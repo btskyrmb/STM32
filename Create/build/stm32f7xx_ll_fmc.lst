@@ -1,0 +1,2559 @@
+ARM GAS  /tmp/cceNLurS.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_ll_fmc.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.FMC_NORSRAM_Init,"ax",%progbits
+  21              		.align	2
+  22              		.global	FMC_NORSRAM_Init
+  23              		.thumb
+  24              		.thumb_func
+  26              	FMC_NORSRAM_Init:
+  27              	.LFB136:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_ll_fmc.c"
+   1:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+   2:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @file    stm32f7xx_ll_fmc.c
+   4:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief   FMC Low Layer HAL module driver.
+   6:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *    
+   7:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *          This file provides firmware functions to manage the following 
+   8:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *          functionalities of the Flexible Memory Controller (FMC) peripheral memories:
+   9:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *           + Initialization/de-initialization functions
+  10:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *           + Peripheral Control functions 
+  11:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *           + Peripheral State functions
+  12:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         
+  13:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @verbatim
+  14:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+  15:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         ##### FMC peripheral features #####
+  16:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+  17:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..] The Flexible memory controller (FMC) includes three memory controllers:
+  18:HALLIB/Src/stm32f7xx_ll_fmc.c ****        (+) The NOR/PSRAM memory controller
+  19:HALLIB/Src/stm32f7xx_ll_fmc.c ****        (+) The NAND memory controller
+  20:HALLIB/Src/stm32f7xx_ll_fmc.c ****        (+) The Synchronous DRAM (SDRAM) controller 
+  21:HALLIB/Src/stm32f7xx_ll_fmc.c ****        
+  22:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..] The FMC functional block makes the interface with synchronous and asynchronous static
+  23:HALLIB/Src/stm32f7xx_ll_fmc.c ****        memories, SDRAM memories, and 16-bit PC memory cards. Its main purposes are:
+  24:HALLIB/Src/stm32f7xx_ll_fmc.c ****        (+) to translate AHB transactions into the appropriate external device protocol
+  25:HALLIB/Src/stm32f7xx_ll_fmc.c ****        (+) to meet the access time requirements of the external memory devices
+  26:HALLIB/Src/stm32f7xx_ll_fmc.c ****    
+  27:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..] All external memories share the addresses, data and control signals with the controller.
+  28:HALLIB/Src/stm32f7xx_ll_fmc.c ****        Each external device is accessed by means of a unique Chip Select. The FMC performs
+  29:HALLIB/Src/stm32f7xx_ll_fmc.c ****        only one access at a time to an external device.
+  30:HALLIB/Src/stm32f7xx_ll_fmc.c ****        The main features of the FMC controller are the following:
+ARM GAS  /tmp/cceNLurS.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_ll_fmc.c ****         (+) Interface with static-memory mapped devices including:
+  32:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) Static random access memory (SRAM)
+  33:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) Read-only memory (ROM)
+  34:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) NOR Flash memory/OneNAND Flash memory
+  35:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) PSRAM (4 memory banks)
+  36:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) 16-bit PC Card compatible devices
+  37:HALLIB/Src/stm32f7xx_ll_fmc.c ****            (++) Two banks of NAND Flash memory with ECC hardware to check up to 8 Kbytes of
+  38:HALLIB/Src/stm32f7xx_ll_fmc.c ****                 data
+  39:HALLIB/Src/stm32f7xx_ll_fmc.c ****         (+) Interface with synchronous DRAM (SDRAM) memories
+  40:HALLIB/Src/stm32f7xx_ll_fmc.c ****         (+) Independent Chip Select control for each memory bank
+  41:HALLIB/Src/stm32f7xx_ll_fmc.c ****         (+) Independent configuration for each memory bank
+  42:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     
+  43:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @endverbatim
+  44:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ******************************************************************************
+  45:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @attention
+  46:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+  47:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  48:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+  49:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  50:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * are permitted provided that the following conditions are met:
+  51:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  52:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *      this list of conditions and the following disclaimer.
+  53:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  54:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *      this list of conditions and the following disclaimer in the documentation
+  55:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *      and/or other materials provided with the distribution.
+  56:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  57:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *      may be used to endorse or promote products derived from this software
+  58:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *      without specific prior written permission.
+  59:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+  60:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  61:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  62:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  63:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  64:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  65:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  66:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  67:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  68:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  69:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  70:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+  71:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ******************************************************************************
+  72:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */ 
+  73:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  74:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Includes ------------------------------------------------------------------*/
+  75:HALLIB/Src/stm32f7xx_ll_fmc.c **** #include "stm32f7xx_hal.h"
+  76:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  77:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  78:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+  79:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+  80:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  81:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL  FMC Low Layer
+  82:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief FMC driver modules
+  83:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+  84:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+  85:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  86:HALLIB/Src/stm32f7xx_ll_fmc.c **** #if defined (HAL_SRAM_MODULE_ENABLED) || defined(HAL_NOR_MODULE_ENABLED) || defined(HAL_NAND_MODULE
+  87:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ARM GAS  /tmp/cceNLurS.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Private typedef -----------------------------------------------------------*/
+  89:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Private define ------------------------------------------------------------*/
+  90:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Private macro -------------------------------------------------------------*/
+  91:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Private variables ---------------------------------------------------------*/
+  92:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Private function prototypes -----------------------------------------------*/
+  93:HALLIB/Src/stm32f7xx_ll_fmc.c **** /* Exported functions --------------------------------------------------------*/
+  94:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  95:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_Exported_Functions FMC Low Layer Exported Functions
+  96:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+  97:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+  98:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+  99:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_Exported_Functions_NORSRAM FMC Low Layer NOR SRAM Exported Functions
+ 100:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  NORSRAM Controller functions 
+ 101:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 102:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @verbatim 
+ 103:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================   
+ 104:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ##### How to use NORSRAM device driver #####
+ 105:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 106:HALLIB/Src/stm32f7xx_ll_fmc.c ****  
+ 107:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..] 
+ 108:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This driver contains a set of APIs to interface with the FMC NORSRAM banks in order
+ 109:HALLIB/Src/stm32f7xx_ll_fmc.c ****     to run the NORSRAM external devices.
+ 110:HALLIB/Src/stm32f7xx_ll_fmc.c ****       
+ 111:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NORSRAM bank reset using the function FMC_NORSRAM_DeInit() 
+ 112:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NORSRAM bank control configuration using the function FMC_NORSRAM_Init()
+ 113:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NORSRAM bank timing configuration using the function FMC_NORSRAM_Timing_Init()
+ 114:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NORSRAM bank extended timing configuration using the function 
+ 115:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_NORSRAM_Extended_Timing_Init()
+ 116:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NORSRAM bank enable/disable write operation using the functions
+ 117:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_NORSRAM_WriteOperation_Enable()/FMC_NORSRAM_WriteOperation_Disable()
+ 118:HALLIB/Src/stm32f7xx_ll_fmc.c ****         
+ 119:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 120:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 121:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 122:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 123:HALLIB/Src/stm32f7xx_ll_fmc.c ****        
+ 124:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_NORSRAM_Exported_Functions_Group1 Initialization and de-initialization functio
+ 125:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief    Initialization and Configuration functions 
+ 126:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 127:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @verbatim    
+ 128:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 129:HALLIB/Src/stm32f7xx_ll_fmc.c ****               ##### Initialization and de_initialization functions #####
+ 130:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 131:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]  
+ 132:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This section provides functions allowing to:
+ 133:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Initialize and configure the FMC NORSRAM interface
+ 134:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) De-initialize the FMC NORSRAM interface 
+ 135:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Configure the FMC clock and associated GPIOs    
+ 136:HALLIB/Src/stm32f7xx_ll_fmc.c ****  
+ 137:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 138:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 139:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 140:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 141:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 142:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initialize the FMC_NORSRAM device according to the specified
+ 143:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         control parameters in the FMC_NORSRAM_InitTypeDef
+ 144:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ARM GAS  /tmp/cceNLurS.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Init Pointer to NORSRAM Initialization structure   
+ 146:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 147:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 148:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef  FMC_NORSRAM_Init(FMC_NORSRAM_TypeDef *Device, FMC_NORSRAM_InitTypeDef* Init)
+ 149:HALLIB/Src/stm32f7xx_ll_fmc.c **** { 
+  29              		.loc 1 149 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 70B4     		push	{r4, r5, r6}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 12
+  38              		.cfi_offset 4, -12
+  39              		.cfi_offset 5, -8
+  40              		.cfi_offset 6, -4
+  41              	.LVL1:
+ 150:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;
+ 151:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 152:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 153:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_DEVICE(Device));
+ 154:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_BANK(Init->NSBank));
+ 155:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_MUX(Init->DataAddressMux));
+ 156:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_MEMORY(Init->MemoryType));
+ 157:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_MEMORY_WIDTH(Init->MemoryDataWidth));
+ 158:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_BURSTMODE(Init->BurstAccessMode));
+ 159:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAIT_POLARITY(Init->WaitSignalPolarity));
+ 160:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAIT_SIGNAL_ACTIVE(Init->WaitSignalActive));
+ 161:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WRITE_OPERATION(Init->WriteOperation));
+ 162:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAITE_SIGNAL(Init->WaitSignal));
+ 163:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_EXTENDED_MODE(Init->ExtendedMode));
+ 164:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ASYNWAIT(Init->AsynchronousWait));
+ 165:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WRITE_BURST(Init->WriteBurst));
+ 166:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_CONTINOUS_CLOCK(Init->ContinuousClock)); 
+ 167:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WRITE_FIFO(Init->WriteFifo));
+ 168:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_PAGESIZE(Init->PageSize));
+ 169:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 170:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the BTCR register value */
+ 171:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = Device->BTCR[Init->NSBank];
+  42              		.loc 1 171 0
+  43 0002 0D68     		ldr	r5, [r1]
+  44 0004 50F82530 		ldr	r3, [r0, r5, lsl #2]
+  45              	.LVL2:
+ 172:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 173:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Clear MBKEN, MUXEN, MTYP, MWID, FACCEN, BURSTEN, WAITPOL, WAITCFG, WREN,
+ 174:HALLIB/Src/stm32f7xx_ll_fmc.c ****            WAITEN, EXTMOD, ASYNCWAIT, CBURSTRW and CCLKEN bits */
+ 175:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr &= ((uint32_t)~(FMC_BCR1_MBKEN     | FMC_BCR1_MUXEN    | FMC_BCR1_MTYP     | \
+  46              		.loc 1 175 0
+  47 0008 1B4C     		ldr	r4, .L6
+  48 000a 1C40     		ands	r4, r4, r3
+  49              	.LVL3:
+ 176:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BCR1_MWID      | FMC_BCR1_FACCEN   | FMC_BCR1_BURSTEN  | \
+ 177:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BCR1_WAITPOL   | FMC_BCR1_CPSIZE    | FMC_BCR1_WAITCFG  | \
+ 178:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BCR1_WREN      | FMC_BCR1_WAITEN   | FMC_BCR1_EXTMOD   | \
+ 179:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BCR1_ASYNCWAIT | FMC_BCR1_CBURSTRW | FMC_BCR1_CCLKEN | FMC_BCR1_WFDIS));
+ 180:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ARM GAS  /tmp/cceNLurS.s 			page 5
+
+
+ 181:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set NORSRAM device control parameters */
+ 182:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr |= (uint32_t)(Init->DataAddressMux       |\
+  50              		.loc 1 182 0
+  51 000c 4B68     		ldr	r3, [r1, #4]
+ 183:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryType           |\
+  52              		.loc 1 183 0
+  53 000e 8E68     		ldr	r6, [r1, #8]
+ 182:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryType           |\
+  54              		.loc 1 182 0
+  55 0010 43EA0602 		orr	r2, r3, r6
+ 184:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryDataWidth      |\
+  56              		.loc 1 184 0
+  57 0014 CB68     		ldr	r3, [r1, #12]
+ 183:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryType           |\
+  58              		.loc 1 183 0
+  59 0016 1A43     		orrs	r2, r2, r3
+ 185:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->BurstAccessMode      |\
+  60              		.loc 1 185 0
+  61 0018 0B69     		ldr	r3, [r1, #16]
+ 184:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryDataWidth      |\
+  62              		.loc 1 184 0
+  63 001a 1A43     		orrs	r2, r2, r3
+ 186:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignalPolarity   |\
+  64              		.loc 1 186 0
+  65 001c 4B69     		ldr	r3, [r1, #20]
+ 185:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->BurstAccessMode      |\
+  66              		.loc 1 185 0
+  67 001e 1A43     		orrs	r2, r2, r3
+ 187:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignalActive     |\
+  68              		.loc 1 187 0
+  69 0020 8B69     		ldr	r3, [r1, #24]
+ 186:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignalPolarity   |\
+  70              		.loc 1 186 0
+  71 0022 1A43     		orrs	r2, r2, r3
+ 188:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WriteOperation       |\
+  72              		.loc 1 188 0
+  73 0024 CB69     		ldr	r3, [r1, #28]
+ 187:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignalActive     |\
+  74              		.loc 1 187 0
+  75 0026 1A43     		orrs	r2, r2, r3
+ 189:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignal           |\
+  76              		.loc 1 189 0
+  77 0028 0B6A     		ldr	r3, [r1, #32]
+ 188:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WriteOperation       |\
+  78              		.loc 1 188 0
+  79 002a 1A43     		orrs	r2, r2, r3
+ 190:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->ExtendedMode         |\
+  80              		.loc 1 190 0
+  81 002c 4B6A     		ldr	r3, [r1, #36]
+ 189:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WaitSignal           |\
+  82              		.loc 1 189 0
+  83 002e 1A43     		orrs	r2, r2, r3
+ 191:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->AsynchronousWait     |\
+  84              		.loc 1 191 0
+  85 0030 8B6A     		ldr	r3, [r1, #40]
+ 190:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->ExtendedMode         |\
+  86              		.loc 1 190 0
+ARM GAS  /tmp/cceNLurS.s 			page 6
+
+
+  87 0032 1A43     		orrs	r2, r2, r3
+ 192:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WriteBurst           |\
+  88              		.loc 1 192 0
+  89 0034 CB6A     		ldr	r3, [r1, #44]
+ 191:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->AsynchronousWait     |\
+  90              		.loc 1 191 0
+  91 0036 1A43     		orrs	r2, r2, r3
+ 193:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->ContinuousClock      |\
+  92              		.loc 1 193 0
+  93 0038 0B6B     		ldr	r3, [r1, #48]
+ 192:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WriteBurst           |\
+  94              		.loc 1 192 0
+  95 003a 1A43     		orrs	r2, r2, r3
+ 194:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->PageSize             |\
+  96              		.loc 1 194 0
+  97 003c 8B6B     		ldr	r3, [r1, #56]
+ 193:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->ContinuousClock      |\
+  98              		.loc 1 193 0
+  99 003e 1343     		orrs	r3, r3, r2
+ 195:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->WriteFifo);
+ 100              		.loc 1 195 0
+ 101 0040 4A6B     		ldr	r2, [r1, #52]
+ 194:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->PageSize             |\
+ 102              		.loc 1 194 0
+ 103 0042 1A43     		orrs	r2, r2, r3
+ 182:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     Init->MemoryType           |\
+ 104              		.loc 1 182 0
+ 105 0044 44EA0203 		orr	r3, r4, r2
+ 106              	.LVL4:
+ 196:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     
+ 197:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(Init->MemoryType == FMC_MEMORY_TYPE_NOR)
+ 107              		.loc 1 197 0
+ 108 0048 082E     		cmp	r6, #8
+ 109 004a 01D1     		bne	.L2
+ 198:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 199:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr |= (uint32_t)FMC_NORSRAM_FLASH_ACCESS_ENABLE;
+ 110              		.loc 1 199 0
+ 111 004c 43F04003 		orr	r3, r3, #64
+ 112              	.LVL5:
+ 113              	.L2:
+ 200:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 201:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 202:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->BTCR[Init->NSBank] = tmpr;
+ 114              		.loc 1 202 0
+ 115 0050 40F82530 		str	r3, [r0, r5, lsl #2]
+ 203:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 204:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Configure synchronous mode when Continuous clock is enabled for bank2..4 */
+ 205:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if((Init->ContinuousClock == FMC_CONTINUOUS_CLOCK_SYNC_ASYNC) && (Init->NSBank != FMC_NORSRAM_BAN
+ 116              		.loc 1 205 0
+ 117 0054 0B6B     		ldr	r3, [r1, #48]
+ 118              	.LVL6:
+ 119 0056 B3F5801F 		cmp	r3, #1048576
+ 120 005a 04D1     		bne	.L3
+ 121              		.loc 1 205 0 is_stmt 0 discriminator 1
+ 122 005c 0A68     		ldr	r2, [r1]
+ 123 005e 12B1     		cbz	r2, .L3
+ 206:HALLIB/Src/stm32f7xx_ll_fmc.c ****   { 
+ARM GAS  /tmp/cceNLurS.s 			page 7
+
+
+ 207:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BTCR[FMC_NORSRAM_BANK1] |= (uint32_t)(Init->ContinuousClock);
+ 124              		.loc 1 207 0 is_stmt 1
+ 125 0060 0268     		ldr	r2, [r0]
+ 126 0062 1343     		orrs	r3, r3, r2
+ 127 0064 0360     		str	r3, [r0]
+ 128              	.LVL7:
+ 129              	.L3:
+ 208:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 209:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(Init->NSBank != FMC_NORSRAM_BANK1)
+ 130              		.loc 1 209 0
+ 131 0066 0B68     		ldr	r3, [r1]
+ 132 0068 1BB1     		cbz	r3, .L4
+ 210:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 211:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BTCR[FMC_NORSRAM_BANK1] |= (uint32_t)(Init->WriteFifo);              
+ 133              		.loc 1 211 0
+ 134 006a 0268     		ldr	r2, [r0]
+ 135 006c 4B6B     		ldr	r3, [r1, #52]
+ 136 006e 1343     		orrs	r3, r3, r2
+ 137 0070 0360     		str	r3, [r0]
+ 138              	.L4:
+ 212:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 213:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 214:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 215:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 139              		.loc 1 215 0
+ 140 0072 0020     		movs	r0, #0
+ 141              	.LVL8:
+ 142 0074 70BC     		pop	{r4, r5, r6}
+ 143              	.LCFI1:
+ 144              		.cfi_restore 6
+ 145              		.cfi_restore 5
+ 146              		.cfi_restore 4
+ 147              		.cfi_def_cfa_offset 0
+ 148 0076 7047     		bx	lr
+ 149              	.L7:
+ 150              		.align	2
+ 151              	.L6:
+ 152 0078 8004C0FF 		.word	-4193152
+ 153              		.cfi_endproc
+ 154              	.LFE136:
+ 156              		.section	.text.FMC_NORSRAM_DeInit,"ax",%progbits
+ 157              		.align	2
+ 158              		.global	FMC_NORSRAM_DeInit
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	FMC_NORSRAM_DeInit:
+ 163              	.LFB137:
+ 216:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 217:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 218:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 219:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  DeInitialize the FMC_NORSRAM peripheral 
+ 220:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ 221:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  ExDevice Pointer to NORSRAM extended mode device instance  
+ 222:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NORSRAM bank number  
+ 223:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 224:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 225:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NORSRAM_DeInit(FMC_NORSRAM_TypeDef *Device, FMC_NORSRAM_EXTENDED_TypeDef *ExD
+ARM GAS  /tmp/cceNLurS.s 			page 8
+
+
+ 226:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 164              		.loc 1 226 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168              		@ link register save eliminated.
+ 169              	.LVL9:
+ 170 0000 10B4     		push	{r4}
+ 171              	.LCFI2:
+ 172              		.cfi_def_cfa_offset 4
+ 173              		.cfi_offset 4, -4
+ 227:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 228:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_DEVICE(Device));
+ 229:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_EXTENDED_DEVICE(ExDevice));
+ 230:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_BANK(Bank));
+ 231:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 232:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Disable the FMC_NORSRAM device */
+ 233:HALLIB/Src/stm32f7xx_ll_fmc.c ****   __FMC_NORSRAM_DISABLE(Device, Bank);
+ 174              		.loc 1 233 0
+ 175 0002 50F82230 		ldr	r3, [r0, r2, lsl #2]
+ 176 0006 23F00103 		bic	r3, r3, #1
+ 177 000a 40F82230 		str	r3, [r0, r2, lsl #2]
+ 234:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 235:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* De-initialize the FMC_NORSRAM device */
+ 236:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* FMC_NORSRAM_BANK1 */
+ 237:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(Bank == FMC_NORSRAM_BANK1)
+ 178              		.loc 1 237 0
+ 179 000e 22B9     		cbnz	r2, .L9
+ 238:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 239:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BTCR[Bank] = 0x000030DB;    
+ 180              		.loc 1 239 0
+ 181 0010 43F2DB03 		movw	r3, #12507
+ 182 0014 40F82230 		str	r3, [r0, r2, lsl #2]
+ 183 0018 03E0     		b	.L10
+ 184              	.L9:
+ 240:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 241:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* FMC_NORSRAM_BANK2, FMC_NORSRAM_BANK3 or FMC_NORSRAM_BANK4 */
+ 242:HALLIB/Src/stm32f7xx_ll_fmc.c ****   else
+ 243:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {   
+ 244:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BTCR[Bank] = 0x000030D2; 
+ 185              		.loc 1 244 0
+ 186 001a 43F2D203 		movw	r3, #12498
+ 187 001e 40F82230 		str	r3, [r0, r2, lsl #2]
+ 188              	.L10:
+ 245:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 246:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 247:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->BTCR[Bank + 1] = 0x0FFFFFFF;
+ 189              		.loc 1 247 0
+ 190 0022 541C     		adds	r4, r2, #1
+ 191 0024 6FF07043 		mvn	r3, #-268435456
+ 192 0028 40F82430 		str	r3, [r0, r4, lsl #2]
+ 248:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ExDevice->BWTR[Bank]   = 0x0FFFFFFF;
+ 193              		.loc 1 248 0
+ 194 002c 41F82230 		str	r3, [r1, r2, lsl #2]
+ 249:HALLIB/Src/stm32f7xx_ll_fmc.c ****    
+ 250:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 251:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ARM GAS  /tmp/cceNLurS.s 			page 9
+
+
+ 195              		.loc 1 251 0
+ 196 0030 0020     		movs	r0, #0
+ 197              	.LVL10:
+ 198 0032 5DF8044B 		ldr	r4, [sp], #4
+ 199              	.LCFI3:
+ 200              		.cfi_restore 4
+ 201              		.cfi_def_cfa_offset 0
+ 202 0036 7047     		bx	lr
+ 203              		.cfi_endproc
+ 204              	.LFE137:
+ 206              		.section	.text.FMC_NORSRAM_Timing_Init,"ax",%progbits
+ 207              		.align	2
+ 208              		.global	FMC_NORSRAM_Timing_Init
+ 209              		.thumb
+ 210              		.thumb_func
+ 212              	FMC_NORSRAM_Timing_Init:
+ 213              	.LFB138:
+ 252:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 253:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 254:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 255:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initialize the FMC_NORSRAM Timing according to the specified
+ 256:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         parameters in the FMC_NORSRAM_TimingTypeDef
+ 257:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ 258:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to NORSRAM Timing structure
+ 259:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NORSRAM bank number  
+ 260:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 261:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 262:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NORSRAM_Timing_Init(FMC_NORSRAM_TypeDef *Device, FMC_NORSRAM_TimingTypeDef *T
+ 263:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 214              		.loc 1 263 0
+ 215              		.cfi_startproc
+ 216              		@ args = 0, pretend = 0, frame = 0
+ 217              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218              		@ link register save eliminated.
+ 219              	.LVL11:
+ 220 0000 70B4     		push	{r4, r5, r6}
+ 221              	.LCFI4:
+ 222              		.cfi_def_cfa_offset 12
+ 223              		.cfi_offset 4, -12
+ 224              		.cfi_offset 5, -8
+ 225              		.cfi_offset 6, -4
+ 226              	.LVL12:
+ 264:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;
+ 265:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 266:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 267:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_DEVICE(Device));
+ 268:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ADDRESS_SETUP_TIME(Timing->AddressSetupTime));
+ 269:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ADDRESS_HOLD_TIME(Timing->AddressHoldTime));
+ 270:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_DATASETUP_TIME(Timing->DataSetupTime));
+ 271:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_TURNAROUND_TIME(Timing->BusTurnAroundDuration));
+ 272:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_CLK_DIV(Timing->CLKDivision));
+ 273:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_DATA_LATENCY(Timing->DataLatency));
+ 274:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ACCESS_MODE(Timing->AccessMode));
+ 275:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_BANK(Bank));
+ 276:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 277:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the BTCR register value */
+ 278:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = Device->BTCR[Bank + 1];
+ARM GAS  /tmp/cceNLurS.s 			page 10
+
+
+ 227              		.loc 1 278 0
+ 228 0002 0132     		adds	r2, r2, #1
+ 229              	.LVL13:
+ 230 0004 50F82230 		ldr	r3, [r0, r2, lsl #2]
+ 231              	.LVL14:
+ 279:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 280:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Clear ADDSET, ADDHLD, DATAST, BUSTURN, CLKDIV, DATLAT and ACCMOD bits */
+ 281:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr &= ((uint32_t)~(FMC_BTR1_ADDSET  | FMC_BTR1_ADDHLD | FMC_BTR1_DATAST | \
+ 232              		.loc 1 281 0
+ 233 0008 03F04046 		and	r6, r3, #-1073741824
+ 234              	.LVL15:
+ 282:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BTR1_BUSTURN | FMC_BTR1_CLKDIV | FMC_BTR1_DATLAT | \
+ 283:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_BTR1_ACCMOD));
+ 284:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 285:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set FMC_NORSRAM device timing parameters */  
+ 286:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr |= (uint32_t)(Timing->AddressSetupTime                  |\
+ 235              		.loc 1 286 0
+ 236 000c 0B68     		ldr	r3, [r1]
+ 287:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->AddressHoldTime) << 4)          |\
+ 237              		.loc 1 287 0
+ 238 000e 4D68     		ldr	r5, [r1, #4]
+ 286:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->AddressHoldTime) << 4)          |\
+ 239              		.loc 1 286 0
+ 240 0010 43EA0513 		orr	r3, r3, r5, lsl #4
+ 288:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->DataSetupTime) << 8)            |\
+ 241              		.loc 1 288 0
+ 242 0014 8D68     		ldr	r5, [r1, #8]
+ 287:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->AddressHoldTime) << 4)          |\
+ 243              		.loc 1 287 0
+ 244 0016 43EA0523 		orr	r3, r3, r5, lsl #8
+ 289:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->BusTurnAroundDuration) << 16)   |\
+ 245              		.loc 1 289 0
+ 246 001a CC68     		ldr	r4, [r1, #12]
+ 288:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->DataSetupTime) << 8)            |\
+ 247              		.loc 1 288 0
+ 248 001c 43EA0445 		orr	r5, r3, r4, lsl #16
+ 290:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    (((Timing->CLKDivision)-1) << 20)         |\
+ 249              		.loc 1 290 0
+ 250 0020 0B69     		ldr	r3, [r1, #16]
+ 251 0022 013B     		subs	r3, r3, #1
+ 289:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->BusTurnAroundDuration) << 16)   |\
+ 252              		.loc 1 289 0
+ 253 0024 45EA0354 		orr	r4, r5, r3, lsl #20
+ 291:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    (((Timing->DataLatency)-2) << 24)         |\
+ 254              		.loc 1 291 0
+ 255 0028 4B69     		ldr	r3, [r1, #20]
+ 256 002a 023B     		subs	r3, r3, #2
+ 290:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    (((Timing->CLKDivision)-1) << 20)         |\
+ 257              		.loc 1 290 0
+ 258 002c 44EA0363 		orr	r3, r4, r3, lsl #24
+ 292:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (Timing->AccessMode)
+ 259              		.loc 1 292 0
+ 260 0030 8C69     		ldr	r4, [r1, #24]
+ 286:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->AddressHoldTime) << 4)          |\
+ 261              		.loc 1 286 0
+ 262 0032 2343     		orrs	r3, r3, r4
+ 263 0034 3343     		orrs	r3, r3, r6
+ARM GAS  /tmp/cceNLurS.s 			page 11
+
+
+ 264              	.LVL16:
+ 293:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     );
+ 294:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 295:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->BTCR[Bank + 1] = tmpr;
+ 265              		.loc 1 295 0
+ 266 0036 40F82230 		str	r3, [r0, r2, lsl #2]
+ 296:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 297:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Configure Clock division value (in NORSRAM bank 1) when continuous clock is enabled */
+ 298:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(HAL_IS_BIT_SET(Device->BTCR[FMC_NORSRAM_BANK1], FMC_BCR1_CCLKEN))
+ 267              		.loc 1 298 0
+ 268 003a 0368     		ldr	r3, [r0]
+ 269              	.LVL17:
+ 270 003c 13F4801F 		tst	r3, #1048576
+ 271 0040 07D0     		beq	.L13
+ 299:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 300:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr = (uint32_t)(Device->BTCR[FMC_NORSRAM_BANK1 + 1] & ~(((uint32_t)0x0F) << 20)); 
+ 272              		.loc 1 300 0
+ 273 0042 4368     		ldr	r3, [r0, #4]
+ 274 0044 23F47002 		bic	r2, r3, #15728640
+ 275              	.LVL18:
+ 301:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr |= (uint32_t)(((Timing->CLKDivision)-1) << 20);
+ 276              		.loc 1 301 0
+ 277 0048 0B69     		ldr	r3, [r1, #16]
+ 278 004a 013B     		subs	r3, r3, #1
+ 279 004c 42EA0353 		orr	r3, r2, r3, lsl #20
+ 280              	.LVL19:
+ 302:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BTCR[FMC_NORSRAM_BANK1 + 1] = tmpr;
+ 281              		.loc 1 302 0
+ 282 0050 4360     		str	r3, [r0, #4]
+ 283              	.LVL20:
+ 284              	.L13:
+ 303:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }  
+ 304:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 305:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;   
+ 306:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 285              		.loc 1 306 0
+ 286 0052 0020     		movs	r0, #0
+ 287              	.LVL21:
+ 288 0054 70BC     		pop	{r4, r5, r6}
+ 289              	.LCFI5:
+ 290              		.cfi_restore 6
+ 291              		.cfi_restore 5
+ 292              		.cfi_restore 4
+ 293              		.cfi_def_cfa_offset 0
+ 294 0056 7047     		bx	lr
+ 295              		.cfi_endproc
+ 296              	.LFE138:
+ 298              		.section	.text.FMC_NORSRAM_Extended_Timing_Init,"ax",%progbits
+ 299              		.align	2
+ 300              		.global	FMC_NORSRAM_Extended_Timing_Init
+ 301              		.thumb
+ 302              		.thumb_func
+ 304              	FMC_NORSRAM_Extended_Timing_Init:
+ 305              	.LFB139:
+ 307:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 308:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 309:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initialize the FMC_NORSRAM Extended mode Timing according to the specified
+ARM GAS  /tmp/cceNLurS.s 			page 12
+
+
+ 310:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         parameters in the FMC_NORSRAM_TimingTypeDef
+ 311:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ 312:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to NORSRAM Timing structure
+ 313:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NORSRAM bank number  
+ 314:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 315:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 316:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef  FMC_NORSRAM_Extended_Timing_Init(FMC_NORSRAM_EXTENDED_TypeDef *Device, FMC_NORSR
+ 317:HALLIB/Src/stm32f7xx_ll_fmc.c **** {  
+ 306              		.loc 1 317 0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310              		@ link register save eliminated.
+ 311              	.LVL22:
+ 318:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;
+ 319:HALLIB/Src/stm32f7xx_ll_fmc.c ****  
+ 320:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 321:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_EXTENDED_MODE(ExtendedMode));
+ 322:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 323:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set NORSRAM device timing register for write configuration, if extended mode is used */
+ 324:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(ExtendedMode == FMC_EXTENDED_MODE_ENABLE)
+ 312              		.loc 1 324 0
+ 313 0000 B3F5804F 		cmp	r3, #16384
+ 314 0004 14D1     		bne	.L16
+ 317:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;
+ 315              		.loc 1 317 0
+ 316 0006 30B4     		push	{r4, r5}
+ 317              	.LCFI6:
+ 318              		.cfi_def_cfa_offset 8
+ 319              		.cfi_offset 4, -8
+ 320              		.cfi_offset 5, -4
+ 325:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 326:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Check the parameters */
+ 327:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_NORSRAM_EXTENDED_DEVICE(Device));  
+ 328:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_ADDRESS_SETUP_TIME(Timing->AddressSetupTime));
+ 329:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_ADDRESS_HOLD_TIME(Timing->AddressHoldTime));
+ 330:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_DATASETUP_TIME(Timing->DataSetupTime));
+ 331:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_TURNAROUND_TIME(Timing->BusTurnAroundDuration));
+ 332:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_CLK_DIV(Timing->CLKDivision));
+ 333:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_DATA_LATENCY(Timing->DataLatency));
+ 334:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_ACCESS_MODE(Timing->AccessMode));
+ 335:HALLIB/Src/stm32f7xx_ll_fmc.c ****     assert_param(IS_FMC_NORSRAM_BANK(Bank));  
+ 336:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 337:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Get the BWTR register value */
+ 338:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr = Device->BWTR[Bank];
+ 321              		.loc 1 338 0
+ 322 0008 50F82230 		ldr	r3, [r0, r2, lsl #2]
+ 323              	.LVL23:
+ 339:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 340:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear ADDSET, ADDHLD, DATAST, BUSTURN, CLKDIV, DATLAT and ACCMOD bits */
+ 341:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr &= ((uint32_t)~(FMC_BWTR1_ADDSET  | FMC_BWTR1_ADDHLD | FMC_BWTR1_DATAST | \
+ 324              		.loc 1 341 0
+ 325 000c 0D4C     		ldr	r4, .L20
+ 326 000e 1C40     		ands	r4, r4, r3
+ 327              	.LVL24:
+ 342:HALLIB/Src/stm32f7xx_ll_fmc.c ****                          FMC_BWTR1_BUSTURN | FMC_BWTR1_ACCMOD));
+ 343:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ARM GAS  /tmp/cceNLurS.s 			page 13
+
+
+ 344:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr |= (uint32_t)(Timing->AddressSetupTime                 |\
+ 328              		.loc 1 344 0
+ 329 0010 0B68     		ldr	r3, [r1]
+ 345:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->AddressHoldTime) << 4)          |\
+ 330              		.loc 1 345 0
+ 331 0012 4D68     		ldr	r5, [r1, #4]
+ 344:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->AddressHoldTime) << 4)          |\
+ 332              		.loc 1 344 0
+ 333 0014 43EA0513 		orr	r3, r3, r5, lsl #4
+ 346:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->DataSetupTime) << 8)            |\
+ 334              		.loc 1 346 0
+ 335 0018 8D68     		ldr	r5, [r1, #8]
+ 345:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->AddressHoldTime) << 4)          |\
+ 336              		.loc 1 345 0
+ 337 001a 43EA0523 		orr	r3, r3, r5, lsl #8
+ 347:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->BusTurnAroundDuration) << 16)   |\
+ 338              		.loc 1 347 0
+ 339 001e CD68     		ldr	r5, [r1, #12]
+ 346:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->DataSetupTime) << 8)            |\
+ 340              		.loc 1 346 0
+ 341 0020 43EA0543 		orr	r3, r3, r5, lsl #16
+ 348:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       (Timing->AccessMode));
+ 342              		.loc 1 348 0
+ 343 0024 8969     		ldr	r1, [r1, #24]
+ 344              	.LVL25:
+ 347:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->BusTurnAroundDuration) << 16)   |\
+ 345              		.loc 1 347 0
+ 346 0026 0B43     		orrs	r3, r3, r1
+ 344:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Timing->AddressHoldTime) << 4)          |\
+ 347              		.loc 1 344 0
+ 348 0028 2343     		orrs	r3, r3, r4
+ 349              	.LVL26:
+ 349:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 350:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BWTR[Bank] = tmpr;
+ 350              		.loc 1 350 0
+ 351 002a 40F82230 		str	r3, [r0, r2, lsl #2]
+ 352 002e 05E0     		b	.L17
+ 353              	.LVL27:
+ 354              	.L16:
+ 355              	.LCFI7:
+ 356              		.cfi_def_cfa_offset 0
+ 357              		.cfi_restore 4
+ 358              		.cfi_restore 5
+ 351:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 352:HALLIB/Src/stm32f7xx_ll_fmc.c ****   else
+ 353:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 354:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->BWTR[Bank] = 0x0FFFFFFF;
+ 359              		.loc 1 354 0
+ 360 0030 6FF07043 		mvn	r3, #-268435456
+ 361              	.LVL28:
+ 362 0034 40F82230 		str	r3, [r0, r2, lsl #2]
+ 355:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }   
+ 356:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 357:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 358:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 363              		.loc 1 358 0
+ 364 0038 0020     		movs	r0, #0
+ARM GAS  /tmp/cceNLurS.s 			page 14
+
+
+ 365              	.LVL29:
+ 366 003a 7047     		bx	lr
+ 367              	.LVL30:
+ 368              	.L17:
+ 369              	.LCFI8:
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 4, -8
+ 372              		.cfi_offset 5, -4
+ 373 003c 0020     		movs	r0, #0
+ 374              	.LVL31:
+ 375 003e 30BC     		pop	{r4, r5}
+ 376              	.LCFI9:
+ 377              		.cfi_restore 5
+ 378              		.cfi_restore 4
+ 379              		.cfi_def_cfa_offset 0
+ 380 0040 7047     		bx	lr
+ 381              	.L21:
+ 382 0042 00BF     		.align	2
+ 383              	.L20:
+ 384 0044 0000F0CF 		.word	-806354944
+ 385              		.cfi_endproc
+ 386              	.LFE139:
+ 388              		.section	.text.FMC_NORSRAM_WriteOperation_Enable,"ax",%progbits
+ 389              		.align	2
+ 390              		.global	FMC_NORSRAM_WriteOperation_Enable
+ 391              		.thumb
+ 392              		.thumb_func
+ 394              	FMC_NORSRAM_WriteOperation_Enable:
+ 395              	.LFB140:
+ 359:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 360:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 361:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 362:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 363:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @addtogroup FMC_LL_NORSRAM_Private_Functions_Group2
+ 364:HALLIB/Src/stm32f7xx_ll_fmc.c ****  *  @brief   management functions 
+ 365:HALLIB/Src/stm32f7xx_ll_fmc.c ****  *
+ 366:HALLIB/Src/stm32f7xx_ll_fmc.c **** @verbatim   
+ 367:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 368:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ##### FMC_NORSRAM Control functions #####
+ 369:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================  
+ 370:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]
+ 371:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This subsection provides a set of functions allowing to control dynamically
+ 372:HALLIB/Src/stm32f7xx_ll_fmc.c ****     the FMC NORSRAM interface.
+ 373:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 374:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 375:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 376:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 377:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 378:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 379:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Enables dynamically FMC_NORSRAM write operation.
+ 380:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ 381:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NORSRAM bank number   
+ 382:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 383:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 384:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NORSRAM_WriteOperation_Enable(FMC_NORSRAM_TypeDef *Device, uint32_t Bank)
+ 385:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 396              		.loc 1 385 0
+ARM GAS  /tmp/cceNLurS.s 			page 15
+
+
+ 397              		.cfi_startproc
+ 398              		@ args = 0, pretend = 0, frame = 0
+ 399              		@ frame_needed = 0, uses_anonymous_args = 0
+ 400              		@ link register save eliminated.
+ 401              	.LVL32:
+ 386:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 387:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_DEVICE(Device));
+ 388:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_BANK(Bank));
+ 389:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 390:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Enable write operation */
+ 391:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->BTCR[Bank] |= FMC_WRITE_OPERATION_ENABLE; 
+ 402              		.loc 1 391 0
+ 403 0000 50F82130 		ldr	r3, [r0, r1, lsl #2]
+ 404 0004 43F48053 		orr	r3, r3, #4096
+ 405 0008 40F82130 		str	r3, [r0, r1, lsl #2]
+ 392:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 393:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 394:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 406              		.loc 1 394 0
+ 407 000c 0020     		movs	r0, #0
+ 408              	.LVL33:
+ 409 000e 7047     		bx	lr
+ 410              		.cfi_endproc
+ 411              	.LFE140:
+ 413              		.section	.text.FMC_NORSRAM_WriteOperation_Disable,"ax",%progbits
+ 414              		.align	2
+ 415              		.global	FMC_NORSRAM_WriteOperation_Disable
+ 416              		.thumb
+ 417              		.thumb_func
+ 419              	FMC_NORSRAM_WriteOperation_Disable:
+ 420              	.LFB141:
+ 395:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 396:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 397:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Disables dynamically FMC_NORSRAM write operation.
+ 398:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NORSRAM device instance
+ 399:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NORSRAM bank number   
+ 400:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 401:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 402:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NORSRAM_WriteOperation_Disable(FMC_NORSRAM_TypeDef *Device, uint32_t Bank)
+ 403:HALLIB/Src/stm32f7xx_ll_fmc.c **** { 
+ 421              		.loc 1 403 0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425              		@ link register save eliminated.
+ 426              	.LVL34:
+ 404:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 405:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_DEVICE(Device));
+ 406:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NORSRAM_BANK(Bank));
+ 407:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 408:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Disable write operation */
+ 409:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->BTCR[Bank] &= ~FMC_WRITE_OPERATION_ENABLE; 
+ 427              		.loc 1 409 0
+ 428 0000 50F82130 		ldr	r3, [r0, r1, lsl #2]
+ 429 0004 23F48053 		bic	r3, r3, #4096
+ 430 0008 40F82130 		str	r3, [r0, r1, lsl #2]
+ 410:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ARM GAS  /tmp/cceNLurS.s 			page 16
+
+
+ 411:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 412:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 431              		.loc 1 412 0
+ 432 000c 0020     		movs	r0, #0
+ 433              	.LVL35:
+ 434 000e 7047     		bx	lr
+ 435              		.cfi_endproc
+ 436              	.LFE141:
+ 438              		.section	.text.FMC_NAND_Init,"ax",%progbits
+ 439              		.align	2
+ 440              		.global	FMC_NAND_Init
+ 441              		.thumb
+ 442              		.thumb_func
+ 444              	FMC_NAND_Init:
+ 445              	.LFB142:
+ 413:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 414:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 415:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 416:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 417:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 418:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 419:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 420:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 421:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 422:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_Exported_Functions_NAND FMC Low Layer NAND Exported Functions
+ 423:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief    NAND Controller functions 
+ 424:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 425:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @verbatim 
+ 426:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 427:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     ##### How to use NAND device driver #####
+ 428:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 429:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]
+ 430:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This driver contains a set of APIs to interface with the FMC NAND banks in order
+ 431:HALLIB/Src/stm32f7xx_ll_fmc.c ****     to run the NAND external devices.
+ 432:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 433:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank reset using the function FMC_NAND_DeInit() 
+ 434:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank control configuration using the function FMC_NAND_Init()
+ 435:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank common space timing configuration using the function 
+ 436:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_NAND_CommonSpace_Timing_Init()
+ 437:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank attribute space timing configuration using the function 
+ 438:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_NAND_AttributeSpace_Timing_Init()
+ 439:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank enable/disable ECC correction feature using the functions
+ 440:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_NAND_ECC_Enable()/FMC_NAND_ECC_Disable()
+ 441:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC NAND bank get ECC correction code using the function FMC_NAND_GetECC()    
+ 442:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 443:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 444:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 445:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 446:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 447:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_NAND_Exported_Functions_Group1 Initialization and de-initialization functions
+ 448:HALLIB/Src/stm32f7xx_ll_fmc.c ****  *  @brief    Initialization and Configuration functions 
+ 449:HALLIB/Src/stm32f7xx_ll_fmc.c ****  *
+ 450:HALLIB/Src/stm32f7xx_ll_fmc.c **** @verbatim    
+ 451:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 452:HALLIB/Src/stm32f7xx_ll_fmc.c ****               ##### Initialization and de_initialization functions #####
+ 453:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 454:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]  
+ARM GAS  /tmp/cceNLurS.s 			page 17
+
+
+ 455:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This section provides functions allowing to:
+ 456:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Initialize and configure the FMC NAND interface
+ 457:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) De-initialize the FMC NAND interface 
+ 458:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Configure the FMC clock and associated GPIOs
+ 459:HALLIB/Src/stm32f7xx_ll_fmc.c ****         
+ 460:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 461:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 462:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 463:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 464:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 465:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initializes the FMC_NAND device according to the specified
+ 466:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         control parameters in the FMC_NAND_HandleTypeDef
+ 467:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 468:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Init Pointer to NAND Initialization structure
+ 469:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 470:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 471:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_Init(FMC_NAND_TypeDef *Device, FMC_NAND_InitTypeDef *Init)
+ 472:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 446              		.loc 1 472 0
+ 447              		.cfi_startproc
+ 448              		@ args = 0, pretend = 0, frame = 0
+ 449              		@ frame_needed = 0, uses_anonymous_args = 0
+ 450              		@ link register save eliminated.
+ 451              	.LVL36:
+ 452 0000 10B4     		push	{r4}
+ 453              	.LCFI10:
+ 454              		.cfi_def_cfa_offset 4
+ 455              		.cfi_offset 4, -4
+ 456              	.LVL37:
+ 473:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr  = 0; 
+ 474:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 475:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 476:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device));
+ 477:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Init->NandBank));
+ 478:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAIT_FEATURE(Init->Waitfeature));
+ 479:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_MEMORY_WIDTH(Init->MemoryDataWidth));
+ 480:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ECC_STATE(Init->EccComputation));
+ 481:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ECCPAGE_SIZE(Init->ECCPageSize));
+ 482:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_TCLR_TIME(Init->TCLRSetupTime));
+ 483:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_TAR_TIME(Init->TARSetupTime));   
+ 484:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 485:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the NAND bank 3 register value */
+ 486:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = Device->PCR;
+ 457              		.loc 1 486 0
+ 458 0002 0368     		ldr	r3, [r0]
+ 459              	.LVL38:
+ 487:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 488:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Clear PWAITEN, PBKEN, PTYP, PWID, ECCEN, TCLR, TAR and ECCPS bits */
+ 489:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr &= ((uint32_t)~(FMC_PCR_PWAITEN  | FMC_PCR_PBKEN | FMC_PCR_PTYP | \
+ 460              		.loc 1 489 0
+ 461 0004 0B4C     		ldr	r4, .L26
+ 462 0006 1C40     		ands	r4, r4, r3
+ 463              	.LVL39:
+ 490:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_PCR_PWID | FMC_PCR_ECCEN | FMC_PCR_TCLR | \
+ 491:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_PCR_TAR | FMC_PCR_ECCPS));  
+ 492:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set NAND device control parameters */
+ 493:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr |= (uint32_t)(Init->Waitfeature                |\
+ARM GAS  /tmp/cceNLurS.s 			page 18
+
+
+ 464              		.loc 1 493 0
+ 465 0008 4A68     		ldr	r2, [r1, #4]
+ 494:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       FMC_PCR_MEMORY_TYPE_NAND         |\
+ 495:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->MemoryDataWidth            |\
+ 466              		.loc 1 495 0
+ 467 000a 8B68     		ldr	r3, [r1, #8]
+ 494:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       FMC_PCR_MEMORY_TYPE_NAND         |\
+ 468              		.loc 1 494 0
+ 469 000c 1A43     		orrs	r2, r2, r3
+ 496:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->EccComputation             |\
+ 470              		.loc 1 496 0
+ 471 000e CB68     		ldr	r3, [r1, #12]
+ 495:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->EccComputation             |\
+ 472              		.loc 1 495 0
+ 473 0010 1A43     		orrs	r2, r2, r3
+ 497:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->ECCPageSize                |\
+ 474              		.loc 1 497 0
+ 475 0012 0B69     		ldr	r3, [r1, #16]
+ 496:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->EccComputation             |\
+ 476              		.loc 1 496 0
+ 477 0014 1A43     		orrs	r2, r2, r3
+ 498:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Init->TCLRSetupTime) << 9)     |\
+ 478              		.loc 1 498 0
+ 479 0016 4B69     		ldr	r3, [r1, #20]
+ 497:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       Init->ECCPageSize                |\
+ 480              		.loc 1 497 0
+ 481 0018 42EA4322 		orr	r2, r2, r3, lsl #9
+ 499:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ((Init->TARSetupTime) << 13));   
+ 482              		.loc 1 499 0
+ 483 001c 8B69     		ldr	r3, [r1, #24]
+ 493:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       FMC_PCR_MEMORY_TYPE_NAND         |\
+ 484              		.loc 1 493 0
+ 485 001e 42EA4333 		orr	r3, r2, r3, lsl #13
+ 486 0022 2343     		orrs	r3, r3, r4
+ 487 0024 43F00803 		orr	r3, r3, #8
+ 488              	.LVL40:
+ 500:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 501:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* NAND bank 3 registers configuration */
+ 502:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PCR  = tmpr;
+ 489              		.loc 1 502 0
+ 490 0028 0360     		str	r3, [r0]
+ 503:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 504:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 505:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 506:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 491              		.loc 1 506 0
+ 492 002a 0020     		movs	r0, #0
+ 493              	.LVL41:
+ 494 002c 5DF8044B 		ldr	r4, [sp], #4
+ 495              	.LCFI11:
+ 496              		.cfi_restore 4
+ 497              		.cfi_def_cfa_offset 0
+ 498 0030 7047     		bx	lr
+ 499              	.L27:
+ 500 0032 00BF     		.align	2
+ 501              	.L26:
+ 502 0034 8101F0FF 		.word	-1048191
+ARM GAS  /tmp/cceNLurS.s 			page 19
+
+
+ 503              		.cfi_endproc
+ 504              	.LFE142:
+ 506              		.section	.text.FMC_NAND_CommonSpace_Timing_Init,"ax",%progbits
+ 507              		.align	2
+ 508              		.global	FMC_NAND_CommonSpace_Timing_Init
+ 509              		.thumb
+ 510              		.thumb_func
+ 512              	FMC_NAND_CommonSpace_Timing_Init:
+ 513              	.LFB143:
+ 507:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 508:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 509:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initializes the FMC_NAND Common space Timing according to the specified
+ 510:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         parameters in the FMC_NAND_PCC_TimingTypeDef
+ 511:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 512:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to NAND timing structure
+ 513:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number   
+ 514:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 515:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 516:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_CommonSpace_Timing_Init(FMC_NAND_TypeDef *Device, FMC_NAND_PCC_TimingTyp
+ 517:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 514              		.loc 1 517 0
+ 515              		.cfi_startproc
+ 516              		@ args = 0, pretend = 0, frame = 0
+ 517              		@ frame_needed = 0, uses_anonymous_args = 0
+ 518              		@ link register save eliminated.
+ 519              	.LVL42:
+ 518:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;  
+ 519:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 520:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 521:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device));
+ 522:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SETUP_TIME(Timing->SetupTime));
+ 523:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAIT_TIME(Timing->WaitSetupTime));
+ 524:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_HOLD_TIME(Timing->HoldSetupTime));
+ 525:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_HIZ_TIME(Timing->HiZSetupTime));
+ 526:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 527:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 528:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the NAND bank 3 register value */
+ 529:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = Device->PMEM;
+ 520              		.loc 1 529 0
+ 521 0000 8368     		ldr	r3, [r0, #8]
+ 522              	.LVL43:
+ 530:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 531:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Clear MEMSETx, MEMWAITx, MEMHOLDx and MEMHIZx bits */
+ 532:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr &= ((uint32_t)~(FMC_PMEM_MEMSET3  | FMC_PMEM_MEMWAIT3 | FMC_PMEM_MEMHOLD3 | \
+ 533:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_PMEM_MEMHIZ3)); 
+ 534:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set FMC_NAND device timing parameters */
+ 535:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr |= (uint32_t)(Timing->SetupTime                  |\
+ 523              		.loc 1 535 0
+ 524 0002 0B68     		ldr	r3, [r1]
+ 536:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->WaitSetupTime) << 8)     |\
+ 525              		.loc 1 536 0
+ 526 0004 4A68     		ldr	r2, [r1, #4]
+ 527              	.LVL44:
+ 535:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->WaitSetupTime) << 8)     |\
+ 528              		.loc 1 535 0
+ 529 0006 43EA0223 		orr	r3, r3, r2, lsl #8
+ 537:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->HoldSetupTime) << 16)    |\
+ARM GAS  /tmp/cceNLurS.s 			page 20
+
+
+ 530              		.loc 1 537 0
+ 531 000a 8A68     		ldr	r2, [r1, #8]
+ 536:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->WaitSetupTime) << 8)     |\
+ 532              		.loc 1 536 0
+ 533 000c 43EA0243 		orr	r3, r3, r2, lsl #16
+ 538:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->HiZSetupTime) << 24)
+ 534              		.loc 1 538 0
+ 535 0010 CA68     		ldr	r2, [r1, #12]
+ 537:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ((Timing->HoldSetupTime) << 16)    |\
+ 536              		.loc 1 537 0
+ 537 0012 43EA0263 		orr	r3, r3, r2, lsl #24
+ 538              	.LVL45:
+ 539:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        );
+ 540:HALLIB/Src/stm32f7xx_ll_fmc.c ****                             
+ 541:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* NAND bank 3 registers configuration */
+ 542:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PMEM = tmpr;
+ 539              		.loc 1 542 0
+ 540 0016 8360     		str	r3, [r0, #8]
+ 543:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 544:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 545:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 541              		.loc 1 545 0
+ 542 0018 0020     		movs	r0, #0
+ 543              	.LVL46:
+ 544 001a 7047     		bx	lr
+ 545              		.cfi_endproc
+ 546              	.LFE143:
+ 548              		.section	.text.FMC_NAND_AttributeSpace_Timing_Init,"ax",%progbits
+ 549              		.align	2
+ 550              		.global	FMC_NAND_AttributeSpace_Timing_Init
+ 551              		.thumb
+ 552              		.thumb_func
+ 554              	FMC_NAND_AttributeSpace_Timing_Init:
+ 555              	.LFB144:
+ 546:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 547:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 548:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initializes the FMC_NAND Attribute space Timing according to the specified
+ 549:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         parameters in the FMC_NAND_PCC_TimingTypeDef
+ 550:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 551:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to NAND timing structure
+ 552:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number 
+ 553:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 554:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 555:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_AttributeSpace_Timing_Init(FMC_NAND_TypeDef *Device, FMC_NAND_PCC_Timing
+ 556:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 556              		.loc 1 556 0
+ 557              		.cfi_startproc
+ 558              		@ args = 0, pretend = 0, frame = 0
+ 559              		@ frame_needed = 0, uses_anonymous_args = 0
+ 560              		@ link register save eliminated.
+ 561              	.LVL47:
+ 557:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr = 0;  
+ 558:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 559:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */ 
+ 560:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device)); 
+ 561:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SETUP_TIME(Timing->SetupTime));
+ 562:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WAIT_TIME(Timing->WaitSetupTime));
+ARM GAS  /tmp/cceNLurS.s 			page 21
+
+
+ 563:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_HOLD_TIME(Timing->HoldSetupTime));
+ 564:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_HIZ_TIME(Timing->HiZSetupTime));
+ 565:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 566:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 567:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the NAND bank 3 register value */
+ 568:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = Device->PATT;
+ 562              		.loc 1 568 0
+ 563 0000 C368     		ldr	r3, [r0, #12]
+ 564              	.LVL48:
+ 569:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 570:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Clear ATTSETx, ATTWAITx, ATTHOLDx and ATTHIZx bits */
+ 571:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr &= ((uint32_t)~(FMC_PATT_ATTSET3  | FMC_PATT_ATTWAIT3 | FMC_PATT_ATTHOLD3 | \
+ 572:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        FMC_PATT_ATTHIZ3));
+ 573:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set FMC_NAND device timing parameters */
+ 574:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr |= (uint32_t)(Timing->SetupTime                  |\
+ 565              		.loc 1 574 0
+ 566 0002 0B68     		ldr	r3, [r1]
+ 575:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->WaitSetupTime) << 8)     |\
+ 567              		.loc 1 575 0
+ 568 0004 4A68     		ldr	r2, [r1, #4]
+ 569              	.LVL49:
+ 574:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->WaitSetupTime) << 8)     |\
+ 570              		.loc 1 574 0
+ 571 0006 43EA0223 		orr	r3, r3, r2, lsl #8
+ 576:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->HoldSetupTime) << 16)    |\
+ 572              		.loc 1 576 0
+ 573 000a 8A68     		ldr	r2, [r1, #8]
+ 575:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->WaitSetupTime) << 8)     |\
+ 574              		.loc 1 575 0
+ 575 000c 43EA0243 		orr	r3, r3, r2, lsl #16
+ 577:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->HiZSetupTime) << 24));
+ 576              		.loc 1 577 0
+ 577 0010 CA68     		ldr	r2, [r1, #12]
+ 576:HALLIB/Src/stm32f7xx_ll_fmc.c ****                    ((Timing->HoldSetupTime) << 16)    |\
+ 578              		.loc 1 576 0
+ 579 0012 43EA0263 		orr	r3, r3, r2, lsl #24
+ 580              	.LVL50:
+ 578:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        
+ 579:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* NAND bank 3 registers configuration */
+ 580:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PATT = tmpr;
+ 581              		.loc 1 580 0
+ 582 0016 C360     		str	r3, [r0, #12]
+ 581:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 582:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 583:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 583              		.loc 1 583 0
+ 584 0018 0020     		movs	r0, #0
+ 585              	.LVL51:
+ 586 001a 7047     		bx	lr
+ 587              		.cfi_endproc
+ 588              	.LFE144:
+ 590              		.section	.text.FMC_NAND_DeInit,"ax",%progbits
+ 591              		.align	2
+ 592              		.global	FMC_NAND_DeInit
+ 593              		.thumb
+ 594              		.thumb_func
+ 596              	FMC_NAND_DeInit:
+ARM GAS  /tmp/cceNLurS.s 			page 22
+
+
+ 597              	.LFB145:
+ 584:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 585:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 586:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  DeInitializes the FMC_NAND device 
+ 587:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 588:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number
+ 589:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 590:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 591:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_DeInit(FMC_NAND_TypeDef *Device, uint32_t Bank)
+ 592:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 598              		.loc 1 592 0
+ 599              		.cfi_startproc
+ 600              		@ args = 0, pretend = 0, frame = 0
+ 601              		@ frame_needed = 0, uses_anonymous_args = 0
+ 602              		@ link register save eliminated.
+ 603              	.LVL52:
+ 593:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */ 
+ 594:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device)); 
+ 595:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 596:HALLIB/Src/stm32f7xx_ll_fmc.c ****       
+ 597:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Disable the NAND Bank */
+ 598:HALLIB/Src/stm32f7xx_ll_fmc.c ****   __FMC_NAND_DISABLE(Device);
+ 604              		.loc 1 598 0
+ 605 0000 0368     		ldr	r3, [r0]
+ 606 0002 23F00403 		bic	r3, r3, #4
+ 607 0006 0360     		str	r3, [r0]
+ 599:HALLIB/Src/stm32f7xx_ll_fmc.c ****  
+ 600:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Set the FMC_NAND_BANK3 registers to their reset values */
+ 601:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PCR  = 0x00000018U;
+ 608              		.loc 1 601 0
+ 609 0008 1823     		movs	r3, #24
+ 610 000a 0360     		str	r3, [r0]
+ 602:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SR   = 0x00000040U;
+ 611              		.loc 1 602 0
+ 612 000c 4023     		movs	r3, #64
+ 613 000e 4360     		str	r3, [r0, #4]
+ 603:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PMEM = 0xFCFCFCFCU;
+ 614              		.loc 1 603 0
+ 615 0010 4FF0FC33 		mov	r3, #-50529028
+ 616 0014 8360     		str	r3, [r0, #8]
+ 604:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PATT = 0xFCFCFCFCU; 
+ 617              		.loc 1 604 0
+ 618 0016 C360     		str	r3, [r0, #12]
+ 605:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 606:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 607:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 619              		.loc 1 607 0
+ 620 0018 0020     		movs	r0, #0
+ 621              	.LVL53:
+ 622 001a 7047     		bx	lr
+ 623              		.cfi_endproc
+ 624              	.LFE145:
+ 626              		.section	.text.FMC_NAND_ECC_Enable,"ax",%progbits
+ 627              		.align	2
+ 628              		.global	FMC_NAND_ECC_Enable
+ 629              		.thumb
+ 630              		.thumb_func
+ARM GAS  /tmp/cceNLurS.s 			page 23
+
+
+ 632              	FMC_NAND_ECC_Enable:
+ 633              	.LFB146:
+ 608:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 609:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 610:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 611:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 612:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 613:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup HAL_FMC_NAND_Group3 Control functions 
+ 614:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *  @brief   management functions 
+ 615:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 616:HALLIB/Src/stm32f7xx_ll_fmc.c **** @verbatim   
+ 617:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 618:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        ##### FMC_NAND Control functions #####
+ 619:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================  
+ 620:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]
+ 621:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This subsection provides a set of functions allowing to control dynamically
+ 622:HALLIB/Src/stm32f7xx_ll_fmc.c ****     the FMC NAND interface.
+ 623:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 624:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 625:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 626:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */ 
+ 627:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 628:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 629:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 630:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Enables dynamically FMC_NAND ECC feature.
+ 631:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 632:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number
+ 633:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 634:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */    
+ 635:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_ECC_Enable(FMC_NAND_TypeDef *Device, uint32_t Bank)
+ 636:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 634              		.loc 1 636 0
+ 635              		.cfi_startproc
+ 636              		@ args = 0, pretend = 0, frame = 0
+ 637              		@ frame_needed = 0, uses_anonymous_args = 0
+ 638              		@ link register save eliminated.
+ 639              	.LVL54:
+ 637:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */ 
+ 638:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device)); 
+ 639:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 640:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 641:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Enable ECC feature */
+ 642:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PCR |= FMC_PCR_ECCEN;
+ 640              		.loc 1 642 0
+ 641 0000 0368     		ldr	r3, [r0]
+ 642 0002 43F04003 		orr	r3, r3, #64
+ 643 0006 0360     		str	r3, [r0]
+ 643:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 644:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 645:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 644              		.loc 1 645 0
+ 645 0008 0020     		movs	r0, #0
+ 646              	.LVL55:
+ 647 000a 7047     		bx	lr
+ 648              		.cfi_endproc
+ 649              	.LFE146:
+ 651              		.section	.text.FMC_NAND_ECC_Disable,"ax",%progbits
+ARM GAS  /tmp/cceNLurS.s 			page 24
+
+
+ 652              		.align	2
+ 653              		.global	FMC_NAND_ECC_Disable
+ 654              		.thumb
+ 655              		.thumb_func
+ 657              	FMC_NAND_ECC_Disable:
+ 658              	.LFB147:
+ 646:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 647:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 648:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 649:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Disables dynamically FMC_NAND ECC feature.
+ 650:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 651:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number
+ 652:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 653:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */  
+ 654:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_ECC_Disable(FMC_NAND_TypeDef *Device, uint32_t Bank)  
+ 655:HALLIB/Src/stm32f7xx_ll_fmc.c **** {  
+ 659              		.loc 1 655 0
+ 660              		.cfi_startproc
+ 661              		@ args = 0, pretend = 0, frame = 0
+ 662              		@ frame_needed = 0, uses_anonymous_args = 0
+ 663              		@ link register save eliminated.
+ 664              	.LVL56:
+ 656:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */ 
+ 657:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device)); 
+ 658:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 659:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 660:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Disable ECC feature */
+ 661:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->PCR &= ~FMC_PCR_ECCEN;
+ 665              		.loc 1 661 0
+ 666 0000 0368     		ldr	r3, [r0]
+ 667 0002 23F04003 		bic	r3, r3, #64
+ 668 0006 0360     		str	r3, [r0]
+ 662:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 663:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 664:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 669              		.loc 1 664 0
+ 670 0008 0020     		movs	r0, #0
+ 671              	.LVL57:
+ 672 000a 7047     		bx	lr
+ 673              		.cfi_endproc
+ 674              	.LFE147:
+ 676              		.section	.text.FMC_NAND_GetECC,"ax",%progbits
+ 677              		.align	2
+ 678              		.global	FMC_NAND_GetECC
+ 679              		.thumb
+ 680              		.thumb_func
+ 682              	FMC_NAND_GetECC:
+ 683              	.LFB148:
+ 665:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 666:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 667:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Disables dynamically FMC_NAND ECC feature.
+ 668:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to NAND device instance
+ 669:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  ECCval Pointer to ECC value
+ 670:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank NAND bank number
+ 671:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timeout Timeout wait value  
+ 672:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 673:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ARM GAS  /tmp/cceNLurS.s 			page 25
+
+
+ 674:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_NAND_GetECC(FMC_NAND_TypeDef *Device, uint32_t *ECCval, uint32_t Bank, uint32
+ 675:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 684              		.loc 1 675 0
+ 685              		.cfi_startproc
+ 686              		@ args = 0, pretend = 0, frame = 0
+ 687              		@ frame_needed = 0, uses_anonymous_args = 0
+ 688              	.LVL58:
+ 689 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 690              	.LCFI12:
+ 691              		.cfi_def_cfa_offset 24
+ 692              		.cfi_offset 3, -24
+ 693              		.cfi_offset 4, -20
+ 694              		.cfi_offset 5, -16
+ 695              		.cfi_offset 6, -12
+ 696              		.cfi_offset 7, -8
+ 697              		.cfi_offset 14, -4
+ 698 0002 0446     		mov	r4, r0
+ 699 0004 0E46     		mov	r6, r1
+ 700 0006 1D46     		mov	r5, r3
+ 701              	.LVL59:
+ 676:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tickstart = 0;
+ 677:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 678:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */ 
+ 679:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_DEVICE(Device)); 
+ 680:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_NAND_BANK(Bank));
+ 681:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 682:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get tick */ 
+ 683:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tickstart = HAL_GetTick();
+ 702              		.loc 1 683 0
+ 703 0008 FFF7FEFF 		bl	HAL_GetTick
+ 704              	.LVL60:
+ 705 000c 0746     		mov	r7, r0
+ 706              	.LVL61:
+ 684:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 685:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Wait until FIFO is empty */
+ 686:HALLIB/Src/stm32f7xx_ll_fmc.c ****   while(__FMC_NAND_GET_FLAG(Device, Bank, FMC_FLAG_FEMPT) == RESET)
+ 707              		.loc 1 686 0
+ 708 000e 08E0     		b	.L35
+ 709              	.LVL62:
+ 710              	.L37:
+ 687:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 688:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Check for the Timeout */
+ 689:HALLIB/Src/stm32f7xx_ll_fmc.c ****     if(Timeout != HAL_MAX_DELAY)
+ 711              		.loc 1 689 0
+ 712 0010 B5F1FF3F 		cmp	r5, #-1
+ 713 0014 05D0     		beq	.L35
+ 690:HALLIB/Src/stm32f7xx_ll_fmc.c ****     {
+ 691:HALLIB/Src/stm32f7xx_ll_fmc.c ****       if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+ 714              		.loc 1 691 0
+ 715 0016 65B1     		cbz	r5, .L38
+ 716              		.loc 1 691 0 is_stmt 0 discriminator 1
+ 717 0018 FFF7FEFF 		bl	HAL_GetTick
+ 718              	.LVL63:
+ 719 001c C01B     		subs	r0, r0, r7
+ 720 001e 8542     		cmp	r5, r0
+ 721 0020 09D3     		bcc	.L39
+ 722              	.L35:
+ARM GAS  /tmp/cceNLurS.s 			page 26
+
+
+ 686:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 723              		.loc 1 686 0 is_stmt 1
+ 724 0022 6368     		ldr	r3, [r4, #4]
+ 725 0024 13F0400F 		tst	r3, #64
+ 726 0028 F2D0     		beq	.L37
+ 692:HALLIB/Src/stm32f7xx_ll_fmc.c ****       {
+ 693:HALLIB/Src/stm32f7xx_ll_fmc.c ****         return HAL_TIMEOUT;
+ 694:HALLIB/Src/stm32f7xx_ll_fmc.c ****       }
+ 695:HALLIB/Src/stm32f7xx_ll_fmc.c ****     }  
+ 696:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 697:HALLIB/Src/stm32f7xx_ll_fmc.c ****  
+ 698:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the ECCR register value */
+ 699:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *ECCval = (uint32_t)Device->ECCR;
+ 727              		.loc 1 699 0
+ 728 002a 6369     		ldr	r3, [r4, #20]
+ 729 002c 3360     		str	r3, [r6]
+ 700:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 701:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 730              		.loc 1 701 0
+ 731 002e 0020     		movs	r0, #0
+ 732 0030 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 733              	.LVL64:
+ 734              	.L38:
+ 693:HALLIB/Src/stm32f7xx_ll_fmc.c ****       }
+ 735              		.loc 1 693 0
+ 736 0032 0320     		movs	r0, #3
+ 737 0034 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 738              	.LVL65:
+ 739              	.L39:
+ 740 0036 0320     		movs	r0, #3
+ 702:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 741              		.loc 1 702 0
+ 742 0038 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 743              		.cfi_endproc
+ 744              	.LFE148:
+ 746 003a 00BF     		.section	.text.FMC_SDRAM_Init,"ax",%progbits
+ 747              		.align	2
+ 748              		.global	FMC_SDRAM_Init
+ 749              		.thumb
+ 750              		.thumb_func
+ 752              	FMC_SDRAM_Init:
+ 753              	.LFB149:
+ 703:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 704:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 705:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 706:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 707:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 708:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 709:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 710:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 711:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 712:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @defgroup FMC_LL_SDRAM
+ 713:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief    SDRAM Controller functions 
+ 714:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 715:HALLIB/Src/stm32f7xx_ll_fmc.c ****   @verbatim 
+ 716:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 717:HALLIB/Src/stm32f7xx_ll_fmc.c ****                      ##### How to use SDRAM device driver #####
+ARM GAS  /tmp/cceNLurS.s 			page 27
+
+
+ 718:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 719:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..] 
+ 720:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This driver contains a set of APIs to interface with the FMC SDRAM banks in order
+ 721:HALLIB/Src/stm32f7xx_ll_fmc.c ****     to run the SDRAM external devices.
+ 722:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 723:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC SDRAM bank reset using the function FMC_SDRAM_DeInit() 
+ 724:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC SDRAM bank control configuration using the function FMC_SDRAM_Init()
+ 725:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC SDRAM bank timing configuration using the function FMC_SDRAM_Timing_Init()
+ 726:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC SDRAM bank enable/disable write operation using the functions
+ 727:HALLIB/Src/stm32f7xx_ll_fmc.c ****         FMC_SDRAM_WriteOperation_Enable()/FMC_SDRAM_WriteOperation_Disable()   
+ 728:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) FMC SDRAM bank send command using the function FMC_SDRAM_SendCommand()      
+ 729:HALLIB/Src/stm32f7xx_ll_fmc.c ****        
+ 730:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 731:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 732:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 733:HALLIB/Src/stm32f7xx_ll_fmc.c ****          
+ 734:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @addtogroup FMC_LL_SDRAM_Private_Functions_Group1
+ 735:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *  @brief    Initialization and Configuration functions 
+ 736:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 737:HALLIB/Src/stm32f7xx_ll_fmc.c **** @verbatim    
+ 738:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 739:HALLIB/Src/stm32f7xx_ll_fmc.c ****               ##### Initialization and de_initialization functions #####
+ 740:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 741:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]  
+ 742:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This section provides functions allowing to:
+ 743:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Initialize and configure the FMC SDRAM interface
+ 744:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) De-initialize the FMC SDRAM interface 
+ 745:HALLIB/Src/stm32f7xx_ll_fmc.c ****     (+) Configure the FMC clock and associated GPIOs
+ 746:HALLIB/Src/stm32f7xx_ll_fmc.c ****         
+ 747:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 748:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 749:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 750:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 751:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 752:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initializes the FMC_SDRAM device according to the specified
+ 753:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         control parameters in the FMC_SDRAM_InitTypeDef
+ 754:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance
+ 755:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Init Pointer to SDRAM Initialization structure   
+ 756:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 757:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 758:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_Init(FMC_SDRAM_TypeDef *Device, FMC_SDRAM_InitTypeDef *Init)
+ 759:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 754              		.loc 1 759 0
+ 755              		.cfi_startproc
+ 756              		@ args = 0, pretend = 0, frame = 0
+ 757              		@ frame_needed = 0, uses_anonymous_args = 0
+ 758              		@ link register save eliminated.
+ 759              	.LVL66:
+ 760 0000 30B4     		push	{r4, r5}
+ 761              	.LCFI13:
+ 762              		.cfi_def_cfa_offset 8
+ 763              		.cfi_offset 4, -8
+ 764              		.cfi_offset 5, -4
+ 765              	.LVL67:
+ 760:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr1 = 0;
+ 761:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr2 = 0;
+ 762:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ARM GAS  /tmp/cceNLurS.s 			page 28
+
+
+ 763:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 764:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 765:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Init->SDBank));
+ 766:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_COLUMNBITS_NUMBER(Init->ColumnBitsNumber));
+ 767:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ROWBITS_NUMBER(Init->RowBitsNumber));
+ 768:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDMEMORY_WIDTH(Init->MemoryDataWidth));
+ 769:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_INTERNALBANK_NUMBER(Init->InternalBankNumber));
+ 770:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_CAS_LATENCY(Init->CASLatency));
+ 771:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WRITE_PROTECTION(Init->WriteProtection));
+ 772:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDCLOCK_PERIOD(Init->SDClockPeriod));
+ 773:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_READ_BURST(Init->ReadBurst));
+ 774:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_READPIPE_DELAY(Init->ReadPipeDelay));   
+ 775:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 776:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set SDRAM bank configuration parameters */
+ 777:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if (Init->SDBank != FMC_SDRAM_BANK2) 
+ 766              		.loc 1 777 0
+ 767 0002 0B68     		ldr	r3, [r1]
+ 768 0004 012B     		cmp	r3, #1
+ 769 0006 16D0     		beq	.L42
+ 778:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 779:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 = Device->SDCR[FMC_SDRAM_BANK1];
+ 770              		.loc 1 779 0
+ 771 0008 0368     		ldr	r3, [r0]
+ 772              	.LVL68:
+ 780:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 781:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear NC, NR, MWID, NB, CAS, WP, SDCLK, RBURST, and RPIPE bits */
+ 782:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 &= ((uint32_t)~(FMC_SDCR1_NC  | FMC_SDCR1_NR | FMC_SDCR1_MWID | \
+ 773              		.loc 1 782 0
+ 774 000a 1A4C     		ldr	r4, .L45
+ 775 000c 1C40     		ands	r4, r4, r3
+ 776              	.LVL69:
+ 783:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDCR1_NB  | FMC_SDCR1_CAS | FMC_SDCR1_WP   | \
+ 784:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDCR1_SDCLK | FMC_SDCR1_RBURST | FMC_SDCR1_RPIPE));
+ 785:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 786:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 |= (uint32_t)(Init->ColumnBitsNumber   |\
+ 777              		.loc 1 786 0
+ 778 000e 4A68     		ldr	r2, [r1, #4]
+ 787:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->RowBitsNumber      |\
+ 779              		.loc 1 787 0
+ 780 0010 8B68     		ldr	r3, [r1, #8]
+ 786:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->RowBitsNumber      |\
+ 781              		.loc 1 786 0
+ 782 0012 1A43     		orrs	r2, r2, r3
+ 788:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->MemoryDataWidth    |\
+ 783              		.loc 1 788 0
+ 784 0014 CB68     		ldr	r3, [r1, #12]
+ 787:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->RowBitsNumber      |\
+ 785              		.loc 1 787 0
+ 786 0016 1A43     		orrs	r2, r2, r3
+ 789:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->InternalBankNumber |\
+ 787              		.loc 1 789 0
+ 788 0018 0B69     		ldr	r3, [r1, #16]
+ 788:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->MemoryDataWidth    |\
+ 789              		.loc 1 788 0
+ 790 001a 1A43     		orrs	r2, r2, r3
+ 790:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->CASLatency         |\
+ 791              		.loc 1 790 0
+ARM GAS  /tmp/cceNLurS.s 			page 29
+
+
+ 792 001c 4B69     		ldr	r3, [r1, #20]
+ 789:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->InternalBankNumber |\
+ 793              		.loc 1 789 0
+ 794 001e 1A43     		orrs	r2, r2, r3
+ 791:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->WriteProtection    |\
+ 795              		.loc 1 791 0
+ 796 0020 8B69     		ldr	r3, [r1, #24]
+ 790:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->CASLatency         |\
+ 797              		.loc 1 790 0
+ 798 0022 1A43     		orrs	r2, r2, r3
+ 792:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->SDClockPeriod      |\
+ 799              		.loc 1 792 0
+ 800 0024 CB69     		ldr	r3, [r1, #28]
+ 791:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->WriteProtection    |\
+ 801              		.loc 1 791 0
+ 802 0026 1A43     		orrs	r2, r2, r3
+ 793:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ 803              		.loc 1 793 0
+ 804 0028 0B6A     		ldr	r3, [r1, #32]
+ 792:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->SDClockPeriod      |\
+ 805              		.loc 1 792 0
+ 806 002a 1343     		orrs	r3, r3, r2
+ 794:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadPipeDelay
+ 807              		.loc 1 794 0
+ 808 002c 4A6A     		ldr	r2, [r1, #36]
+ 793:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ 809              		.loc 1 793 0
+ 810 002e 1343     		orrs	r3, r3, r2
+ 786:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->RowBitsNumber      |\
+ 811              		.loc 1 786 0
+ 812 0030 2343     		orrs	r3, r3, r4
+ 813              	.LVL70:
+ 795:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         );                                      
+ 796:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDCR[FMC_SDRAM_BANK1] = tmpr1;
+ 814              		.loc 1 796 0
+ 815 0032 0360     		str	r3, [r0]
+ 816 0034 1AE0     		b	.L43
+ 817              	.LVL71:
+ 818              	.L42:
+ 797:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 798:HALLIB/Src/stm32f7xx_ll_fmc.c ****   else /* FMC_Bank2_SDRAM */                      
+ 799:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 800:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 = Device->SDCR[FMC_SDRAM_BANK1];
+ 819              		.loc 1 800 0
+ 820 0036 0468     		ldr	r4, [r0]
+ 821              	.LVL72:
+ 801:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 802:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear SDCLK, RBURST, and RPIPE bits */
+ 803:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 &= ((uint32_t)~(FMC_SDCR1_SDCLK | FMC_SDCR1_RBURST | FMC_SDCR1_RPIPE));
+ 822              		.loc 1 803 0
+ 823 0038 24F4F842 		bic	r2, r4, #31744
+ 824              	.LVL73:
+ 804:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 805:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 |= (uint32_t)(Init->SDClockPeriod      |\
+ 825              		.loc 1 805 0
+ 826 003c CC69     		ldr	r4, [r1, #28]
+ 806:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ARM GAS  /tmp/cceNLurS.s 			page 30
+
+
+ 827              		.loc 1 806 0
+ 828 003e 0B6A     		ldr	r3, [r1, #32]
+ 805:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ 829              		.loc 1 805 0
+ 830 0040 1C43     		orrs	r4, r4, r3
+ 807:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadPipeDelay);
+ 831              		.loc 1 807 0
+ 832 0042 4B6A     		ldr	r3, [r1, #36]
+ 806:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ 833              		.loc 1 806 0
+ 834 0044 2343     		orrs	r3, r3, r4
+ 805:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         Init->ReadBurst          |\
+ 835              		.loc 1 805 0
+ 836 0046 42EA0304 		orr	r4, r2, r3
+ 837              	.LVL74:
+ 808:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 809:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 = Device->SDCR[FMC_SDRAM_BANK2];
+ 838              		.loc 1 809 0
+ 839 004a 4368     		ldr	r3, [r0, #4]
+ 840              	.LVL75:
+ 810:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 811:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear NC, NR, MWID, NB, CAS, WP, SDCLK, RBURST, and RPIPE bits */
+ 812:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 &= ((uint32_t)~(FMC_SDCR1_NC  | FMC_SDCR1_NR | FMC_SDCR1_MWID | \
+ 841              		.loc 1 812 0
+ 842 004c 094D     		ldr	r5, .L45
+ 843 004e 1D40     		ands	r5, r5, r3
+ 844              	.LVL76:
+ 813:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDCR1_NB  | FMC_SDCR1_CAS | FMC_SDCR1_WP   | \
+ 814:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDCR1_SDCLK | FMC_SDCR1_RBURST | FMC_SDCR1_RPIPE));
+ 815:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 816:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 |= (uint32_t)(Init->ColumnBitsNumber   |\
+ 845              		.loc 1 816 0
+ 846 0050 4A68     		ldr	r2, [r1, #4]
+ 817:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->RowBitsNumber       |\
+ 847              		.loc 1 817 0
+ 848 0052 8B68     		ldr	r3, [r1, #8]
+ 816:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->RowBitsNumber       |\
+ 849              		.loc 1 816 0
+ 850 0054 1A43     		orrs	r2, r2, r3
+ 818:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->MemoryDataWidth     |\
+ 851              		.loc 1 818 0
+ 852 0056 CB68     		ldr	r3, [r1, #12]
+ 817:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->RowBitsNumber       |\
+ 853              		.loc 1 817 0
+ 854 0058 1A43     		orrs	r2, r2, r3
+ 819:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->InternalBankNumber  |\
+ 855              		.loc 1 819 0
+ 856 005a 0B69     		ldr	r3, [r1, #16]
+ 818:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->MemoryDataWidth     |\
+ 857              		.loc 1 818 0
+ 858 005c 1A43     		orrs	r2, r2, r3
+ 820:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->CASLatency          |\
+ 859              		.loc 1 820 0
+ 860 005e 4B69     		ldr	r3, [r1, #20]
+ 819:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->InternalBankNumber  |\
+ 861              		.loc 1 819 0
+ 862 0060 1343     		orrs	r3, r3, r2
+ARM GAS  /tmp/cceNLurS.s 			page 31
+
+
+ 821:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->WriteProtection);
+ 863              		.loc 1 821 0
+ 864 0062 8A69     		ldr	r2, [r1, #24]
+ 820:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->CASLatency          |\
+ 865              		.loc 1 820 0
+ 866 0064 1343     		orrs	r3, r3, r2
+ 816:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        Init->RowBitsNumber       |\
+ 867              		.loc 1 816 0
+ 868 0066 2B43     		orrs	r3, r3, r5
+ 869              	.LVL77:
+ 822:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 823:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDCR[FMC_SDRAM_BANK1] = tmpr1;
+ 870              		.loc 1 823 0
+ 871 0068 0460     		str	r4, [r0]
+ 824:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDCR[FMC_SDRAM_BANK2] = tmpr2;
+ 872              		.loc 1 824 0
+ 873 006a 4360     		str	r3, [r0, #4]
+ 874              	.LVL78:
+ 875              	.L43:
+ 825:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 826:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 827:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 828:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 876              		.loc 1 828 0
+ 877 006c 0020     		movs	r0, #0
+ 878              	.LVL79:
+ 879 006e 30BC     		pop	{r4, r5}
+ 880              	.LCFI14:
+ 881              		.cfi_restore 5
+ 882              		.cfi_restore 4
+ 883              		.cfi_def_cfa_offset 0
+ 884 0070 7047     		bx	lr
+ 885              	.L46:
+ 886 0072 00BF     		.align	2
+ 887              	.L45:
+ 888 0074 0080FFFF 		.word	-32768
+ 889              		.cfi_endproc
+ 890              	.LFE149:
+ 892              		.section	.text.FMC_SDRAM_Timing_Init,"ax",%progbits
+ 893              		.align	2
+ 894              		.global	FMC_SDRAM_Timing_Init
+ 895              		.thumb
+ 896              		.thumb_func
+ 898              	FMC_SDRAM_Timing_Init:
+ 899              	.LFB150:
+ 829:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 830:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 831:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 832:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Initializes the FMC_SDRAM device timing according to the specified
+ 833:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         parameters in the FMC_SDRAM_TimingTypeDef
+ 834:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance
+ 835:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to SDRAM Timing structure
+ 836:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank SDRAM bank number   
+ 837:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 838:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 839:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_Timing_Init(FMC_SDRAM_TypeDef *Device, FMC_SDRAM_TimingTypeDef *Timing,
+ 840:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ARM GAS  /tmp/cceNLurS.s 			page 32
+
+
+ 900              		.loc 1 840 0
+ 901              		.cfi_startproc
+ 902              		@ args = 0, pretend = 0, frame = 0
+ 903              		@ frame_needed = 0, uses_anonymous_args = 0
+ 904              	.LVL80:
+ 905 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 906              	.LCFI15:
+ 907              		.cfi_def_cfa_offset 20
+ 908              		.cfi_offset 4, -20
+ 909              		.cfi_offset 5, -16
+ 910              		.cfi_offset 6, -12
+ 911              		.cfi_offset 7, -8
+ 912              		.cfi_offset 14, -4
+ 913              	.LVL81:
+ 841:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr1 = 0;
+ 842:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpr2 = 0;
+ 843:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 844:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 845:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 846:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_LOADTOACTIVE_DELAY(Timing->LoadToActiveDelay));
+ 847:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_EXITSELFREFRESH_DELAY(Timing->ExitSelfRefreshDelay));
+ 848:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SELFREFRESH_TIME(Timing->SelfRefreshTime));
+ 849:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_ROWCYCLE_DELAY(Timing->RowCycleDelay));
+ 850:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_WRITE_RECOVERY_TIME(Timing->WriteRecoveryTime));
+ 851:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_RP_DELAY(Timing->RPDelay));
+ 852:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_RCD_DELAY(Timing->RCDDelay));
+ 853:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Bank));
+ 854:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 855:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set SDRAM device timing parameters */ 
+ 856:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if (Bank != FMC_SDRAM_BANK2) 
+ 914              		.loc 1 856 0
+ 915 0002 012A     		cmp	r2, #1
+ 916 0004 20D0     		beq	.L48
+ 857:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 858:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 = Device->SDTR[FMC_SDRAM_BANK1];
+ 917              		.loc 1 858 0
+ 918 0006 8368     		ldr	r3, [r0, #8]
+ 919              	.LVL82:
+ 859:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 860:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear TMRD, TXSR, TRAS, TRC, TWR, TRP and TRCD bits */
+ 861:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 &= ((uint32_t)~(FMC_SDTR1_TMRD  | FMC_SDTR1_TXSR | FMC_SDTR1_TRAS | \
+ 920              		.loc 1 861 0
+ 921 0008 03F0704E 		and	lr, r3, #-268435456
+ 922              	.LVL83:
+ 862:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDTR1_TRC  | FMC_SDTR1_TWR | FMC_SDTR1_TRP | \
+ 863:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDTR1_TRCD));
+ 864:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 865:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 |= (uint32_t)(((Timing->LoadToActiveDelay)-1)           |\
+ 923              		.loc 1 865 0
+ 924 000c 0B68     		ldr	r3, [r1]
+ 925 000e 5A1E     		subs	r2, r3, #1
+ 926              	.LVL84:
+ 866:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4) |\
+ 927              		.loc 1 866 0
+ 928 0010 4E68     		ldr	r6, [r1, #4]
+ 929 0012 013E     		subs	r6, r6, #1
+ 865:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4) |\
+ARM GAS  /tmp/cceNLurS.s 			page 33
+
+
+ 930              		.loc 1 865 0
+ 931 0014 42EA0617 		orr	r7, r2, r6, lsl #4
+ 867:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->SelfRefreshTime)-1) << 8)      |\
+ 932              		.loc 1 867 0
+ 933 0018 8D68     		ldr	r5, [r1, #8]
+ 934 001a 013D     		subs	r5, r5, #1
+ 866:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4) |\
+ 935              		.loc 1 866 0
+ 936 001c 47EA0526 		orr	r6, r7, r5, lsl #8
+ 868:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->RowCycleDelay)-1) << 12)       |\
+ 937              		.loc 1 868 0
+ 938 0020 CC68     		ldr	r4, [r1, #12]
+ 939 0022 013C     		subs	r4, r4, #1
+ 867:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->SelfRefreshTime)-1) << 8)      |\
+ 940              		.loc 1 867 0
+ 941 0024 46EA0435 		orr	r5, r6, r4, lsl #12
+ 869:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->WriteRecoveryTime)-1) <<16)    |\
+ 942              		.loc 1 869 0
+ 943 0028 0A69     		ldr	r2, [r1, #16]
+ 944 002a 013A     		subs	r2, r2, #1
+ 868:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->RowCycleDelay)-1) << 12)       |\
+ 945              		.loc 1 868 0
+ 946 002c 45EA0244 		orr	r4, r5, r2, lsl #16
+ 870:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->RPDelay)-1) << 20)             |\
+ 947              		.loc 1 870 0
+ 948 0030 4B69     		ldr	r3, [r1, #20]
+ 949 0032 013B     		subs	r3, r3, #1
+ 869:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->WriteRecoveryTime)-1) <<16)    |\
+ 950              		.loc 1 869 0
+ 951 0034 44EA0352 		orr	r2, r4, r3, lsl #20
+ 871:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->RCDDelay)-1) << 24));
+ 952              		.loc 1 871 0
+ 953 0038 8B69     		ldr	r3, [r1, #24]
+ 954 003a 013B     		subs	r3, r3, #1
+ 865:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4) |\
+ 955              		.loc 1 865 0
+ 956 003c 42EA0363 		orr	r3, r2, r3, lsl #24
+ 957 0040 4EEA0303 		orr	r3, lr, r3
+ 958              	.LVL85:
+ 872:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDTR[FMC_SDRAM_BANK1] = tmpr1;
+ 959              		.loc 1 872 0
+ 960 0044 8360     		str	r3, [r0, #8]
+ 961 0046 24E0     		b	.L49
+ 962              	.LVL86:
+ 963              	.L48:
+ 873:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 874:HALLIB/Src/stm32f7xx_ll_fmc.c ****   else /* FMC_Bank2_SDRAM */
+ 875:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ 876:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 = Device->SDTR[FMC_SDRAM_BANK1];
+ 964              		.loc 1 876 0
+ 965 0048 8368     		ldr	r3, [r0, #8]
+ 966              	.LVL87:
+ 877:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 878:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear TRC and TRP bits */
+ 879:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 &= ((uint32_t)~(FMC_SDTR1_TRC | FMC_SDTR1_TRP));
+ 967              		.loc 1 879 0
+ 968 004a 134A     		ldr	r2, .L51
+ARM GAS  /tmp/cceNLurS.s 			page 34
+
+
+ 969              	.LVL88:
+ 970 004c 1A40     		ands	r2, r2, r3
+ 971              	.LVL89:
+ 880:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 881:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr1 |= (uint32_t)((((Timing->RowCycleDelay)-1) << 12)       |\
+ 972              		.loc 1 881 0
+ 973 004e CF68     		ldr	r7, [r1, #12]
+ 974 0050 013F     		subs	r7, r7, #1
+ 882:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         (((Timing->RPDelay)-1) << 20)); 
+ 975              		.loc 1 882 0
+ 976 0052 4B69     		ldr	r3, [r1, #20]
+ 977 0054 013B     		subs	r3, r3, #1
+ 978 0056 1B05     		lsls	r3, r3, #20
+ 881:HALLIB/Src/stm32f7xx_ll_fmc.c ****                         (((Timing->RPDelay)-1) << 20)); 
+ 979              		.loc 1 881 0
+ 980 0058 43EA0733 		orr	r3, r3, r7, lsl #12
+ 981 005c 42EA0307 		orr	r7, r2, r3
+ 982              	.LVL90:
+ 883:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 884:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 = Device->SDTR[FMC_SDRAM_BANK2];
+ 983              		.loc 1 884 0
+ 984 0060 C368     		ldr	r3, [r0, #12]
+ 985              	.LVL91:
+ 885:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 886:HALLIB/Src/stm32f7xx_ll_fmc.c ****     /* Clear TMRD, TXSR, TRAS, TRC, TWR, TRP and TRCD bits */
+ 887:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 &= ((uint32_t)~(FMC_SDTR1_TMRD  | FMC_SDTR1_TXSR | FMC_SDTR1_TRAS | \
+ 986              		.loc 1 887 0
+ 987 0062 03F0704E 		and	lr, r3, #-268435456
+ 988              	.LVL92:
+ 888:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDTR1_TRC  | FMC_SDTR1_TWR | FMC_SDTR1_TRP | \
+ 889:HALLIB/Src/stm32f7xx_ll_fmc.c ****                           FMC_SDTR1_TRCD));
+ 890:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+ 891:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpr2 |= (uint32_t)(((Timing->LoadToActiveDelay)-1)           |\
+ 989              		.loc 1 891 0
+ 990 0066 0B68     		ldr	r3, [r1]
+ 991 0068 5E1E     		subs	r6, r3, #1
+ 892:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4)  |\
+ 992              		.loc 1 892 0
+ 993 006a 4C68     		ldr	r4, [r1, #4]
+ 994 006c 013C     		subs	r4, r4, #1
+ 891:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4)  |\
+ 995              		.loc 1 891 0
+ 996 006e 46EA0415 		orr	r5, r6, r4, lsl #4
+ 893:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->SelfRefreshTime)-1) << 8)       |\
+ 997              		.loc 1 893 0
+ 998 0072 8A68     		ldr	r2, [r1, #8]
+ 999 0074 013A     		subs	r2, r2, #1
+ 892:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4)  |\
+ 1000              		.loc 1 892 0
+ 1001 0076 45EA0224 		orr	r4, r5, r2, lsl #8
+ 894:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->WriteRecoveryTime)-1) <<16)     |\
+ 1002              		.loc 1 894 0
+ 1003 007a 0B69     		ldr	r3, [r1, #16]
+ 1004 007c 013B     		subs	r3, r3, #1
+ 893:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->SelfRefreshTime)-1) << 8)       |\
+ 1005              		.loc 1 893 0
+ 1006 007e 44EA0342 		orr	r2, r4, r3, lsl #16
+ARM GAS  /tmp/cceNLurS.s 			page 35
+
+
+ 895:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->RCDDelay)-1) << 24));   
+ 1007              		.loc 1 895 0
+ 1008 0082 8B69     		ldr	r3, [r1, #24]
+ 1009 0084 013B     		subs	r3, r3, #1
+ 891:HALLIB/Src/stm32f7xx_ll_fmc.c ****                        (((Timing->ExitSelfRefreshDelay)-1) << 4)  |\
+ 1010              		.loc 1 891 0
+ 1011 0086 42EA0363 		orr	r3, r2, r3, lsl #24
+ 1012 008a 4EEA0303 		orr	r3, lr, r3
+ 1013              	.LVL93:
+ 896:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 897:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDTR[FMC_SDRAM_BANK1] = tmpr1;
+ 1014              		.loc 1 897 0
+ 1015 008e 8760     		str	r7, [r0, #8]
+ 898:HALLIB/Src/stm32f7xx_ll_fmc.c ****     Device->SDTR[FMC_SDRAM_BANK2] = tmpr2;
+ 1016              		.loc 1 898 0
+ 1017 0090 C360     		str	r3, [r0, #12]
+ 1018              	.LVL94:
+ 1019              	.L49:
+ 899:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+ 900:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 901:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 902:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1020              		.loc 1 902 0
+ 1021 0092 0020     		movs	r0, #0
+ 1022              	.LVL95:
+ 1023 0094 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1024              	.L52:
+ 1025 0096 00BF     		.align	2
+ 1026              	.L51:
+ 1027 0098 FF0F0FFF 		.word	-15790081
+ 1028              		.cfi_endproc
+ 1029              	.LFE150:
+ 1031              		.section	.text.FMC_SDRAM_DeInit,"ax",%progbits
+ 1032              		.align	2
+ 1033              		.global	FMC_SDRAM_DeInit
+ 1034              		.thumb
+ 1035              		.thumb_func
+ 1037              	FMC_SDRAM_DeInit:
+ 1038              	.LFB151:
+ 903:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 904:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 905:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  DeInitializes the FMC_SDRAM peripheral 
+ 906:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance
+ 907:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 908:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 909:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_DeInit(FMC_SDRAM_TypeDef *Device, uint32_t Bank)
+ 910:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1039              		.loc 1 910 0
+ 1040              		.cfi_startproc
+ 1041              		@ args = 0, pretend = 0, frame = 0
+ 1042              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1043              		@ link register save eliminated.
+ 1044              	.LVL96:
+ 1045 0000 0346     		mov	r3, r0
+ 911:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 912:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 913:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Bank));
+ARM GAS  /tmp/cceNLurS.s 			page 36
+
+
+ 914:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 915:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* De-initialize the SDRAM device */
+ 916:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCR[Bank] = 0x000002D0;
+ 1046              		.loc 1 916 0
+ 1047 0002 4FF43472 		mov	r2, #720
+ 1048 0006 40F82120 		str	r2, [r0, r1, lsl #2]
+ 917:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDTR[Bank] = 0x0FFFFFFF;    
+ 1049              		.loc 1 917 0
+ 1050 000a 0231     		adds	r1, r1, #2
+ 1051              	.LVL97:
+ 1052 000c 6FF07042 		mvn	r2, #-268435456
+ 1053 0010 40F82120 		str	r2, [r0, r1, lsl #2]
+ 918:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCMR      = 0x00000000;
+ 1054              		.loc 1 918 0
+ 1055 0014 0020     		movs	r0, #0
+ 1056              	.LVL98:
+ 1057 0016 1861     		str	r0, [r3, #16]
+ 919:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDRTR      = 0x00000000;
+ 1058              		.loc 1 919 0
+ 1059 0018 5861     		str	r0, [r3, #20]
+ 920:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDSR       = 0x00000000;
+ 1060              		.loc 1 920 0
+ 1061 001a 9861     		str	r0, [r3, #24]
+ 921:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 922:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 923:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1062              		.loc 1 923 0
+ 1063 001c 7047     		bx	lr
+ 1064              		.cfi_endproc
+ 1065              	.LFE151:
+ 1067 001e 00BF     		.section	.text.FMC_SDRAM_WriteProtection_Enable,"ax",%progbits
+ 1068              		.align	2
+ 1069              		.global	FMC_SDRAM_WriteProtection_Enable
+ 1070              		.thumb
+ 1071              		.thumb_func
+ 1073              	FMC_SDRAM_WriteProtection_Enable:
+ 1074              	.LFB152:
+ 924:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 925:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 926:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @}
+ 927:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 928:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 929:HALLIB/Src/stm32f7xx_ll_fmc.c **** /** @addtogroup FMC_LL_SDRAMPrivate_Functions_Group2
+ 930:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *  @brief   management functions 
+ 931:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *
+ 932:HALLIB/Src/stm32f7xx_ll_fmc.c **** @verbatim   
+ 933:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================
+ 934:HALLIB/Src/stm32f7xx_ll_fmc.c ****                       ##### FMC_SDRAM Control functions #####
+ 935:HALLIB/Src/stm32f7xx_ll_fmc.c ****   ==============================================================================  
+ 936:HALLIB/Src/stm32f7xx_ll_fmc.c ****   [..]
+ 937:HALLIB/Src/stm32f7xx_ll_fmc.c ****     This subsection provides a set of functions allowing to control dynamically
+ 938:HALLIB/Src/stm32f7xx_ll_fmc.c ****     the FMC SDRAM interface.
+ 939:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 940:HALLIB/Src/stm32f7xx_ll_fmc.c **** @endverbatim
+ 941:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @{
+ 942:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 943:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ARM GAS  /tmp/cceNLurS.s 			page 37
+
+
+ 944:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 945:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Enables dynamically FMC_SDRAM write protection.
+ 946:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance
+ 947:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank SDRAM bank number 
+ 948:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 949:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 950:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_WriteProtection_Enable(FMC_SDRAM_TypeDef *Device, uint32_t Bank)
+ 951:HALLIB/Src/stm32f7xx_ll_fmc.c **** { 
+ 1075              		.loc 1 951 0
+ 1076              		.cfi_startproc
+ 1077              		@ args = 0, pretend = 0, frame = 0
+ 1078              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1079              		@ link register save eliminated.
+ 1080              	.LVL99:
+ 952:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 953:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 954:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Bank));
+ 955:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 956:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Enable write protection */
+ 957:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCR[Bank] |= FMC_SDRAM_WRITE_PROTECTION_ENABLE;
+ 1081              		.loc 1 957 0
+ 1082 0000 50F82130 		ldr	r3, [r0, r1, lsl #2]
+ 1083 0004 43F40073 		orr	r3, r3, #512
+ 1084 0008 40F82130 		str	r3, [r0, r1, lsl #2]
+ 958:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 959:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+ 960:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1085              		.loc 1 960 0
+ 1086 000c 0020     		movs	r0, #0
+ 1087              	.LVL100:
+ 1088 000e 7047     		bx	lr
+ 1089              		.cfi_endproc
+ 1090              	.LFE152:
+ 1092              		.section	.text.FMC_SDRAM_WriteProtection_Disable,"ax",%progbits
+ 1093              		.align	2
+ 1094              		.global	FMC_SDRAM_WriteProtection_Disable
+ 1095              		.thumb
+ 1096              		.thumb_func
+ 1098              	FMC_SDRAM_WriteProtection_Disable:
+ 1099              	.LFB153:
+ 961:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 962:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 963:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Disables dynamically FMC_SDRAM write protection.
+ 964:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  hsdram FMC_SDRAM handle
+ 965:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL status
+ 966:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+ 967:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_WriteProtection_Disable(FMC_SDRAM_TypeDef *Device, uint32_t Bank)
+ 968:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1100              		.loc 1 968 0
+ 1101              		.cfi_startproc
+ 1102              		@ args = 0, pretend = 0, frame = 0
+ 1103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1104              		@ link register save eliminated.
+ 1105              	.LVL101:
+ 969:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 970:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 971:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Bank));
+ARM GAS  /tmp/cceNLurS.s 			page 38
+
+
+ 972:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 973:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Disable write protection */
+ 974:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCR[Bank] &= ~FMC_SDRAM_WRITE_PROTECTION_ENABLE;
+ 1106              		.loc 1 974 0
+ 1107 0000 50F82130 		ldr	r3, [r0, r1, lsl #2]
+ 1108 0004 23F40073 		bic	r3, r3, #512
+ 1109 0008 40F82130 		str	r3, [r0, r1, lsl #2]
+ 975:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 976:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;
+ 977:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1110              		.loc 1 977 0
+ 1111 000c 0020     		movs	r0, #0
+ 1112              	.LVL102:
+ 1113 000e 7047     		bx	lr
+ 1114              		.cfi_endproc
+ 1115              	.LFE153:
+ 1117              		.section	.text.FMC_SDRAM_SendCommand,"ax",%progbits
+ 1118              		.align	2
+ 1119              		.global	FMC_SDRAM_SendCommand
+ 1120              		.thumb
+ 1121              		.thumb_func
+ 1123              	FMC_SDRAM_SendCommand:
+ 1124              	.LFB154:
+ 978:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 979:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+ 980:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Send Command to the FMC SDRAM bank
+ 981:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance
+ 982:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Command Pointer to SDRAM command structure   
+ 983:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timing Pointer to SDRAM Timing structure
+ 984:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Timeout Timeout wait value
+ 985:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL state
+ 986:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */  
+ 987:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_SendCommand(FMC_SDRAM_TypeDef *Device, FMC_SDRAM_CommandTypeDef *Comman
+ 988:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1125              		.loc 1 988 0
+ 1126              		.cfi_startproc
+ 1127              		@ args = 0, pretend = 0, frame = 8
+ 1128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1129              		@ link register save eliminated.
+ 1130              	.LVL103:
+ 1131 0000 10B4     		push	{r4}
+ 1132              	.LCFI16:
+ 1133              		.cfi_def_cfa_offset 4
+ 1134              		.cfi_offset 4, -4
+ 1135 0002 83B0     		sub	sp, sp, #12
+ 1136              	.LCFI17:
+ 1137              		.cfi_def_cfa_offset 16
+ 1138 0004 0446     		mov	r4, r0
+ 989:HALLIB/Src/stm32f7xx_ll_fmc.c ****   __IO uint32_t tmpr = 0;
+ 1139              		.loc 1 989 0
+ 1140 0006 0020     		movs	r0, #0
+ 1141              	.LVL104:
+ 1142 0008 0190     		str	r0, [sp, #4]
+ 990:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+ 991:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+ 992:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+ 993:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_COMMAND_MODE(Command->CommandMode));
+ARM GAS  /tmp/cceNLurS.s 			page 39
+
+
+ 994:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_COMMAND_TARGET(Command->CommandTarget));
+ 995:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_AUTOREFRESH_NUMBER(Command->AutoRefreshNumber));
+ 996:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_MODE_REGISTER(Command->ModeRegisterDefinition));  
+ 997:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+ 998:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set command register */
+ 999:HALLIB/Src/stm32f7xx_ll_fmc.c ****   tmpr = (uint32_t)((Command->CommandMode)                  |\
+ 1143              		.loc 1 999 0
+ 1144 000a 0A68     		ldr	r2, [r1]
+ 1145              	.LVL105:
+1000:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (Command->CommandTarget)                |\
+ 1146              		.loc 1 1000 0
+ 1147 000c 4B68     		ldr	r3, [r1, #4]
+ 999:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (Command->CommandTarget)                |\
+ 1148              		.loc 1 999 0
+ 1149 000e 1343     		orrs	r3, r3, r2
+1001:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (((Command->AutoRefreshNumber)-1) << 5) |\
+ 1150              		.loc 1 1001 0
+ 1151 0010 8A68     		ldr	r2, [r1, #8]
+ 1152 0012 013A     		subs	r2, r2, #1
+1000:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (Command->CommandTarget)                |\
+ 1153              		.loc 1 1000 0
+ 1154 0014 43EA4213 		orr	r3, r3, r2, lsl #5
+1002:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     ((Command->ModeRegisterDefinition) << 9)
+ 1155              		.loc 1 1002 0
+ 1156 0018 CA68     		ldr	r2, [r1, #12]
+ 999:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     (Command->CommandTarget)                |\
+ 1157              		.loc 1 999 0
+ 1158 001a 43EA4223 		orr	r3, r3, r2, lsl #9
+ 1159 001e 0193     		str	r3, [sp, #4]
+1003:HALLIB/Src/stm32f7xx_ll_fmc.c ****                     );
+1004:HALLIB/Src/stm32f7xx_ll_fmc.c ****     
+1005:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCMR = tmpr;
+ 1160              		.loc 1 1005 0
+ 1161 0020 019B     		ldr	r3, [sp, #4]
+ 1162 0022 2361     		str	r3, [r4, #16]
+1006:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1007:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+1008:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1163              		.loc 1 1008 0
+ 1164 0024 03B0     		add	sp, sp, #12
+ 1165              	.LCFI18:
+ 1166              		.cfi_def_cfa_offset 4
+ 1167              		@ sp needed
+ 1168 0026 5DF8044B 		ldr	r4, [sp], #4
+ 1169              	.LCFI19:
+ 1170              		.cfi_restore 4
+ 1171              		.cfi_def_cfa_offset 0
+ 1172              	.LVL106:
+ 1173 002a 7047     		bx	lr
+ 1174              		.cfi_endproc
+ 1175              	.LFE154:
+ 1177              		.section	.text.FMC_SDRAM_ProgramRefreshRate,"ax",%progbits
+ 1178              		.align	2
+ 1179              		.global	FMC_SDRAM_ProgramRefreshRate
+ 1180              		.thumb
+ 1181              		.thumb_func
+ 1183              	FMC_SDRAM_ProgramRefreshRate:
+ARM GAS  /tmp/cceNLurS.s 			page 40
+
+
+ 1184              	.LFB155:
+1009:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+1010:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+1011:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Program the SDRAM Memory Refresh rate.
+1012:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance  
+1013:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  RefreshRate The SDRAM refresh rate value.       
+1014:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval HAL state
+1015:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+1016:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_ProgramRefreshRate(FMC_SDRAM_TypeDef *Device, uint32_t RefreshRate)
+1017:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1185              		.loc 1 1017 0
+ 1186              		.cfi_startproc
+ 1187              		@ args = 0, pretend = 0, frame = 0
+ 1188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1189              		@ link register save eliminated.
+ 1190              	.LVL107:
+1018:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+1019:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+1020:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_REFRESH_RATE(RefreshRate));
+1021:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1022:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set the refresh rate in command register */
+1023:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDRTR |= (RefreshRate<<1);
+ 1191              		.loc 1 1023 0
+ 1192 0000 4369     		ldr	r3, [r0, #20]
+ 1193 0002 43EA4101 		orr	r1, r3, r1, lsl #1
+ 1194              	.LVL108:
+ 1195 0006 4161     		str	r1, [r0, #20]
+1024:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1025:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;   
+1026:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1196              		.loc 1 1026 0
+ 1197 0008 0020     		movs	r0, #0
+ 1198              	.LVL109:
+ 1199 000a 7047     		bx	lr
+ 1200              		.cfi_endproc
+ 1201              	.LFE155:
+ 1203              		.section	.text.FMC_SDRAM_SetAutoRefreshNumber,"ax",%progbits
+ 1204              		.align	2
+ 1205              		.global	FMC_SDRAM_SetAutoRefreshNumber
+ 1206              		.thumb
+ 1207              		.thumb_func
+ 1209              	FMC_SDRAM_SetAutoRefreshNumber:
+ 1210              	.LFB156:
+1027:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+1028:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+1029:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Set the Number of consecutive SDRAM Memory auto Refresh commands.
+1030:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance  
+1031:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  AutoRefreshNumber Specifies the auto Refresh number.       
+1032:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval None
+1033:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+1034:HALLIB/Src/stm32f7xx_ll_fmc.c **** HAL_StatusTypeDef FMC_SDRAM_SetAutoRefreshNumber(FMC_SDRAM_TypeDef *Device, uint32_t AutoRefreshNum
+1035:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1211              		.loc 1 1035 0
+ 1212              		.cfi_startproc
+ 1213              		@ args = 0, pretend = 0, frame = 0
+ 1214              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1215              		@ link register save eliminated.
+ARM GAS  /tmp/cceNLurS.s 			page 41
+
+
+ 1216              	.LVL110:
+1036:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+1037:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+1038:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_AUTOREFRESH_NUMBER(AutoRefreshNumber));
+1039:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1040:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Set the Auto-refresh number in command register */
+1041:HALLIB/Src/stm32f7xx_ll_fmc.c ****   Device->SDCMR |= (AutoRefreshNumber << 5); 
+ 1217              		.loc 1 1041 0
+ 1218 0000 0369     		ldr	r3, [r0, #16]
+ 1219 0002 43EA4111 		orr	r1, r3, r1, lsl #5
+ 1220              	.LVL111:
+ 1221 0006 0161     		str	r1, [r0, #16]
+1042:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+1043:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return HAL_OK;  
+1044:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1222              		.loc 1 1044 0
+ 1223 0008 0020     		movs	r0, #0
+ 1224              	.LVL112:
+ 1225 000a 7047     		bx	lr
+ 1226              		.cfi_endproc
+ 1227              	.LFE156:
+ 1229              		.section	.text.FMC_SDRAM_GetModeStatus,"ax",%progbits
+ 1230              		.align	2
+ 1231              		.global	FMC_SDRAM_GetModeStatus
+ 1232              		.thumb
+ 1233              		.thumb_func
+ 1235              	FMC_SDRAM_GetModeStatus:
+ 1236              	.LFB157:
+1045:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+1046:HALLIB/Src/stm32f7xx_ll_fmc.c **** /**
+1047:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @brief  Returns the indicated FMC SDRAM bank mode status.
+1048:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Device Pointer to SDRAM device instance  
+1049:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @param  Bank Defines the FMC SDRAM bank. This parameter can be 
+1050:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *                     FMC_Bank1_SDRAM or FMC_Bank2_SDRAM. 
+1051:HALLIB/Src/stm32f7xx_ll_fmc.c ****   * @retval The FMC SDRAM bank mode status, could be on of the following values:
+1052:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         FMC_SDRAM_NORMAL_MODE, FMC_SDRAM_SELF_REFRESH_MODE or 
+1053:HALLIB/Src/stm32f7xx_ll_fmc.c ****   *         FMC_SDRAM_POWER_DOWN_MODE.           
+1054:HALLIB/Src/stm32f7xx_ll_fmc.c ****   */
+1055:HALLIB/Src/stm32f7xx_ll_fmc.c **** uint32_t FMC_SDRAM_GetModeStatus(FMC_SDRAM_TypeDef *Device, uint32_t Bank)
+1056:HALLIB/Src/stm32f7xx_ll_fmc.c **** {
+ 1237              		.loc 1 1056 0
+ 1238              		.cfi_startproc
+ 1239              		@ args = 0, pretend = 0, frame = 0
+ 1240              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1241              		@ link register save eliminated.
+ 1242              	.LVL113:
+1057:HALLIB/Src/stm32f7xx_ll_fmc.c ****   uint32_t tmpreg = 0;
+1058:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1059:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Check the parameters */
+1060:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_DEVICE(Device));
+1061:HALLIB/Src/stm32f7xx_ll_fmc.c ****   assert_param(IS_FMC_SDRAM_BANK(Bank));
+1062:HALLIB/Src/stm32f7xx_ll_fmc.c **** 
+1063:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Get the corresponding bank mode */
+1064:HALLIB/Src/stm32f7xx_ll_fmc.c ****   if(Bank == FMC_SDRAM_BANK1)
+ 1243              		.loc 1 1064 0
+ 1244 0000 19B9     		cbnz	r1, .L61
+1065:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+ARM GAS  /tmp/cceNLurS.s 			page 42
+
+
+1066:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpreg = (uint32_t)(Device->SDSR & FMC_SDSR_MODES1); 
+ 1245              		.loc 1 1066 0
+ 1246 0002 8069     		ldr	r0, [r0, #24]
+ 1247              	.LVL114:
+ 1248 0004 00F00600 		and	r0, r0, #6
+ 1249              	.LVL115:
+ 1250 0008 7047     		bx	lr
+ 1251              	.LVL116:
+ 1252              	.L61:
+1067:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+1068:HALLIB/Src/stm32f7xx_ll_fmc.c ****   else
+1069:HALLIB/Src/stm32f7xx_ll_fmc.c ****   {
+1070:HALLIB/Src/stm32f7xx_ll_fmc.c ****     tmpreg = ((uint32_t)(Device->SDSR & FMC_SDSR_MODES2) >> 2);
+ 1253              		.loc 1 1070 0
+ 1254 000a 8069     		ldr	r0, [r0, #24]
+ 1255              	.LVL117:
+ 1256 000c 8008     		lsrs	r0, r0, #2
+ 1257 000e 00F00600 		and	r0, r0, #6
+ 1258              	.LVL118:
+1071:HALLIB/Src/stm32f7xx_ll_fmc.c ****   }
+1072:HALLIB/Src/stm32f7xx_ll_fmc.c ****   
+1073:HALLIB/Src/stm32f7xx_ll_fmc.c ****   /* Return the mode status */
+1074:HALLIB/Src/stm32f7xx_ll_fmc.c ****   return tmpreg;
+1075:HALLIB/Src/stm32f7xx_ll_fmc.c **** }
+ 1259              		.loc 1 1075 0
+ 1260 0012 7047     		bx	lr
+ 1261              		.cfi_endproc
+ 1262              	.LFE157:
+ 1264              		.text
+ 1265              	.Letext0:
+ 1266              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 1267              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 1268              		.file 4 "Inc/stm32f767xx.h"
+ 1269              		.file 5 "Inc/stm32f7xx.h"
+ 1270              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 1271              		.file 7 "HALLIB/Inc/stm32f7xx_ll_fmc.h"
+ 1272              		.file 8 "CORE/core_cm7.h"
+ 1273              		.file 9 "HALLIB/Inc/stm32f7xx_hal.h"
+ARM GAS  /tmp/cceNLurS.s 			page 43
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_ll_fmc.c
+     /tmp/cceNLurS.s:21     .text.FMC_NORSRAM_Init:00000000 $t
+     /tmp/cceNLurS.s:26     .text.FMC_NORSRAM_Init:00000000 FMC_NORSRAM_Init
+     /tmp/cceNLurS.s:152    .text.FMC_NORSRAM_Init:00000078 $d
+     /tmp/cceNLurS.s:157    .text.FMC_NORSRAM_DeInit:00000000 $t
+     /tmp/cceNLurS.s:162    .text.FMC_NORSRAM_DeInit:00000000 FMC_NORSRAM_DeInit
+     /tmp/cceNLurS.s:207    .text.FMC_NORSRAM_Timing_Init:00000000 $t
+     /tmp/cceNLurS.s:212    .text.FMC_NORSRAM_Timing_Init:00000000 FMC_NORSRAM_Timing_Init
+     /tmp/cceNLurS.s:299    .text.FMC_NORSRAM_Extended_Timing_Init:00000000 $t
+     /tmp/cceNLurS.s:304    .text.FMC_NORSRAM_Extended_Timing_Init:00000000 FMC_NORSRAM_Extended_Timing_Init
+     /tmp/cceNLurS.s:384    .text.FMC_NORSRAM_Extended_Timing_Init:00000044 $d
+     /tmp/cceNLurS.s:389    .text.FMC_NORSRAM_WriteOperation_Enable:00000000 $t
+     /tmp/cceNLurS.s:394    .text.FMC_NORSRAM_WriteOperation_Enable:00000000 FMC_NORSRAM_WriteOperation_Enable
+     /tmp/cceNLurS.s:414    .text.FMC_NORSRAM_WriteOperation_Disable:00000000 $t
+     /tmp/cceNLurS.s:419    .text.FMC_NORSRAM_WriteOperation_Disable:00000000 FMC_NORSRAM_WriteOperation_Disable
+     /tmp/cceNLurS.s:439    .text.FMC_NAND_Init:00000000 $t
+     /tmp/cceNLurS.s:444    .text.FMC_NAND_Init:00000000 FMC_NAND_Init
+     /tmp/cceNLurS.s:502    .text.FMC_NAND_Init:00000034 $d
+     /tmp/cceNLurS.s:507    .text.FMC_NAND_CommonSpace_Timing_Init:00000000 $t
+     /tmp/cceNLurS.s:512    .text.FMC_NAND_CommonSpace_Timing_Init:00000000 FMC_NAND_CommonSpace_Timing_Init
+     /tmp/cceNLurS.s:549    .text.FMC_NAND_AttributeSpace_Timing_Init:00000000 $t
+     /tmp/cceNLurS.s:554    .text.FMC_NAND_AttributeSpace_Timing_Init:00000000 FMC_NAND_AttributeSpace_Timing_Init
+     /tmp/cceNLurS.s:591    .text.FMC_NAND_DeInit:00000000 $t
+     /tmp/cceNLurS.s:596    .text.FMC_NAND_DeInit:00000000 FMC_NAND_DeInit
+     /tmp/cceNLurS.s:627    .text.FMC_NAND_ECC_Enable:00000000 $t
+     /tmp/cceNLurS.s:632    .text.FMC_NAND_ECC_Enable:00000000 FMC_NAND_ECC_Enable
+     /tmp/cceNLurS.s:652    .text.FMC_NAND_ECC_Disable:00000000 $t
+     /tmp/cceNLurS.s:657    .text.FMC_NAND_ECC_Disable:00000000 FMC_NAND_ECC_Disable
+     /tmp/cceNLurS.s:677    .text.FMC_NAND_GetECC:00000000 $t
+     /tmp/cceNLurS.s:682    .text.FMC_NAND_GetECC:00000000 FMC_NAND_GetECC
+     /tmp/cceNLurS.s:747    .text.FMC_SDRAM_Init:00000000 $t
+     /tmp/cceNLurS.s:752    .text.FMC_SDRAM_Init:00000000 FMC_SDRAM_Init
+     /tmp/cceNLurS.s:888    .text.FMC_SDRAM_Init:00000074 $d
+     /tmp/cceNLurS.s:893    .text.FMC_SDRAM_Timing_Init:00000000 $t
+     /tmp/cceNLurS.s:898    .text.FMC_SDRAM_Timing_Init:00000000 FMC_SDRAM_Timing_Init
+     /tmp/cceNLurS.s:1027   .text.FMC_SDRAM_Timing_Init:00000098 $d
+     /tmp/cceNLurS.s:1032   .text.FMC_SDRAM_DeInit:00000000 $t
+     /tmp/cceNLurS.s:1037   .text.FMC_SDRAM_DeInit:00000000 FMC_SDRAM_DeInit
+     /tmp/cceNLurS.s:1068   .text.FMC_SDRAM_WriteProtection_Enable:00000000 $t
+     /tmp/cceNLurS.s:1073   .text.FMC_SDRAM_WriteProtection_Enable:00000000 FMC_SDRAM_WriteProtection_Enable
+     /tmp/cceNLurS.s:1093   .text.FMC_SDRAM_WriteProtection_Disable:00000000 $t
+     /tmp/cceNLurS.s:1098   .text.FMC_SDRAM_WriteProtection_Disable:00000000 FMC_SDRAM_WriteProtection_Disable
+     /tmp/cceNLurS.s:1118   .text.FMC_SDRAM_SendCommand:00000000 $t
+     /tmp/cceNLurS.s:1123   .text.FMC_SDRAM_SendCommand:00000000 FMC_SDRAM_SendCommand
+     /tmp/cceNLurS.s:1178   .text.FMC_SDRAM_ProgramRefreshRate:00000000 $t
+     /tmp/cceNLurS.s:1183   .text.FMC_SDRAM_ProgramRefreshRate:00000000 FMC_SDRAM_ProgramRefreshRate
+     /tmp/cceNLurS.s:1204   .text.FMC_SDRAM_SetAutoRefreshNumber:00000000 $t
+     /tmp/cceNLurS.s:1209   .text.FMC_SDRAM_SetAutoRefreshNumber:00000000 FMC_SDRAM_SetAutoRefreshNumber
+     /tmp/cceNLurS.s:1230   .text.FMC_SDRAM_GetModeStatus:00000000 $t
+     /tmp/cceNLurS.s:1235   .text.FMC_SDRAM_GetModeStatus:00000000 FMC_SDRAM_GetModeStatus
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GetTick

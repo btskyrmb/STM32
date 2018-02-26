@@ -1,0 +1,3618 @@
+ARM GAS  /tmp/cccVrwre.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_dma.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.DMA_SetConfig,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	DMA_SetConfig:
+  26              	.LFB148:
+  27              		.file 1 "HALLIB/Src/stm32f7xx_hal_dma.c"
+   1:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_dma.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @file    stm32f7xx_hal_dma.c
+   4:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief   DMA HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_dma.c ****   *    
+   7:HALLIB/Src/stm32f7xx_hal_dma.c ****   *          This file provides firmware functions to manage the following 
+   8:HALLIB/Src/stm32f7xx_hal_dma.c ****   *          functionalities of the Direct Memory Access (DMA) peripheral:
+   9:HALLIB/Src/stm32f7xx_hal_dma.c ****   *           + Initialization and de-initialization functions
+  10:HALLIB/Src/stm32f7xx_hal_dma.c ****   *           + IO operation functions
+  11:HALLIB/Src/stm32f7xx_hal_dma.c ****   *           + Peripheral State and errors functions
+  12:HALLIB/Src/stm32f7xx_hal_dma.c ****   @verbatim     
+  13:HALLIB/Src/stm32f7xx_hal_dma.c ****   ==============================================================================
+  14:HALLIB/Src/stm32f7xx_hal_dma.c ****                         ##### How to use this driver #####
+  15:HALLIB/Src/stm32f7xx_hal_dma.c ****   ==============================================================================
+  16:HALLIB/Src/stm32f7xx_hal_dma.c ****   [..]
+  17:HALLIB/Src/stm32f7xx_hal_dma.c ****    (#) Enable and configure the peripheral to be connected to the DMA Stream
+  18:HALLIB/Src/stm32f7xx_hal_dma.c ****        (except for internal SRAM/FLASH memories: no initialization is 
+  19:HALLIB/Src/stm32f7xx_hal_dma.c ****        necessary) please refer to Reference manual for connection between peripherals
+  20:HALLIB/Src/stm32f7xx_hal_dma.c ****        and DMA requests.
+  21:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  22:HALLIB/Src/stm32f7xx_hal_dma.c ****    (#) For a given Stream, program the required configuration through the following parameters:
+  23:HALLIB/Src/stm32f7xx_hal_dma.c ****        Transfer Direction, Source and Destination data formats, 
+  24:HALLIB/Src/stm32f7xx_hal_dma.c ****        Circular, Normal or peripheral flow control mode, Stream Priority level, 
+  25:HALLIB/Src/stm32f7xx_hal_dma.c ****        Source and Destination Increment mode, FIFO mode and its Threshold (if needed), 
+  26:HALLIB/Src/stm32f7xx_hal_dma.c ****        Burst mode for Source and/or Destination (if needed) using HAL_DMA_Init() function.
+  27:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  28:HALLIB/Src/stm32f7xx_hal_dma.c ****    -@-   Prior to HAL_DMA_Init() the clock must be enabled for DMA through the following macros:
+  29:HALLIB/Src/stm32f7xx_hal_dma.c ****          __HAL_RCC_DMA1_CLK_ENABLE() or __HAL_RCC_DMA2_CLK_ENABLE().
+  30:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  31:HALLIB/Src/stm32f7xx_hal_dma.c ****      *** Polling mode IO operation ***
+ARM GAS  /tmp/cccVrwre.s 			page 2
+
+
+  32:HALLIB/Src/stm32f7xx_hal_dma.c ****      =================================
+  33:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+  34:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Use HAL_DMA_Start() to start DMA transfer after the configuration of Source 
+  35:HALLIB/Src/stm32f7xx_hal_dma.c ****               address and destination address and the Length of data to be transferred.
+  36:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Use HAL_DMA_PollForTransfer() to poll for the end of current transfer, in this  
+  37:HALLIB/Src/stm32f7xx_hal_dma.c ****               case a fixed Timeout can be configured by User depending from his application.
+  38:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Use HAL_DMA_Abort() function to abort the current transfer.
+  39:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  40:HALLIB/Src/stm32f7xx_hal_dma.c ****      *** Interrupt mode IO operation ***
+  41:HALLIB/Src/stm32f7xx_hal_dma.c ****      ===================================
+  42:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+  43:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Configure the DMA interrupt priority using HAL_NVIC_SetPriority()
+  44:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Enable the DMA IRQ handler using HAL_NVIC_EnableIRQ()
+  45:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Select Callbacks functions using HAL_DMA_RegisterCallback()
+  46:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Use HAL_DMA_Start_IT() to start DMA transfer after the configuration of  
+  47:HALLIB/Src/stm32f7xx_hal_dma.c ****               Source address and destination address and the Length of data to be transferred. In t
+  48:HALLIB/Src/stm32f7xx_hal_dma.c ****               case the DMA interrupt is configured 
+  49:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) Use HAL_DMA_IRQHandler() called under DMA_IRQHandler() Interrupt subroutine
+  50:HALLIB/Src/stm32f7xx_hal_dma.c ****           (+) At the end of data transfer HAL_DMA_IRQHandler() function is executed and user can 
+  51:HALLIB/Src/stm32f7xx_hal_dma.c ****               add his own function by customization of function pointer XferCpltCallback and 
+  52:HALLIB/Src/stm32f7xx_hal_dma.c ****               XferErrorCallback (i.e a member of DMA handle structure).
+  53:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+  54:HALLIB/Src/stm32f7xx_hal_dma.c ****      (#) Use HAL_DMA_GetState() function to return the DMA state and HAL_DMA_GetError() in case of 
+  55:HALLIB/Src/stm32f7xx_hal_dma.c ****          detection.
+  56:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  57:HALLIB/Src/stm32f7xx_hal_dma.c ****      (#) Use HAL_DMA_Abort_IT() function to abort the current transfer
+  58:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  59:HALLIB/Src/stm32f7xx_hal_dma.c ****      -@-   In Memory-to-Memory transfer mode, Circular mode is not allowed.
+  60:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  61:HALLIB/Src/stm32f7xx_hal_dma.c ****      -@-   The FIFO is used mainly to reduce bus usage and to allow data packing/unpacking: it is
+  62:HALLIB/Src/stm32f7xx_hal_dma.c ****            possible to set different Data Sizes for the Peripheral and the Memory (ie. you can set
+  63:HALLIB/Src/stm32f7xx_hal_dma.c ****            Half-Word data size for the peripheral to access its data register and set Word data siz
+  64:HALLIB/Src/stm32f7xx_hal_dma.c ****            for the Memory to gain in access time. Each two half words will be packed and written in
+  65:HALLIB/Src/stm32f7xx_hal_dma.c ****            a single access to a Word in the Memory).
+  66:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  67:HALLIB/Src/stm32f7xx_hal_dma.c ****      -@-   When FIFO is disabled, it is not allowed to configure different Data Sizes for Source
+  68:HALLIB/Src/stm32f7xx_hal_dma.c ****            and Destination. In this case the Peripheral Data Size will be applied to both Source
+  69:HALLIB/Src/stm32f7xx_hal_dma.c ****            and Destination.
+  70:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  71:HALLIB/Src/stm32f7xx_hal_dma.c ****      *** DMA HAL driver macros list ***
+  72:HALLIB/Src/stm32f7xx_hal_dma.c ****      =============================================
+  73:HALLIB/Src/stm32f7xx_hal_dma.c ****      [..]
+  74:HALLIB/Src/stm32f7xx_hal_dma.c ****        Below the list of most used macros in DMA HAL driver.
+  75:HALLIB/Src/stm32f7xx_hal_dma.c ****        
+  76:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) __HAL_DMA_ENABLE: Enable the specified DMA Stream.
+  77:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) __HAL_DMA_DISABLE: Disable the specified DMA Stream.
+  78:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) __HAL_DMA_GET_IT_SOURCE: Check whether the specified DMA Stream interrupt has occurred or
+  79:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  80:HALLIB/Src/stm32f7xx_hal_dma.c ****      [..]
+  81:HALLIB/Src/stm32f7xx_hal_dma.c ****       (@) You can refer to the DMA HAL driver header file for more useful macros
+  82:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+  83:HALLIB/Src/stm32f7xx_hal_dma.c ****   @endverbatim
+  84:HALLIB/Src/stm32f7xx_hal_dma.c ****   ******************************************************************************
+  85:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @attention
+  86:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+  87:HALLIB/Src/stm32f7xx_hal_dma.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  88:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+ARM GAS  /tmp/cccVrwre.s 			page 3
+
+
+  89:HALLIB/Src/stm32f7xx_hal_dma.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  90:HALLIB/Src/stm32f7xx_hal_dma.c ****   * are permitted provided that the following conditions are met:
+  91:HALLIB/Src/stm32f7xx_hal_dma.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  92:HALLIB/Src/stm32f7xx_hal_dma.c ****   *      this list of conditions and the following disclaimer.
+  93:HALLIB/Src/stm32f7xx_hal_dma.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  94:HALLIB/Src/stm32f7xx_hal_dma.c ****   *      this list of conditions and the following disclaimer in the documentation
+  95:HALLIB/Src/stm32f7xx_hal_dma.c ****   *      and/or other materials provided with the distribution.
+  96:HALLIB/Src/stm32f7xx_hal_dma.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  97:HALLIB/Src/stm32f7xx_hal_dma.c ****   *      may be used to endorse or promote products derived from this software
+  98:HALLIB/Src/stm32f7xx_hal_dma.c ****   *      without specific prior written permission.
+  99:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+ 100:HALLIB/Src/stm32f7xx_hal_dma.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ 101:HALLIB/Src/stm32f7xx_hal_dma.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ 102:HALLIB/Src/stm32f7xx_hal_dma.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ 103:HALLIB/Src/stm32f7xx_hal_dma.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ 104:HALLIB/Src/stm32f7xx_hal_dma.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ 105:HALLIB/Src/stm32f7xx_hal_dma.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ 106:HALLIB/Src/stm32f7xx_hal_dma.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ 107:HALLIB/Src/stm32f7xx_hal_dma.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ 108:HALLIB/Src/stm32f7xx_hal_dma.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ 109:HALLIB/Src/stm32f7xx_hal_dma.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 110:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+ 111:HALLIB/Src/stm32f7xx_hal_dma.c ****   ******************************************************************************
+ 112:HALLIB/Src/stm32f7xx_hal_dma.c ****   */ 
+ 113:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 114:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Includes ------------------------------------------------------------------*/
+ 115:HALLIB/Src/stm32f7xx_hal_dma.c **** #include "stm32f7xx_hal.h"
+ 116:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 117:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup STM32F7xx_HAL_Driver
+ 118:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 119:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 120:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 121:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @defgroup DMA DMA
+ 122:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief DMA HAL module driver
+ 123:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 124:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 125:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 126:HALLIB/Src/stm32f7xx_hal_dma.c **** #ifdef HAL_DMA_MODULE_ENABLED
+ 127:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 128:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Private types -------------------------------------------------------------*/
+ 129:HALLIB/Src/stm32f7xx_hal_dma.c **** typedef struct
+ 130:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 131:HALLIB/Src/stm32f7xx_hal_dma.c ****   __IO uint32_t ISR;   /*!< DMA interrupt status register */
+ 132:HALLIB/Src/stm32f7xx_hal_dma.c ****   __IO uint32_t Reserved0;
+ 133:HALLIB/Src/stm32f7xx_hal_dma.c ****   __IO uint32_t IFCR;  /*!< DMA interrupt flag clear register */
+ 134:HALLIB/Src/stm32f7xx_hal_dma.c **** } DMA_Base_Registers;
+ 135:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 136:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Private variables ---------------------------------------------------------*/
+ 137:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Private constants ---------------------------------------------------------*/
+ 138:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Private_Constants
+ 139:HALLIB/Src/stm32f7xx_hal_dma.c ****  * @{
+ 140:HALLIB/Src/stm32f7xx_hal_dma.c ****  */
+ 141:HALLIB/Src/stm32f7xx_hal_dma.c ****  #define HAL_TIMEOUT_DMA_ABORT    ((uint32_t)5)  /* 5 ms */
+ 142:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 143:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+ 144:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 145:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Private macros ------------------------------------------------------------*/
+ARM GAS  /tmp/cccVrwre.s 			page 4
+
+
+ 146:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Private functions ---------------------------------------------------------*/
+ 147:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Private_Functions
+ 148:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 149:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 150:HALLIB/Src/stm32f7xx_hal_dma.c **** static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32
+ 151:HALLIB/Src/stm32f7xx_hal_dma.c **** static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma);
+ 152:HALLIB/Src/stm32f7xx_hal_dma.c **** static HAL_StatusTypeDef DMA_CheckFifoParam(DMA_HandleTypeDef *hdma);
+ 153:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 154:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 155:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+ 156:HALLIB/Src/stm32f7xx_hal_dma.c ****   */  
+ 157:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 158:HALLIB/Src/stm32f7xx_hal_dma.c **** /* Exported functions ---------------------------------------------------------*/
+ 159:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Exported_Functions
+ 160:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 161:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 162:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 163:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Exported_Functions_Group1
+ 164:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+ 165:HALLIB/Src/stm32f7xx_hal_dma.c **** @verbatim
+ 166:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+ 167:HALLIB/Src/stm32f7xx_hal_dma.c ****              ##### Initialization and de-initialization functions  #####
+ 168:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+ 169:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+ 170:HALLIB/Src/stm32f7xx_hal_dma.c ****     This section provides functions allowing to initialize the DMA Stream source
+ 171:HALLIB/Src/stm32f7xx_hal_dma.c ****     and destination addresses, incrementation and data sizes, transfer direction, 
+ 172:HALLIB/Src/stm32f7xx_hal_dma.c ****     circular/normal mode selection, memory-to-memory mode selection and Stream priority value.
+ 173:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+ 174:HALLIB/Src/stm32f7xx_hal_dma.c ****     The HAL_DMA_Init() function follows the DMA configuration procedures as described in
+ 175:HALLIB/Src/stm32f7xx_hal_dma.c ****     reference manual.
+ 176:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 177:HALLIB/Src/stm32f7xx_hal_dma.c **** @endverbatim
+ 178:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 179:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 180:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 181:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 182:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Initialize the DMA according to the specified
+ 183:HALLIB/Src/stm32f7xx_hal_dma.c ****   *         parameters in the DMA_InitTypeDef and create the associated handle.
+ 184:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma Pointer to a DMA_HandleTypeDef structure that contains
+ 185:HALLIB/Src/stm32f7xx_hal_dma.c ****   *               the configuration information for the specified DMA Stream.  
+ 186:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 187:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 188:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_Init(DMA_HandleTypeDef *hdma)
+ 189:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 190:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = 0U;
+ 191:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tickstart = HAL_GetTick();
+ 192:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 193:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 194:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the DMA peripheral state */
+ 195:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma == NULL)
+ 196:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 197:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 198:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 199:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 200:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the parameters */
+ 201:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_STREAM_ALL_INSTANCE(hdma->Instance));
+ 202:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_CHANNEL(hdma->Init.Channel));
+ARM GAS  /tmp/cccVrwre.s 			page 5
+
+
+ 203:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_DIRECTION(hdma->Init.Direction));
+ 204:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_PERIPHERAL_INC_STATE(hdma->Init.PeriphInc));
+ 205:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_MEMORY_INC_STATE(hdma->Init.MemInc));
+ 206:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_PERIPHERAL_DATA_SIZE(hdma->Init.PeriphDataAlignment));
+ 207:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_MEMORY_DATA_SIZE(hdma->Init.MemDataAlignment));
+ 208:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_MODE(hdma->Init.Mode));
+ 209:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_PRIORITY(hdma->Init.Priority));
+ 210:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_FIFO_MODE_STATE(hdma->Init.FIFOMode));
+ 211:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the memory burst, peripheral burst and FIFO threshold parameters only
+ 212:HALLIB/Src/stm32f7xx_hal_dma.c ****      when FIFO mode is enabled */
+ 213:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->Init.FIFOMode != DMA_FIFOMODE_DISABLE)
+ 214:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 215:HALLIB/Src/stm32f7xx_hal_dma.c ****     assert_param(IS_DMA_FIFO_THRESHOLD(hdma->Init.FIFOThreshold));
+ 216:HALLIB/Src/stm32f7xx_hal_dma.c ****     assert_param(IS_DMA_MEMORY_BURST(hdma->Init.MemBurst));
+ 217:HALLIB/Src/stm32f7xx_hal_dma.c ****     assert_param(IS_DMA_PERIPHERAL_BURST(hdma->Init.PeriphBurst));
+ 218:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 219:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 220:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Allocate lock resource */
+ 221:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_UNLOCK(hdma);
+ 222:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 223:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Change DMA peripheral state */
+ 224:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->State = HAL_DMA_STATE_BUSY;
+ 225:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 226:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Disable the peripheral */
+ 227:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_DMA_DISABLE(hdma);
+ 228:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 229:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check if the DMA Stream is effectively disabled */
+ 230:HALLIB/Src/stm32f7xx_hal_dma.c ****   while((hdma->Instance->CR & DMA_SxCR_EN) != RESET)
+ 231:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 232:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Check for the Timeout */
+ 233:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((HAL_GetTick() - tickstart ) > HAL_TIMEOUT_DMA_ABORT)
+ 234:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 235:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 236:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode = HAL_DMA_ERROR_TIMEOUT;
+ 237:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 238:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Change the DMA state */
+ 239:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->State = HAL_DMA_STATE_TIMEOUT;
+ 240:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 241:HALLIB/Src/stm32f7xx_hal_dma.c ****       return HAL_TIMEOUT;
+ 242:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 243:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 244:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 245:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Get the CR register value */
+ 246:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp = hdma->Instance->CR;
+ 247:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 248:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clear CHSEL, MBURST, PBURST, PL, MSIZE, PSIZE, MINC, PINC, CIRC, DIR, CT and DBM bits */
+ 249:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp &= ((uint32_t)~(DMA_SxCR_CHSEL | DMA_SxCR_MBURST | DMA_SxCR_PBURST | \
+ 250:HALLIB/Src/stm32f7xx_hal_dma.c ****                       DMA_SxCR_PL    | DMA_SxCR_MSIZE  | DMA_SxCR_PSIZE  | \
+ 251:HALLIB/Src/stm32f7xx_hal_dma.c ****                       DMA_SxCR_MINC  | DMA_SxCR_PINC   | DMA_SxCR_CIRC   | \
+ 252:HALLIB/Src/stm32f7xx_hal_dma.c ****                       DMA_SxCR_DIR   | DMA_SxCR_CT     | DMA_SxCR_DBM));
+ 253:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 254:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Prepare the DMA Stream configuration */
+ 255:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp |=  hdma->Init.Channel             | hdma->Init.Direction        |
+ 256:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphInc           | hdma->Init.MemInc           |
+ 257:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphDataAlignment | hdma->Init.MemDataAlignment |
+ 258:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.Mode                | hdma->Init.Priority;
+ 259:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ARM GAS  /tmp/cccVrwre.s 			page 6
+
+
+ 260:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* the Memory burst and peripheral burst are not used when the FIFO is disabled */
+ 261:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->Init.FIFOMode == DMA_FIFOMODE_ENABLE)
+ 262:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 263:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Get memory burst and peripheral burst */
+ 264:HALLIB/Src/stm32f7xx_hal_dma.c ****     tmp |=  hdma->Init.MemBurst | hdma->Init.PeriphBurst;
+ 265:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 266:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 267:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Write to DMA Stream CR register */
+ 268:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->CR = tmp;  
+ 269:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 270:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Get the FCR register value */
+ 271:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp = hdma->Instance->FCR;
+ 272:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 273:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clear Direct mode and FIFO threshold bits */
+ 274:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp &= (uint32_t)~(DMA_SxFCR_DMDIS | DMA_SxFCR_FTH);
+ 275:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 276:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Prepare the DMA Stream FIFO configuration */
+ 277:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmp |= hdma->Init.FIFOMode;
+ 278:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 279:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* The FIFO threshold is not used when the FIFO mode is disabled */
+ 280:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->Init.FIFOMode == DMA_FIFOMODE_ENABLE)
+ 281:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 282:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Get the FIFO threshold */
+ 283:HALLIB/Src/stm32f7xx_hal_dma.c ****     tmp |= hdma->Init.FIFOThreshold;
+ 284:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 285:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Check compatibility between FIFO threshold level and size of the memory burst */
+ 286:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* for INCR4, INCR8, INCR16 bursts */
+ 287:HALLIB/Src/stm32f7xx_hal_dma.c ****     if (hdma->Init.MemBurst != DMA_MBURST_SINGLE)
+ 288:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 289:HALLIB/Src/stm32f7xx_hal_dma.c ****       if (DMA_CheckFifoParam(hdma) != HAL_OK)
+ 290:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 291:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Update error code */
+ 292:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->ErrorCode = HAL_DMA_ERROR_PARAM;
+ 293:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 294:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Change the DMA state */
+ 295:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->State = HAL_DMA_STATE_READY;
+ 296:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 297:HALLIB/Src/stm32f7xx_hal_dma.c ****         return HAL_ERROR; 
+ 298:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 299:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 300:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 301:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 302:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Write to DMA Stream FCR */
+ 303:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->FCR = tmp;
+ 304:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 305:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Initialize StreamBaseAddress and StreamIndex parameters to be used to calculate
+ 306:HALLIB/Src/stm32f7xx_hal_dma.c ****      DMA steam Base Address needed by HAL_DMA_IRQHandler() and HAL_DMA_PollForTransfer() */
+ 307:HALLIB/Src/stm32f7xx_hal_dma.c ****   regs = (DMA_Base_Registers *)DMA_CalcBaseAndBitshift(hdma);
+ 308:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 309:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clear all interrupt flags */
+ 310:HALLIB/Src/stm32f7xx_hal_dma.c ****   regs->IFCR = 0x3FU << hdma->StreamIndex;
+ 311:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 312:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Initialize the error code */
+ 313:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 314:HALLIB/Src/stm32f7xx_hal_dma.c ****                                                                                      
+ 315:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Initialize the DMA state */
+ 316:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->State = HAL_DMA_STATE_READY;
+ARM GAS  /tmp/cccVrwre.s 			page 7
+
+
+ 317:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 318:HALLIB/Src/stm32f7xx_hal_dma.c ****   return HAL_OK;
+ 319:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 320:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 321:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 322:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  DeInitializes the DMA peripheral 
+ 323:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 324:HALLIB/Src/stm32f7xx_hal_dma.c ****   *               the configuration information for the specified DMA Stream.  
+ 325:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 326:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 327:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma)
+ 328:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 329:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 330:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 331:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the DMA peripheral state */
+ 332:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma == NULL)
+ 333:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 334:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 335:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 336:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 337:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the DMA peripheral state */
+ 338:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->State == HAL_DMA_STATE_BUSY)
+ 339:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 340:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Return error status */
+ 341:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_BUSY;
+ 342:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 343:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 344:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the parameters */
+ 345:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_STREAM_ALL_INSTANCE(hdma->Instance));
+ 346:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 347:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Disable the selected DMA Streamx */
+ 348:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_DMA_DISABLE(hdma);
+ 349:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 350:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx control register */
+ 351:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->CR   = 0U;
+ 352:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 353:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx number of data to transfer register */
+ 354:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->NDTR = 0U;
+ 355:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 356:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx peripheral address register */
+ 357:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->PAR  = 0U;
+ 358:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 359:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx memory 0 address register */
+ 360:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->M0AR = 0U;
+ 361:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 362:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx memory 1 address register */
+ 363:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->M1AR = 0U;
+ 364:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 365:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset DMA Streamx FIFO control register */
+ 366:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->FCR  = (uint32_t)0x00000021U;
+ 367:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 368:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Get DMA steam Base Address */  
+ 369:HALLIB/Src/stm32f7xx_hal_dma.c ****   regs = (DMA_Base_Registers *)DMA_CalcBaseAndBitshift(hdma);
+ 370:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 371:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clear all interrupt flags at correct offset within the register */
+ 372:HALLIB/Src/stm32f7xx_hal_dma.c ****   regs->IFCR = 0x3FU << hdma->StreamIndex;
+ 373:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ARM GAS  /tmp/cccVrwre.s 			page 8
+
+
+ 374:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clean all callbacks */
+ 375:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferCpltCallback = NULL;
+ 376:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferHalfCpltCallback = NULL;
+ 377:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferM1CpltCallback = NULL;
+ 378:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferM1HalfCpltCallback = NULL;
+ 379:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferErrorCallback = NULL;
+ 380:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferAbortCallback = NULL;  
+ 381:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 382:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset the error code */
+ 383:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 384:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 385:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Reset the DMA state */
+ 386:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->State = HAL_DMA_STATE_RESET;
+ 387:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 388:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Release Lock */
+ 389:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_UNLOCK(hdma);
+ 390:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 391:HALLIB/Src/stm32f7xx_hal_dma.c ****   return HAL_OK;
+ 392:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 393:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 394:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 395:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+ 396:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 397:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 398:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Exported_Functions_Group2
+ 399:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+ 400:HALLIB/Src/stm32f7xx_hal_dma.c **** @verbatim   
+ 401:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+ 402:HALLIB/Src/stm32f7xx_hal_dma.c ****                       #####  IO operation functions  #####
+ 403:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+ 404:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]  This section provides functions allowing to:
+ 405:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Configure the source, destination address and data length and Start DMA transfer
+ 406:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Configure the source, destination address and data length and 
+ 407:HALLIB/Src/stm32f7xx_hal_dma.c ****           Start DMA transfer with interrupt
+ 408:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Abort DMA transfer
+ 409:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Poll for transfer complete
+ 410:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Handle DMA interrupt request  
+ 411:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 412:HALLIB/Src/stm32f7xx_hal_dma.c **** @endverbatim
+ 413:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+ 414:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 415:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 416:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 417:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Starts the DMA Transfer.
+ 418:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 419:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                     the configuration information for the specified DMA Stream.
+ 420:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  SrcAddress The source memory Buffer address
+ 421:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DstAddress The destination memory Buffer address
+ 422:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 423:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 424:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 425:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_Start(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, 
+ 426:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 427:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 428:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 429:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the parameters */
+ 430:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ARM GAS  /tmp/cccVrwre.s 			page 9
+
+
+ 431:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 432:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Process locked */
+ 433:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_LOCK(hdma);
+ 434:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 435:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+ 436:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 437:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Change DMA peripheral state */
+ 438:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->State = HAL_DMA_STATE_BUSY;
+ 439:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 440:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Initialize the error code */
+ 441:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 442:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 443:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure the source, destination address and the data length */
+ 444:HALLIB/Src/stm32f7xx_hal_dma.c ****     DMA_SetConfig(hdma, SrcAddress, DstAddress, DataLength);
+ 445:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 446:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Enable the Peripheral */
+ 447:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_DMA_ENABLE(hdma);
+ 448:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 449:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 450:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 451:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Process unlocked */
+ 452:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ 453:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 454:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Return error status */
+ 455:HALLIB/Src/stm32f7xx_hal_dma.c ****     status = HAL_BUSY;
+ 456:HALLIB/Src/stm32f7xx_hal_dma.c ****   } 
+ 457:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status; 
+ 458:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 459:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 460:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 461:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Start the DMA Transfer with interrupt enabled.
+ 462:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 463:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                     the configuration information for the specified DMA Stream.  
+ 464:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  SrcAddress The source memory Buffer address
+ 465:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DstAddress The destination memory Buffer address
+ 466:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 467:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 468:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 469:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddres
+ 470:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 471:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 472:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 473:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* calculate DMA base and stream number */
+ 474:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs = (DMA_Base_Registers *)hdma->StreamBaseAddress;
+ 475:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 476:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Check the parameters */
+ 477:HALLIB/Src/stm32f7xx_hal_dma.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ 478:HALLIB/Src/stm32f7xx_hal_dma.c ****  
+ 479:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Process locked */
+ 480:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_LOCK(hdma);
+ 481:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 482:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+ 483:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 484:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Change DMA peripheral state */
+ 485:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->State = HAL_DMA_STATE_BUSY;
+ 486:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 487:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Initialize the error code */
+ARM GAS  /tmp/cccVrwre.s 			page 10
+
+
+ 488:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 489:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 490:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure the source, destination address and the data length */
+ 491:HALLIB/Src/stm32f7xx_hal_dma.c ****     DMA_SetConfig(hdma, SrcAddress, DstAddress, DataLength);
+ 492:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 493:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Clear all interrupt flags at correct offset within the register */
+ 494:HALLIB/Src/stm32f7xx_hal_dma.c ****     regs->IFCR = 0x3FU << hdma->StreamIndex;
+ 495:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 496:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Enable Common interrupts*/
+ 497:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->CR  |= DMA_IT_TC | DMA_IT_TE | DMA_IT_DME;
+ 498:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->FCR |= DMA_IT_FE;
+ 499:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 500:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(hdma->XferHalfCpltCallback != NULL)
+ 501:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 502:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->Instance->CR  |= DMA_IT_HT;
+ 503:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 504:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 505:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Enable the Peripheral */
+ 506:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_DMA_ENABLE(hdma);
+ 507:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 508:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 509:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 510:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Process unlocked */
+ 511:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);	  
+ 512:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 513:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Return error status */
+ 514:HALLIB/Src/stm32f7xx_hal_dma.c ****     status = HAL_BUSY;
+ 515:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 516:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 517:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status;
+ 518:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 519:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 520:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 521:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Aborts the DMA Transfer.
+ 522:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma   pointer to a DMA_HandleTypeDef structure that contains
+ 523:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                 the configuration information for the specified DMA Stream.
+ 524:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                   
+ 525:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @note  After disabling a DMA Stream, a check for wait until the DMA Stream is 
+ 526:HALLIB/Src/stm32f7xx_hal_dma.c ****   *        effectively disabled is added. If a Stream is disabled 
+ 527:HALLIB/Src/stm32f7xx_hal_dma.c ****   *        while a data transfer is ongoing, the current data will be transferred
+ 528:HALLIB/Src/stm32f7xx_hal_dma.c ****   *        and the Stream will be effectively disabled only after the transfer of
+ 529:HALLIB/Src/stm32f7xx_hal_dma.c ****   *        this single data is finished.  
+ 530:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 531:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 532:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_Abort(DMA_HandleTypeDef *hdma)
+ 533:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 534:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* calculate DMA base and stream number */
+ 535:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs = (DMA_Base_Registers *)hdma->StreamBaseAddress;
+ 536:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 537:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tickstart = HAL_GetTick();
+ 538:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 539:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->State != HAL_DMA_STATE_BUSY)
+ 540:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 541:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NO_XFER;
+ 542:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 543:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Process Unlocked */
+ 544:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ARM GAS  /tmp/cccVrwre.s 			page 11
+
+
+ 545:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 546:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 547:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 548:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 549:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 550:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Disable all the transfer interrupts */
+ 551:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->CR  &= ~(DMA_IT_TC | DMA_IT_TE | DMA_IT_DME);
+ 552:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->FCR &= ~(DMA_IT_FE);
+ 553:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 554:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((hdma->XferHalfCpltCallback != NULL) || (hdma->XferM1HalfCpltCallback != NULL))
+ 555:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 556:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->Instance->CR  &= ~(DMA_IT_HT);
+ 557:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 558:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 559:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Disable the stream */
+ 560:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_DMA_DISABLE(hdma);
+ 561:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 562:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Check if the DMA Stream is effectively disabled */
+ 563:HALLIB/Src/stm32f7xx_hal_dma.c ****     while((hdma->Instance->CR & DMA_SxCR_EN) != RESET)
+ 564:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 565:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Check for the Timeout */
+ 566:HALLIB/Src/stm32f7xx_hal_dma.c ****       if((HAL_GetTick() - tickstart ) > HAL_TIMEOUT_DMA_ABORT)
+ 567:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 568:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Update error code */
+ 569:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->ErrorCode = HAL_DMA_ERROR_TIMEOUT;
+ 570:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 571:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Process Unlocked */
+ 572:HALLIB/Src/stm32f7xx_hal_dma.c ****         __HAL_UNLOCK(hdma);
+ 573:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 574:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Change the DMA state */
+ 575:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->State = HAL_DMA_STATE_TIMEOUT;
+ 576:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 577:HALLIB/Src/stm32f7xx_hal_dma.c ****         return HAL_TIMEOUT;
+ 578:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 579:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 580:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 581:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Clear all interrupt flags at correct offset within the register */
+ 582:HALLIB/Src/stm32f7xx_hal_dma.c ****     regs->IFCR = 0x3FU << hdma->StreamIndex;
+ 583:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 584:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Process Unlocked */
+ 585:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ 586:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 587:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Change the DMA state*/
+ 588:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->State = HAL_DMA_STATE_READY;
+ 589:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 590:HALLIB/Src/stm32f7xx_hal_dma.c ****   return HAL_OK;
+ 591:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 592:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 593:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 594:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Aborts the DMA Transfer in Interrupt mode.
+ 595:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma   pointer to a DMA_HandleTypeDef structure that contains
+ 596:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                 the configuration information for the specified DMA Stream.
+ 597:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 598:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 599:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_Abort_IT(DMA_HandleTypeDef *hdma)
+ 600:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 601:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->State != HAL_DMA_STATE_BUSY)
+ARM GAS  /tmp/cccVrwre.s 			page 12
+
+
+ 602:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 603:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NO_XFER;
+ 604:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 605:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 606:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 607:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 608:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Set Abort State  */
+ 609:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->State = HAL_DMA_STATE_ABORT;
+ 610:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 611:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Disable the stream */
+ 612:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_DMA_DISABLE(hdma);
+ 613:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 614:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 615:HALLIB/Src/stm32f7xx_hal_dma.c ****   return HAL_OK;
+ 616:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 617:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 618:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 619:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Polling for transfer complete.
+ 620:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma          pointer to a DMA_HandleTypeDef structure that contains
+ 621:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                        the configuration information for the specified DMA Stream.
+ 622:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  CompleteLevel Specifies the DMA level complete.
+ 623:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @note   The polling mode is kept in this version for legacy. it is recommanded to use the IT mo
+ 624:HALLIB/Src/stm32f7xx_hal_dma.c ****   *         This model could be used for debug purpose.
+ 625:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @note   The HAL_DMA_PollForTransfer API cannot be used in circular and double buffering mode (a
+ 626:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  Timeout       Timeout duration.
+ 627:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 628:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 629:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_LevelCompleteTypeDef Com
+ 630:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 631:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK; 
+ 632:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t mask_cpltlevel;
+ 633:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tickstart = HAL_GetTick(); 
+ 634:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmpisr;
+ 635:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 636:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* calculate DMA base and stream number */
+ 637:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 638:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 639:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(HAL_DMA_STATE_BUSY != hdma->State)
+ 640:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 641:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* No transfer ongoing */
+ 642:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NO_XFER;
+ 643:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ 644:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 645:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 646:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 647:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Polling mode not supported in circular mode and double buffering mode */
+ 648:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((hdma->Instance->CR & DMA_SxCR_CIRC) != RESET)
+ 649:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 650:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NOT_SUPPORTED;
+ 651:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 652:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 653:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 654:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Get the level transfer complete flag */
+ 655:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(CompleteLevel == HAL_DMA_FULL_TRANSFER)
+ 656:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 657:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Transfer Complete flag */
+ 658:HALLIB/Src/stm32f7xx_hal_dma.c ****     mask_cpltlevel = DMA_FLAG_TCIF0_4 << hdma->StreamIndex;
+ARM GAS  /tmp/cccVrwre.s 			page 13
+
+
+ 659:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 660:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 661:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 662:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Half Transfer Complete flag */
+ 663:HALLIB/Src/stm32f7xx_hal_dma.c ****     mask_cpltlevel = DMA_FLAG_HTIF0_4 << hdma->StreamIndex;
+ 664:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 665:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 666:HALLIB/Src/stm32f7xx_hal_dma.c ****   regs = (DMA_Base_Registers *)hdma->StreamBaseAddress;
+ 667:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmpisr = regs->ISR;
+ 668:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 669:HALLIB/Src/stm32f7xx_hal_dma.c ****   while(((tmpisr & mask_cpltlevel) == RESET) && ((hdma->ErrorCode & HAL_DMA_ERROR_TE) == RESET))
+ 670:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 671:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Check for the Timeout (Not applicable in circular mode)*/
+ 672:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(Timeout != HAL_MAX_DELAY)
+ 673:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 674:HALLIB/Src/stm32f7xx_hal_dma.c ****       if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+ 675:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 676:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Update error code */
+ 677:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->ErrorCode = HAL_DMA_ERROR_TIMEOUT;
+ 678:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 679:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Process Unlocked */
+ 680:HALLIB/Src/stm32f7xx_hal_dma.c ****         __HAL_UNLOCK(hdma);
+ 681:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 682:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Change the DMA state */
+ 683:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->State = HAL_DMA_STATE_READY;
+ 684:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 685:HALLIB/Src/stm32f7xx_hal_dma.c ****         return HAL_TIMEOUT;
+ 686:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 687:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 688:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 689:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Get the ISR register value */
+ 690:HALLIB/Src/stm32f7xx_hal_dma.c ****     tmpisr = regs->ISR;
+ 691:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 692:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((tmpisr & (DMA_FLAG_TEIF0_4 << hdma->StreamIndex)) != RESET)
+ 693:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 694:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 695:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_TE;
+ 696:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 697:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the transfer error flag */
+ 698:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_TEIF0_4 << hdma->StreamIndex;
+ 699:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 700:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 701:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((tmpisr & (DMA_FLAG_FEIF0_4 << hdma->StreamIndex)) != RESET)
+ 702:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 703:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 704:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_FE;
+ 705:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 706:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the FIFO error flag */
+ 707:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_FEIF0_4 << hdma->StreamIndex;
+ 708:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 709:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 710:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((tmpisr & (DMA_FLAG_DMEIF0_4 << hdma->StreamIndex)) != RESET)
+ 711:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 712:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 713:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_DME;
+ 714:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 715:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the Direct Mode error flag */
+ARM GAS  /tmp/cccVrwre.s 			page 14
+
+
+ 716:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_DMEIF0_4 << hdma->StreamIndex;
+ 717:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 718:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 719:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 720:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->ErrorCode != HAL_DMA_ERROR_NONE)
+ 721:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 722:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((hdma->ErrorCode & HAL_DMA_ERROR_TE) != RESET)
+ 723:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 724:HALLIB/Src/stm32f7xx_hal_dma.c ****       HAL_DMA_Abort(hdma);
+ 725:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 726:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the half transfer and transfer complete flags */
+ 727:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = (DMA_FLAG_HTIF0_4 | DMA_FLAG_TCIF0_4) << hdma->StreamIndex;
+ 728:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 729:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Process Unlocked */
+ 730:HALLIB/Src/stm32f7xx_hal_dma.c ****       __HAL_UNLOCK(hdma);
+ 731:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 732:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Change the DMA state */
+ 733:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->State= HAL_DMA_STATE_READY;
+ 734:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 735:HALLIB/Src/stm32f7xx_hal_dma.c ****       return HAL_ERROR;
+ 736:HALLIB/Src/stm32f7xx_hal_dma.c ****    }
+ 737:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 738:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 739:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Get the level transfer complete flag */
+ 740:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(CompleteLevel == HAL_DMA_FULL_TRANSFER)
+ 741:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 742:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Clear the half transfer and transfer complete flags */
+ 743:HALLIB/Src/stm32f7xx_hal_dma.c ****     regs->IFCR = (DMA_FLAG_HTIF0_4 | DMA_FLAG_TCIF0_4) << hdma->StreamIndex;
+ 744:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 745:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Process Unlocked */
+ 746:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ 747:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 748:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->State = HAL_DMA_STATE_READY;
+ 749:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 750:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+ 751:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 752:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Clear the half transfer flag */
+ 753:HALLIB/Src/stm32f7xx_hal_dma.c ****     regs->IFCR = (DMA_FLAG_HTIF0_4) << hdma->StreamIndex;
+ 754:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 755:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 756:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status;
+ 757:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 758:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 759:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 760:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Handles DMA interrupt request.
+ 761:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 762:HALLIB/Src/stm32f7xx_hal_dma.c ****   *               the configuration information for the specified DMA Stream.  
+ 763:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval None
+ 764:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+ 765:HALLIB/Src/stm32f7xx_hal_dma.c **** void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
+ 766:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 767:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmpisr;
+ 768:HALLIB/Src/stm32f7xx_hal_dma.c ****   __IO uint32_t count = 0;
+ 769:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t timeout = SystemCoreClock / 9600;
+ 770:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 771:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* calculate DMA base and stream number */
+ 772:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs = (DMA_Base_Registers *)hdma->StreamBaseAddress;
+ARM GAS  /tmp/cccVrwre.s 			page 15
+
+
+ 773:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 774:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmpisr = regs->ISR;
+ 775:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 776:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Transfer Error Interrupt management ***************************************/
+ 777:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((tmpisr & (DMA_FLAG_TEIF0_4 << hdma->StreamIndex)) != RESET)
+ 778:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 779:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(__HAL_DMA_GET_IT_SOURCE(hdma, DMA_IT_TE) != RESET)
+ 780:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 781:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Disable the transfer error interrupt */
+ 782:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->Instance->CR  &= ~(DMA_IT_TE);
+ 783:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 784:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the transfer error flag */
+ 785:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_TEIF0_4 << hdma->StreamIndex;
+ 786:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 787:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 788:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_TE;
+ 789:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 790:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 791:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* FIFO Error Interrupt management ******************************************/
+ 792:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((tmpisr & (DMA_FLAG_FEIF0_4 << hdma->StreamIndex)) != RESET)
+ 793:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 794:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(__HAL_DMA_GET_IT_SOURCE(hdma, DMA_IT_FE) != RESET)
+ 795:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 796:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the FIFO error flag */
+ 797:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_FEIF0_4 << hdma->StreamIndex;
+ 798:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 799:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 800:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_FE;
+ 801:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 802:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 803:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Direct Mode Error Interrupt management ***********************************/
+ 804:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((tmpisr & (DMA_FLAG_DMEIF0_4 << hdma->StreamIndex)) != RESET)
+ 805:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 806:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(__HAL_DMA_GET_IT_SOURCE(hdma, DMA_IT_DME) != RESET)
+ 807:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 808:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the direct mode error flag */
+ 809:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_DMEIF0_4 << hdma->StreamIndex;
+ 810:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 811:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Update error code */
+ 812:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->ErrorCode |= HAL_DMA_ERROR_DME;
+ 813:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 814:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 815:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Half Transfer Complete Interrupt management ******************************/
+ 816:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((tmpisr & (DMA_FLAG_HTIF0_4 << hdma->StreamIndex)) != RESET)
+ 817:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 818:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(__HAL_DMA_GET_IT_SOURCE(hdma, DMA_IT_HT) != RESET)
+ 819:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 820:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the half transfer complete flag */
+ 821:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_HTIF0_4 << hdma->StreamIndex;
+ 822:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 823:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Multi_Buffering mode enabled */
+ 824:HALLIB/Src/stm32f7xx_hal_dma.c ****       if(((hdma->Instance->CR) & (uint32_t)(DMA_SxCR_DBM)) != RESET)
+ 825:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 826:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Current memory buffer used is Memory 0 */
+ 827:HALLIB/Src/stm32f7xx_hal_dma.c ****         if((hdma->Instance->CR & DMA_SxCR_CT) == RESET)
+ 828:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 829:HALLIB/Src/stm32f7xx_hal_dma.c ****           if(hdma->XferHalfCpltCallback != NULL)
+ARM GAS  /tmp/cccVrwre.s 			page 16
+
+
+ 830:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 831:HALLIB/Src/stm32f7xx_hal_dma.c ****             /* Half transfer callback */
+ 832:HALLIB/Src/stm32f7xx_hal_dma.c ****             hdma->XferHalfCpltCallback(hdma);
+ 833:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 834:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 835:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Current memory buffer used is Memory 1 */
+ 836:HALLIB/Src/stm32f7xx_hal_dma.c ****         else
+ 837:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 838:HALLIB/Src/stm32f7xx_hal_dma.c ****           if(hdma->XferM1HalfCpltCallback != NULL)
+ 839:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 840:HALLIB/Src/stm32f7xx_hal_dma.c ****             /* Half transfer callback */
+ 841:HALLIB/Src/stm32f7xx_hal_dma.c ****             hdma->XferM1HalfCpltCallback(hdma);
+ 842:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 843:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 844:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 845:HALLIB/Src/stm32f7xx_hal_dma.c ****       else
+ 846:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 847:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Disable the half transfer interrupt if the DMA mode is not CIRCULAR */
+ 848:HALLIB/Src/stm32f7xx_hal_dma.c ****         if((hdma->Instance->CR & DMA_SxCR_CIRC) == RESET)
+ 849:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 850:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Disable the half transfer interrupt */
+ 851:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Instance->CR  &= ~(DMA_IT_HT);
+ 852:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 853:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 854:HALLIB/Src/stm32f7xx_hal_dma.c ****         if(hdma->XferHalfCpltCallback != NULL)
+ 855:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 856:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Half transfer callback */
+ 857:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->XferHalfCpltCallback(hdma);
+ 858:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 859:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 860:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 861:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 862:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Transfer Complete Interrupt management ***********************************/
+ 863:HALLIB/Src/stm32f7xx_hal_dma.c ****   if ((tmpisr & (DMA_FLAG_TCIF0_4 << hdma->StreamIndex)) != RESET)
+ 864:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 865:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(__HAL_DMA_GET_IT_SOURCE(hdma, DMA_IT_TC) != RESET)
+ 866:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 867:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Clear the transfer complete flag */
+ 868:HALLIB/Src/stm32f7xx_hal_dma.c ****       regs->IFCR = DMA_FLAG_TCIF0_4 << hdma->StreamIndex;
+ 869:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 870:HALLIB/Src/stm32f7xx_hal_dma.c ****       if(HAL_DMA_STATE_ABORT == hdma->State)
+ 871:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 872:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Disable all the transfer interrupts */
+ 873:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->Instance->CR  &= ~(DMA_IT_TC | DMA_IT_TE | DMA_IT_DME);
+ 874:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->Instance->FCR &= ~(DMA_IT_FE);
+ 875:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 876:HALLIB/Src/stm32f7xx_hal_dma.c ****         if((hdma->XferHalfCpltCallback != NULL) || (hdma->XferM1HalfCpltCallback != NULL))
+ 877:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 878:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Instance->CR  &= ~(DMA_IT_HT);
+ 879:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 880:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 881:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Clear all interrupt flags at correct offset within the register */
+ 882:HALLIB/Src/stm32f7xx_hal_dma.c ****         regs->IFCR = 0x3FU << hdma->StreamIndex;
+ 883:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 884:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Process Unlocked */
+ 885:HALLIB/Src/stm32f7xx_hal_dma.c ****         __HAL_UNLOCK(hdma);
+ 886:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ARM GAS  /tmp/cccVrwre.s 			page 17
+
+
+ 887:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Change the DMA state */
+ 888:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->State = HAL_DMA_STATE_READY;
+ 889:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 890:HALLIB/Src/stm32f7xx_hal_dma.c ****         if(hdma->XferAbortCallback != NULL)
+ 891:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 892:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->XferAbortCallback(hdma);
+ 893:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 894:HALLIB/Src/stm32f7xx_hal_dma.c ****         return;
+ 895:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 896:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 897:HALLIB/Src/stm32f7xx_hal_dma.c ****       if(((hdma->Instance->CR) & (uint32_t)(DMA_SxCR_DBM)) != RESET)
+ 898:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 899:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Current memory buffer used is Memory 0 */
+ 900:HALLIB/Src/stm32f7xx_hal_dma.c ****         if((hdma->Instance->CR & DMA_SxCR_CT) == RESET)
+ 901:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 902:HALLIB/Src/stm32f7xx_hal_dma.c ****           if(hdma->XferM1CpltCallback != NULL)
+ 903:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 904:HALLIB/Src/stm32f7xx_hal_dma.c ****             /* Transfer complete Callback for memory1 */
+ 905:HALLIB/Src/stm32f7xx_hal_dma.c ****             hdma->XferM1CpltCallback(hdma);
+ 906:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 907:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 908:HALLIB/Src/stm32f7xx_hal_dma.c ****         /* Current memory buffer used is Memory 1 */
+ 909:HALLIB/Src/stm32f7xx_hal_dma.c ****         else
+ 910:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 911:HALLIB/Src/stm32f7xx_hal_dma.c ****           if(hdma->XferCpltCallback != NULL)
+ 912:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 913:HALLIB/Src/stm32f7xx_hal_dma.c ****             /* Transfer complete Callback for memory0 */
+ 914:HALLIB/Src/stm32f7xx_hal_dma.c ****             hdma->XferCpltCallback(hdma);
+ 915:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 916:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 917:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 918:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Disable the transfer complete interrupt if the DMA mode is not CIRCULAR */
+ 919:HALLIB/Src/stm32f7xx_hal_dma.c ****       else
+ 920:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 921:HALLIB/Src/stm32f7xx_hal_dma.c ****         if((hdma->Instance->CR & DMA_SxCR_CIRC) == RESET)
+ 922:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 923:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Disable the transfer complete interrupt */
+ 924:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Instance->CR  &= ~(DMA_IT_TC);
+ 925:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 926:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Process Unlocked */
+ 927:HALLIB/Src/stm32f7xx_hal_dma.c ****           __HAL_UNLOCK(hdma);
+ 928:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 929:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Change the DMA state */
+ 930:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->State = HAL_DMA_STATE_READY;
+ 931:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 932:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 933:HALLIB/Src/stm32f7xx_hal_dma.c ****         if(hdma->XferCpltCallback != NULL)
+ 934:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 935:HALLIB/Src/stm32f7xx_hal_dma.c ****           /* Transfer complete callback */
+ 936:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->XferCpltCallback(hdma);
+ 937:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 938:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 939:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 940:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 941:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 942:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* manage error case */
+ 943:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->ErrorCode != HAL_DMA_ERROR_NONE)
+ARM GAS  /tmp/cccVrwre.s 			page 18
+
+
+ 944:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 945:HALLIB/Src/stm32f7xx_hal_dma.c ****     if((hdma->ErrorCode & HAL_DMA_ERROR_TE) != RESET)
+ 946:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 947:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->State = HAL_DMA_STATE_ABORT;
+ 948:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 949:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Disable the stream */
+ 950:HALLIB/Src/stm32f7xx_hal_dma.c ****       __HAL_DMA_DISABLE(hdma);
+ 951:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 952:HALLIB/Src/stm32f7xx_hal_dma.c ****       do
+ 953:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 954:HALLIB/Src/stm32f7xx_hal_dma.c ****         if (++count > timeout)
+ 955:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 956:HALLIB/Src/stm32f7xx_hal_dma.c ****           break;
+ 957:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 958:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 959:HALLIB/Src/stm32f7xx_hal_dma.c ****       while((hdma->Instance->CR & DMA_SxCR_EN) != RESET);
+ 960:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 961:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Process Unlocked */
+ 962:HALLIB/Src/stm32f7xx_hal_dma.c ****       __HAL_UNLOCK(hdma);
+ 963:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 964:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Change the DMA state */
+ 965:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->State = HAL_DMA_STATE_READY;
+ 966:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 967:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 968:HALLIB/Src/stm32f7xx_hal_dma.c ****     if(hdma->XferErrorCallback != NULL)
+ 969:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 970:HALLIB/Src/stm32f7xx_hal_dma.c ****       /* Transfer error callback */
+ 971:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferErrorCallback(hdma);
+ 972:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 973:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 974:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 975:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 976:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+ 977:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Register callbacks
+ 978:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma                 pointer to a DMA_HandleTypeDef structure that contains
+ 979:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                               the configuration information for the specified DMA Stream.
+ 980:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  CallbackID           User Callback identifer
+ 981:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                               a DMA_HandleTypeDef structure as parameter.
+ 982:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  pCallback            pointer to private callbacsk function which has pointer to 
+ 983:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                               a DMA_HandleTypeDef structure as parameter.
+ 984:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+ 985:HALLIB/Src/stm32f7xx_hal_dma.c ****   */                      
+ 986:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef Callb
+ 987:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ 988:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 990:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 991:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Process locked */
+ 992:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_LOCK(hdma);
+ 993:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 994:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+ 995:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 996:HALLIB/Src/stm32f7xx_hal_dma.c ****     switch (CallbackID)
+ 997:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 998:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_CPLT_CB_ID:
+ 999:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferCpltCallback = pCallback;
+1000:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ARM GAS  /tmp/cccVrwre.s 			page 19
+
+
+1001:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1002:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_HALFCPLT_CB_ID:
+1003:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferHalfCpltCallback = pCallback;
+1004:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1005:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1006:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_M1CPLT_CB_ID:
+1007:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1CpltCallback = pCallback;
+1008:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1009:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1010:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_M1HALFCPLT_CB_ID:
+1011:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1HalfCpltCallback = pCallback;
+1012:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1013:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1014:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_ERROR_CB_ID:
+1015:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferErrorCallback = pCallback;
+1016:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1017:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1018:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_ABORT_CB_ID:
+1019:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferAbortCallback = pCallback;
+1020:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1021:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1022:HALLIB/Src/stm32f7xx_hal_dma.c ****     default:
+1023:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1024:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+1025:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1026:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+1027:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1028:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Return error status */
+1029:HALLIB/Src/stm32f7xx_hal_dma.c ****     status =  HAL_ERROR;
+1030:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1031:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1032:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Release Lock */
+1033:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_UNLOCK(hdma);
+1034:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1035:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status;
+1036:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+1037:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1038:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1039:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  UnRegister callbacks
+1040:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma                 pointer to a DMA_HandleTypeDef structure that contains
+1041:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                               the configuration information for the specified DMA Stream.
+1042:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  CallbackID           User Callback identifer
+1043:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                               a HAL_DMA_CallbackIDTypeDef ENUM as parameter.
+1044:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+1045:HALLIB/Src/stm32f7xx_hal_dma.c ****   */              
+1046:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef Cal
+1047:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+1048:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+1049:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1050:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Process locked */
+1051:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_LOCK(hdma);
+1052:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1053:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+1054:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1055:HALLIB/Src/stm32f7xx_hal_dma.c ****     switch (CallbackID)
+1056:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+1057:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_CPLT_CB_ID:
+ARM GAS  /tmp/cccVrwre.s 			page 20
+
+
+1058:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferCpltCallback = NULL;
+1059:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1060:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1061:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_HALFCPLT_CB_ID:
+1062:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferHalfCpltCallback = NULL;
+1063:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1064:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1065:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_M1CPLT_CB_ID:
+1066:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1CpltCallback = NULL;
+1067:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1068:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1069:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_M1HALFCPLT_CB_ID:
+1070:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1HalfCpltCallback = NULL;
+1071:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1072:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1073:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_ERROR_CB_ID:
+1074:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferErrorCallback = NULL;
+1075:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1076:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1077:HALLIB/Src/stm32f7xx_hal_dma.c ****     case  HAL_DMA_XFER_ABORT_CB_ID:
+1078:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferAbortCallback = NULL;
+1079:HALLIB/Src/stm32f7xx_hal_dma.c ****       break; 
+1080:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1081:HALLIB/Src/stm32f7xx_hal_dma.c ****     case   HAL_DMA_XFER_ALL_CB_ID:
+1082:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferCpltCallback = NULL;
+1083:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferHalfCpltCallback = NULL;
+1084:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1CpltCallback = NULL;
+1085:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1HalfCpltCallback = NULL;
+1086:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferErrorCallback = NULL;
+1087:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferAbortCallback = NULL;
+1088:HALLIB/Src/stm32f7xx_hal_dma.c ****       break; 
+1089:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+1090:HALLIB/Src/stm32f7xx_hal_dma.c ****     default:
+1091:HALLIB/Src/stm32f7xx_hal_dma.c ****       status = HAL_ERROR;
+1092:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1093:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+1094:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1095:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+1096:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1097:HALLIB/Src/stm32f7xx_hal_dma.c ****     status = HAL_ERROR;
+1098:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1099:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1100:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Release Lock */
+1101:HALLIB/Src/stm32f7xx_hal_dma.c ****   __HAL_UNLOCK(hdma);
+1102:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1103:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status;
+1104:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+1105:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1106:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1107:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+1108:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1109:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1110:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Exported_Functions_Group3
+1111:HALLIB/Src/stm32f7xx_hal_dma.c ****   *
+1112:HALLIB/Src/stm32f7xx_hal_dma.c **** @verbatim
+1113:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+1114:HALLIB/Src/stm32f7xx_hal_dma.c ****                     ##### State and Errors functions #####
+ARM GAS  /tmp/cccVrwre.s 			page 21
+
+
+1115:HALLIB/Src/stm32f7xx_hal_dma.c ****  ===============================================================================
+1116:HALLIB/Src/stm32f7xx_hal_dma.c ****     [..]
+1117:HALLIB/Src/stm32f7xx_hal_dma.c ****     This subsection provides functions allowing to
+1118:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Check the DMA state
+1119:HALLIB/Src/stm32f7xx_hal_dma.c ****       (+) Get error code
+1120:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1121:HALLIB/Src/stm32f7xx_hal_dma.c **** @endverbatim
+1122:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+1123:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1124:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1125:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1126:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Returns the DMA state.
+1127:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+1128:HALLIB/Src/stm32f7xx_hal_dma.c ****   *               the configuration information for the specified DMA Stream.
+1129:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL state
+1130:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1131:HALLIB/Src/stm32f7xx_hal_dma.c **** HAL_DMA_StateTypeDef HAL_DMA_GetState(DMA_HandleTypeDef *hdma)
+1132:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+1133:HALLIB/Src/stm32f7xx_hal_dma.c ****   return hdma->State;
+1134:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+1135:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1136:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1137:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Return the DMA error code
+1138:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma  pointer to a DMA_HandleTypeDef structure that contains
+1139:HALLIB/Src/stm32f7xx_hal_dma.c ****   *              the configuration information for the specified DMA Stream.
+1140:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval DMA Error Code
+1141:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1142:HALLIB/Src/stm32f7xx_hal_dma.c **** uint32_t HAL_DMA_GetError(DMA_HandleTypeDef *hdma)
+1143:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+1144:HALLIB/Src/stm32f7xx_hal_dma.c ****   return hdma->ErrorCode;
+1145:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+1146:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1147:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1148:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+1149:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1150:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1151:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1152:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @}
+1153:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1154:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1155:HALLIB/Src/stm32f7xx_hal_dma.c **** /** @addtogroup DMA_Private_Functions
+1156:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @{
+1157:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1158:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1159:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1160:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Sets the DMA Transfer parameter.
+1161:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+1162:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                     the configuration information for the specified DMA Stream.
+1163:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  SrcAddress The source memory Buffer address
+1164:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DstAddress The destination memory Buffer address
+1165:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  DataLength The length of data to be transferred from source to destination
+1166:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+1167:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1168:HALLIB/Src/stm32f7xx_hal_dma.c **** static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32
+1169:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+  28              		.loc 1 1169 0
+  29              		.cfi_startproc
+ARM GAS  /tmp/cccVrwre.s 			page 22
+
+
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  34 0000 30B4     		push	{r4, r5}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 5, -4
+1170:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Clear DBM bit */
+1171:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->CR &= (uint32_t)(~DMA_SxCR_DBM);
+  39              		.loc 1 1171 0
+  40 0002 0568     		ldr	r5, [r0]
+  41 0004 2C68     		ldr	r4, [r5]
+  42 0006 24F48024 		bic	r4, r4, #262144
+  43 000a 2C60     		str	r4, [r5]
+1172:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1173:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Configure DMA Stream data length */
+1174:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->Instance->NDTR = DataLength;
+  44              		.loc 1 1174 0
+  45 000c 0468     		ldr	r4, [r0]
+  46 000e 6360     		str	r3, [r4, #4]
+1175:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1176:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Memory to Peripheral */
+1177:HALLIB/Src/stm32f7xx_hal_dma.c ****   if((hdma->Init.Direction) == DMA_MEMORY_TO_PERIPH)
+  47              		.loc 1 1177 0
+  48 0010 8368     		ldr	r3, [r0, #8]
+  49              	.LVL1:
+  50 0012 402B     		cmp	r3, #64
+  51 0014 04D1     		bne	.L2
+1178:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1179:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure DMA Stream destination address */
+1180:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->PAR = DstAddress;
+  52              		.loc 1 1180 0
+  53 0016 0368     		ldr	r3, [r0]
+  54 0018 9A60     		str	r2, [r3, #8]
+  55              	.LVL2:
+1181:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1182:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure DMA Stream source address */
+1183:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->M0AR = SrcAddress;
+  56              		.loc 1 1183 0
+  57 001a 0368     		ldr	r3, [r0]
+  58 001c D960     		str	r1, [r3, #12]
+  59 001e 03E0     		b	.L1
+  60              	.LVL3:
+  61              	.L2:
+1184:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1185:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Peripheral to Memory */
+1186:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+1187:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1188:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure DMA Stream source address */
+1189:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->PAR = SrcAddress;
+  62              		.loc 1 1189 0
+  63 0020 0368     		ldr	r3, [r0]
+  64 0022 9960     		str	r1, [r3, #8]
+  65              	.LVL4:
+1190:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ARM GAS  /tmp/cccVrwre.s 			page 23
+
+
+1191:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* Configure DMA Stream destination address */
+1192:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->M0AR = DstAddress;
+  66              		.loc 1 1192 0
+  67 0024 0368     		ldr	r3, [r0]
+  68 0026 DA60     		str	r2, [r3, #12]
+  69              	.L1:
+1193:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1194:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+  70              		.loc 1 1194 0
+  71 0028 30BC     		pop	{r4, r5}
+  72              	.LCFI1:
+  73              		.cfi_restore 5
+  74              		.cfi_restore 4
+  75              		.cfi_def_cfa_offset 0
+  76 002a 7047     		bx	lr
+  77              		.cfi_endproc
+  78              	.LFE148:
+  80              		.section	.text.DMA_CalcBaseAndBitshift,"ax",%progbits
+  81              		.align	2
+  82              		.thumb
+  83              		.thumb_func
+  85              	DMA_CalcBaseAndBitshift:
+  86              	.LFB149:
+1195:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1196:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1197:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Returns the DMA Stream base address depending on stream number
+1198:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+1199:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                     the configuration information for the specified DMA Stream. 
+1200:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval Stream base address
+1201:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1202:HALLIB/Src/stm32f7xx_hal_dma.c **** static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
+1203:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+  87              		.loc 1 1203 0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              		@ link register save eliminated.
+  92              	.LVL5:
+1204:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t stream_number = (((uint32_t)hdma->Instance & 0xFFU) - 16U) / 24U;
+  93              		.loc 1 1204 0
+  94 0000 0268     		ldr	r2, [r0]
+  95 0002 D3B2     		uxtb	r3, r2
+  96 0004 103B     		subs	r3, r3, #16
+  97 0006 0949     		ldr	r1, .L8
+  98 0008 A1FB0313 		umull	r1, r3, r1, r3
+  99 000c 1B09     		lsrs	r3, r3, #4
+ 100              	.LVL6:
+1205:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1206:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* lookup table for necessary bitshift of flags within status registers */
+1207:HALLIB/Src/stm32f7xx_hal_dma.c ****   static const uint8_t flagBitshiftOffset[8U] = {0U, 6U, 16U, 22U, 0U, 6U, 16U, 22U};
+1208:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->StreamIndex = flagBitshiftOffset[stream_number];
+ 101              		.loc 1 1208 0
+ 102 000e 0849     		ldr	r1, .L8+4
+ 103 0010 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 104 0012 C165     		str	r1, [r0, #92]
+1209:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1210:HALLIB/Src/stm32f7xx_hal_dma.c ****   if (stream_number > 3U)
+ARM GAS  /tmp/cccVrwre.s 			page 24
+
+
+ 105              		.loc 1 1210 0
+ 106 0014 032B     		cmp	r3, #3
+ 107 0016 04D9     		bls	.L6
+1211:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1212:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* return pointer to HISR and HIFCR */
+1213:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->StreamBaseAddress = (((uint32_t)hdma->Instance & (uint32_t)(~0x3FFU)) + 4U);
+ 108              		.loc 1 1213 0
+ 109 0018 064B     		ldr	r3, .L8+8
+ 110              	.LVL7:
+ 111 001a 1340     		ands	r3, r3, r2
+ 112 001c 0433     		adds	r3, r3, #4
+ 113 001e 8365     		str	r3, [r0, #88]
+ 114 0020 02E0     		b	.L7
+ 115              	.LVL8:
+ 116              	.L6:
+1214:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1215:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+1216:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1217:HALLIB/Src/stm32f7xx_hal_dma.c ****     /* return pointer to LISR and LIFCR */
+1218:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->StreamBaseAddress = ((uint32_t)hdma->Instance & (uint32_t)(~0x3FFU));
+ 117              		.loc 1 1218 0
+ 118 0022 044B     		ldr	r3, .L8+8
+ 119              	.LVL9:
+ 120 0024 1340     		ands	r3, r3, r2
+ 121 0026 8365     		str	r3, [r0, #88]
+ 122              	.L7:
+1219:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1220:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1221:HALLIB/Src/stm32f7xx_hal_dma.c ****   return hdma->StreamBaseAddress;
+1222:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 123              		.loc 1 1222 0
+ 124 0028 806D     		ldr	r0, [r0, #88]
+ 125              	.LVL10:
+ 126 002a 7047     		bx	lr
+ 127              	.L9:
+ 128              		.align	2
+ 129              	.L8:
+ 130 002c ABAAAAAA 		.word	-1431655765
+ 131 0030 00000000 		.word	.LANCHOR0
+ 132 0034 00FCFFFF 		.word	-1024
+ 133              		.cfi_endproc
+ 134              	.LFE149:
+ 136              		.section	.text.DMA_CheckFifoParam,"ax",%progbits
+ 137              		.align	2
+ 138              		.thumb
+ 139              		.thumb_func
+ 141              	DMA_CheckFifoParam:
+ 142              	.LFB150:
+1223:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+1224:HALLIB/Src/stm32f7xx_hal_dma.c **** /**
+1225:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @brief  Check compatibility between FIFO threshold level and size of the memory burst
+1226:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+1227:HALLIB/Src/stm32f7xx_hal_dma.c ****   *                     the configuration information for the specified DMA Stream. 
+1228:HALLIB/Src/stm32f7xx_hal_dma.c ****   * @retval HAL status
+1229:HALLIB/Src/stm32f7xx_hal_dma.c ****   */
+1230:HALLIB/Src/stm32f7xx_hal_dma.c **** static HAL_StatusTypeDef DMA_CheckFifoParam(DMA_HandleTypeDef *hdma)
+1231:HALLIB/Src/stm32f7xx_hal_dma.c **** {
+ARM GAS  /tmp/cccVrwre.s 			page 25
+
+
+ 143              		.loc 1 1231 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147              		@ link register save eliminated.
+ 148              	.LVL11:
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+1233:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 149              		.loc 1 1233 0
+ 150 0000 836A     		ldr	r3, [r0, #40]
+ 151              	.LVL12:
+1234:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1235:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Memory Data size equal to Byte */
+1236:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->Init.MemDataAlignment == DMA_MDATAALIGN_BYTE)
+ 152              		.loc 1 1236 0
+ 153 0002 8269     		ldr	r2, [r0, #24]
+ 154 0004 82B9     		cbnz	r2, .L11
+1237:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1238:HALLIB/Src/stm32f7xx_hal_dma.c ****     switch (tmp)
+ 155              		.loc 1 1238 0
+ 156 0006 012B     		cmp	r3, #1
+ 157 0008 08D0     		beq	.L13
+ 158 000a 0BB1     		cbz	r3, .L14
+ 159 000c 022B     		cmp	r3, #2
+ 160 000e 2ED1     		bne	.L30
+ 161              	.L14:
+1239:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+1240:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_1QUARTERFULL:
+1241:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_3QUARTERSFULL:
+1242:HALLIB/Src/stm32f7xx_hal_dma.c ****       if ((hdma->Init.MemBurst & DMA_SxCR_MBURST_1) == DMA_SxCR_MBURST_1)
+ 162              		.loc 1 1242 0
+ 163 0010 C36A     		ldr	r3, [r0, #44]
+ 164              	.LVL13:
+ 165 0012 13F0807F 		tst	r3, #16777216
+ 166 0016 2CD1     		bne	.L23
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 167              		.loc 1 1232 0
+ 168 0018 0020     		movs	r0, #0
+ 169              	.LVL14:
+ 170 001a 7047     		bx	lr
+ 171              	.LVL15:
+ 172              	.L13:
+1243:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+1244:HALLIB/Src/stm32f7xx_hal_dma.c ****         status = HAL_ERROR;
+1245:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+1246:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1247:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_HALFFULL:
+1248:HALLIB/Src/stm32f7xx_hal_dma.c ****       if (hdma->Init.MemBurst == DMA_MBURST_INC16)
+ 173              		.loc 1 1248 0
+ 174 001c C36A     		ldr	r3, [r0, #44]
+ 175              	.LVL16:
+ 176 001e B3F1C07F 		cmp	r3, #25165824
+ 177 0022 28D0     		beq	.L24
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 178              		.loc 1 1232 0
+ 179 0024 0020     		movs	r0, #0
+ 180              	.LVL17:
+ARM GAS  /tmp/cccVrwre.s 			page 26
+
+
+ 181 0026 7047     		bx	lr
+ 182              	.LVL18:
+ 183              	.L11:
+1249:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+1250:HALLIB/Src/stm32f7xx_hal_dma.c ****         status = HAL_ERROR;
+1251:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+1252:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1253:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_FULL:
+1254:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1255:HALLIB/Src/stm32f7xx_hal_dma.c ****     default:
+1256:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1257:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+1258:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1259:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1260:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Memory Data size equal to Half-Word */
+1261:HALLIB/Src/stm32f7xx_hal_dma.c ****   else if (hdma->Init.MemDataAlignment == DMA_MDATAALIGN_HALFWORD)
+ 184              		.loc 1 1261 0
+ 185 0028 B2F5005F 		cmp	r2, #8192
+ 186 002c 13D1     		bne	.L15
+1262:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1263:HALLIB/Src/stm32f7xx_hal_dma.c ****     switch (tmp)
+ 187              		.loc 1 1263 0
+ 188 002e 032B     		cmp	r3, #3
+ 189 0030 03D8     		bhi	.L16
+ 190 0032 DFE803F0 		tbb	[pc, r3]
+ 191              	.L17:
+ 192 0036 22       		.byte	(.L25-.L17)/2
+ 193 0037 04       		.byte	(.L18-.L17)/2
+ 194 0038 22       		.byte	(.L25-.L17)/2
+ 195 0039 0A       		.byte	(.L19-.L17)/2
+ 196              		.p2align 1
+ 197              	.L16:
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 198              		.loc 1 1232 0
+ 199 003a 0020     		movs	r0, #0
+ 200              	.LVL19:
+ 201 003c 7047     		bx	lr
+ 202              	.LVL20:
+ 203              	.L18:
+1264:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+1265:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_1QUARTERFULL:
+1266:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_3QUARTERSFULL:
+1267:HALLIB/Src/stm32f7xx_hal_dma.c ****       status = HAL_ERROR;
+1268:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1269:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_HALFFULL:
+1270:HALLIB/Src/stm32f7xx_hal_dma.c ****       if ((hdma->Init.MemBurst & DMA_SxCR_MBURST_1) == DMA_SxCR_MBURST_1)
+ 204              		.loc 1 1270 0
+ 205 003e C36A     		ldr	r3, [r0, #44]
+ 206              	.LVL21:
+ 207 0040 13F0807F 		tst	r3, #16777216
+ 208 0044 1BD1     		bne	.L26
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 209              		.loc 1 1232 0
+ 210 0046 0020     		movs	r0, #0
+ 211              	.LVL22:
+ 212 0048 7047     		bx	lr
+ 213              	.LVL23:
+ARM GAS  /tmp/cccVrwre.s 			page 27
+
+
+ 214              	.L19:
+1271:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+1272:HALLIB/Src/stm32f7xx_hal_dma.c ****         status = HAL_ERROR;
+1273:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+1274:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1275:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_FULL:
+1276:HALLIB/Src/stm32f7xx_hal_dma.c ****       if (hdma->Init.MemBurst == DMA_MBURST_INC16)
+ 215              		.loc 1 1276 0
+ 216 004a C36A     		ldr	r3, [r0, #44]
+ 217              	.LVL24:
+ 218 004c B3F1C07F 		cmp	r3, #25165824
+ 219 0050 17D0     		beq	.L27
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 220              		.loc 1 1232 0
+ 221 0052 0020     		movs	r0, #0
+ 222              	.LVL25:
+ 223 0054 7047     		bx	lr
+ 224              	.LVL26:
+ 225              	.L15:
+1277:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+1278:HALLIB/Src/stm32f7xx_hal_dma.c ****         status = HAL_ERROR;
+1279:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+1280:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;   
+1281:HALLIB/Src/stm32f7xx_hal_dma.c ****     default:
+1282:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1283:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+1284:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+1285:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1286:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* Memory Data size equal to Word */
+1287:HALLIB/Src/stm32f7xx_hal_dma.c ****   else
+1288:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+1289:HALLIB/Src/stm32f7xx_hal_dma.c ****     switch (tmp)
+ 226              		.loc 1 1289 0
+ 227 0056 022B     		cmp	r3, #2
+ 228 0058 15D9     		bls	.L28
+ 229 005a 032B     		cmp	r3, #3
+ 230 005c 01D0     		beq	.L21
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 231              		.loc 1 1232 0
+ 232 005e 0020     		movs	r0, #0
+ 233              	.LVL27:
+ 234 0060 7047     		bx	lr
+ 235              	.LVL28:
+ 236              	.L21:
+1290:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+1291:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_1QUARTERFULL:
+1292:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_HALFFULL:
+1293:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_3QUARTERSFULL:
+1294:HALLIB/Src/stm32f7xx_hal_dma.c ****       status = HAL_ERROR;
+1295:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1296:HALLIB/Src/stm32f7xx_hal_dma.c ****     case DMA_FIFO_THRESHOLD_FULL:
+1297:HALLIB/Src/stm32f7xx_hal_dma.c ****       if ((hdma->Init.MemBurst & DMA_SxCR_MBURST_1) == DMA_SxCR_MBURST_1)
+ 237              		.loc 1 1297 0
+ 238 0062 C36A     		ldr	r3, [r0, #44]
+ 239              	.LVL29:
+ 240 0064 13F0807F 		tst	r3, #16777216
+ 241 0068 0FD1     		bne	.L29
+ARM GAS  /tmp/cccVrwre.s 			page 28
+
+
+1232:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = hdma->Init.FIFOThreshold;
+ 242              		.loc 1 1232 0
+ 243 006a 0020     		movs	r0, #0
+ 244              	.LVL30:
+ 245 006c 7047     		bx	lr
+ 246              	.LVL31:
+ 247              	.L30:
+ 248 006e 0020     		movs	r0, #0
+ 249              	.LVL32:
+ 250 0070 7047     		bx	lr
+ 251              	.LVL33:
+ 252              	.L23:
+1244:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 253              		.loc 1 1244 0
+ 254 0072 0120     		movs	r0, #1
+ 255              	.LVL34:
+ 256 0074 7047     		bx	lr
+ 257              	.LVL35:
+ 258              	.L24:
+1250:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 259              		.loc 1 1250 0
+ 260 0076 0120     		movs	r0, #1
+ 261              	.LVL36:
+ 262 0078 7047     		bx	lr
+ 263              	.LVL37:
+ 264              	.L25:
+1267:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 265              		.loc 1 1267 0
+ 266 007a 0120     		movs	r0, #1
+ 267              	.LVL38:
+ 268 007c 7047     		bx	lr
+ 269              	.LVL39:
+ 270              	.L26:
+1272:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 271              		.loc 1 1272 0
+ 272 007e 0120     		movs	r0, #1
+ 273              	.LVL40:
+ 274 0080 7047     		bx	lr
+ 275              	.LVL41:
+ 276              	.L27:
+1278:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 277              		.loc 1 1278 0
+ 278 0082 0120     		movs	r0, #1
+ 279              	.LVL42:
+ 280 0084 7047     		bx	lr
+ 281              	.LVL43:
+ 282              	.L28:
+1294:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 283              		.loc 1 1294 0
+ 284 0086 0120     		movs	r0, #1
+ 285              	.LVL44:
+ 286 0088 7047     		bx	lr
+ 287              	.LVL45:
+ 288              	.L29:
+1298:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+1299:HALLIB/Src/stm32f7xx_hal_dma.c ****         status = HAL_ERROR;
+ 289              		.loc 1 1299 0
+ARM GAS  /tmp/cccVrwre.s 			page 29
+
+
+ 290 008a 0120     		movs	r0, #1
+ 291              	.LVL46:
+1300:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+1301:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1302:HALLIB/Src/stm32f7xx_hal_dma.c ****     default:
+1303:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+1304:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+1305:HALLIB/Src/stm32f7xx_hal_dma.c ****   } 
+1306:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+1307:HALLIB/Src/stm32f7xx_hal_dma.c ****   return status; 
+1308:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 292              		.loc 1 1308 0
+ 293 008c 7047     		bx	lr
+ 294              		.cfi_endproc
+ 295              	.LFE150:
+ 297 008e 00BF     		.section	.text.HAL_DMA_Init,"ax",%progbits
+ 298              		.align	2
+ 299              		.global	HAL_DMA_Init
+ 300              		.thumb
+ 301              		.thumb_func
+ 303              	HAL_DMA_Init:
+ 304              	.LFB136:
+ 189:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmp = 0U;
+ 305              		.loc 1 189 0
+ 306              		.cfi_startproc
+ 307              		@ args = 0, pretend = 0, frame = 0
+ 308              		@ frame_needed = 0, uses_anonymous_args = 0
+ 309              	.LVL47:
+ 310 0000 70B5     		push	{r4, r5, r6, lr}
+ 311              	.LCFI2:
+ 312              		.cfi_def_cfa_offset 16
+ 313              		.cfi_offset 4, -16
+ 314              		.cfi_offset 5, -12
+ 315              		.cfi_offset 6, -8
+ 316              		.cfi_offset 14, -4
+ 317 0002 0446     		mov	r4, r0
+ 318              	.LVL48:
+ 191:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 319              		.loc 1 191 0
+ 320 0004 FFF7FEFF 		bl	HAL_GetTick
+ 321              	.LVL49:
+ 195:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 322              		.loc 1 195 0
+ 323 0008 002C     		cmp	r4, #0
+ 324 000a 5CD0     		beq	.L37
+ 325 000c 0546     		mov	r5, r0
+ 221:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 326              		.loc 1 221 0
+ 327 000e 0023     		movs	r3, #0
+ 328 0010 84F83430 		strb	r3, [r4, #52]
+ 224:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 329              		.loc 1 224 0
+ 330 0014 0223     		movs	r3, #2
+ 331 0016 84F83530 		strb	r3, [r4, #53]
+ 227:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 332              		.loc 1 227 0
+ 333 001a 2268     		ldr	r2, [r4]
+ARM GAS  /tmp/cccVrwre.s 			page 30
+
+
+ 334 001c 1368     		ldr	r3, [r2]
+ 335 001e 23F00103 		bic	r3, r3, #1
+ 336 0022 1360     		str	r3, [r2]
+ 230:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 337              		.loc 1 230 0
+ 338 0024 0AE0     		b	.L33
+ 339              	.LVL50:
+ 340              	.L34:
+ 233:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 341              		.loc 1 233 0
+ 342 0026 FFF7FEFF 		bl	HAL_GetTick
+ 343              	.LVL51:
+ 344 002a 401B     		subs	r0, r0, r5
+ 345 002c 0528     		cmp	r0, #5
+ 346 002e 05D9     		bls	.L33
+ 236:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 347              		.loc 1 236 0
+ 348 0030 2023     		movs	r3, #32
+ 349 0032 6365     		str	r3, [r4, #84]
+ 239:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 350              		.loc 1 239 0
+ 351 0034 0320     		movs	r0, #3
+ 352 0036 84F83500 		strb	r0, [r4, #53]
+ 241:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 353              		.loc 1 241 0
+ 354 003a 70BD     		pop	{r4, r5, r6, pc}
+ 355              	.LVL52:
+ 356              	.L33:
+ 230:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 357              		.loc 1 230 0
+ 358 003c 2368     		ldr	r3, [r4]
+ 359 003e 1A68     		ldr	r2, [r3]
+ 360 0040 12F0010F 		tst	r2, #1
+ 361 0044 EFD1     		bne	.L34
+ 246:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 362              		.loc 1 246 0
+ 363 0046 1A68     		ldr	r2, [r3]
+ 364              	.LVL53:
+ 249:HALLIB/Src/stm32f7xx_hal_dma.c ****                       DMA_SxCR_PL    | DMA_SxCR_MSIZE  | DMA_SxCR_PSIZE  | \
+ 365              		.loc 1 249 0
+ 366 0048 2048     		ldr	r0, .L39
+ 367 004a 1040     		ands	r0, r0, r2
+ 368              	.LVL54:
+ 255:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphInc           | hdma->Init.MemInc           |
+ 369              		.loc 1 255 0
+ 370 004c 6168     		ldr	r1, [r4, #4]
+ 371 004e A268     		ldr	r2, [r4, #8]
+ 372 0050 1143     		orrs	r1, r1, r2
+ 256:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphDataAlignment | hdma->Init.MemDataAlignment |
+ 373              		.loc 1 256 0
+ 374 0052 E268     		ldr	r2, [r4, #12]
+ 255:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphInc           | hdma->Init.MemInc           |
+ 375              		.loc 1 255 0
+ 376 0054 1143     		orrs	r1, r1, r2
+ 256:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphDataAlignment | hdma->Init.MemDataAlignment |
+ 377              		.loc 1 256 0
+ 378 0056 2269     		ldr	r2, [r4, #16]
+ARM GAS  /tmp/cccVrwre.s 			page 31
+
+
+ 379 0058 1143     		orrs	r1, r1, r2
+ 257:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.Mode                | hdma->Init.Priority;
+ 380              		.loc 1 257 0
+ 381 005a 6269     		ldr	r2, [r4, #20]
+ 256:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphDataAlignment | hdma->Init.MemDataAlignment |
+ 382              		.loc 1 256 0
+ 383 005c 1143     		orrs	r1, r1, r2
+ 257:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.Mode                | hdma->Init.Priority;
+ 384              		.loc 1 257 0
+ 385 005e A269     		ldr	r2, [r4, #24]
+ 386 0060 1143     		orrs	r1, r1, r2
+ 258:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 387              		.loc 1 258 0
+ 388 0062 E269     		ldr	r2, [r4, #28]
+ 257:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.Mode                | hdma->Init.Priority;
+ 389              		.loc 1 257 0
+ 390 0064 0A43     		orrs	r2, r2, r1
+ 258:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 391              		.loc 1 258 0
+ 392 0066 216A     		ldr	r1, [r4, #32]
+ 393 0068 1143     		orrs	r1, r1, r2
+ 255:HALLIB/Src/stm32f7xx_hal_dma.c ****           hdma->Init.PeriphInc           | hdma->Init.MemInc           |
+ 394              		.loc 1 255 0
+ 395 006a 40EA0102 		orr	r2, r0, r1
+ 396              	.LVL55:
+ 261:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 397              		.loc 1 261 0
+ 398 006e 616A     		ldr	r1, [r4, #36]
+ 399 0070 0429     		cmp	r1, #4
+ 400 0072 03D1     		bne	.L35
+ 264:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 401              		.loc 1 264 0
+ 402 0074 E06A     		ldr	r0, [r4, #44]
+ 403 0076 216B     		ldr	r1, [r4, #48]
+ 404 0078 0143     		orrs	r1, r1, r0
+ 405 007a 0A43     		orrs	r2, r2, r1
+ 406              	.LVL56:
+ 407              	.L35:
+ 268:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 408              		.loc 1 268 0
+ 409 007c 1A60     		str	r2, [r3]
+ 271:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 410              		.loc 1 271 0
+ 411 007e 2668     		ldr	r6, [r4]
+ 412 0080 7569     		ldr	r5, [r6, #20]
+ 413              	.LVL57:
+ 274:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 414              		.loc 1 274 0
+ 415 0082 25F00705 		bic	r5, r5, #7
+ 416              	.LVL58:
+ 277:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 417              		.loc 1 277 0
+ 418 0086 636A     		ldr	r3, [r4, #36]
+ 419 0088 1D43     		orrs	r5, r5, r3
+ 420              	.LVL59:
+ 280:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 421              		.loc 1 280 0
+ARM GAS  /tmp/cccVrwre.s 			page 32
+
+
+ 422 008a 042B     		cmp	r3, #4
+ 423 008c 0DD1     		bne	.L36
+ 283:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 424              		.loc 1 283 0
+ 425 008e A36A     		ldr	r3, [r4, #40]
+ 426 0090 1D43     		orrs	r5, r5, r3
+ 427              	.LVL60:
+ 287:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 428              		.loc 1 287 0
+ 429 0092 E36A     		ldr	r3, [r4, #44]
+ 430 0094 4BB1     		cbz	r3, .L36
+ 289:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 431              		.loc 1 289 0
+ 432 0096 2046     		mov	r0, r4
+ 433 0098 FFF7FEFF 		bl	DMA_CheckFifoParam
+ 434              	.LVL61:
+ 435 009c 28B1     		cbz	r0, .L36
+ 292:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 436              		.loc 1 292 0
+ 437 009e 4023     		movs	r3, #64
+ 438 00a0 6365     		str	r3, [r4, #84]
+ 295:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 439              		.loc 1 295 0
+ 440 00a2 0120     		movs	r0, #1
+ 441 00a4 84F83500 		strb	r0, [r4, #53]
+ 297:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 442              		.loc 1 297 0
+ 443 00a8 70BD     		pop	{r4, r5, r6, pc}
+ 444              	.LVL62:
+ 445              	.L36:
+ 303:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 446              		.loc 1 303 0
+ 447 00aa 7561     		str	r5, [r6, #20]
+ 307:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 448              		.loc 1 307 0
+ 449 00ac 2046     		mov	r0, r4
+ 450 00ae FFF7FEFF 		bl	DMA_CalcBaseAndBitshift
+ 451              	.LVL63:
+ 310:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 452              		.loc 1 310 0
+ 453 00b2 E26D     		ldr	r2, [r4, #92]
+ 454 00b4 3F23     		movs	r3, #63
+ 455 00b6 9340     		lsls	r3, r3, r2
+ 456 00b8 8360     		str	r3, [r0, #8]
+ 313:HALLIB/Src/stm32f7xx_hal_dma.c ****                                                                                      
+ 457              		.loc 1 313 0
+ 458 00ba 0020     		movs	r0, #0
+ 459              	.LVL64:
+ 460 00bc 6065     		str	r0, [r4, #84]
+ 316:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 461              		.loc 1 316 0
+ 462 00be 0123     		movs	r3, #1
+ 463 00c0 84F83530 		strb	r3, [r4, #53]
+ 318:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 464              		.loc 1 318 0
+ 465 00c4 70BD     		pop	{r4, r5, r6, pc}
+ 466              	.LVL65:
+ARM GAS  /tmp/cccVrwre.s 			page 33
+
+
+ 467              	.L37:
+ 197:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 468              		.loc 1 197 0
+ 469 00c6 0120     		movs	r0, #1
+ 470              	.LVL66:
+ 319:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 471              		.loc 1 319 0
+ 472 00c8 70BD     		pop	{r4, r5, r6, pc}
+ 473              	.LVL67:
+ 474              	.L40:
+ 475 00ca 00BF     		.align	2
+ 476              	.L39:
+ 477 00cc 3F8010E0 		.word	-535789505
+ 478              		.cfi_endproc
+ 479              	.LFE136:
+ 481              		.section	.text.HAL_DMA_DeInit,"ax",%progbits
+ 482              		.align	2
+ 483              		.global	HAL_DMA_DeInit
+ 484              		.thumb
+ 485              		.thumb_func
+ 487              	HAL_DMA_DeInit:
+ 488              	.LFB137:
+ 328:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 489              		.loc 1 328 0
+ 490              		.cfi_startproc
+ 491              		@ args = 0, pretend = 0, frame = 0
+ 492              		@ frame_needed = 0, uses_anonymous_args = 0
+ 493              	.LVL68:
+ 332:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 494              		.loc 1 332 0
+ 495 0000 0028     		cmp	r0, #0
+ 496 0002 2CD0     		beq	.L43
+ 328:HALLIB/Src/stm32f7xx_hal_dma.c ****   DMA_Base_Registers *regs;
+ 497              		.loc 1 328 0
+ 498 0004 38B5     		push	{r3, r4, r5, lr}
+ 499              	.LCFI3:
+ 500              		.cfi_def_cfa_offset 16
+ 501              		.cfi_offset 3, -16
+ 502              		.cfi_offset 4, -12
+ 503              		.cfi_offset 5, -8
+ 504              		.cfi_offset 14, -4
+ 505 0006 0446     		mov	r4, r0
+ 338:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 506              		.loc 1 338 0
+ 507 0008 90F83530 		ldrb	r3, [r0, #53]	@ zero_extendqisi2
+ 508 000c DBB2     		uxtb	r3, r3
+ 509 000e 022B     		cmp	r3, #2
+ 510 0010 27D0     		beq	.L44
+ 348:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 511              		.loc 1 348 0
+ 512 0012 0268     		ldr	r2, [r0]
+ 513 0014 1368     		ldr	r3, [r2]
+ 514 0016 23F00103 		bic	r3, r3, #1
+ 515 001a 1360     		str	r3, [r2]
+ 351:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 516              		.loc 1 351 0
+ 517 001c 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/cccVrwre.s 			page 34
+
+
+ 518 001e 0025     		movs	r5, #0
+ 519 0020 1D60     		str	r5, [r3]
+ 354:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 520              		.loc 1 354 0
+ 521 0022 0368     		ldr	r3, [r0]
+ 522 0024 5D60     		str	r5, [r3, #4]
+ 357:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 523              		.loc 1 357 0
+ 524 0026 0368     		ldr	r3, [r0]
+ 525 0028 9D60     		str	r5, [r3, #8]
+ 360:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 526              		.loc 1 360 0
+ 527 002a 0368     		ldr	r3, [r0]
+ 528 002c DD60     		str	r5, [r3, #12]
+ 363:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 529              		.loc 1 363 0
+ 530 002e 0368     		ldr	r3, [r0]
+ 531 0030 1D61     		str	r5, [r3, #16]
+ 366:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 532              		.loc 1 366 0
+ 533 0032 0368     		ldr	r3, [r0]
+ 534 0034 2122     		movs	r2, #33
+ 535 0036 5A61     		str	r2, [r3, #20]
+ 369:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 536              		.loc 1 369 0
+ 537 0038 FFF7FEFF 		bl	DMA_CalcBaseAndBitshift
+ 538              	.LVL69:
+ 372:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 539              		.loc 1 372 0
+ 540 003c E26D     		ldr	r2, [r4, #92]
+ 541 003e 3F23     		movs	r3, #63
+ 542 0040 9340     		lsls	r3, r3, r2
+ 543 0042 8360     		str	r3, [r0, #8]
+ 375:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferHalfCpltCallback = NULL;
+ 544              		.loc 1 375 0
+ 545 0044 E563     		str	r5, [r4, #60]
+ 376:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferM1CpltCallback = NULL;
+ 546              		.loc 1 376 0
+ 547 0046 2564     		str	r5, [r4, #64]
+ 377:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferM1HalfCpltCallback = NULL;
+ 548              		.loc 1 377 0
+ 549 0048 6564     		str	r5, [r4, #68]
+ 378:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferErrorCallback = NULL;
+ 550              		.loc 1 378 0
+ 551 004a A564     		str	r5, [r4, #72]
+ 379:HALLIB/Src/stm32f7xx_hal_dma.c ****   hdma->XferAbortCallback = NULL;  
+ 552              		.loc 1 379 0
+ 553 004c E564     		str	r5, [r4, #76]
+ 380:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 554              		.loc 1 380 0
+ 555 004e 2565     		str	r5, [r4, #80]
+ 383:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 556              		.loc 1 383 0
+ 557 0050 6565     		str	r5, [r4, #84]
+ 386:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 558              		.loc 1 386 0
+ 559 0052 84F83550 		strb	r5, [r4, #53]
+ARM GAS  /tmp/cccVrwre.s 			page 35
+
+
+ 389:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 560              		.loc 1 389 0
+ 561 0056 84F83450 		strb	r5, [r4, #52]
+ 391:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 562              		.loc 1 391 0
+ 563 005a 2846     		mov	r0, r5
+ 564              	.LVL70:
+ 565 005c 38BD     		pop	{r3, r4, r5, pc}
+ 566              	.LVL71:
+ 567              	.L43:
+ 568              	.LCFI4:
+ 569              		.cfi_def_cfa_offset 0
+ 570              		.cfi_restore 3
+ 571              		.cfi_restore 4
+ 572              		.cfi_restore 5
+ 573              		.cfi_restore 14
+ 334:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 574              		.loc 1 334 0
+ 575 005e 0120     		movs	r0, #1
+ 576              	.LVL72:
+ 392:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 577              		.loc 1 392 0
+ 578 0060 7047     		bx	lr
+ 579              	.LVL73:
+ 580              	.L44:
+ 581              	.LCFI5:
+ 582              		.cfi_def_cfa_offset 16
+ 583              		.cfi_offset 3, -16
+ 584              		.cfi_offset 4, -12
+ 585              		.cfi_offset 5, -8
+ 586              		.cfi_offset 14, -4
+ 341:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 587              		.loc 1 341 0
+ 588 0062 0220     		movs	r0, #2
+ 589              	.LVL74:
+ 392:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 590              		.loc 1 392 0
+ 591 0064 38BD     		pop	{r3, r4, r5, pc}
+ 592              		.cfi_endproc
+ 593              	.LFE137:
+ 595 0066 00BF     		.section	.text.HAL_DMA_Start,"ax",%progbits
+ 596              		.align	2
+ 597              		.global	HAL_DMA_Start
+ 598              		.thumb
+ 599              		.thumb_func
+ 601              	HAL_DMA_Start:
+ 602              	.LFB138:
+ 426:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 603              		.loc 1 426 0
+ 604              		.cfi_startproc
+ 605              		@ args = 0, pretend = 0, frame = 0
+ 606              		@ frame_needed = 0, uses_anonymous_args = 0
+ 607              	.LVL75:
+ 608 0000 38B5     		push	{r3, r4, r5, lr}
+ 609              	.LCFI6:
+ 610              		.cfi_def_cfa_offset 16
+ 611              		.cfi_offset 3, -16
+ARM GAS  /tmp/cccVrwre.s 			page 36
+
+
+ 612              		.cfi_offset 4, -12
+ 613              		.cfi_offset 5, -8
+ 614              		.cfi_offset 14, -4
+ 615              	.LVL76:
+ 433:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 616              		.loc 1 433 0
+ 617 0002 90F83440 		ldrb	r4, [r0, #52]	@ zero_extendqisi2
+ 618 0006 012C     		cmp	r4, #1
+ 619 0008 1CD0     		beq	.L49
+ 433:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 620              		.loc 1 433 0 is_stmt 0 discriminator 2
+ 621 000a 0124     		movs	r4, #1
+ 622 000c 80F83440 		strb	r4, [r0, #52]
+ 435:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 623              		.loc 1 435 0 is_stmt 1 discriminator 2
+ 624 0010 90F83540 		ldrb	r4, [r0, #53]	@ zero_extendqisi2
+ 625 0014 E4B2     		uxtb	r4, r4
+ 626 0016 012C     		cmp	r4, #1
+ 627 0018 0FD1     		bne	.L48
+ 628 001a 0546     		mov	r5, r0
+ 438:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 629              		.loc 1 438 0
+ 630 001c 0220     		movs	r0, #2
+ 631              	.LVL77:
+ 632 001e 85F83500 		strb	r0, [r5, #53]
+ 441:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 633              		.loc 1 441 0
+ 634 0022 0024     		movs	r4, #0
+ 635 0024 6C65     		str	r4, [r5, #84]
+ 444:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 636              		.loc 1 444 0
+ 637 0026 2846     		mov	r0, r5
+ 638 0028 FFF7FEFF 		bl	DMA_SetConfig
+ 639              	.LVL78:
+ 447:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 640              		.loc 1 447 0
+ 641 002c 2A68     		ldr	r2, [r5]
+ 642 002e 1368     		ldr	r3, [r2]
+ 643 0030 43F00103 		orr	r3, r3, #1
+ 644 0034 1360     		str	r3, [r2]
+ 427:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 645              		.loc 1 427 0
+ 646 0036 2046     		mov	r0, r4
+ 647 0038 38BD     		pop	{r3, r4, r5, pc}
+ 648              	.LVL79:
+ 649              	.L48:
+ 452:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 650              		.loc 1 452 0
+ 651 003a 0023     		movs	r3, #0
+ 652              	.LVL80:
+ 653 003c 80F83430 		strb	r3, [r0, #52]
+ 654              	.LVL81:
+ 455:HALLIB/Src/stm32f7xx_hal_dma.c ****   } 
+ 655              		.loc 1 455 0
+ 656 0040 0220     		movs	r0, #2
+ 657              	.LVL82:
+ 658 0042 38BD     		pop	{r3, r4, r5, pc}
+ARM GAS  /tmp/cccVrwre.s 			page 37
+
+
+ 659              	.LVL83:
+ 660              	.L49:
+ 433:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 661              		.loc 1 433 0
+ 662 0044 0220     		movs	r0, #2
+ 663              	.LVL84:
+ 458:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 664              		.loc 1 458 0
+ 665 0046 38BD     		pop	{r3, r4, r5, pc}
+ 666              		.cfi_endproc
+ 667              	.LFE138:
+ 669              		.section	.text.HAL_DMA_Start_IT,"ax",%progbits
+ 670              		.align	2
+ 671              		.global	HAL_DMA_Start_IT
+ 672              		.thumb
+ 673              		.thumb_func
+ 675              	HAL_DMA_Start_IT:
+ 676              	.LFB139:
+ 470:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 677              		.loc 1 470 0
+ 678              		.cfi_startproc
+ 679              		@ args = 0, pretend = 0, frame = 0
+ 680              		@ frame_needed = 0, uses_anonymous_args = 0
+ 681              	.LVL85:
+ 682 0000 38B5     		push	{r3, r4, r5, lr}
+ 683              	.LCFI7:
+ 684              		.cfi_def_cfa_offset 16
+ 685              		.cfi_offset 3, -16
+ 686              		.cfi_offset 4, -12
+ 687              		.cfi_offset 5, -8
+ 688              		.cfi_offset 14, -4
+ 689              	.LVL86:
+ 474:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 690              		.loc 1 474 0
+ 691 0002 856D     		ldr	r5, [r0, #88]
+ 692              	.LVL87:
+ 480:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 693              		.loc 1 480 0
+ 694 0004 90F83440 		ldrb	r4, [r0, #52]	@ zero_extendqisi2
+ 695 0008 012C     		cmp	r4, #1
+ 696 000a 31D0     		beq	.L55
+ 480:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 697              		.loc 1 480 0 is_stmt 0 discriminator 2
+ 698 000c 0124     		movs	r4, #1
+ 699 000e 80F83440 		strb	r4, [r0, #52]
+ 482:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 700              		.loc 1 482 0 is_stmt 1 discriminator 2
+ 701 0012 90F83540 		ldrb	r4, [r0, #53]	@ zero_extendqisi2
+ 702 0016 E4B2     		uxtb	r4, r4
+ 703 0018 012C     		cmp	r4, #1
+ 704 001a 24D1     		bne	.L53
+ 705 001c 0446     		mov	r4, r0
+ 485:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 706              		.loc 1 485 0
+ 707 001e 0220     		movs	r0, #2
+ 708              	.LVL88:
+ 709 0020 84F83500 		strb	r0, [r4, #53]
+ARM GAS  /tmp/cccVrwre.s 			page 38
+
+
+ 488:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 710              		.loc 1 488 0
+ 711 0024 0020     		movs	r0, #0
+ 712 0026 6065     		str	r0, [r4, #84]
+ 491:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 713              		.loc 1 491 0
+ 714 0028 2046     		mov	r0, r4
+ 715 002a FFF7FEFF 		bl	DMA_SetConfig
+ 716              	.LVL89:
+ 494:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 717              		.loc 1 494 0
+ 718 002e E26D     		ldr	r2, [r4, #92]
+ 719 0030 3F23     		movs	r3, #63
+ 720 0032 9340     		lsls	r3, r3, r2
+ 721 0034 AB60     		str	r3, [r5, #8]
+ 497:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->FCR |= DMA_IT_FE;
+ 722              		.loc 1 497 0
+ 723 0036 2268     		ldr	r2, [r4]
+ 724 0038 1368     		ldr	r3, [r2]
+ 725 003a 43F01603 		orr	r3, r3, #22
+ 726 003e 1360     		str	r3, [r2]
+ 498:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 727              		.loc 1 498 0
+ 728 0040 2268     		ldr	r2, [r4]
+ 729 0042 5369     		ldr	r3, [r2, #20]
+ 730 0044 43F08003 		orr	r3, r3, #128
+ 731 0048 5361     		str	r3, [r2, #20]
+ 500:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 732              		.loc 1 500 0
+ 733 004a 236C     		ldr	r3, [r4, #64]
+ 734 004c 23B1     		cbz	r3, .L54
+ 502:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 735              		.loc 1 502 0
+ 736 004e 2268     		ldr	r2, [r4]
+ 737 0050 1368     		ldr	r3, [r2]
+ 738 0052 43F00803 		orr	r3, r3, #8
+ 739 0056 1360     		str	r3, [r2]
+ 740              	.L54:
+ 506:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 741              		.loc 1 506 0
+ 742 0058 2268     		ldr	r2, [r4]
+ 743 005a 1368     		ldr	r3, [r2]
+ 744 005c 43F00103 		orr	r3, r3, #1
+ 745 0060 1360     		str	r3, [r2]
+ 471:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 746              		.loc 1 471 0
+ 747 0062 0020     		movs	r0, #0
+ 748 0064 38BD     		pop	{r3, r4, r5, pc}
+ 749              	.LVL90:
+ 750              	.L53:
+ 511:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 751              		.loc 1 511 0
+ 752 0066 0023     		movs	r3, #0
+ 753              	.LVL91:
+ 754 0068 80F83430 		strb	r3, [r0, #52]
+ 755              	.LVL92:
+ 514:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ARM GAS  /tmp/cccVrwre.s 			page 39
+
+
+ 756              		.loc 1 514 0
+ 757 006c 0220     		movs	r0, #2
+ 758              	.LVL93:
+ 759 006e 38BD     		pop	{r3, r4, r5, pc}
+ 760              	.LVL94:
+ 761              	.L55:
+ 480:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 762              		.loc 1 480 0
+ 763 0070 0220     		movs	r0, #2
+ 764              	.LVL95:
+ 518:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 765              		.loc 1 518 0
+ 766 0072 38BD     		pop	{r3, r4, r5, pc}
+ 767              		.cfi_endproc
+ 768              	.LFE139:
+ 770              		.section	.text.HAL_DMA_Abort,"ax",%progbits
+ 771              		.align	2
+ 772              		.global	HAL_DMA_Abort
+ 773              		.thumb
+ 774              		.thumb_func
+ 776              	HAL_DMA_Abort:
+ 777              	.LFB140:
+ 533:HALLIB/Src/stm32f7xx_hal_dma.c ****   /* calculate DMA base and stream number */
+ 778              		.loc 1 533 0
+ 779              		.cfi_startproc
+ 780              		@ args = 0, pretend = 0, frame = 0
+ 781              		@ frame_needed = 0, uses_anonymous_args = 0
+ 782              	.LVL96:
+ 783 0000 70B5     		push	{r4, r5, r6, lr}
+ 784              	.LCFI8:
+ 785              		.cfi_def_cfa_offset 16
+ 786              		.cfi_offset 4, -16
+ 787              		.cfi_offset 5, -12
+ 788              		.cfi_offset 6, -8
+ 789              		.cfi_offset 14, -4
+ 790 0002 0446     		mov	r4, r0
+ 535:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 791              		.loc 1 535 0
+ 792 0004 866D     		ldr	r6, [r0, #88]
+ 793              	.LVL97:
+ 537:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 794              		.loc 1 537 0
+ 795 0006 FFF7FEFF 		bl	HAL_GetTick
+ 796              	.LVL98:
+ 539:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 797              		.loc 1 539 0
+ 798 000a 94F83530 		ldrb	r3, [r4, #53]	@ zero_extendqisi2
+ 799 000e DBB2     		uxtb	r3, r3
+ 800 0010 022B     		cmp	r3, #2
+ 801 0012 06D0     		beq	.L58
+ 541:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 802              		.loc 1 541 0
+ 803 0014 8023     		movs	r3, #128
+ 804 0016 6365     		str	r3, [r4, #84]
+ 544:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 805              		.loc 1 544 0
+ 806 0018 0023     		movs	r3, #0
+ARM GAS  /tmp/cccVrwre.s 			page 40
+
+
+ 807 001a 84F83430 		strb	r3, [r4, #52]
+ 546:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 808              		.loc 1 546 0
+ 809 001e 0120     		movs	r0, #1
+ 810              	.LVL99:
+ 811 0020 70BD     		pop	{r4, r5, r6, pc}
+ 812              	.LVL100:
+ 813              	.L58:
+ 814 0022 0546     		mov	r5, r0
+ 551:HALLIB/Src/stm32f7xx_hal_dma.c ****     hdma->Instance->FCR &= ~(DMA_IT_FE);
+ 815              		.loc 1 551 0
+ 816 0024 2268     		ldr	r2, [r4]
+ 817 0026 1368     		ldr	r3, [r2]
+ 818 0028 23F01603 		bic	r3, r3, #22
+ 819 002c 1360     		str	r3, [r2]
+ 552:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 820              		.loc 1 552 0
+ 821 002e 2268     		ldr	r2, [r4]
+ 822 0030 5369     		ldr	r3, [r2, #20]
+ 823 0032 23F08003 		bic	r3, r3, #128
+ 824 0036 5361     		str	r3, [r2, #20]
+ 554:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 825              		.loc 1 554 0
+ 826 0038 236C     		ldr	r3, [r4, #64]
+ 827 003a 0BB9     		cbnz	r3, .L60
+ 554:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 828              		.loc 1 554 0 is_stmt 0 discriminator 1
+ 829 003c A36C     		ldr	r3, [r4, #72]
+ 830 003e 23B1     		cbz	r3, .L61
+ 831              	.L60:
+ 556:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 832              		.loc 1 556 0 is_stmt 1
+ 833 0040 2268     		ldr	r2, [r4]
+ 834 0042 1368     		ldr	r3, [r2]
+ 835 0044 23F00803 		bic	r3, r3, #8
+ 836 0048 1360     		str	r3, [r2]
+ 837              	.L61:
+ 560:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 838              		.loc 1 560 0
+ 839 004a 2268     		ldr	r2, [r4]
+ 840 004c 1368     		ldr	r3, [r2]
+ 841 004e 23F00103 		bic	r3, r3, #1
+ 842 0052 1360     		str	r3, [r2]
+ 563:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 843              		.loc 1 563 0
+ 844 0054 0DE0     		b	.L62
+ 845              	.LVL101:
+ 846              	.L63:
+ 566:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 847              		.loc 1 566 0
+ 848 0056 FFF7FEFF 		bl	HAL_GetTick
+ 849              	.LVL102:
+ 850 005a 401B     		subs	r0, r0, r5
+ 851 005c 0528     		cmp	r0, #5
+ 852 005e 08D9     		bls	.L62
+ 569:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 853              		.loc 1 569 0
+ARM GAS  /tmp/cccVrwre.s 			page 41
+
+
+ 854 0060 2023     		movs	r3, #32
+ 855 0062 6365     		str	r3, [r4, #84]
+ 572:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 856              		.loc 1 572 0
+ 857 0064 0023     		movs	r3, #0
+ 858 0066 84F83430 		strb	r3, [r4, #52]
+ 575:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 859              		.loc 1 575 0
+ 860 006a 0320     		movs	r0, #3
+ 861 006c 84F83500 		strb	r0, [r4, #53]
+ 577:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 862              		.loc 1 577 0
+ 863 0070 70BD     		pop	{r4, r5, r6, pc}
+ 864              	.LVL103:
+ 865              	.L62:
+ 563:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 866              		.loc 1 563 0
+ 867 0072 2368     		ldr	r3, [r4]
+ 868 0074 1B68     		ldr	r3, [r3]
+ 869 0076 13F0010F 		tst	r3, #1
+ 870 007a ECD1     		bne	.L63
+ 582:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 871              		.loc 1 582 0
+ 872 007c E26D     		ldr	r2, [r4, #92]
+ 873 007e 3F23     		movs	r3, #63
+ 874 0080 9340     		lsls	r3, r3, r2
+ 875 0082 B360     		str	r3, [r6, #8]
+ 585:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 876              		.loc 1 585 0
+ 877 0084 0020     		movs	r0, #0
+ 878 0086 84F83400 		strb	r0, [r4, #52]
+ 588:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 879              		.loc 1 588 0
+ 880 008a 0123     		movs	r3, #1
+ 881 008c 84F83530 		strb	r3, [r4, #53]
+ 591:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 882              		.loc 1 591 0
+ 883 0090 70BD     		pop	{r4, r5, r6, pc}
+ 884              		.cfi_endproc
+ 885              	.LFE140:
+ 887 0092 00BF     		.section	.text.HAL_DMA_Abort_IT,"ax",%progbits
+ 888              		.align	2
+ 889              		.global	HAL_DMA_Abort_IT
+ 890              		.thumb
+ 891              		.thumb_func
+ 893              	HAL_DMA_Abort_IT:
+ 894              	.LFB141:
+ 600:HALLIB/Src/stm32f7xx_hal_dma.c ****   if(hdma->State != HAL_DMA_STATE_BUSY)
+ 895              		.loc 1 600 0
+ 896              		.cfi_startproc
+ 897              		@ args = 0, pretend = 0, frame = 0
+ 898              		@ frame_needed = 0, uses_anonymous_args = 0
+ 899              		@ link register save eliminated.
+ 900              	.LVL104:
+ 601:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 901              		.loc 1 601 0
+ 902 0000 90F83530 		ldrb	r3, [r0, #53]	@ zero_extendqisi2
+ARM GAS  /tmp/cccVrwre.s 			page 42
+
+
+ 903 0004 DBB2     		uxtb	r3, r3
+ 904 0006 022B     		cmp	r3, #2
+ 905 0008 03D0     		beq	.L66
+ 603:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 906              		.loc 1 603 0
+ 907 000a 8023     		movs	r3, #128
+ 908 000c 4365     		str	r3, [r0, #84]
+ 604:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 909              		.loc 1 604 0
+ 910 000e 0120     		movs	r0, #1
+ 911              	.LVL105:
+ 912 0010 7047     		bx	lr
+ 913              	.LVL106:
+ 914              	.L66:
+ 609:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 915              		.loc 1 609 0
+ 916 0012 0523     		movs	r3, #5
+ 917 0014 80F83530 		strb	r3, [r0, #53]
+ 612:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 918              		.loc 1 612 0
+ 919 0018 0268     		ldr	r2, [r0]
+ 920 001a 1368     		ldr	r3, [r2]
+ 921 001c 23F00103 		bic	r3, r3, #1
+ 922 0020 1360     		str	r3, [r2]
+ 615:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 923              		.loc 1 615 0
+ 924 0022 0020     		movs	r0, #0
+ 925              	.LVL107:
+ 616:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 926              		.loc 1 616 0
+ 927 0024 7047     		bx	lr
+ 928              		.cfi_endproc
+ 929              	.LFE141:
+ 931 0026 00BF     		.section	.text.HAL_DMA_PollForTransfer,"ax",%progbits
+ 932              		.align	2
+ 933              		.global	HAL_DMA_PollForTransfer
+ 934              		.thumb
+ 935              		.thumb_func
+ 937              	HAL_DMA_PollForTransfer:
+ 938              	.LFB142:
+ 630:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK; 
+ 939              		.loc 1 630 0
+ 940              		.cfi_startproc
+ 941              		@ args = 0, pretend = 0, frame = 0
+ 942              		@ frame_needed = 0, uses_anonymous_args = 0
+ 943              	.LVL108:
+ 944 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 945              	.LCFI9:
+ 946              		.cfi_def_cfa_offset 32
+ 947              		.cfi_offset 3, -32
+ 948              		.cfi_offset 4, -28
+ 949              		.cfi_offset 5, -24
+ 950              		.cfi_offset 6, -20
+ 951              		.cfi_offset 7, -16
+ 952              		.cfi_offset 8, -12
+ 953              		.cfi_offset 9, -8
+ 954              		.cfi_offset 14, -4
+ARM GAS  /tmp/cccVrwre.s 			page 43
+
+
+ 955 0004 0446     		mov	r4, r0
+ 956 0006 8946     		mov	r9, r1
+ 957 0008 1546     		mov	r5, r2
+ 958              	.LVL109:
+ 633:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmpisr;
+ 959              		.loc 1 633 0
+ 960 000a FFF7FEFF 		bl	HAL_GetTick
+ 961              	.LVL110:
+ 639:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 962              		.loc 1 639 0
+ 963 000e 94F83530 		ldrb	r3, [r4, #53]	@ zero_extendqisi2
+ 964 0012 DBB2     		uxtb	r3, r3
+ 965 0014 022B     		cmp	r3, #2
+ 966 0016 07D0     		beq	.L69
+ 642:HALLIB/Src/stm32f7xx_hal_dma.c ****     __HAL_UNLOCK(hdma);
+ 967              		.loc 1 642 0
+ 968 0018 8023     		movs	r3, #128
+ 969 001a 6365     		str	r3, [r4, #84]
+ 643:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 970              		.loc 1 643 0
+ 971 001c 0023     		movs	r3, #0
+ 972 001e 84F83430 		strb	r3, [r4, #52]
+ 644:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 973              		.loc 1 644 0
+ 974 0022 0120     		movs	r0, #1
+ 975              	.LVL111:
+ 976 0024 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 977              	.LVL112:
+ 978              	.L69:
+ 979 0028 8046     		mov	r8, r0
+ 648:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 980              		.loc 1 648 0
+ 981 002a 2368     		ldr	r3, [r4]
+ 982 002c 1B68     		ldr	r3, [r3]
+ 983 002e 13F4807F 		tst	r3, #256
+ 984 0032 05D0     		beq	.L71
+ 650:HALLIB/Src/stm32f7xx_hal_dma.c ****     return HAL_ERROR;
+ 985              		.loc 1 650 0
+ 986 0034 4FF48073 		mov	r3, #256
+ 987 0038 6365     		str	r3, [r4, #84]
+ 651:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 988              		.loc 1 651 0
+ 989 003a 0120     		movs	r0, #1
+ 990              	.LVL113:
+ 991 003c BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 992              	.LVL114:
+ 993              	.L71:
+ 655:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 994              		.loc 1 655 0
+ 995 0040 B9F1000F 		cmp	r9, #0
+ 996 0044 03D1     		bne	.L72
+ 658:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 997              		.loc 1 658 0
+ 998 0046 E36D     		ldr	r3, [r4, #92]
+ 999 0048 2027     		movs	r7, #32
+ 1000 004a 9F40     		lsls	r7, r7, r3
+ 1001              	.LVL115:
+ARM GAS  /tmp/cccVrwre.s 			page 44
+
+
+ 1002 004c 02E0     		b	.L73
+ 1003              	.LVL116:
+ 1004              	.L72:
+ 663:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 1005              		.loc 1 663 0
+ 1006 004e E36D     		ldr	r3, [r4, #92]
+ 1007 0050 1027     		movs	r7, #16
+ 1008 0052 9F40     		lsls	r7, r7, r3
+ 1009              	.LVL117:
+ 1010              	.L73:
+ 666:HALLIB/Src/stm32f7xx_hal_dma.c ****   tmpisr = regs->ISR;
+ 1011              		.loc 1 666 0
+ 1012 0054 A66D     		ldr	r6, [r4, #88]
+ 1013              	.LVL118:
+ 667:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 1014              		.loc 1 667 0
+ 1015 0056 3368     		ldr	r3, [r6]
+ 1016              	.LVL119:
+ 669:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1017              		.loc 1 669 0
+ 1018 0058 33E0     		b	.L74
+ 1019              	.LVL120:
+ 1020              	.L81:
+ 672:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1021              		.loc 1 672 0
+ 1022 005a B5F1FF3F 		cmp	r5, #-1
+ 1023 005e 11D0     		beq	.L75
+ 674:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 1024              		.loc 1 674 0
+ 1025 0060 2DB1     		cbz	r5, .L76
+ 674:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 1026              		.loc 1 674 0 is_stmt 0 discriminator 1
+ 1027 0062 FFF7FEFF 		bl	HAL_GetTick
+ 1028              	.LVL121:
+ 1029 0066 C8EB0000 		rsb	r0, r8, r0
+ 1030 006a 8542     		cmp	r5, r0
+ 1031 006c 0AD2     		bcs	.L75
+ 1032              	.L76:
+ 677:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1033              		.loc 1 677 0 is_stmt 1
+ 1034 006e 2023     		movs	r3, #32
+ 1035 0070 6365     		str	r3, [r4, #84]
+ 680:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 1036              		.loc 1 680 0
+ 1037 0072 0023     		movs	r3, #0
+ 1038 0074 84F83430 		strb	r3, [r4, #52]
+ 683:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 1039              		.loc 1 683 0
+ 1040 0078 0123     		movs	r3, #1
+ 1041 007a 84F83530 		strb	r3, [r4, #53]
+ 685:HALLIB/Src/stm32f7xx_hal_dma.c ****       }
+ 1042              		.loc 1 685 0
+ 1043 007e 0320     		movs	r0, #3
+ 1044 0080 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1045              	.LVL122:
+ 1046              	.L75:
+ 690:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ARM GAS  /tmp/cccVrwre.s 			page 45
+
+
+ 1047              		.loc 1 690 0
+ 1048 0084 3368     		ldr	r3, [r6]
+ 1049              	.LVL123:
+ 692:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1050              		.loc 1 692 0
+ 1051 0086 E16D     		ldr	r1, [r4, #92]
+ 1052 0088 0822     		movs	r2, #8
+ 1053 008a 8A40     		lsls	r2, r2, r1
+ 1054 008c 1342     		tst	r3, r2
+ 1055 008e 04D0     		beq	.L77
+ 695:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1056              		.loc 1 695 0
+ 1057 0090 616D     		ldr	r1, [r4, #84]
+ 1058 0092 41F00101 		orr	r1, r1, #1
+ 1059 0096 6165     		str	r1, [r4, #84]
+ 698:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1060              		.loc 1 698 0
+ 1061 0098 B260     		str	r2, [r6, #8]
+ 1062              	.L77:
+ 701:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1063              		.loc 1 701 0
+ 1064 009a E16D     		ldr	r1, [r4, #92]
+ 1065 009c 0122     		movs	r2, #1
+ 1066 009e 8A40     		lsls	r2, r2, r1
+ 1067 00a0 1342     		tst	r3, r2
+ 1068 00a2 04D0     		beq	.L78
+ 704:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1069              		.loc 1 704 0
+ 1070 00a4 616D     		ldr	r1, [r4, #84]
+ 1071 00a6 41F00201 		orr	r1, r1, #2
+ 1072 00aa 6165     		str	r1, [r4, #84]
+ 707:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1073              		.loc 1 707 0
+ 1074 00ac B260     		str	r2, [r6, #8]
+ 1075              	.L78:
+ 710:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1076              		.loc 1 710 0
+ 1077 00ae E16D     		ldr	r1, [r4, #92]
+ 1078 00b0 0422     		movs	r2, #4
+ 1079 00b2 8A40     		lsls	r2, r2, r1
+ 1080 00b4 1342     		tst	r3, r2
+ 1081 00b6 04D0     		beq	.L74
+ 713:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1082              		.loc 1 713 0
+ 1083 00b8 616D     		ldr	r1, [r4, #84]
+ 1084 00ba 41F00401 		orr	r1, r1, #4
+ 1085 00be 6165     		str	r1, [r4, #84]
+ 716:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1086              		.loc 1 716 0
+ 1087 00c0 B260     		str	r2, [r6, #8]
+ 1088              	.L74:
+ 669:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1089              		.loc 1 669 0
+ 1090 00c2 1F42     		tst	r7, r3
+ 1091 00c4 03D1     		bne	.L80
+ 669:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1092              		.loc 1 669 0 is_stmt 0 discriminator 1
+ARM GAS  /tmp/cccVrwre.s 			page 46
+
+
+ 1093 00c6 636D     		ldr	r3, [r4, #84]
+ 1094              	.LVL124:
+ 1095 00c8 13F0010F 		tst	r3, #1
+ 1096 00cc C5D0     		beq	.L81
+ 1097              	.L80:
+ 720:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1098              		.loc 1 720 0 is_stmt 1
+ 1099 00ce 636D     		ldr	r3, [r4, #84]
+ 1100 00d0 93B1     		cbz	r3, .L82
+ 722:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1101              		.loc 1 722 0
+ 1102 00d2 636D     		ldr	r3, [r4, #84]
+ 1103 00d4 13F0010F 		tst	r3, #1
+ 1104 00d8 0ED0     		beq	.L82
+ 724:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 1105              		.loc 1 724 0
+ 1106 00da 2046     		mov	r0, r4
+ 1107 00dc FFF7FEFF 		bl	HAL_DMA_Abort
+ 1108              	.LVL125:
+ 727:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 1109              		.loc 1 727 0
+ 1110 00e0 E26D     		ldr	r2, [r4, #92]
+ 1111 00e2 3023     		movs	r3, #48
+ 1112 00e4 9340     		lsls	r3, r3, r2
+ 1113 00e6 B360     		str	r3, [r6, #8]
+ 730:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1114              		.loc 1 730 0
+ 1115 00e8 0023     		movs	r3, #0
+ 1116 00ea 84F83430 		strb	r3, [r4, #52]
+ 733:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1117              		.loc 1 733 0
+ 1118 00ee 0120     		movs	r0, #1
+ 1119 00f0 84F83500 		strb	r0, [r4, #53]
+ 735:HALLIB/Src/stm32f7xx_hal_dma.c ****    }
+ 1120              		.loc 1 735 0
+ 1121 00f4 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1122              	.LVL126:
+ 1123              	.L82:
+ 740:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1124              		.loc 1 740 0
+ 1125 00f8 B9F1000F 		cmp	r9, #0
+ 1126 00fc 0BD1     		bne	.L83
+ 743:HALLIB/Src/stm32f7xx_hal_dma.c ****     
+ 1127              		.loc 1 743 0
+ 1128 00fe E26D     		ldr	r2, [r4, #92]
+ 1129 0100 3023     		movs	r3, #48
+ 1130 0102 9340     		lsls	r3, r3, r2
+ 1131 0104 B360     		str	r3, [r6, #8]
+ 746:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1132              		.loc 1 746 0
+ 1133 0106 0020     		movs	r0, #0
+ 1134 0108 84F83400 		strb	r0, [r4, #52]
+ 748:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 1135              		.loc 1 748 0
+ 1136 010c 0123     		movs	r3, #1
+ 1137 010e 84F83530 		strb	r3, [r4, #53]
+ 1138 0112 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ARM GAS  /tmp/cccVrwre.s 			page 47
+
+
+ 1139              	.LVL127:
+ 1140              	.L83:
+ 753:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 1141              		.loc 1 753 0
+ 1142 0116 E26D     		ldr	r2, [r4, #92]
+ 1143 0118 1023     		movs	r3, #16
+ 1144 011a 9340     		lsls	r3, r3, r2
+ 1145 011c B360     		str	r3, [r6, #8]
+ 756:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 1146              		.loc 1 756 0
+ 1147 011e 0020     		movs	r0, #0
+ 757:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1148              		.loc 1 757 0
+ 1149 0120 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1150              		.cfi_endproc
+ 1151              	.LFE142:
+ 1153              		.section	.text.HAL_DMA_IRQHandler,"ax",%progbits
+ 1154              		.align	2
+ 1155              		.global	HAL_DMA_IRQHandler
+ 1156              		.thumb
+ 1157              		.thumb_func
+ 1159              	HAL_DMA_IRQHandler:
+ 1160              	.LFB143:
+ 766:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t tmpisr;
+ 1161              		.loc 1 766 0
+ 1162              		.cfi_startproc
+ 1163              		@ args = 0, pretend = 0, frame = 8
+ 1164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1165              	.LVL128:
+ 1166 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1167              	.LCFI10:
+ 1168              		.cfi_def_cfa_offset 20
+ 1169              		.cfi_offset 4, -20
+ 1170              		.cfi_offset 5, -16
+ 1171              		.cfi_offset 6, -12
+ 1172              		.cfi_offset 7, -8
+ 1173              		.cfi_offset 14, -4
+ 1174 0002 83B0     		sub	sp, sp, #12
+ 1175              	.LCFI11:
+ 1176              		.cfi_def_cfa_offset 32
+ 1177 0004 0446     		mov	r4, r0
+ 768:HALLIB/Src/stm32f7xx_hal_dma.c ****   uint32_t timeout = SystemCoreClock / 9600;
+ 1178              		.loc 1 768 0
+ 1179 0006 0023     		movs	r3, #0
+ 1180 0008 0193     		str	r3, [sp, #4]
+ 769:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1181              		.loc 1 769 0
+ 1182 000a 714B     		ldr	r3, .L105
+ 1183 000c 1B68     		ldr	r3, [r3]
+ 1184 000e 714D     		ldr	r5, .L105+4
+ 1185 0010 A5FB0335 		umull	r3, r5, r5, r3
+ 1186 0014 AD0A     		lsrs	r5, r5, #10
+ 1187              	.LVL129:
+ 772:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1188              		.loc 1 772 0
+ 1189 0016 876D     		ldr	r7, [r0, #88]
+ 1190              	.LVL130:
+ARM GAS  /tmp/cccVrwre.s 			page 48
+
+
+ 774:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1191              		.loc 1 774 0
+ 1192 0018 3E68     		ldr	r6, [r7]
+ 1193              	.LVL131:
+ 777:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1194              		.loc 1 777 0
+ 1195 001a C26D     		ldr	r2, [r0, #92]
+ 1196 001c 0823     		movs	r3, #8
+ 1197 001e 9340     		lsls	r3, r3, r2
+ 1198 0020 1E42     		tst	r6, r3
+ 1199 0022 10D0     		beq	.L86
+ 779:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1200              		.loc 1 779 0
+ 1201 0024 0368     		ldr	r3, [r0]
+ 1202 0026 1A68     		ldr	r2, [r3]
+ 1203 0028 12F0040F 		tst	r2, #4
+ 1204 002c 0BD0     		beq	.L86
+ 782:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1205              		.loc 1 782 0
+ 1206 002e 1A68     		ldr	r2, [r3]
+ 1207 0030 22F00402 		bic	r2, r2, #4
+ 1208 0034 1A60     		str	r2, [r3]
+ 785:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1209              		.loc 1 785 0
+ 1210 0036 C26D     		ldr	r2, [r0, #92]
+ 1211 0038 0823     		movs	r3, #8
+ 1212 003a 9340     		lsls	r3, r3, r2
+ 1213 003c BB60     		str	r3, [r7, #8]
+ 788:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1214              		.loc 1 788 0
+ 1215 003e 436D     		ldr	r3, [r0, #84]
+ 1216 0040 43F00103 		orr	r3, r3, #1
+ 1217 0044 4365     		str	r3, [r0, #84]
+ 1218              	.L86:
+ 792:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1219              		.loc 1 792 0
+ 1220 0046 E26D     		ldr	r2, [r4, #92]
+ 1221 0048 0123     		movs	r3, #1
+ 1222 004a 9340     		lsls	r3, r3, r2
+ 1223 004c 1E42     		tst	r6, r3
+ 1224 004e 09D0     		beq	.L87
+ 794:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1225              		.loc 1 794 0
+ 1226 0050 2268     		ldr	r2, [r4]
+ 1227 0052 5269     		ldr	r2, [r2, #20]
+ 1228 0054 12F0800F 		tst	r2, #128
+ 1229 0058 04D0     		beq	.L87
+ 797:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1230              		.loc 1 797 0
+ 1231 005a BB60     		str	r3, [r7, #8]
+ 800:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1232              		.loc 1 800 0
+ 1233 005c 636D     		ldr	r3, [r4, #84]
+ 1234 005e 43F00203 		orr	r3, r3, #2
+ 1235 0062 6365     		str	r3, [r4, #84]
+ 1236              	.L87:
+ 804:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ARM GAS  /tmp/cccVrwre.s 			page 49
+
+
+ 1237              		.loc 1 804 0
+ 1238 0064 E26D     		ldr	r2, [r4, #92]
+ 1239 0066 0423     		movs	r3, #4
+ 1240 0068 9340     		lsls	r3, r3, r2
+ 1241 006a 1E42     		tst	r6, r3
+ 1242 006c 09D0     		beq	.L88
+ 806:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1243              		.loc 1 806 0
+ 1244 006e 2268     		ldr	r2, [r4]
+ 1245 0070 1268     		ldr	r2, [r2]
+ 1246 0072 12F0020F 		tst	r2, #2
+ 1247 0076 04D0     		beq	.L88
+ 809:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1248              		.loc 1 809 0
+ 1249 0078 BB60     		str	r3, [r7, #8]
+ 812:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1250              		.loc 1 812 0
+ 1251 007a 636D     		ldr	r3, [r4, #84]
+ 1252 007c 43F00403 		orr	r3, r3, #4
+ 1253 0080 6365     		str	r3, [r4, #84]
+ 1254              	.L88:
+ 816:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1255              		.loc 1 816 0
+ 1256 0082 E26D     		ldr	r2, [r4, #92]
+ 1257 0084 1023     		movs	r3, #16
+ 1258 0086 9340     		lsls	r3, r3, r2
+ 1259 0088 1E42     		tst	r6, r3
+ 1260 008a 24D0     		beq	.L89
+ 818:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1261              		.loc 1 818 0
+ 1262 008c 2268     		ldr	r2, [r4]
+ 1263 008e 1268     		ldr	r2, [r2]
+ 1264 0090 12F0080F 		tst	r2, #8
+ 1265 0094 1FD0     		beq	.L89
+ 821:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1266              		.loc 1 821 0
+ 1267 0096 BB60     		str	r3, [r7, #8]
+ 824:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 1268              		.loc 1 824 0
+ 1269 0098 2368     		ldr	r3, [r4]
+ 1270 009a 1A68     		ldr	r2, [r3]
+ 1271 009c 12F4802F 		tst	r2, #262144
+ 1272 00a0 0DD0     		beq	.L90
+ 827:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1273              		.loc 1 827 0
+ 1274 00a2 1B68     		ldr	r3, [r3]
+ 1275 00a4 13F4002F 		tst	r3, #524288
+ 1276 00a8 04D1     		bne	.L91
+ 829:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 1277              		.loc 1 829 0
+ 1278 00aa 236C     		ldr	r3, [r4, #64]
+ 1279 00ac 9BB1     		cbz	r3, .L89
+ 832:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 1280              		.loc 1 832 0
+ 1281 00ae 2046     		mov	r0, r4
+ 1282              	.LVL132:
+ 1283 00b0 9847     		blx	r3
+ARM GAS  /tmp/cccVrwre.s 			page 50
+
+
+ 1284              	.LVL133:
+ 1285 00b2 10E0     		b	.L89
+ 1286              	.LVL134:
+ 1287              	.L91:
+ 838:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 1288              		.loc 1 838 0
+ 1289 00b4 A36C     		ldr	r3, [r4, #72]
+ 1290 00b6 73B1     		cbz	r3, .L89
+ 841:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 1291              		.loc 1 841 0
+ 1292 00b8 2046     		mov	r0, r4
+ 1293              	.LVL135:
+ 1294 00ba 9847     		blx	r3
+ 1295              	.LVL136:
+ 1296 00bc 0BE0     		b	.L89
+ 1297              	.LVL137:
+ 1298              	.L90:
+ 848:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1299              		.loc 1 848 0
+ 1300 00be 1A68     		ldr	r2, [r3]
+ 1301 00c0 12F4807F 		tst	r2, #256
+ 1302 00c4 03D1     		bne	.L92
+ 851:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1303              		.loc 1 851 0
+ 1304 00c6 1A68     		ldr	r2, [r3]
+ 1305 00c8 22F00802 		bic	r2, r2, #8
+ 1306 00cc 1A60     		str	r2, [r3]
+ 1307              	.L92:
+ 854:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1308              		.loc 1 854 0
+ 1309 00ce 236C     		ldr	r3, [r4, #64]
+ 1310 00d0 0BB1     		cbz	r3, .L89
+ 857:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1311              		.loc 1 857 0
+ 1312 00d2 2046     		mov	r0, r4
+ 1313              	.LVL138:
+ 1314 00d4 9847     		blx	r3
+ 1315              	.LVL139:
+ 1316              	.L89:
+ 863:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1317              		.loc 1 863 0
+ 1318 00d6 E26D     		ldr	r2, [r4, #92]
+ 1319 00d8 2023     		movs	r3, #32
+ 1320 00da 9340     		lsls	r3, r3, r2
+ 1321 00dc 1E42     		tst	r6, r3
+ 1322 00de 52D0     		beq	.L93
+ 865:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1323              		.loc 1 865 0
+ 1324 00e0 2268     		ldr	r2, [r4]
+ 1325 00e2 1268     		ldr	r2, [r2]
+ 1326 00e4 12F0100F 		tst	r2, #16
+ 1327 00e8 4DD0     		beq	.L93
+ 868:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1328              		.loc 1 868 0
+ 1329 00ea BB60     		str	r3, [r7, #8]
+ 870:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 1330              		.loc 1 870 0
+ARM GAS  /tmp/cccVrwre.s 			page 51
+
+
+ 1331 00ec 94F83530 		ldrb	r3, [r4, #53]	@ zero_extendqisi2
+ 1332 00f0 DBB2     		uxtb	r3, r3
+ 1333 00f2 052B     		cmp	r3, #5
+ 1334 00f4 22D1     		bne	.L94
+ 873:HALLIB/Src/stm32f7xx_hal_dma.c ****         hdma->Instance->FCR &= ~(DMA_IT_FE);
+ 1335              		.loc 1 873 0
+ 1336 00f6 2268     		ldr	r2, [r4]
+ 1337 00f8 1368     		ldr	r3, [r2]
+ 1338 00fa 23F01603 		bic	r3, r3, #22
+ 1339 00fe 1360     		str	r3, [r2]
+ 874:HALLIB/Src/stm32f7xx_hal_dma.c ****         
+ 1340              		.loc 1 874 0
+ 1341 0100 2268     		ldr	r2, [r4]
+ 1342 0102 5369     		ldr	r3, [r2, #20]
+ 1343 0104 23F08003 		bic	r3, r3, #128
+ 1344 0108 5361     		str	r3, [r2, #20]
+ 876:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1345              		.loc 1 876 0
+ 1346 010a 236C     		ldr	r3, [r4, #64]
+ 1347 010c 0BB9     		cbnz	r3, .L95
+ 876:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1348              		.loc 1 876 0 is_stmt 0 discriminator 1
+ 1349 010e A36C     		ldr	r3, [r4, #72]
+ 1350 0110 23B1     		cbz	r3, .L96
+ 1351              	.L95:
+ 878:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1352              		.loc 1 878 0 is_stmt 1
+ 1353 0112 2268     		ldr	r2, [r4]
+ 1354 0114 1368     		ldr	r3, [r2]
+ 1355 0116 23F00803 		bic	r3, r3, #8
+ 1356 011a 1360     		str	r3, [r2]
+ 1357              	.L96:
+ 882:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1358              		.loc 1 882 0
+ 1359 011c E26D     		ldr	r2, [r4, #92]
+ 1360 011e 3F23     		movs	r3, #63
+ 1361 0120 9340     		lsls	r3, r3, r2
+ 1362 0122 BB60     		str	r3, [r7, #8]
+ 885:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1363              		.loc 1 885 0
+ 1364 0124 0023     		movs	r3, #0
+ 1365 0126 84F83430 		strb	r3, [r4, #52]
+ 888:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1366              		.loc 1 888 0
+ 1367 012a 0123     		movs	r3, #1
+ 1368 012c 84F83530 		strb	r3, [r4, #53]
+ 890:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1369              		.loc 1 890 0
+ 1370 0130 236D     		ldr	r3, [r4, #80]
+ 1371 0132 002B     		cmp	r3, #0
+ 1372 0134 49D0     		beq	.L85
+ 892:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1373              		.loc 1 892 0
+ 1374 0136 2046     		mov	r0, r4
+ 1375 0138 9847     		blx	r3
+ 1376              	.LVL140:
+ 1377 013a 46E0     		b	.L85
+ARM GAS  /tmp/cccVrwre.s 			page 52
+
+
+ 1378              	.L94:
+ 897:HALLIB/Src/stm32f7xx_hal_dma.c ****       {
+ 1379              		.loc 1 897 0
+ 1380 013c 2368     		ldr	r3, [r4]
+ 1381 013e 1A68     		ldr	r2, [r3]
+ 1382 0140 12F4802F 		tst	r2, #262144
+ 1383 0144 0DD0     		beq	.L98
+ 900:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1384              		.loc 1 900 0
+ 1385 0146 1B68     		ldr	r3, [r3]
+ 1386 0148 13F4002F 		tst	r3, #524288
+ 1387 014c 04D1     		bne	.L99
+ 902:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 1388              		.loc 1 902 0
+ 1389 014e 636C     		ldr	r3, [r4, #68]
+ 1390 0150 CBB1     		cbz	r3, .L93
+ 905:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 1391              		.loc 1 905 0
+ 1392 0152 2046     		mov	r0, r4
+ 1393 0154 9847     		blx	r3
+ 1394              	.LVL141:
+ 1395 0156 16E0     		b	.L93
+ 1396              	.L99:
+ 911:HALLIB/Src/stm32f7xx_hal_dma.c ****           {
+ 1397              		.loc 1 911 0
+ 1398 0158 E36B     		ldr	r3, [r4, #60]
+ 1399 015a A3B1     		cbz	r3, .L93
+ 914:HALLIB/Src/stm32f7xx_hal_dma.c ****           }
+ 1400              		.loc 1 914 0
+ 1401 015c 2046     		mov	r0, r4
+ 1402 015e 9847     		blx	r3
+ 1403              	.LVL142:
+ 1404 0160 11E0     		b	.L93
+ 1405              	.L98:
+ 921:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1406              		.loc 1 921 0
+ 1407 0162 1A68     		ldr	r2, [r3]
+ 1408 0164 12F4807F 		tst	r2, #256
+ 1409 0168 09D1     		bne	.L100
+ 924:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1410              		.loc 1 924 0
+ 1411 016a 1A68     		ldr	r2, [r3]
+ 1412 016c 22F01002 		bic	r2, r2, #16
+ 1413 0170 1A60     		str	r2, [r3]
+ 927:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1414              		.loc 1 927 0
+ 1415 0172 0023     		movs	r3, #0
+ 1416 0174 84F83430 		strb	r3, [r4, #52]
+ 930:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1417              		.loc 1 930 0
+ 1418 0178 0123     		movs	r3, #1
+ 1419 017a 84F83530 		strb	r3, [r4, #53]
+ 1420              	.L100:
+ 933:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1421              		.loc 1 933 0
+ 1422 017e E36B     		ldr	r3, [r4, #60]
+ 1423 0180 0BB1     		cbz	r3, .L93
+ARM GAS  /tmp/cccVrwre.s 			page 53
+
+
+ 936:HALLIB/Src/stm32f7xx_hal_dma.c ****         }
+ 1424              		.loc 1 936 0
+ 1425 0182 2046     		mov	r0, r4
+ 1426 0184 9847     		blx	r3
+ 1427              	.LVL143:
+ 1428              	.L93:
+ 943:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1429              		.loc 1 943 0
+ 1430 0186 636D     		ldr	r3, [r4, #84]
+ 1431 0188 FBB1     		cbz	r3, .L85
+ 945:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1432              		.loc 1 945 0
+ 1433 018a 636D     		ldr	r3, [r4, #84]
+ 1434 018c 13F0010F 		tst	r3, #1
+ 1435 0190 17D0     		beq	.L101
+ 947:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1436              		.loc 1 947 0
+ 1437 0192 0523     		movs	r3, #5
+ 1438 0194 84F83530 		strb	r3, [r4, #53]
+ 950:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1439              		.loc 1 950 0
+ 1440 0198 2268     		ldr	r2, [r4]
+ 1441 019a 1368     		ldr	r3, [r2]
+ 1442 019c 23F00103 		bic	r3, r3, #1
+ 1443 01a0 1360     		str	r3, [r2]
+ 1444              	.L103:
+ 954:HALLIB/Src/stm32f7xx_hal_dma.c ****         {
+ 1445              		.loc 1 954 0
+ 1446 01a2 019B     		ldr	r3, [sp, #4]
+ 1447 01a4 0133     		adds	r3, r3, #1
+ 1448 01a6 0193     		str	r3, [sp, #4]
+ 1449 01a8 9D42     		cmp	r5, r3
+ 1450 01aa 04D3     		bcc	.L102
+ 959:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1451              		.loc 1 959 0
+ 1452 01ac 2368     		ldr	r3, [r4]
+ 1453 01ae 1B68     		ldr	r3, [r3]
+ 1454 01b0 13F0010F 		tst	r3, #1
+ 1455 01b4 F5D1     		bne	.L103
+ 1456              	.L102:
+ 962:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1457              		.loc 1 962 0
+ 1458 01b6 0023     		movs	r3, #0
+ 1459 01b8 84F83430 		strb	r3, [r4, #52]
+ 965:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1460              		.loc 1 965 0
+ 1461 01bc 0123     		movs	r3, #1
+ 1462 01be 84F83530 		strb	r3, [r4, #53]
+ 1463              	.L101:
+ 968:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1464              		.loc 1 968 0
+ 1465 01c2 E36C     		ldr	r3, [r4, #76]
+ 1466 01c4 0BB1     		cbz	r3, .L85
+ 971:HALLIB/Src/stm32f7xx_hal_dma.c ****     }
+ 1467              		.loc 1 971 0
+ 1468 01c6 2046     		mov	r0, r4
+ 1469 01c8 9847     		blx	r3
+ARM GAS  /tmp/cccVrwre.s 			page 54
+
+
+ 1470              	.LVL144:
+ 1471              	.L85:
+ 974:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1472              		.loc 1 974 0
+ 1473 01ca 03B0     		add	sp, sp, #12
+ 1474              	.LCFI12:
+ 1475              		.cfi_def_cfa_offset 20
+ 1476              		@ sp needed
+ 1477 01cc F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1478              	.LVL145:
+ 1479              	.L106:
+ 1480 01ce 00BF     		.align	2
+ 1481              	.L105:
+ 1482 01d0 00000000 		.word	SystemCoreClock
+ 1483 01d4 B5814E1B 		.word	458129845
+ 1484              		.cfi_endproc
+ 1485              	.LFE143:
+ 1487              		.section	.text.HAL_DMA_RegisterCallback,"ax",%progbits
+ 1488              		.align	2
+ 1489              		.global	HAL_DMA_RegisterCallback
+ 1490              		.thumb
+ 1491              		.thumb_func
+ 1493              	HAL_DMA_RegisterCallback:
+ 1494              	.LFB144:
+ 987:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1495              		.loc 1 987 0
+ 1496              		.cfi_startproc
+ 1497              		@ args = 0, pretend = 0, frame = 0
+ 1498              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1499              		@ link register save eliminated.
+ 1500              	.LVL146:
+ 992:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1501              		.loc 1 992 0
+ 1502 0000 90F83430 		ldrb	r3, [r0, #52]	@ zero_extendqisi2
+ 1503 0004 012B     		cmp	r3, #1
+ 1504 0006 28D0     		beq	.L117
+ 992:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1505              		.loc 1 992 0 is_stmt 0 discriminator 2
+ 1506 0008 0123     		movs	r3, #1
+ 1507 000a 80F83430 		strb	r3, [r0, #52]
+ 994:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1508              		.loc 1 994 0 is_stmt 1 discriminator 2
+ 1509 000e 90F83530 		ldrb	r3, [r0, #53]	@ zero_extendqisi2
+ 1510 0012 DBB2     		uxtb	r3, r3
+ 1511 0014 012B     		cmp	r3, #1
+ 1512 0016 18D1     		bne	.L118
+ 996:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1513              		.loc 1 996 0
+ 1514 0018 0529     		cmp	r1, #5
+ 1515 001a 18D8     		bhi	.L119
+ 1516 001c DFE801F0 		tbb	[pc, r1]
+ 1517              	.L111:
+ 1518 0020 03       		.byte	(.L110-.L111)/2
+ 1519 0021 06       		.byte	(.L112-.L111)/2
+ 1520 0022 09       		.byte	(.L113-.L111)/2
+ 1521 0023 0C       		.byte	(.L114-.L111)/2
+ 1522 0024 0F       		.byte	(.L115-.L111)/2
+ARM GAS  /tmp/cccVrwre.s 			page 55
+
+
+ 1523 0025 12       		.byte	(.L116-.L111)/2
+ 1524              		.p2align 1
+ 1525              	.L110:
+ 999:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1526              		.loc 1 999 0
+ 1527 0026 C263     		str	r2, [r0, #60]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1528              		.loc 1 989 0
+ 1529 0028 0023     		movs	r3, #0
+1000:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1530              		.loc 1 1000 0
+ 1531 002a 11E0     		b	.L109
+ 1532              	.L112:
+1003:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1533              		.loc 1 1003 0
+ 1534 002c 0264     		str	r2, [r0, #64]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1535              		.loc 1 989 0
+ 1536 002e 0023     		movs	r3, #0
+1004:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1537              		.loc 1 1004 0
+ 1538 0030 0EE0     		b	.L109
+ 1539              	.L113:
+1007:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1540              		.loc 1 1007 0
+ 1541 0032 4264     		str	r2, [r0, #68]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1542              		.loc 1 989 0
+ 1543 0034 0023     		movs	r3, #0
+1008:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1544              		.loc 1 1008 0
+ 1545 0036 0BE0     		b	.L109
+ 1546              	.L114:
+1011:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1547              		.loc 1 1011 0
+ 1548 0038 8264     		str	r2, [r0, #72]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1549              		.loc 1 989 0
+ 1550 003a 0023     		movs	r3, #0
+1012:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1551              		.loc 1 1012 0
+ 1552 003c 08E0     		b	.L109
+ 1553              	.L115:
+1015:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1554              		.loc 1 1015 0
+ 1555 003e C264     		str	r2, [r0, #76]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1556              		.loc 1 989 0
+ 1557 0040 0023     		movs	r3, #0
+1016:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1558              		.loc 1 1016 0
+ 1559 0042 05E0     		b	.L109
+ 1560              	.L116:
+1019:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1561              		.loc 1 1019 0
+ 1562 0044 0265     		str	r2, [r0, #80]
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ARM GAS  /tmp/cccVrwre.s 			page 56
+
+
+ 1563              		.loc 1 989 0
+ 1564 0046 0023     		movs	r3, #0
+1020:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1565              		.loc 1 1020 0
+ 1566 0048 02E0     		b	.L109
+ 1567              	.L118:
+1029:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 1568              		.loc 1 1029 0
+ 1569 004a 0123     		movs	r3, #1
+ 1570 004c 00E0     		b	.L109
+ 1571              	.L119:
+ 989:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1572              		.loc 1 989 0
+ 1573 004e 0023     		movs	r3, #0
+ 1574              	.L109:
+ 1575              	.LVL147:
+1033:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 1576              		.loc 1 1033 0
+ 1577 0050 0022     		movs	r2, #0
+ 1578              	.LVL148:
+ 1579 0052 80F83420 		strb	r2, [r0, #52]
+1035:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 1580              		.loc 1 1035 0
+ 1581 0056 1846     		mov	r0, r3
+ 1582              	.LVL149:
+ 1583 0058 7047     		bx	lr
+ 1584              	.LVL150:
+ 1585              	.L117:
+ 992:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1586              		.loc 1 992 0
+ 1587 005a 0220     		movs	r0, #2
+ 1588              	.LVL151:
+1036:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1589              		.loc 1 1036 0
+ 1590 005c 7047     		bx	lr
+ 1591              		.cfi_endproc
+ 1592              	.LFE144:
+ 1594 005e 00BF     		.section	.text.HAL_DMA_UnRegisterCallback,"ax",%progbits
+ 1595              		.align	2
+ 1596              		.global	HAL_DMA_UnRegisterCallback
+ 1597              		.thumb
+ 1598              		.thumb_func
+ 1600              	HAL_DMA_UnRegisterCallback:
+ 1601              	.LFB145:
+1047:HALLIB/Src/stm32f7xx_hal_dma.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 1602              		.loc 1 1047 0
+ 1603              		.cfi_startproc
+ 1604              		@ args = 0, pretend = 0, frame = 0
+ 1605              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1606              		@ link register save eliminated.
+ 1607              	.LVL152:
+1051:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 1608              		.loc 1 1051 0
+ 1609 0000 90F83430 		ldrb	r3, [r0, #52]	@ zero_extendqisi2
+ 1610 0004 012B     		cmp	r3, #1
+ 1611 0006 31D0     		beq	.L131
+1051:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ARM GAS  /tmp/cccVrwre.s 			page 57
+
+
+ 1612              		.loc 1 1051 0 is_stmt 0 discriminator 2
+ 1613 0008 0123     		movs	r3, #1
+ 1614 000a 80F83430 		strb	r3, [r0, #52]
+1053:HALLIB/Src/stm32f7xx_hal_dma.c ****   {
+ 1615              		.loc 1 1053 0 is_stmt 1 discriminator 2
+ 1616 000e 90F83530 		ldrb	r3, [r0, #53]	@ zero_extendqisi2
+ 1617 0012 DBB2     		uxtb	r3, r3
+ 1618 0014 012B     		cmp	r3, #1
+ 1619 0016 21D1     		bne	.L132
+1055:HALLIB/Src/stm32f7xx_hal_dma.c ****     {
+ 1620              		.loc 1 1055 0
+ 1621 0018 0629     		cmp	r1, #6
+ 1622 001a 21D8     		bhi	.L133
+ 1623 001c DFE801F0 		tbb	[pc, r1]
+ 1624              	.L124:
+ 1625 0020 04       		.byte	(.L123-.L124)/2
+ 1626 0021 07       		.byte	(.L125-.L124)/2
+ 1627 0022 0A       		.byte	(.L126-.L124)/2
+ 1628 0023 0D       		.byte	(.L127-.L124)/2
+ 1629 0024 10       		.byte	(.L128-.L124)/2
+ 1630 0025 13       		.byte	(.L129-.L124)/2
+ 1631 0026 16       		.byte	(.L130-.L124)/2
+ 1632 0027 00       		.p2align 1
+ 1633              	.L123:
+1058:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1634              		.loc 1 1058 0
+ 1635 0028 0023     		movs	r3, #0
+ 1636 002a C363     		str	r3, [r0, #60]
+1059:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1637              		.loc 1 1059 0
+ 1638 002c 19E0     		b	.L122
+ 1639              	.L125:
+1062:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1640              		.loc 1 1062 0
+ 1641 002e 0023     		movs	r3, #0
+ 1642 0030 0364     		str	r3, [r0, #64]
+1063:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1643              		.loc 1 1063 0
+ 1644 0032 16E0     		b	.L122
+ 1645              	.L126:
+1066:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1646              		.loc 1 1066 0
+ 1647 0034 0023     		movs	r3, #0
+ 1648 0036 4364     		str	r3, [r0, #68]
+1067:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1649              		.loc 1 1067 0
+ 1650 0038 13E0     		b	.L122
+ 1651              	.L127:
+1070:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1652              		.loc 1 1070 0
+ 1653 003a 0023     		movs	r3, #0
+ 1654 003c 8364     		str	r3, [r0, #72]
+1071:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1655              		.loc 1 1071 0
+ 1656 003e 10E0     		b	.L122
+ 1657              	.L128:
+1074:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ARM GAS  /tmp/cccVrwre.s 			page 58
+
+
+ 1658              		.loc 1 1074 0
+ 1659 0040 0023     		movs	r3, #0
+ 1660 0042 C364     		str	r3, [r0, #76]
+1075:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1661              		.loc 1 1075 0
+ 1662 0044 0DE0     		b	.L122
+ 1663              	.L129:
+1078:HALLIB/Src/stm32f7xx_hal_dma.c ****       break; 
+ 1664              		.loc 1 1078 0
+ 1665 0046 0023     		movs	r3, #0
+ 1666 0048 0365     		str	r3, [r0, #80]
+1079:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1667              		.loc 1 1079 0
+ 1668 004a 0AE0     		b	.L122
+ 1669              	.L130:
+1082:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferHalfCpltCallback = NULL;
+ 1670              		.loc 1 1082 0
+ 1671 004c 0023     		movs	r3, #0
+ 1672 004e C363     		str	r3, [r0, #60]
+1083:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1CpltCallback = NULL;
+ 1673              		.loc 1 1083 0
+ 1674 0050 0364     		str	r3, [r0, #64]
+1084:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferM1HalfCpltCallback = NULL;
+ 1675              		.loc 1 1084 0
+ 1676 0052 4364     		str	r3, [r0, #68]
+1085:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferErrorCallback = NULL;
+ 1677              		.loc 1 1085 0
+ 1678 0054 8364     		str	r3, [r0, #72]
+1086:HALLIB/Src/stm32f7xx_hal_dma.c ****       hdma->XferAbortCallback = NULL;
+ 1679              		.loc 1 1086 0
+ 1680 0056 C364     		str	r3, [r0, #76]
+1087:HALLIB/Src/stm32f7xx_hal_dma.c ****       break; 
+ 1681              		.loc 1 1087 0
+ 1682 0058 0365     		str	r3, [r0, #80]
+1088:HALLIB/Src/stm32f7xx_hal_dma.c ****       
+ 1683              		.loc 1 1088 0
+ 1684 005a 02E0     		b	.L122
+ 1685              	.L132:
+1097:HALLIB/Src/stm32f7xx_hal_dma.c ****   }
+ 1686              		.loc 1 1097 0
+ 1687 005c 0123     		movs	r3, #1
+ 1688 005e 00E0     		b	.L122
+ 1689              	.L133:
+1091:HALLIB/Src/stm32f7xx_hal_dma.c ****       break;
+ 1690              		.loc 1 1091 0
+ 1691 0060 0123     		movs	r3, #1
+ 1692              	.L122:
+ 1693              	.LVL153:
+1101:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 1694              		.loc 1 1101 0
+ 1695 0062 0022     		movs	r2, #0
+ 1696 0064 80F83420 		strb	r2, [r0, #52]
+1103:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 1697              		.loc 1 1103 0
+ 1698 0068 1846     		mov	r0, r3
+ 1699              	.LVL154:
+ 1700 006a 7047     		bx	lr
+ARM GAS  /tmp/cccVrwre.s 			page 59
+
+
+ 1701              	.LVL155:
+ 1702              	.L131:
+1051:HALLIB/Src/stm32f7xx_hal_dma.c ****   
+ 1703              		.loc 1 1051 0
+ 1704 006c 0220     		movs	r0, #2
+ 1705              	.LVL156:
+1104:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1706              		.loc 1 1104 0
+ 1707 006e 7047     		bx	lr
+ 1708              		.cfi_endproc
+ 1709              	.LFE145:
+ 1711              		.section	.text.HAL_DMA_GetState,"ax",%progbits
+ 1712              		.align	2
+ 1713              		.global	HAL_DMA_GetState
+ 1714              		.thumb
+ 1715              		.thumb_func
+ 1717              	HAL_DMA_GetState:
+ 1718              	.LFB146:
+1132:HALLIB/Src/stm32f7xx_hal_dma.c ****   return hdma->State;
+ 1719              		.loc 1 1132 0
+ 1720              		.cfi_startproc
+ 1721              		@ args = 0, pretend = 0, frame = 0
+ 1722              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1723              		@ link register save eliminated.
+ 1724              	.LVL157:
+1133:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 1725              		.loc 1 1133 0
+ 1726 0000 90F83500 		ldrb	r0, [r0, #53]	@ zero_extendqisi2
+ 1727              	.LVL158:
+1134:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1728              		.loc 1 1134 0
+ 1729 0004 7047     		bx	lr
+ 1730              		.cfi_endproc
+ 1731              	.LFE146:
+ 1733 0006 00BF     		.section	.text.HAL_DMA_GetError,"ax",%progbits
+ 1734              		.align	2
+ 1735              		.global	HAL_DMA_GetError
+ 1736              		.thumb
+ 1737              		.thumb_func
+ 1739              	HAL_DMA_GetError:
+ 1740              	.LFB147:
+1143:HALLIB/Src/stm32f7xx_hal_dma.c ****   return hdma->ErrorCode;
+ 1741              		.loc 1 1143 0
+ 1742              		.cfi_startproc
+ 1743              		@ args = 0, pretend = 0, frame = 0
+ 1744              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1745              		@ link register save eliminated.
+ 1746              	.LVL159:
+1144:HALLIB/Src/stm32f7xx_hal_dma.c **** }
+ 1747              		.loc 1 1144 0
+ 1748 0000 406D     		ldr	r0, [r0, #84]
+ 1749              	.LVL160:
+1145:HALLIB/Src/stm32f7xx_hal_dma.c **** 
+ 1750              		.loc 1 1145 0
+ 1751 0002 7047     		bx	lr
+ 1752              		.cfi_endproc
+ 1753              	.LFE147:
+ARM GAS  /tmp/cccVrwre.s 			page 60
+
+
+ 1755              		.section	.rodata.flagBitshiftOffset.12660,"a",%progbits
+ 1756              		.align	2
+ 1757              		.set	.LANCHOR0,. + 0
+ 1760              	flagBitshiftOffset.12660:
+ 1761 0000 00       		.byte	0
+ 1762 0001 06       		.byte	6
+ 1763 0002 10       		.byte	16
+ 1764 0003 16       		.byte	22
+ 1765 0004 00       		.byte	0
+ 1766 0005 06       		.byte	6
+ 1767 0006 10       		.byte	16
+ 1768 0007 16       		.byte	22
+ 1769              		.text
+ 1770              	.Letext0:
+ 1771              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 1772              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 1773              		.file 4 "Inc/stm32f767xx.h"
+ 1774              		.file 5 "Inc/stm32f7xx.h"
+ 1775              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 1776              		.file 7 "HALLIB/Inc/stm32f7xx_hal_dma.h"
+ 1777              		.file 8 "CORE/core_cm7.h"
+ 1778              		.file 9 "Inc/system_stm32f7xx.h"
+ 1779              		.file 10 "HALLIB/Inc/stm32f7xx_hal.h"
+ARM GAS  /tmp/cccVrwre.s 			page 61
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_dma.c
+     /tmp/cccVrwre.s:21     .text.DMA_SetConfig:00000000 $t
+     /tmp/cccVrwre.s:25     .text.DMA_SetConfig:00000000 DMA_SetConfig
+     /tmp/cccVrwre.s:81     .text.DMA_CalcBaseAndBitshift:00000000 $t
+     /tmp/cccVrwre.s:85     .text.DMA_CalcBaseAndBitshift:00000000 DMA_CalcBaseAndBitshift
+     /tmp/cccVrwre.s:130    .text.DMA_CalcBaseAndBitshift:0000002c $d
+     /tmp/cccVrwre.s:137    .text.DMA_CheckFifoParam:00000000 $t
+     /tmp/cccVrwre.s:141    .text.DMA_CheckFifoParam:00000000 DMA_CheckFifoParam
+     /tmp/cccVrwre.s:192    .text.DMA_CheckFifoParam:00000036 $d
+     /tmp/cccVrwre.s:196    .text.DMA_CheckFifoParam:0000003a $t
+     /tmp/cccVrwre.s:298    .text.HAL_DMA_Init:00000000 $t
+     /tmp/cccVrwre.s:303    .text.HAL_DMA_Init:00000000 HAL_DMA_Init
+     /tmp/cccVrwre.s:477    .text.HAL_DMA_Init:000000cc $d
+     /tmp/cccVrwre.s:482    .text.HAL_DMA_DeInit:00000000 $t
+     /tmp/cccVrwre.s:487    .text.HAL_DMA_DeInit:00000000 HAL_DMA_DeInit
+     /tmp/cccVrwre.s:596    .text.HAL_DMA_Start:00000000 $t
+     /tmp/cccVrwre.s:601    .text.HAL_DMA_Start:00000000 HAL_DMA_Start
+     /tmp/cccVrwre.s:670    .text.HAL_DMA_Start_IT:00000000 $t
+     /tmp/cccVrwre.s:675    .text.HAL_DMA_Start_IT:00000000 HAL_DMA_Start_IT
+     /tmp/cccVrwre.s:771    .text.HAL_DMA_Abort:00000000 $t
+     /tmp/cccVrwre.s:776    .text.HAL_DMA_Abort:00000000 HAL_DMA_Abort
+     /tmp/cccVrwre.s:888    .text.HAL_DMA_Abort_IT:00000000 $t
+     /tmp/cccVrwre.s:893    .text.HAL_DMA_Abort_IT:00000000 HAL_DMA_Abort_IT
+     /tmp/cccVrwre.s:932    .text.HAL_DMA_PollForTransfer:00000000 $t
+     /tmp/cccVrwre.s:937    .text.HAL_DMA_PollForTransfer:00000000 HAL_DMA_PollForTransfer
+     /tmp/cccVrwre.s:1154   .text.HAL_DMA_IRQHandler:00000000 $t
+     /tmp/cccVrwre.s:1159   .text.HAL_DMA_IRQHandler:00000000 HAL_DMA_IRQHandler
+     /tmp/cccVrwre.s:1482   .text.HAL_DMA_IRQHandler:000001d0 $d
+     /tmp/cccVrwre.s:1488   .text.HAL_DMA_RegisterCallback:00000000 $t
+     /tmp/cccVrwre.s:1493   .text.HAL_DMA_RegisterCallback:00000000 HAL_DMA_RegisterCallback
+     /tmp/cccVrwre.s:1518   .text.HAL_DMA_RegisterCallback:00000020 $d
+     /tmp/cccVrwre.s:1524   .text.HAL_DMA_RegisterCallback:00000026 $t
+     /tmp/cccVrwre.s:1595   .text.HAL_DMA_UnRegisterCallback:00000000 $t
+     /tmp/cccVrwre.s:1600   .text.HAL_DMA_UnRegisterCallback:00000000 HAL_DMA_UnRegisterCallback
+     /tmp/cccVrwre.s:1625   .text.HAL_DMA_UnRegisterCallback:00000020 $d
+     /tmp/cccVrwre.s:1712   .text.HAL_DMA_GetState:00000000 $t
+     /tmp/cccVrwre.s:1717   .text.HAL_DMA_GetState:00000000 HAL_DMA_GetState
+     /tmp/cccVrwre.s:1734   .text.HAL_DMA_GetError:00000000 $t
+     /tmp/cccVrwre.s:1739   .text.HAL_DMA_GetError:00000000 HAL_DMA_GetError
+     /tmp/cccVrwre.s:1756   .rodata.flagBitshiftOffset.12660:00000000 $d
+     /tmp/cccVrwre.s:1760   .rodata.flagBitshiftOffset.12660:00000000 flagBitshiftOffset.12660
+                     .debug_frame:00000010 $d
+     /tmp/cccVrwre.s:1632   .text.HAL_DMA_UnRegisterCallback:00000027 $d
+     /tmp/cccVrwre.s:1632   .text.HAL_DMA_UnRegisterCallback:00000028 $t
+
+UNDEFINED SYMBOLS
+HAL_GetTick
+SystemCoreClock

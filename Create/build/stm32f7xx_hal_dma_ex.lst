@@ -1,0 +1,3096 @@
+ARM GAS  /tmp/ccpQRZUW.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_dma_ex.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.DMA_MultiBufferSetConfig,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	DMA_MultiBufferSetConfig:
+  26              	.LFB139:
+  27              		.file 1 "HALLIB/Src/stm32f7xx_hal_dma_ex.c"
+   1:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @file    stm32f7xx_hal_dma_ex.c
+   4:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief   DMA Extension HAL module driver
+   6:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *         This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *         functionalities of the DMA Extension peripheral:
+   8:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *           + Extended features functions
+   9:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  10:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   @verbatim
+  11:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   ==============================================================================
+  12:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****                         ##### How to use this driver #####
+  13:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   ==============================================================================
+  14:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   [..]
+  15:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   The DMA Extension HAL driver can be used as follows:
+  16:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****    (+) Start a multi buffer transfer using the HAL_DMA_MultiBufferStart() function
+  17:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****        for polling mode or HAL_DMA_MultiBufferStart_IT() for interrupt mode.
+  18:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  19:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****      -@-  In Memory-to-Memory transfer mode, Multi (Double) Buffer mode is not allowed.
+  20:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****      -@-  When Multi (Double) Buffer mode is enabled, the transfer is circular by default.
+  21:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****      -@-  In Multi (Double) buffer mode, it is possible to update the base address for 
+  22:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****           the AHB memory port on the fly (DMA_SxM0AR or DMA_SxM1AR) when the stream is enabled.
+  23:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+  24:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   @endverbatim
+  25:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   ******************************************************************************
+  26:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @attention
+  27:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  28:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  29:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  30:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  31:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * are permitted provided that the following conditions are met:
+ARM GAS  /tmp/ccpQRZUW.s 			page 2
+
+
+  32:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  33:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *      this list of conditions and the following disclaimer.
+  34:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  35:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  36:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *      and/or other materials provided with the distribution.
+  37:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  38:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *      may be used to endorse or promote products derived from this software
+  39:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *      without specific prior written permission.
+  40:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  41:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  42:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  43:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  44:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  45:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  46:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  47:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  48:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  49:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  50:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  51:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  52:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   ******************************************************************************
+  53:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+  54:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  55:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Includes ------------------------------------------------------------------*/
+  56:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** #include "stm32f7xx_hal.h"
+  57:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  58:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  59:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+  60:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+  61:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  62:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @defgroup DMAEx DMAEx
+  63:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief DMA Extended HAL module driver
+  64:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+  65:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+  66:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  67:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** #ifdef HAL_DMA_MODULE_ENABLED
+  68:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  69:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Private types -------------------------------------------------------------*/
+  70:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Private variables ---------------------------------------------------------*/
+  71:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Private Constants ---------------------------------------------------------*/
+  72:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Private macros ------------------------------------------------------------*/
+  73:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Private functions ---------------------------------------------------------*/
+  74:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Private_Functions
+  75:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+  76:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+  77:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  78:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** static void DMA_MultiBufferSetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddr
+  79:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  80:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+  81:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @}
+  82:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+  83:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  84:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /* Exported functions ---------------------------------------------------------*/
+  85:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  86:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Exported_Functions
+  87:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+  88:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ARM GAS  /tmp/ccpQRZUW.s 			page 3
+
+
+  89:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  90:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+  91:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Exported_Functions_Group1
+  92:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *
+  93:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** @verbatim
+  94:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****  ===============================================================================
+  95:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****                 #####  Extended features functions  #####
+  96:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****  ===============================================================================  
+  97:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     [..]  This section provides functions allowing to:
+  98:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       (+) Configure the source, destination address and data length and 
+  99:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****           Start MultiBuffer DMA transfer
+ 100:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       (+) Configure the source, destination address and data length and 
+ 101:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****           Start MultiBuffer DMA transfer with interrupt
+ 102:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       (+) Change on the fly the memory0 or memory1 address.
+ 103:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 104:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** @endverbatim
+ 105:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+ 106:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 107:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 108:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 109:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 110:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief  Starts the multi_buffer DMA Transfer.
+ 111:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 112:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 113:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 114:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 115:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  SecondMemAddress The second memory Buffer address in case of multi buffer Transfer  
+ 116:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 117:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @retval HAL status
+ 118:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 119:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t
+ 120:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** {
+ 121:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 122:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 123:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Check the parameters */
+ 124:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ 125:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 126:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Memory-to-memory transfer not supported in double buffering mode */
+ 127:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if (hdma->Init.Direction == DMA_MEMORY_TO_MEMORY)
+ 128:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 129:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NOT_SUPPORTED;
+ 130:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     status = HAL_ERROR;
+ 131:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 132:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   else
+ 133:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 134:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Process Locked */
+ 135:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_LOCK(hdma);
+ 136:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 137:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     if(HAL_DMA_STATE_READY == hdma->State)
+ 138:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 139:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Change DMA peripheral state */
+ 140:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       hdma->State = HAL_DMA_STATE_BUSY; 
+ 141:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 142:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Enable the double buffer mode */
+ 143:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       hdma->Instance->CR |= (uint32_t)DMA_SxCR_DBM;
+ 144:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 145:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Configure DMA Stream destination address */
+ARM GAS  /tmp/ccpQRZUW.s 			page 4
+
+
+ 146:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       hdma->Instance->M1AR = SecondMemAddress;
+ 147:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 148:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Configure the source, destination address and the data length */
+ 149:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       DMA_MultiBufferSetConfig(hdma, SrcAddress, DstAddress, DataLength);
+ 150:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 151:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Enable the peripheral */
+ 152:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       __HAL_DMA_ENABLE(hdma);
+ 153:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 154:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     else
+ 155:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 156:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       /* Return error status */
+ 157:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       status = HAL_BUSY;
+ 158:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 159:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 160:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   return status;
+ 161:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** }
+ 162:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 163:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 164:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief  Starts the multi_buffer DMA Transfer with interrupt enabled.
+ 165:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 166:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 167:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 168:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 169:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  SecondMemAddress The second memory Buffer address in case of multi buffer Transfer  
+ 170:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 171:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @retval HAL status
+ 172:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 173:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint3
+ 174:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** {
+ 175:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 176:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 177:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Check the parameters */
+ 178:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ 179:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 180:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Memory-to-memory transfer not supported in double buffering mode */
+ 181:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if (hdma->Init.Direction == DMA_MEMORY_TO_MEMORY)
+ 182:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 183:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NOT_SUPPORTED;
+ 184:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     return HAL_ERROR;
+ 185:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 186:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 187:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Process locked */
+ 188:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   __HAL_LOCK(hdma);
+ 189:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 190:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+ 191:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 192:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Change DMA peripheral state */
+ 193:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->State = HAL_DMA_STATE_BUSY;
+ 194:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 195:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Initialize the error code */
+ 196:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 197:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 198:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Enable the Double buffer mode */
+ 199:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->CR |= (uint32_t)DMA_SxCR_DBM;
+ 200:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 201:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 202:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->M1AR = SecondMemAddress;
+ARM GAS  /tmp/ccpQRZUW.s 			page 5
+
+
+ 203:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 204:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure the source, destination address and the data length */
+ 205:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     DMA_MultiBufferSetConfig(hdma, SrcAddress, DstAddress, DataLength); 
+ 206:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 207:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Clear all flags */
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TC_FLAG_INDEX(hdma));
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 213:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 214:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Enable Common interrupts*/
+ 215:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->CR  |= DMA_IT_TC | DMA_IT_TE | DMA_IT_DME;
+ 216:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->FCR |= DMA_IT_FE;
+ 217:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 218:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     if((hdma->XferHalfCpltCallback != NULL) || (hdma->XferM1HalfCpltCallback != NULL))
+ 219:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 220:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       hdma->Instance->CR  |= DMA_IT_HT;
+ 221:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 222:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 223:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Enable the peripheral */
+ 224:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_ENABLE(hdma); 
+ 225:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 226:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   else
+ 227:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {     
+ 228:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Process unlocked */
+ 229:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_UNLOCK(hdma);	  
+ 230:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 231:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Return error status */
+ 232:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     status = HAL_BUSY;
+ 233:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }  
+ 234:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   return status; 
+ 235:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** }
+ 236:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 237:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 238:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief  Change the memory0 or memory1 address on the fly.
+ 239:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 240:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 241:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  Address    The new address
+ 242:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  memory     the memory to be changed, This parameter can be one of 
+ 243:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                     the following values:
+ 244:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                      MEMORY0 /
+ 245:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                      MEMORY1
+ 246:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @note   The MEMORY0 address can be changed only when the current transfer use
+ 247:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *         MEMORY1 and the MEMORY1 address can be changed only when the current 
+ 248:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *         transfer use MEMORY0.
+ 249:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @retval HAL status
+ 250:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 251:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_ChangeMemory(DMA_HandleTypeDef *hdma, uint32_t Address, HAL_DMA_MemoryT
+ 252:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** {
+ 253:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if(memory == MEMORY0)
+ 254:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 255:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* change the memory0 address */
+ 256:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->M0AR = Address;
+ 257:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 258:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   else
+ 259:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ARM GAS  /tmp/ccpQRZUW.s 			page 6
+
+
+ 260:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* change the memory1 address */
+ 261:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->M1AR = Address;
+ 262:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 263:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 264:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   return HAL_OK;
+ 265:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** }
+ 266:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 267:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 268:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @}
+ 269:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 270:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 271:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 272:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @}
+ 273:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 274:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 275:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Private_Functions
+ 276:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @{
+ 277:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 278:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 279:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** /**
+ 280:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @brief  Set the DMA Transfer parameter.
+ 281:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 282:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 283:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 284:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 285:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 286:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   * @retval HAL status
+ 287:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   */
+ 288:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** static void DMA_MultiBufferSetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddr
+ 289:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** {
+  28              		.loc 1 289 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  34 0000 10B4     		push	{r4}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 4, -4
+ 290:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Configure DMA Stream data length */
+ 291:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   hdma->Instance->NDTR = DataLength;
+  38              		.loc 1 291 0
+  39 0002 0468     		ldr	r4, [r0]
+  40 0004 6360     		str	r3, [r4, #4]
+ 292:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 293:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Peripheral to Memory */
+ 294:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if((hdma->Init.Direction) == DMA_MEMORY_TO_PERIPH)
+  41              		.loc 1 294 0
+  42 0006 8368     		ldr	r3, [r0, #8]
+  43              	.LVL1:
+  44 0008 402B     		cmp	r3, #64
+  45 000a 04D1     		bne	.L2
+ 295:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 296:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 297:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->PAR = DstAddress;
+  46              		.loc 1 297 0
+ARM GAS  /tmp/ccpQRZUW.s 			page 7
+
+
+  47 000c 0368     		ldr	r3, [r0]
+  48 000e 9A60     		str	r2, [r3, #8]
+  49              	.LVL2:
+ 298:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 299:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure DMA Stream source address */
+ 300:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->M0AR = SrcAddress;
+  50              		.loc 1 300 0
+  51 0010 0368     		ldr	r3, [r0]
+  52 0012 D960     		str	r1, [r3, #12]
+  53 0014 03E0     		b	.L1
+  54              	.LVL3:
+  55              	.L2:
+ 301:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 302:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   /* Memory to Peripheral */
+ 303:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   else
+ 304:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 305:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure DMA Stream source address */
+ 306:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->PAR = SrcAddress;
+  56              		.loc 1 306 0
+  57 0016 0368     		ldr	r3, [r0]
+  58 0018 9960     		str	r1, [r3, #8]
+  59              	.LVL4:
+ 307:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 308:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 309:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->M0AR = DstAddress;
+  60              		.loc 1 309 0
+  61 001a 0368     		ldr	r3, [r0]
+  62 001c DA60     		str	r2, [r3, #12]
+  63              	.L1:
+ 310:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 311:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** }
+  64              		.loc 1 311 0
+  65 001e 5DF8044B 		ldr	r4, [sp], #4
+  66              	.LCFI1:
+  67              		.cfi_restore 4
+  68              		.cfi_def_cfa_offset 0
+  69 0022 7047     		bx	lr
+  70              		.cfi_endproc
+  71              	.LFE139:
+  73              		.section	.text.HAL_DMAEx_MultiBufferStart,"ax",%progbits
+  74              		.align	2
+  75              		.global	HAL_DMAEx_MultiBufferStart
+  76              		.thumb
+  77              		.thumb_func
+  79              	HAL_DMAEx_MultiBufferStart:
+  80              	.LFB136:
+ 120:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+  81              		.loc 1 120 0
+  82              		.cfi_startproc
+  83              		@ args = 4, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              	.LVL5:
+  86 0000 38B5     		push	{r3, r4, r5, lr}
+  87              	.LCFI2:
+  88              		.cfi_def_cfa_offset 16
+  89              		.cfi_offset 3, -16
+  90              		.cfi_offset 4, -12
+ARM GAS  /tmp/ccpQRZUW.s 			page 8
+
+
+  91              		.cfi_offset 5, -8
+  92              		.cfi_offset 14, -4
+  93              	.LVL6:
+ 127:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+  94              		.loc 1 127 0
+  95 0002 8468     		ldr	r4, [r0, #8]
+  96 0004 802C     		cmp	r4, #128
+  97 0006 04D1     		bne	.L6
+ 129:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     status = HAL_ERROR;
+  98              		.loc 1 129 0
+  99 0008 4FF48073 		mov	r3, #256
+ 100              	.LVL7:
+ 101 000c 4365     		str	r3, [r0, #84]
+ 102              	.LVL8:
+ 130:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 103              		.loc 1 130 0
+ 104 000e 0120     		movs	r0, #1
+ 105              	.LVL9:
+ 106 0010 38BD     		pop	{r3, r4, r5, pc}
+ 107              	.LVL10:
+ 108              	.L6:
+ 135:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 109              		.loc 1 135 0
+ 110 0012 90F83440 		ldrb	r4, [r0, #52]	@ zero_extendqisi2
+ 111 0016 012C     		cmp	r4, #1
+ 112 0018 1DD0     		beq	.L8
+ 135:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 113              		.loc 1 135 0 is_stmt 0 discriminator 2
+ 114 001a 0124     		movs	r4, #1
+ 115 001c 80F83440 		strb	r4, [r0, #52]
+ 137:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 116              		.loc 1 137 0 is_stmt 1 discriminator 2
+ 117 0020 90F83540 		ldrb	r4, [r0, #53]	@ zero_extendqisi2
+ 118 0024 E4B2     		uxtb	r4, r4
+ 119 0026 012C     		cmp	r4, #1
+ 120 0028 17D1     		bne	.L9
+ 121 002a 0446     		mov	r4, r0
+ 140:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 122              		.loc 1 140 0
+ 123 002c 0220     		movs	r0, #2
+ 124              	.LVL11:
+ 125 002e 84F83500 		strb	r0, [r4, #53]
+ 143:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 126              		.loc 1 143 0
+ 127 0032 2568     		ldr	r5, [r4]
+ 128 0034 2868     		ldr	r0, [r5]
+ 129 0036 40F48020 		orr	r0, r0, #262144
+ 130 003a 2860     		str	r0, [r5]
+ 146:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 131              		.loc 1 146 0
+ 132 003c 2068     		ldr	r0, [r4]
+ 133 003e 0361     		str	r3, [r0, #16]
+ 149:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****       
+ 134              		.loc 1 149 0
+ 135 0040 049B     		ldr	r3, [sp, #16]
+ 136              	.LVL12:
+ 137 0042 2046     		mov	r0, r4
+ARM GAS  /tmp/ccpQRZUW.s 			page 9
+
+
+ 138              	.LVL13:
+ 139 0044 FFF7FEFF 		bl	DMA_MultiBufferSetConfig
+ 140              	.LVL14:
+ 152:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 141              		.loc 1 152 0
+ 142 0048 2268     		ldr	r2, [r4]
+ 143 004a 1368     		ldr	r3, [r2]
+ 144 004c 43F00103 		orr	r3, r3, #1
+ 145 0050 1360     		str	r3, [r2]
+ 121:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 146              		.loc 1 121 0
+ 147 0052 0020     		movs	r0, #0
+ 148 0054 38BD     		pop	{r3, r4, r5, pc}
+ 149              	.LVL15:
+ 150              	.L8:
+ 135:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 151              		.loc 1 135 0
+ 152 0056 0220     		movs	r0, #2
+ 153              	.LVL16:
+ 154 0058 38BD     		pop	{r3, r4, r5, pc}
+ 155              	.LVL17:
+ 156              	.L9:
+ 157:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 157              		.loc 1 157 0
+ 158 005a 0220     		movs	r0, #2
+ 159              	.LVL18:
+ 161:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 160              		.loc 1 161 0
+ 161 005c 38BD     		pop	{r3, r4, r5, pc}
+ 162              		.cfi_endproc
+ 163              	.LFE136:
+ 165 005e 00BF     		.section	.text.HAL_DMAEx_MultiBufferStart_IT,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	HAL_DMAEx_MultiBufferStart_IT
+ 168              		.thumb
+ 169              		.thumb_func
+ 171              	HAL_DMAEx_MultiBufferStart_IT:
+ 172              	.LFB137:
+ 174:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 173              		.loc 1 174 0
+ 174              		.cfi_startproc
+ 175              		@ args = 4, pretend = 0, frame = 0
+ 176              		@ frame_needed = 0, uses_anonymous_args = 0
+ 177              	.LVL19:
+ 178 0000 38B5     		push	{r3, r4, r5, lr}
+ 179              	.LCFI3:
+ 180              		.cfi_def_cfa_offset 16
+ 181              		.cfi_offset 3, -16
+ 182              		.cfi_offset 4, -12
+ 183              		.cfi_offset 5, -8
+ 184              		.cfi_offset 14, -4
+ 185              	.LVL20:
+ 181:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 186              		.loc 1 181 0
+ 187 0002 8468     		ldr	r4, [r0, #8]
+ 188 0004 802C     		cmp	r4, #128
+ 189 0006 04D1     		bne	.L12
+ARM GAS  /tmp/ccpQRZUW.s 			page 10
+
+
+ 183:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     return HAL_ERROR;
+ 190              		.loc 1 183 0
+ 191 0008 4FF48073 		mov	r3, #256
+ 192              	.LVL21:
+ 193 000c 4365     		str	r3, [r0, #84]
+ 184:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 194              		.loc 1 184 0
+ 195 000e 0120     		movs	r0, #1
+ 196              	.LVL22:
+ 197 0010 38BD     		pop	{r3, r4, r5, pc}
+ 198              	.LVL23:
+ 199              	.L12:
+ 188:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 200              		.loc 1 188 0
+ 201 0012 90F83440 		ldrb	r4, [r0, #52]	@ zero_extendqisi2
+ 202 0016 012C     		cmp	r4, #1
+ 203 0018 00F01B87 		beq	.L62
+ 188:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 204              		.loc 1 188 0 is_stmt 0 discriminator 2
+ 205 001c 0124     		movs	r4, #1
+ 206 001e 80F83440 		strb	r4, [r0, #52]
+ 190:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 207              		.loc 1 190 0 is_stmt 1 discriminator 2
+ 208 0022 90F83540 		ldrb	r4, [r0, #53]	@ zero_extendqisi2
+ 209 0026 E4B2     		uxtb	r4, r4
+ 210 0028 012C     		cmp	r4, #1
+ 211 002a 40F00D87 		bne	.L14
+ 212 002e 0446     		mov	r4, r0
+ 193:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 213              		.loc 1 193 0
+ 214 0030 0220     		movs	r0, #2
+ 215              	.LVL24:
+ 216 0032 84F83500 		strb	r0, [r4, #53]
+ 196:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 217              		.loc 1 196 0
+ 218 0036 0020     		movs	r0, #0
+ 219 0038 6065     		str	r0, [r4, #84]
+ 199:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 220              		.loc 1 199 0
+ 221 003a 2568     		ldr	r5, [r4]
+ 222 003c 2868     		ldr	r0, [r5]
+ 223 003e 40F48020 		orr	r0, r0, #262144
+ 224 0042 2860     		str	r0, [r5]
+ 202:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 225              		.loc 1 202 0
+ 226 0044 2068     		ldr	r0, [r4]
+ 227 0046 0361     		str	r3, [r0, #16]
+ 205:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 228              		.loc 1 205 0
+ 229 0048 049B     		ldr	r3, [sp, #16]
+ 230              	.LVL25:
+ 231 004a 2046     		mov	r0, r4
+ 232              	.LVL26:
+ 233 004c FFF7FEFF 		bl	DMA_MultiBufferSetConfig
+ 234              	.LVL27:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 235              		.loc 1 208 0
+ARM GAS  /tmp/ccpQRZUW.s 			page 11
+
+
+ 236 0050 2368     		ldr	r3, [r4]
+ 237 0052 AA4A     		ldr	r2, .L304
+ 238 0054 9342     		cmp	r3, r2
+ 239 0056 54D9     		bls	.L15
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 240              		.loc 1 208 0 is_stmt 0 discriminator 1
+ 241 0058 A2F58962 		sub	r2, r2, #1096
+ 242 005c 9342     		cmp	r3, r2
+ 243 005e 2ED0     		beq	.L63
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 244              		.loc 1 208 0 discriminator 3
+ 245 0060 02F58062 		add	r2, r2, #1024
+ 246 0064 9342     		cmp	r3, r2
+ 247 0066 2CD0     		beq	.L64
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 248              		.loc 1 208 0 discriminator 5
+ 249 0068 A2F56872 		sub	r2, r2, #928
+ 250 006c 9342     		cmp	r3, r2
+ 251 006e 2AD0     		beq	.L65
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 252              		.loc 1 208 0 discriminator 7
+ 253 0070 02F58062 		add	r2, r2, #1024
+ 254 0074 9342     		cmp	r3, r2
+ 255 0076 28D0     		beq	.L66
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 256              		.loc 1 208 0 discriminator 9
+ 257 0078 A2F58962 		sub	r2, r2, #1096
+ 258 007c 9342     		cmp	r3, r2
+ 259 007e 26D0     		beq	.L67
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 260              		.loc 1 208 0 discriminator 11
+ 261 0080 02F58062 		add	r2, r2, #1024
+ 262 0084 9342     		cmp	r3, r2
+ 263 0086 25D0     		beq	.L68
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 264              		.loc 1 208 0 discriminator 13
+ 265 0088 A2F56872 		sub	r2, r2, #928
+ 266 008c 9342     		cmp	r3, r2
+ 267 008e 24D0     		beq	.L69
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 268              		.loc 1 208 0 discriminator 15
+ 269 0090 02F58062 		add	r2, r2, #1024
+ 270 0094 9342     		cmp	r3, r2
+ 271 0096 23D0     		beq	.L70
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 272              		.loc 1 208 0 discriminator 17
+ 273 0098 A2F58962 		sub	r2, r2, #1096
+ 274 009c 9342     		cmp	r3, r2
+ 275 009e 22D0     		beq	.L71
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 276              		.loc 1 208 0 discriminator 19
+ 277 00a0 02F58062 		add	r2, r2, #1024
+ 278 00a4 9342     		cmp	r3, r2
+ 279 00a6 21D0     		beq	.L72
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 280              		.loc 1 208 0 discriminator 21
+ 281 00a8 A2F56872 		sub	r2, r2, #928
+ARM GAS  /tmp/ccpQRZUW.s 			page 12
+
+
+ 282 00ac 9342     		cmp	r3, r2
+ 283 00ae 20D0     		beq	.L73
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 284              		.loc 1 208 0 discriminator 23
+ 285 00b0 02F58062 		add	r2, r2, #1024
+ 286 00b4 9342     		cmp	r3, r2
+ 287 00b6 1FD1     		bne	.L74
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 288              		.loc 1 208 0
+ 289 00b8 4FF40013 		mov	r3, #2097152
+ 290 00bc 1EE0     		b	.L16
+ 291              	.L63:
+ 292 00be 2023     		movs	r3, #32
+ 293 00c0 1CE0     		b	.L16
+ 294              	.L64:
+ 295 00c2 2023     		movs	r3, #32
+ 296 00c4 1AE0     		b	.L16
+ 297              	.L65:
+ 298 00c6 2023     		movs	r3, #32
+ 299 00c8 18E0     		b	.L16
+ 300              	.L66:
+ 301 00ca 2023     		movs	r3, #32
+ 302 00cc 16E0     		b	.L16
+ 303              	.L67:
+ 304 00ce 4FF40063 		mov	r3, #2048
+ 305 00d2 13E0     		b	.L16
+ 306              	.L68:
+ 307 00d4 4FF40063 		mov	r3, #2048
+ 308 00d8 10E0     		b	.L16
+ 309              	.L69:
+ 310 00da 4FF40063 		mov	r3, #2048
+ 311 00de 0DE0     		b	.L16
+ 312              	.L70:
+ 313 00e0 4FF40063 		mov	r3, #2048
+ 314 00e4 0AE0     		b	.L16
+ 315              	.L71:
+ 316 00e6 4FF40013 		mov	r3, #2097152
+ 317 00ea 07E0     		b	.L16
+ 318              	.L72:
+ 319 00ec 4FF40013 		mov	r3, #2097152
+ 320 00f0 04E0     		b	.L16
+ 321              	.L73:
+ 322 00f2 4FF40013 		mov	r3, #2097152
+ 323 00f6 01E0     		b	.L16
+ 324              	.L74:
+ 325 00f8 4FF00063 		mov	r3, #134217728
+ 326              	.L16:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 327              		.loc 1 208 0 discriminator 50
+ 328 00fc 804A     		ldr	r2, .L304+4
+ 329 00fe D360     		str	r3, [r2, #12]
+ 330 0100 0CE1     		b	.L17
+ 331              	.L15:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 332              		.loc 1 208 0 discriminator 2
+ 333 0102 804A     		ldr	r2, .L304+8
+ 334 0104 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccpQRZUW.s 			page 13
+
+
+ 335 0106 53D9     		bls	.L18
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 336              		.loc 1 208 0 discriminator 51
+ 337 0108 A83A     		subs	r2, r2, #168
+ 338 010a 9342     		cmp	r3, r2
+ 339 010c 2ED0     		beq	.L75
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 340              		.loc 1 208 0 discriminator 53
+ 341 010e 02F58062 		add	r2, r2, #1024
+ 342 0112 9342     		cmp	r3, r2
+ 343 0114 2CD0     		beq	.L76
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 344              		.loc 1 208 0 discriminator 55
+ 345 0116 A2F56872 		sub	r2, r2, #928
+ 346 011a 9342     		cmp	r3, r2
+ 347 011c 2AD0     		beq	.L77
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 348              		.loc 1 208 0 discriminator 57
+ 349 011e 02F58062 		add	r2, r2, #1024
+ 350 0122 9342     		cmp	r3, r2
+ 351 0124 28D0     		beq	.L78
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 352              		.loc 1 208 0 discriminator 59
+ 353 0126 A2F58962 		sub	r2, r2, #1096
+ 354 012a 9342     		cmp	r3, r2
+ 355 012c 26D0     		beq	.L79
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 356              		.loc 1 208 0 discriminator 61
+ 357 012e 02F58062 		add	r2, r2, #1024
+ 358 0132 9342     		cmp	r3, r2
+ 359 0134 25D0     		beq	.L80
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 360              		.loc 1 208 0 discriminator 63
+ 361 0136 A2F56872 		sub	r2, r2, #928
+ 362 013a 9342     		cmp	r3, r2
+ 363 013c 24D0     		beq	.L81
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 364              		.loc 1 208 0 discriminator 65
+ 365 013e 02F58062 		add	r2, r2, #1024
+ 366 0142 9342     		cmp	r3, r2
+ 367 0144 23D0     		beq	.L82
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 368              		.loc 1 208 0 discriminator 67
+ 369 0146 A2F58962 		sub	r2, r2, #1096
+ 370 014a 9342     		cmp	r3, r2
+ 371 014c 22D0     		beq	.L83
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 372              		.loc 1 208 0 discriminator 69
+ 373 014e 02F58062 		add	r2, r2, #1024
+ 374 0152 9342     		cmp	r3, r2
+ 375 0154 21D0     		beq	.L84
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 376              		.loc 1 208 0 discriminator 71
+ 377 0156 A2F56872 		sub	r2, r2, #928
+ 378 015a 9342     		cmp	r3, r2
+ 379 015c 20D0     		beq	.L85
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ARM GAS  /tmp/ccpQRZUW.s 			page 14
+
+
+ 380              		.loc 1 208 0 discriminator 73
+ 381 015e 02F58062 		add	r2, r2, #1024
+ 382 0162 9342     		cmp	r3, r2
+ 383 0164 1FD1     		bne	.L86
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 384              		.loc 1 208 0
+ 385 0166 4FF40013 		mov	r3, #2097152
+ 386 016a 1EE0     		b	.L19
+ 387              	.L75:
+ 388 016c 2023     		movs	r3, #32
+ 389 016e 1CE0     		b	.L19
+ 390              	.L76:
+ 391 0170 2023     		movs	r3, #32
+ 392 0172 1AE0     		b	.L19
+ 393              	.L77:
+ 394 0174 2023     		movs	r3, #32
+ 395 0176 18E0     		b	.L19
+ 396              	.L78:
+ 397 0178 2023     		movs	r3, #32
+ 398 017a 16E0     		b	.L19
+ 399              	.L79:
+ 400 017c 4FF40063 		mov	r3, #2048
+ 401 0180 13E0     		b	.L19
+ 402              	.L80:
+ 403 0182 4FF40063 		mov	r3, #2048
+ 404 0186 10E0     		b	.L19
+ 405              	.L81:
+ 406 0188 4FF40063 		mov	r3, #2048
+ 407 018c 0DE0     		b	.L19
+ 408              	.L82:
+ 409 018e 4FF40063 		mov	r3, #2048
+ 410 0192 0AE0     		b	.L19
+ 411              	.L83:
+ 412 0194 4FF40013 		mov	r3, #2097152
+ 413 0198 07E0     		b	.L19
+ 414              	.L84:
+ 415 019a 4FF40013 		mov	r3, #2097152
+ 416 019e 04E0     		b	.L19
+ 417              	.L85:
+ 418 01a0 4FF40013 		mov	r3, #2097152
+ 419 01a4 01E0     		b	.L19
+ 420              	.L86:
+ 421 01a6 4FF00063 		mov	r3, #134217728
+ 422              	.L19:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 423              		.loc 1 208 0 discriminator 100
+ 424 01aa 554A     		ldr	r2, .L304+4
+ 425 01ac 9360     		str	r3, [r2, #8]
+ 426 01ae B5E0     		b	.L17
+ 427              	.L18:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 428              		.loc 1 208 0 discriminator 52
+ 429 01b0 554A     		ldr	r2, .L304+12
+ 430 01b2 9342     		cmp	r3, r2
+ 431 01b4 53D9     		bls	.L21
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 432              		.loc 1 208 0 discriminator 102
+ARM GAS  /tmp/ccpQRZUW.s 			page 15
+
+
+ 433 01b6 483A     		subs	r2, r2, #72
+ 434 01b8 9342     		cmp	r3, r2
+ 435 01ba 2ED0     		beq	.L87
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 436              		.loc 1 208 0 discriminator 104
+ 437 01bc 02F58062 		add	r2, r2, #1024
+ 438 01c0 9342     		cmp	r3, r2
+ 439 01c2 2CD0     		beq	.L88
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 440              		.loc 1 208 0 discriminator 106
+ 441 01c4 A2F56872 		sub	r2, r2, #928
+ 442 01c8 9342     		cmp	r3, r2
+ 443 01ca 2AD0     		beq	.L89
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 444              		.loc 1 208 0 discriminator 108
+ 445 01cc 02F58062 		add	r2, r2, #1024
+ 446 01d0 9342     		cmp	r3, r2
+ 447 01d2 28D0     		beq	.L90
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 448              		.loc 1 208 0 discriminator 110
+ 449 01d4 A2F58962 		sub	r2, r2, #1096
+ 450 01d8 9342     		cmp	r3, r2
+ 451 01da 26D0     		beq	.L91
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 452              		.loc 1 208 0 discriminator 112
+ 453 01dc 02F58062 		add	r2, r2, #1024
+ 454 01e0 9342     		cmp	r3, r2
+ 455 01e2 25D0     		beq	.L92
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 456              		.loc 1 208 0 discriminator 114
+ 457 01e4 A2F56872 		sub	r2, r2, #928
+ 458 01e8 9342     		cmp	r3, r2
+ 459 01ea 24D0     		beq	.L93
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 460              		.loc 1 208 0 discriminator 116
+ 461 01ec 02F58062 		add	r2, r2, #1024
+ 462 01f0 9342     		cmp	r3, r2
+ 463 01f2 23D0     		beq	.L94
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 464              		.loc 1 208 0 discriminator 118
+ 465 01f4 A2F58962 		sub	r2, r2, #1096
+ 466 01f8 9342     		cmp	r3, r2
+ 467 01fa 22D0     		beq	.L95
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 468              		.loc 1 208 0 discriminator 120
+ 469 01fc 02F58062 		add	r2, r2, #1024
+ 470 0200 9342     		cmp	r3, r2
+ 471 0202 21D0     		beq	.L96
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 472              		.loc 1 208 0 discriminator 122
+ 473 0204 A2F56872 		sub	r2, r2, #928
+ 474 0208 9342     		cmp	r3, r2
+ 475 020a 20D0     		beq	.L97
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 476              		.loc 1 208 0 discriminator 124
+ 477 020c 02F58062 		add	r2, r2, #1024
+ 478 0210 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccpQRZUW.s 			page 16
+
+
+ 479 0212 1FD1     		bne	.L98
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 480              		.loc 1 208 0
+ 481 0214 4FF40013 		mov	r3, #2097152
+ 482 0218 1EE0     		b	.L22
+ 483              	.L87:
+ 484 021a 2023     		movs	r3, #32
+ 485 021c 1CE0     		b	.L22
+ 486              	.L88:
+ 487 021e 2023     		movs	r3, #32
+ 488 0220 1AE0     		b	.L22
+ 489              	.L89:
+ 490 0222 2023     		movs	r3, #32
+ 491 0224 18E0     		b	.L22
+ 492              	.L90:
+ 493 0226 2023     		movs	r3, #32
+ 494 0228 16E0     		b	.L22
+ 495              	.L91:
+ 496 022a 4FF40063 		mov	r3, #2048
+ 497 022e 13E0     		b	.L22
+ 498              	.L92:
+ 499 0230 4FF40063 		mov	r3, #2048
+ 500 0234 10E0     		b	.L22
+ 501              	.L93:
+ 502 0236 4FF40063 		mov	r3, #2048
+ 503 023a 0DE0     		b	.L22
+ 504              	.L94:
+ 505 023c 4FF40063 		mov	r3, #2048
+ 506 0240 0AE0     		b	.L22
+ 507              	.L95:
+ 508 0242 4FF40013 		mov	r3, #2097152
+ 509 0246 07E0     		b	.L22
+ 510              	.L96:
+ 511 0248 4FF40013 		mov	r3, #2097152
+ 512 024c 04E0     		b	.L22
+ 513              	.L97:
+ 514 024e 4FF40013 		mov	r3, #2097152
+ 515 0252 01E0     		b	.L22
+ 516              	.L98:
+ 517 0254 4FF00063 		mov	r3, #134217728
+ 518              	.L22:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 519              		.loc 1 208 0 discriminator 151
+ 520 0258 2C4A     		ldr	r2, .L304+16
+ 521 025a D360     		str	r3, [r2, #12]
+ 522 025c 5EE0     		b	.L17
+ 523              	.L21:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 524              		.loc 1 208 0 discriminator 103
+ 525 025e 2C4A     		ldr	r2, .L304+20
+ 526 0260 9342     		cmp	r3, r2
+ 527 0262 2ED0     		beq	.L99
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 528              		.loc 1 208 0 discriminator 153
+ 529 0264 02F58062 		add	r2, r2, #1024
+ 530 0268 9342     		cmp	r3, r2
+ 531 026a 2CD0     		beq	.L100
+ARM GAS  /tmp/ccpQRZUW.s 			page 17
+
+
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 532              		.loc 1 208 0 discriminator 155
+ 533 026c A2F56872 		sub	r2, r2, #928
+ 534 0270 9342     		cmp	r3, r2
+ 535 0272 2AD0     		beq	.L101
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 536              		.loc 1 208 0 discriminator 157
+ 537 0274 02F58062 		add	r2, r2, #1024
+ 538 0278 9342     		cmp	r3, r2
+ 539 027a 28D0     		beq	.L102
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 540              		.loc 1 208 0 discriminator 159
+ 541 027c A2F58962 		sub	r2, r2, #1096
+ 542 0280 9342     		cmp	r3, r2
+ 543 0282 26D0     		beq	.L103
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 544              		.loc 1 208 0 discriminator 161
+ 545 0284 02F58062 		add	r2, r2, #1024
+ 546 0288 9342     		cmp	r3, r2
+ 547 028a 25D0     		beq	.L104
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 548              		.loc 1 208 0 discriminator 163
+ 549 028c A2F56872 		sub	r2, r2, #928
+ 550 0290 9342     		cmp	r3, r2
+ 551 0292 24D0     		beq	.L105
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 552              		.loc 1 208 0 discriminator 165
+ 553 0294 02F58062 		add	r2, r2, #1024
+ 554 0298 9342     		cmp	r3, r2
+ 555 029a 23D0     		beq	.L106
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 556              		.loc 1 208 0 discriminator 167
+ 557 029c A2F58962 		sub	r2, r2, #1096
+ 558 02a0 9342     		cmp	r3, r2
+ 559 02a2 22D0     		beq	.L107
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 560              		.loc 1 208 0 discriminator 169
+ 561 02a4 02F58062 		add	r2, r2, #1024
+ 562 02a8 9342     		cmp	r3, r2
+ 563 02aa 21D0     		beq	.L108
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 564              		.loc 1 208 0 discriminator 171
+ 565 02ac A2F56872 		sub	r2, r2, #928
+ 566 02b0 9342     		cmp	r3, r2
+ 567 02b2 20D0     		beq	.L109
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 568              		.loc 1 208 0 discriminator 173
+ 569 02b4 02F58062 		add	r2, r2, #1024
+ 570 02b8 9342     		cmp	r3, r2
+ 571 02ba 2BD1     		bne	.L110
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 572              		.loc 1 208 0
+ 573 02bc 4FF40013 		mov	r3, #2097152
+ 574 02c0 2AE0     		b	.L23
+ 575              	.L99:
+ 576 02c2 2023     		movs	r3, #32
+ 577 02c4 28E0     		b	.L23
+ARM GAS  /tmp/ccpQRZUW.s 			page 18
+
+
+ 578              	.L100:
+ 579 02c6 2023     		movs	r3, #32
+ 580 02c8 26E0     		b	.L23
+ 581              	.L101:
+ 582 02ca 2023     		movs	r3, #32
+ 583 02cc 24E0     		b	.L23
+ 584              	.L102:
+ 585 02ce 2023     		movs	r3, #32
+ 586 02d0 22E0     		b	.L23
+ 587              	.L103:
+ 588 02d2 4FF40063 		mov	r3, #2048
+ 589 02d6 1FE0     		b	.L23
+ 590              	.L104:
+ 591 02d8 4FF40063 		mov	r3, #2048
+ 592 02dc 1CE0     		b	.L23
+ 593              	.L105:
+ 594 02de 4FF40063 		mov	r3, #2048
+ 595 02e2 19E0     		b	.L23
+ 596              	.L106:
+ 597 02e4 4FF40063 		mov	r3, #2048
+ 598 02e8 16E0     		b	.L23
+ 599              	.L107:
+ 600 02ea 4FF40013 		mov	r3, #2097152
+ 601 02ee 13E0     		b	.L23
+ 602              	.L108:
+ 603 02f0 4FF40013 		mov	r3, #2097152
+ 604 02f4 10E0     		b	.L23
+ 605              	.L109:
+ 606 02f6 4FF40013 		mov	r3, #2097152
+ 607 02fa 0DE0     		b	.L23
+ 608              	.L305:
+ 609              		.align	2
+ 610              	.L304:
+ 611 02fc 58640240 		.word	1073898584
+ 612 0300 00640240 		.word	1073898496
+ 613 0304 B8600240 		.word	1073897656
+ 614 0308 58600240 		.word	1073897560
+ 615 030c 00600240 		.word	1073897472
+ 616 0310 10600240 		.word	1073897488
+ 617              	.L110:
+ 618 0314 4FF00063 		mov	r3, #134217728
+ 619              	.L23:
+ 208:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 620              		.loc 1 208 0 discriminator 200
+ 621 0318 AB4A     		ldr	r2, .L306
+ 622 031a 9360     		str	r3, [r2, #8]
+ 623              	.L17:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 624              		.loc 1 209 0 is_stmt 1
+ 625 031c 2368     		ldr	r3, [r4]
+ 626 031e AB4A     		ldr	r2, .L306+4
+ 627 0320 9342     		cmp	r3, r2
+ 628 0322 54D9     		bls	.L24
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 629              		.loc 1 209 0 is_stmt 0 discriminator 1
+ 630 0324 A2F58962 		sub	r2, r2, #1096
+ 631 0328 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccpQRZUW.s 			page 19
+
+
+ 632 032a 2ED0     		beq	.L111
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 633              		.loc 1 209 0 discriminator 3
+ 634 032c 02F58062 		add	r2, r2, #1024
+ 635 0330 9342     		cmp	r3, r2
+ 636 0332 2CD0     		beq	.L112
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 637              		.loc 1 209 0 discriminator 5
+ 638 0334 A2F56872 		sub	r2, r2, #928
+ 639 0338 9342     		cmp	r3, r2
+ 640 033a 2AD0     		beq	.L113
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 641              		.loc 1 209 0 discriminator 7
+ 642 033c 02F58062 		add	r2, r2, #1024
+ 643 0340 9342     		cmp	r3, r2
+ 644 0342 28D0     		beq	.L114
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 645              		.loc 1 209 0 discriminator 9
+ 646 0344 A2F58962 		sub	r2, r2, #1096
+ 647 0348 9342     		cmp	r3, r2
+ 648 034a 26D0     		beq	.L115
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 649              		.loc 1 209 0 discriminator 11
+ 650 034c 02F58062 		add	r2, r2, #1024
+ 651 0350 9342     		cmp	r3, r2
+ 652 0352 25D0     		beq	.L116
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 653              		.loc 1 209 0 discriminator 13
+ 654 0354 A2F56872 		sub	r2, r2, #928
+ 655 0358 9342     		cmp	r3, r2
+ 656 035a 24D0     		beq	.L117
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 657              		.loc 1 209 0 discriminator 15
+ 658 035c 02F58062 		add	r2, r2, #1024
+ 659 0360 9342     		cmp	r3, r2
+ 660 0362 23D0     		beq	.L118
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 661              		.loc 1 209 0 discriminator 17
+ 662 0364 A2F58962 		sub	r2, r2, #1096
+ 663 0368 9342     		cmp	r3, r2
+ 664 036a 22D0     		beq	.L119
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 665              		.loc 1 209 0 discriminator 19
+ 666 036c 02F58062 		add	r2, r2, #1024
+ 667 0370 9342     		cmp	r3, r2
+ 668 0372 21D0     		beq	.L120
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 669              		.loc 1 209 0 discriminator 21
+ 670 0374 A2F56872 		sub	r2, r2, #928
+ 671 0378 9342     		cmp	r3, r2
+ 672 037a 20D0     		beq	.L121
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 673              		.loc 1 209 0 discriminator 23
+ 674 037c 02F58062 		add	r2, r2, #1024
+ 675 0380 9342     		cmp	r3, r2
+ 676 0382 1FD1     		bne	.L122
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ARM GAS  /tmp/ccpQRZUW.s 			page 20
+
+
+ 677              		.loc 1 209 0
+ 678 0384 4FF48013 		mov	r3, #1048576
+ 679 0388 1EE0     		b	.L25
+ 680              	.L111:
+ 681 038a 1023     		movs	r3, #16
+ 682 038c 1CE0     		b	.L25
+ 683              	.L112:
+ 684 038e 1023     		movs	r3, #16
+ 685 0390 1AE0     		b	.L25
+ 686              	.L113:
+ 687 0392 1023     		movs	r3, #16
+ 688 0394 18E0     		b	.L25
+ 689              	.L114:
+ 690 0396 1023     		movs	r3, #16
+ 691 0398 16E0     		b	.L25
+ 692              	.L115:
+ 693 039a 4FF48063 		mov	r3, #1024
+ 694 039e 13E0     		b	.L25
+ 695              	.L116:
+ 696 03a0 4FF48063 		mov	r3, #1024
+ 697 03a4 10E0     		b	.L25
+ 698              	.L117:
+ 699 03a6 4FF48063 		mov	r3, #1024
+ 700 03aa 0DE0     		b	.L25
+ 701              	.L118:
+ 702 03ac 4FF48063 		mov	r3, #1024
+ 703 03b0 0AE0     		b	.L25
+ 704              	.L119:
+ 705 03b2 4FF48013 		mov	r3, #1048576
+ 706 03b6 07E0     		b	.L25
+ 707              	.L120:
+ 708 03b8 4FF48013 		mov	r3, #1048576
+ 709 03bc 04E0     		b	.L25
+ 710              	.L121:
+ 711 03be 4FF48013 		mov	r3, #1048576
+ 712 03c2 01E0     		b	.L25
+ 713              	.L122:
+ 714 03c4 4FF08063 		mov	r3, #67108864
+ 715              	.L25:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 716              		.loc 1 209 0 discriminator 50
+ 717 03c8 814A     		ldr	r2, .L306+8
+ 718 03ca D360     		str	r3, [r2, #12]
+ 719 03cc 0CE1     		b	.L26
+ 720              	.L24:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 721              		.loc 1 209 0 discriminator 2
+ 722 03ce 814A     		ldr	r2, .L306+12
+ 723 03d0 9342     		cmp	r3, r2
+ 724 03d2 53D9     		bls	.L27
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 725              		.loc 1 209 0 discriminator 51
+ 726 03d4 A83A     		subs	r2, r2, #168
+ 727 03d6 9342     		cmp	r3, r2
+ 728 03d8 2ED0     		beq	.L123
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 729              		.loc 1 209 0 discriminator 53
+ARM GAS  /tmp/ccpQRZUW.s 			page 21
+
+
+ 730 03da 02F58062 		add	r2, r2, #1024
+ 731 03de 9342     		cmp	r3, r2
+ 732 03e0 2CD0     		beq	.L124
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 733              		.loc 1 209 0 discriminator 55
+ 734 03e2 A2F56872 		sub	r2, r2, #928
+ 735 03e6 9342     		cmp	r3, r2
+ 736 03e8 2AD0     		beq	.L125
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 737              		.loc 1 209 0 discriminator 57
+ 738 03ea 02F58062 		add	r2, r2, #1024
+ 739 03ee 9342     		cmp	r3, r2
+ 740 03f0 28D0     		beq	.L126
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 741              		.loc 1 209 0 discriminator 59
+ 742 03f2 A2F58962 		sub	r2, r2, #1096
+ 743 03f6 9342     		cmp	r3, r2
+ 744 03f8 26D0     		beq	.L127
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 745              		.loc 1 209 0 discriminator 61
+ 746 03fa 02F58062 		add	r2, r2, #1024
+ 747 03fe 9342     		cmp	r3, r2
+ 748 0400 25D0     		beq	.L128
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 749              		.loc 1 209 0 discriminator 63
+ 750 0402 A2F56872 		sub	r2, r2, #928
+ 751 0406 9342     		cmp	r3, r2
+ 752 0408 24D0     		beq	.L129
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 753              		.loc 1 209 0 discriminator 65
+ 754 040a 02F58062 		add	r2, r2, #1024
+ 755 040e 9342     		cmp	r3, r2
+ 756 0410 23D0     		beq	.L130
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 757              		.loc 1 209 0 discriminator 67
+ 758 0412 A2F58962 		sub	r2, r2, #1096
+ 759 0416 9342     		cmp	r3, r2
+ 760 0418 22D0     		beq	.L131
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 761              		.loc 1 209 0 discriminator 69
+ 762 041a 02F58062 		add	r2, r2, #1024
+ 763 041e 9342     		cmp	r3, r2
+ 764 0420 21D0     		beq	.L132
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 765              		.loc 1 209 0 discriminator 71
+ 766 0422 A2F56872 		sub	r2, r2, #928
+ 767 0426 9342     		cmp	r3, r2
+ 768 0428 20D0     		beq	.L133
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 769              		.loc 1 209 0 discriminator 73
+ 770 042a 02F58062 		add	r2, r2, #1024
+ 771 042e 9342     		cmp	r3, r2
+ 772 0430 1FD1     		bne	.L134
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 773              		.loc 1 209 0
+ 774 0432 4FF48013 		mov	r3, #1048576
+ 775 0436 1EE0     		b	.L28
+ARM GAS  /tmp/ccpQRZUW.s 			page 22
+
+
+ 776              	.L123:
+ 777 0438 1023     		movs	r3, #16
+ 778 043a 1CE0     		b	.L28
+ 779              	.L124:
+ 780 043c 1023     		movs	r3, #16
+ 781 043e 1AE0     		b	.L28
+ 782              	.L125:
+ 783 0440 1023     		movs	r3, #16
+ 784 0442 18E0     		b	.L28
+ 785              	.L126:
+ 786 0444 1023     		movs	r3, #16
+ 787 0446 16E0     		b	.L28
+ 788              	.L127:
+ 789 0448 4FF48063 		mov	r3, #1024
+ 790 044c 13E0     		b	.L28
+ 791              	.L128:
+ 792 044e 4FF48063 		mov	r3, #1024
+ 793 0452 10E0     		b	.L28
+ 794              	.L129:
+ 795 0454 4FF48063 		mov	r3, #1024
+ 796 0458 0DE0     		b	.L28
+ 797              	.L130:
+ 798 045a 4FF48063 		mov	r3, #1024
+ 799 045e 0AE0     		b	.L28
+ 800              	.L131:
+ 801 0460 4FF48013 		mov	r3, #1048576
+ 802 0464 07E0     		b	.L28
+ 803              	.L132:
+ 804 0466 4FF48013 		mov	r3, #1048576
+ 805 046a 04E0     		b	.L28
+ 806              	.L133:
+ 807 046c 4FF48013 		mov	r3, #1048576
+ 808 0470 01E0     		b	.L28
+ 809              	.L134:
+ 810 0472 4FF08063 		mov	r3, #67108864
+ 811              	.L28:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 812              		.loc 1 209 0 discriminator 100
+ 813 0476 564A     		ldr	r2, .L306+8
+ 814 0478 9360     		str	r3, [r2, #8]
+ 815 047a B5E0     		b	.L26
+ 816              	.L27:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 817              		.loc 1 209 0 discriminator 52
+ 818 047c 564A     		ldr	r2, .L306+16
+ 819 047e 9342     		cmp	r3, r2
+ 820 0480 53D9     		bls	.L30
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 821              		.loc 1 209 0 discriminator 102
+ 822 0482 483A     		subs	r2, r2, #72
+ 823 0484 9342     		cmp	r3, r2
+ 824 0486 2ED0     		beq	.L135
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 825              		.loc 1 209 0 discriminator 104
+ 826 0488 02F58062 		add	r2, r2, #1024
+ 827 048c 9342     		cmp	r3, r2
+ 828 048e 2CD0     		beq	.L136
+ARM GAS  /tmp/ccpQRZUW.s 			page 23
+
+
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 829              		.loc 1 209 0 discriminator 106
+ 830 0490 A2F56872 		sub	r2, r2, #928
+ 831 0494 9342     		cmp	r3, r2
+ 832 0496 2AD0     		beq	.L137
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 833              		.loc 1 209 0 discriminator 108
+ 834 0498 02F58062 		add	r2, r2, #1024
+ 835 049c 9342     		cmp	r3, r2
+ 836 049e 28D0     		beq	.L138
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 837              		.loc 1 209 0 discriminator 110
+ 838 04a0 A2F58962 		sub	r2, r2, #1096
+ 839 04a4 9342     		cmp	r3, r2
+ 840 04a6 26D0     		beq	.L139
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 841              		.loc 1 209 0 discriminator 112
+ 842 04a8 02F58062 		add	r2, r2, #1024
+ 843 04ac 9342     		cmp	r3, r2
+ 844 04ae 25D0     		beq	.L140
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 845              		.loc 1 209 0 discriminator 114
+ 846 04b0 A2F56872 		sub	r2, r2, #928
+ 847 04b4 9342     		cmp	r3, r2
+ 848 04b6 24D0     		beq	.L141
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 849              		.loc 1 209 0 discriminator 116
+ 850 04b8 02F58062 		add	r2, r2, #1024
+ 851 04bc 9342     		cmp	r3, r2
+ 852 04be 23D0     		beq	.L142
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 853              		.loc 1 209 0 discriminator 118
+ 854 04c0 A2F58962 		sub	r2, r2, #1096
+ 855 04c4 9342     		cmp	r3, r2
+ 856 04c6 22D0     		beq	.L143
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 857              		.loc 1 209 0 discriminator 120
+ 858 04c8 02F58062 		add	r2, r2, #1024
+ 859 04cc 9342     		cmp	r3, r2
+ 860 04ce 21D0     		beq	.L144
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 861              		.loc 1 209 0 discriminator 122
+ 862 04d0 A2F56872 		sub	r2, r2, #928
+ 863 04d4 9342     		cmp	r3, r2
+ 864 04d6 20D0     		beq	.L145
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 865              		.loc 1 209 0 discriminator 124
+ 866 04d8 02F58062 		add	r2, r2, #1024
+ 867 04dc 9342     		cmp	r3, r2
+ 868 04de 1FD1     		bne	.L146
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 869              		.loc 1 209 0
+ 870 04e0 4FF48013 		mov	r3, #1048576
+ 871 04e4 1EE0     		b	.L31
+ 872              	.L135:
+ 873 04e6 1023     		movs	r3, #16
+ 874 04e8 1CE0     		b	.L31
+ARM GAS  /tmp/ccpQRZUW.s 			page 24
+
+
+ 875              	.L136:
+ 876 04ea 1023     		movs	r3, #16
+ 877 04ec 1AE0     		b	.L31
+ 878              	.L137:
+ 879 04ee 1023     		movs	r3, #16
+ 880 04f0 18E0     		b	.L31
+ 881              	.L138:
+ 882 04f2 1023     		movs	r3, #16
+ 883 04f4 16E0     		b	.L31
+ 884              	.L139:
+ 885 04f6 4FF48063 		mov	r3, #1024
+ 886 04fa 13E0     		b	.L31
+ 887              	.L140:
+ 888 04fc 4FF48063 		mov	r3, #1024
+ 889 0500 10E0     		b	.L31
+ 890              	.L141:
+ 891 0502 4FF48063 		mov	r3, #1024
+ 892 0506 0DE0     		b	.L31
+ 893              	.L142:
+ 894 0508 4FF48063 		mov	r3, #1024
+ 895 050c 0AE0     		b	.L31
+ 896              	.L143:
+ 897 050e 4FF48013 		mov	r3, #1048576
+ 898 0512 07E0     		b	.L31
+ 899              	.L144:
+ 900 0514 4FF48013 		mov	r3, #1048576
+ 901 0518 04E0     		b	.L31
+ 902              	.L145:
+ 903 051a 4FF48013 		mov	r3, #1048576
+ 904 051e 01E0     		b	.L31
+ 905              	.L146:
+ 906 0520 4FF08063 		mov	r3, #67108864
+ 907              	.L31:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 908              		.loc 1 209 0 discriminator 151
+ 909 0524 284A     		ldr	r2, .L306
+ 910 0526 D360     		str	r3, [r2, #12]
+ 911 0528 5EE0     		b	.L26
+ 912              	.L30:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 913              		.loc 1 209 0 discriminator 103
+ 914 052a 2C4A     		ldr	r2, .L306+20
+ 915 052c 9342     		cmp	r3, r2
+ 916 052e 2ED0     		beq	.L147
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 917              		.loc 1 209 0 discriminator 153
+ 918 0530 02F58062 		add	r2, r2, #1024
+ 919 0534 9342     		cmp	r3, r2
+ 920 0536 2CD0     		beq	.L148
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 921              		.loc 1 209 0 discriminator 155
+ 922 0538 A2F56872 		sub	r2, r2, #928
+ 923 053c 9342     		cmp	r3, r2
+ 924 053e 2AD0     		beq	.L149
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 925              		.loc 1 209 0 discriminator 157
+ 926 0540 02F58062 		add	r2, r2, #1024
+ARM GAS  /tmp/ccpQRZUW.s 			page 25
+
+
+ 927 0544 9342     		cmp	r3, r2
+ 928 0546 28D0     		beq	.L150
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 929              		.loc 1 209 0 discriminator 159
+ 930 0548 A2F58962 		sub	r2, r2, #1096
+ 931 054c 9342     		cmp	r3, r2
+ 932 054e 26D0     		beq	.L151
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 933              		.loc 1 209 0 discriminator 161
+ 934 0550 02F58062 		add	r2, r2, #1024
+ 935 0554 9342     		cmp	r3, r2
+ 936 0556 25D0     		beq	.L152
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 937              		.loc 1 209 0 discriminator 163
+ 938 0558 A2F56872 		sub	r2, r2, #928
+ 939 055c 9342     		cmp	r3, r2
+ 940 055e 24D0     		beq	.L153
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 941              		.loc 1 209 0 discriminator 165
+ 942 0560 02F58062 		add	r2, r2, #1024
+ 943 0564 9342     		cmp	r3, r2
+ 944 0566 23D0     		beq	.L154
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 945              		.loc 1 209 0 discriminator 167
+ 946 0568 A2F58962 		sub	r2, r2, #1096
+ 947 056c 9342     		cmp	r3, r2
+ 948 056e 22D0     		beq	.L155
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 949              		.loc 1 209 0 discriminator 169
+ 950 0570 02F58062 		add	r2, r2, #1024
+ 951 0574 9342     		cmp	r3, r2
+ 952 0576 21D0     		beq	.L156
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 953              		.loc 1 209 0 discriminator 171
+ 954 0578 A2F56872 		sub	r2, r2, #928
+ 955 057c 9342     		cmp	r3, r2
+ 956 057e 20D0     		beq	.L157
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 957              		.loc 1 209 0 discriminator 173
+ 958 0580 02F58062 		add	r2, r2, #1024
+ 959 0584 9342     		cmp	r3, r2
+ 960 0586 2BD1     		bne	.L158
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 961              		.loc 1 209 0
+ 962 0588 4FF48013 		mov	r3, #1048576
+ 963 058c 2AE0     		b	.L32
+ 964              	.L147:
+ 965 058e 1023     		movs	r3, #16
+ 966 0590 28E0     		b	.L32
+ 967              	.L148:
+ 968 0592 1023     		movs	r3, #16
+ 969 0594 26E0     		b	.L32
+ 970              	.L149:
+ 971 0596 1023     		movs	r3, #16
+ 972 0598 24E0     		b	.L32
+ 973              	.L150:
+ 974 059a 1023     		movs	r3, #16
+ARM GAS  /tmp/ccpQRZUW.s 			page 26
+
+
+ 975 059c 22E0     		b	.L32
+ 976              	.L151:
+ 977 059e 4FF48063 		mov	r3, #1024
+ 978 05a2 1FE0     		b	.L32
+ 979              	.L152:
+ 980 05a4 4FF48063 		mov	r3, #1024
+ 981 05a8 1CE0     		b	.L32
+ 982              	.L153:
+ 983 05aa 4FF48063 		mov	r3, #1024
+ 984 05ae 19E0     		b	.L32
+ 985              	.L154:
+ 986 05b0 4FF48063 		mov	r3, #1024
+ 987 05b4 16E0     		b	.L32
+ 988              	.L155:
+ 989 05b6 4FF48013 		mov	r3, #1048576
+ 990 05ba 13E0     		b	.L32
+ 991              	.L156:
+ 992 05bc 4FF48013 		mov	r3, #1048576
+ 993 05c0 10E0     		b	.L32
+ 994              	.L157:
+ 995 05c2 4FF48013 		mov	r3, #1048576
+ 996 05c6 0DE0     		b	.L32
+ 997              	.L307:
+ 998              		.align	2
+ 999              	.L306:
+ 1000 05c8 00600240 		.word	1073897472
+ 1001 05cc 58640240 		.word	1073898584
+ 1002 05d0 00640240 		.word	1073898496
+ 1003 05d4 B8600240 		.word	1073897656
+ 1004 05d8 58600240 		.word	1073897560
+ 1005 05dc 10600240 		.word	1073897488
+ 1006              	.L158:
+ 1007 05e0 4FF08063 		mov	r3, #67108864
+ 1008              	.L32:
+ 209:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 1009              		.loc 1 209 0 discriminator 200
+ 1010 05e4 AB4A     		ldr	r2, .L308
+ 1011 05e6 9360     		str	r3, [r2, #8]
+ 1012              	.L26:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1013              		.loc 1 210 0 is_stmt 1
+ 1014 05e8 2368     		ldr	r3, [r4]
+ 1015 05ea AB4A     		ldr	r2, .L308+4
+ 1016 05ec 9342     		cmp	r3, r2
+ 1017 05ee 54D9     		bls	.L33
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1018              		.loc 1 210 0 is_stmt 0 discriminator 1
+ 1019 05f0 A2F58962 		sub	r2, r2, #1096
+ 1020 05f4 9342     		cmp	r3, r2
+ 1021 05f6 2ED0     		beq	.L159
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1022              		.loc 1 210 0 discriminator 3
+ 1023 05f8 02F58062 		add	r2, r2, #1024
+ 1024 05fc 9342     		cmp	r3, r2
+ 1025 05fe 2CD0     		beq	.L160
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1026              		.loc 1 210 0 discriminator 5
+ARM GAS  /tmp/ccpQRZUW.s 			page 27
+
+
+ 1027 0600 A2F56872 		sub	r2, r2, #928
+ 1028 0604 9342     		cmp	r3, r2
+ 1029 0606 2AD0     		beq	.L161
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1030              		.loc 1 210 0 discriminator 7
+ 1031 0608 02F58062 		add	r2, r2, #1024
+ 1032 060c 9342     		cmp	r3, r2
+ 1033 060e 28D0     		beq	.L162
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1034              		.loc 1 210 0 discriminator 9
+ 1035 0610 A2F58962 		sub	r2, r2, #1096
+ 1036 0614 9342     		cmp	r3, r2
+ 1037 0616 26D0     		beq	.L163
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1038              		.loc 1 210 0 discriminator 11
+ 1039 0618 02F58062 		add	r2, r2, #1024
+ 1040 061c 9342     		cmp	r3, r2
+ 1041 061e 25D0     		beq	.L164
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1042              		.loc 1 210 0 discriminator 13
+ 1043 0620 A2F56872 		sub	r2, r2, #928
+ 1044 0624 9342     		cmp	r3, r2
+ 1045 0626 24D0     		beq	.L165
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1046              		.loc 1 210 0 discriminator 15
+ 1047 0628 02F58062 		add	r2, r2, #1024
+ 1048 062c 9342     		cmp	r3, r2
+ 1049 062e 23D0     		beq	.L166
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1050              		.loc 1 210 0 discriminator 17
+ 1051 0630 A2F58962 		sub	r2, r2, #1096
+ 1052 0634 9342     		cmp	r3, r2
+ 1053 0636 22D0     		beq	.L167
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1054              		.loc 1 210 0 discriminator 19
+ 1055 0638 02F58062 		add	r2, r2, #1024
+ 1056 063c 9342     		cmp	r3, r2
+ 1057 063e 21D0     		beq	.L168
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1058              		.loc 1 210 0 discriminator 21
+ 1059 0640 A2F56872 		sub	r2, r2, #928
+ 1060 0644 9342     		cmp	r3, r2
+ 1061 0646 20D0     		beq	.L169
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1062              		.loc 1 210 0 discriminator 23
+ 1063 0648 02F58062 		add	r2, r2, #1024
+ 1064 064c 9342     		cmp	r3, r2
+ 1065 064e 1FD1     		bne	.L170
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1066              		.loc 1 210 0
+ 1067 0650 4FF40023 		mov	r3, #524288
+ 1068 0654 1EE0     		b	.L34
+ 1069              	.L159:
+ 1070 0656 0823     		movs	r3, #8
+ 1071 0658 1CE0     		b	.L34
+ 1072              	.L160:
+ 1073 065a 0823     		movs	r3, #8
+ARM GAS  /tmp/ccpQRZUW.s 			page 28
+
+
+ 1074 065c 1AE0     		b	.L34
+ 1075              	.L161:
+ 1076 065e 0823     		movs	r3, #8
+ 1077 0660 18E0     		b	.L34
+ 1078              	.L162:
+ 1079 0662 0823     		movs	r3, #8
+ 1080 0664 16E0     		b	.L34
+ 1081              	.L163:
+ 1082 0666 4FF40073 		mov	r3, #512
+ 1083 066a 13E0     		b	.L34
+ 1084              	.L164:
+ 1085 066c 4FF40073 		mov	r3, #512
+ 1086 0670 10E0     		b	.L34
+ 1087              	.L165:
+ 1088 0672 4FF40073 		mov	r3, #512
+ 1089 0676 0DE0     		b	.L34
+ 1090              	.L166:
+ 1091 0678 4FF40073 		mov	r3, #512
+ 1092 067c 0AE0     		b	.L34
+ 1093              	.L167:
+ 1094 067e 4FF40023 		mov	r3, #524288
+ 1095 0682 07E0     		b	.L34
+ 1096              	.L168:
+ 1097 0684 4FF40023 		mov	r3, #524288
+ 1098 0688 04E0     		b	.L34
+ 1099              	.L169:
+ 1100 068a 4FF40023 		mov	r3, #524288
+ 1101 068e 01E0     		b	.L34
+ 1102              	.L170:
+ 1103 0690 4FF00073 		mov	r3, #33554432
+ 1104              	.L34:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1105              		.loc 1 210 0 discriminator 50
+ 1106 0694 814A     		ldr	r2, .L308+8
+ 1107 0696 D360     		str	r3, [r2, #12]
+ 1108 0698 0CE1     		b	.L35
+ 1109              	.L33:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1110              		.loc 1 210 0 discriminator 2
+ 1111 069a 814A     		ldr	r2, .L308+12
+ 1112 069c 9342     		cmp	r3, r2
+ 1113 069e 53D9     		bls	.L36
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1114              		.loc 1 210 0 discriminator 51
+ 1115 06a0 A83A     		subs	r2, r2, #168
+ 1116 06a2 9342     		cmp	r3, r2
+ 1117 06a4 2ED0     		beq	.L171
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1118              		.loc 1 210 0 discriminator 53
+ 1119 06a6 02F58062 		add	r2, r2, #1024
+ 1120 06aa 9342     		cmp	r3, r2
+ 1121 06ac 2CD0     		beq	.L172
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1122              		.loc 1 210 0 discriminator 55
+ 1123 06ae A2F56872 		sub	r2, r2, #928
+ 1124 06b2 9342     		cmp	r3, r2
+ 1125 06b4 2AD0     		beq	.L173
+ARM GAS  /tmp/ccpQRZUW.s 			page 29
+
+
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1126              		.loc 1 210 0 discriminator 57
+ 1127 06b6 02F58062 		add	r2, r2, #1024
+ 1128 06ba 9342     		cmp	r3, r2
+ 1129 06bc 28D0     		beq	.L174
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1130              		.loc 1 210 0 discriminator 59
+ 1131 06be A2F58962 		sub	r2, r2, #1096
+ 1132 06c2 9342     		cmp	r3, r2
+ 1133 06c4 26D0     		beq	.L175
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1134              		.loc 1 210 0 discriminator 61
+ 1135 06c6 02F58062 		add	r2, r2, #1024
+ 1136 06ca 9342     		cmp	r3, r2
+ 1137 06cc 25D0     		beq	.L176
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1138              		.loc 1 210 0 discriminator 63
+ 1139 06ce A2F56872 		sub	r2, r2, #928
+ 1140 06d2 9342     		cmp	r3, r2
+ 1141 06d4 24D0     		beq	.L177
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1142              		.loc 1 210 0 discriminator 65
+ 1143 06d6 02F58062 		add	r2, r2, #1024
+ 1144 06da 9342     		cmp	r3, r2
+ 1145 06dc 23D0     		beq	.L178
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1146              		.loc 1 210 0 discriminator 67
+ 1147 06de A2F58962 		sub	r2, r2, #1096
+ 1148 06e2 9342     		cmp	r3, r2
+ 1149 06e4 22D0     		beq	.L179
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1150              		.loc 1 210 0 discriminator 69
+ 1151 06e6 02F58062 		add	r2, r2, #1024
+ 1152 06ea 9342     		cmp	r3, r2
+ 1153 06ec 21D0     		beq	.L180
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1154              		.loc 1 210 0 discriminator 71
+ 1155 06ee A2F56872 		sub	r2, r2, #928
+ 1156 06f2 9342     		cmp	r3, r2
+ 1157 06f4 20D0     		beq	.L181
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1158              		.loc 1 210 0 discriminator 73
+ 1159 06f6 02F58062 		add	r2, r2, #1024
+ 1160 06fa 9342     		cmp	r3, r2
+ 1161 06fc 1FD1     		bne	.L182
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1162              		.loc 1 210 0
+ 1163 06fe 4FF40023 		mov	r3, #524288
+ 1164 0702 1EE0     		b	.L37
+ 1165              	.L171:
+ 1166 0704 0823     		movs	r3, #8
+ 1167 0706 1CE0     		b	.L37
+ 1168              	.L172:
+ 1169 0708 0823     		movs	r3, #8
+ 1170 070a 1AE0     		b	.L37
+ 1171              	.L173:
+ 1172 070c 0823     		movs	r3, #8
+ARM GAS  /tmp/ccpQRZUW.s 			page 30
+
+
+ 1173 070e 18E0     		b	.L37
+ 1174              	.L174:
+ 1175 0710 0823     		movs	r3, #8
+ 1176 0712 16E0     		b	.L37
+ 1177              	.L175:
+ 1178 0714 4FF40073 		mov	r3, #512
+ 1179 0718 13E0     		b	.L37
+ 1180              	.L176:
+ 1181 071a 4FF40073 		mov	r3, #512
+ 1182 071e 10E0     		b	.L37
+ 1183              	.L177:
+ 1184 0720 4FF40073 		mov	r3, #512
+ 1185 0724 0DE0     		b	.L37
+ 1186              	.L178:
+ 1187 0726 4FF40073 		mov	r3, #512
+ 1188 072a 0AE0     		b	.L37
+ 1189              	.L179:
+ 1190 072c 4FF40023 		mov	r3, #524288
+ 1191 0730 07E0     		b	.L37
+ 1192              	.L180:
+ 1193 0732 4FF40023 		mov	r3, #524288
+ 1194 0736 04E0     		b	.L37
+ 1195              	.L181:
+ 1196 0738 4FF40023 		mov	r3, #524288
+ 1197 073c 01E0     		b	.L37
+ 1198              	.L182:
+ 1199 073e 4FF00073 		mov	r3, #33554432
+ 1200              	.L37:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1201              		.loc 1 210 0 discriminator 100
+ 1202 0742 564A     		ldr	r2, .L308+8
+ 1203 0744 9360     		str	r3, [r2, #8]
+ 1204 0746 B5E0     		b	.L35
+ 1205              	.L36:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1206              		.loc 1 210 0 discriminator 52
+ 1207 0748 564A     		ldr	r2, .L308+16
+ 1208 074a 9342     		cmp	r3, r2
+ 1209 074c 53D9     		bls	.L39
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1210              		.loc 1 210 0 discriminator 102
+ 1211 074e 483A     		subs	r2, r2, #72
+ 1212 0750 9342     		cmp	r3, r2
+ 1213 0752 2ED0     		beq	.L183
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1214              		.loc 1 210 0 discriminator 104
+ 1215 0754 02F58062 		add	r2, r2, #1024
+ 1216 0758 9342     		cmp	r3, r2
+ 1217 075a 2CD0     		beq	.L184
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1218              		.loc 1 210 0 discriminator 106
+ 1219 075c A2F56872 		sub	r2, r2, #928
+ 1220 0760 9342     		cmp	r3, r2
+ 1221 0762 2AD0     		beq	.L185
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1222              		.loc 1 210 0 discriminator 108
+ 1223 0764 02F58062 		add	r2, r2, #1024
+ARM GAS  /tmp/ccpQRZUW.s 			page 31
+
+
+ 1224 0768 9342     		cmp	r3, r2
+ 1225 076a 28D0     		beq	.L186
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1226              		.loc 1 210 0 discriminator 110
+ 1227 076c A2F58962 		sub	r2, r2, #1096
+ 1228 0770 9342     		cmp	r3, r2
+ 1229 0772 26D0     		beq	.L187
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1230              		.loc 1 210 0 discriminator 112
+ 1231 0774 02F58062 		add	r2, r2, #1024
+ 1232 0778 9342     		cmp	r3, r2
+ 1233 077a 25D0     		beq	.L188
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1234              		.loc 1 210 0 discriminator 114
+ 1235 077c A2F56872 		sub	r2, r2, #928
+ 1236 0780 9342     		cmp	r3, r2
+ 1237 0782 24D0     		beq	.L189
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1238              		.loc 1 210 0 discriminator 116
+ 1239 0784 02F58062 		add	r2, r2, #1024
+ 1240 0788 9342     		cmp	r3, r2
+ 1241 078a 23D0     		beq	.L190
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1242              		.loc 1 210 0 discriminator 118
+ 1243 078c A2F58962 		sub	r2, r2, #1096
+ 1244 0790 9342     		cmp	r3, r2
+ 1245 0792 22D0     		beq	.L191
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1246              		.loc 1 210 0 discriminator 120
+ 1247 0794 02F58062 		add	r2, r2, #1024
+ 1248 0798 9342     		cmp	r3, r2
+ 1249 079a 21D0     		beq	.L192
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1250              		.loc 1 210 0 discriminator 122
+ 1251 079c A2F56872 		sub	r2, r2, #928
+ 1252 07a0 9342     		cmp	r3, r2
+ 1253 07a2 20D0     		beq	.L193
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1254              		.loc 1 210 0 discriminator 124
+ 1255 07a4 02F58062 		add	r2, r2, #1024
+ 1256 07a8 9342     		cmp	r3, r2
+ 1257 07aa 1FD1     		bne	.L194
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1258              		.loc 1 210 0
+ 1259 07ac 4FF40023 		mov	r3, #524288
+ 1260 07b0 1EE0     		b	.L40
+ 1261              	.L183:
+ 1262 07b2 0823     		movs	r3, #8
+ 1263 07b4 1CE0     		b	.L40
+ 1264              	.L184:
+ 1265 07b6 0823     		movs	r3, #8
+ 1266 07b8 1AE0     		b	.L40
+ 1267              	.L185:
+ 1268 07ba 0823     		movs	r3, #8
+ 1269 07bc 18E0     		b	.L40
+ 1270              	.L186:
+ 1271 07be 0823     		movs	r3, #8
+ARM GAS  /tmp/ccpQRZUW.s 			page 32
+
+
+ 1272 07c0 16E0     		b	.L40
+ 1273              	.L187:
+ 1274 07c2 4FF40073 		mov	r3, #512
+ 1275 07c6 13E0     		b	.L40
+ 1276              	.L188:
+ 1277 07c8 4FF40073 		mov	r3, #512
+ 1278 07cc 10E0     		b	.L40
+ 1279              	.L189:
+ 1280 07ce 4FF40073 		mov	r3, #512
+ 1281 07d2 0DE0     		b	.L40
+ 1282              	.L190:
+ 1283 07d4 4FF40073 		mov	r3, #512
+ 1284 07d8 0AE0     		b	.L40
+ 1285              	.L191:
+ 1286 07da 4FF40023 		mov	r3, #524288
+ 1287 07de 07E0     		b	.L40
+ 1288              	.L192:
+ 1289 07e0 4FF40023 		mov	r3, #524288
+ 1290 07e4 04E0     		b	.L40
+ 1291              	.L193:
+ 1292 07e6 4FF40023 		mov	r3, #524288
+ 1293 07ea 01E0     		b	.L40
+ 1294              	.L194:
+ 1295 07ec 4FF00073 		mov	r3, #33554432
+ 1296              	.L40:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1297              		.loc 1 210 0 discriminator 151
+ 1298 07f0 284A     		ldr	r2, .L308
+ 1299 07f2 D360     		str	r3, [r2, #12]
+ 1300 07f4 5EE0     		b	.L35
+ 1301              	.L39:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1302              		.loc 1 210 0 discriminator 103
+ 1303 07f6 2C4A     		ldr	r2, .L308+20
+ 1304 07f8 9342     		cmp	r3, r2
+ 1305 07fa 2ED0     		beq	.L195
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1306              		.loc 1 210 0 discriminator 153
+ 1307 07fc 02F58062 		add	r2, r2, #1024
+ 1308 0800 9342     		cmp	r3, r2
+ 1309 0802 2CD0     		beq	.L196
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1310              		.loc 1 210 0 discriminator 155
+ 1311 0804 A2F56872 		sub	r2, r2, #928
+ 1312 0808 9342     		cmp	r3, r2
+ 1313 080a 2AD0     		beq	.L197
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1314              		.loc 1 210 0 discriminator 157
+ 1315 080c 02F58062 		add	r2, r2, #1024
+ 1316 0810 9342     		cmp	r3, r2
+ 1317 0812 28D0     		beq	.L198
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1318              		.loc 1 210 0 discriminator 159
+ 1319 0814 A2F58962 		sub	r2, r2, #1096
+ 1320 0818 9342     		cmp	r3, r2
+ 1321 081a 26D0     		beq	.L199
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ARM GAS  /tmp/ccpQRZUW.s 			page 33
+
+
+ 1322              		.loc 1 210 0 discriminator 161
+ 1323 081c 02F58062 		add	r2, r2, #1024
+ 1324 0820 9342     		cmp	r3, r2
+ 1325 0822 25D0     		beq	.L200
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1326              		.loc 1 210 0 discriminator 163
+ 1327 0824 A2F56872 		sub	r2, r2, #928
+ 1328 0828 9342     		cmp	r3, r2
+ 1329 082a 24D0     		beq	.L201
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1330              		.loc 1 210 0 discriminator 165
+ 1331 082c 02F58062 		add	r2, r2, #1024
+ 1332 0830 9342     		cmp	r3, r2
+ 1333 0832 23D0     		beq	.L202
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1334              		.loc 1 210 0 discriminator 167
+ 1335 0834 A2F58962 		sub	r2, r2, #1096
+ 1336 0838 9342     		cmp	r3, r2
+ 1337 083a 22D0     		beq	.L203
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1338              		.loc 1 210 0 discriminator 169
+ 1339 083c 02F58062 		add	r2, r2, #1024
+ 1340 0840 9342     		cmp	r3, r2
+ 1341 0842 21D0     		beq	.L204
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1342              		.loc 1 210 0 discriminator 171
+ 1343 0844 A2F56872 		sub	r2, r2, #928
+ 1344 0848 9342     		cmp	r3, r2
+ 1345 084a 20D0     		beq	.L205
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1346              		.loc 1 210 0 discriminator 173
+ 1347 084c 02F58062 		add	r2, r2, #1024
+ 1348 0850 9342     		cmp	r3, r2
+ 1349 0852 2BD1     		bne	.L206
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1350              		.loc 1 210 0
+ 1351 0854 4FF40023 		mov	r3, #524288
+ 1352 0858 2AE0     		b	.L41
+ 1353              	.L195:
+ 1354 085a 0823     		movs	r3, #8
+ 1355 085c 28E0     		b	.L41
+ 1356              	.L196:
+ 1357 085e 0823     		movs	r3, #8
+ 1358 0860 26E0     		b	.L41
+ 1359              	.L197:
+ 1360 0862 0823     		movs	r3, #8
+ 1361 0864 24E0     		b	.L41
+ 1362              	.L198:
+ 1363 0866 0823     		movs	r3, #8
+ 1364 0868 22E0     		b	.L41
+ 1365              	.L199:
+ 1366 086a 4FF40073 		mov	r3, #512
+ 1367 086e 1FE0     		b	.L41
+ 1368              	.L200:
+ 1369 0870 4FF40073 		mov	r3, #512
+ 1370 0874 1CE0     		b	.L41
+ 1371              	.L201:
+ARM GAS  /tmp/ccpQRZUW.s 			page 34
+
+
+ 1372 0876 4FF40073 		mov	r3, #512
+ 1373 087a 19E0     		b	.L41
+ 1374              	.L202:
+ 1375 087c 4FF40073 		mov	r3, #512
+ 1376 0880 16E0     		b	.L41
+ 1377              	.L203:
+ 1378 0882 4FF40023 		mov	r3, #524288
+ 1379 0886 13E0     		b	.L41
+ 1380              	.L204:
+ 1381 0888 4FF40023 		mov	r3, #524288
+ 1382 088c 10E0     		b	.L41
+ 1383              	.L205:
+ 1384 088e 4FF40023 		mov	r3, #524288
+ 1385 0892 0DE0     		b	.L41
+ 1386              	.L309:
+ 1387              		.align	2
+ 1388              	.L308:
+ 1389 0894 00600240 		.word	1073897472
+ 1390 0898 58640240 		.word	1073898584
+ 1391 089c 00640240 		.word	1073898496
+ 1392 08a0 B8600240 		.word	1073897656
+ 1393 08a4 58600240 		.word	1073897560
+ 1394 08a8 10600240 		.word	1073897488
+ 1395              	.L206:
+ 1396 08ac 4FF00073 		mov	r3, #33554432
+ 1397              	.L41:
+ 210:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1398              		.loc 1 210 0 discriminator 200
+ 1399 08b0 AB4A     		ldr	r2, .L310
+ 1400 08b2 9360     		str	r3, [r2, #8]
+ 1401              	.L35:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1402              		.loc 1 211 0 is_stmt 1
+ 1403 08b4 2368     		ldr	r3, [r4]
+ 1404 08b6 AB4A     		ldr	r2, .L310+4
+ 1405 08b8 9342     		cmp	r3, r2
+ 1406 08ba 54D9     		bls	.L42
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1407              		.loc 1 211 0 is_stmt 0 discriminator 1
+ 1408 08bc A2F58962 		sub	r2, r2, #1096
+ 1409 08c0 9342     		cmp	r3, r2
+ 1410 08c2 2ED0     		beq	.L207
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1411              		.loc 1 211 0 discriminator 3
+ 1412 08c4 02F58062 		add	r2, r2, #1024
+ 1413 08c8 9342     		cmp	r3, r2
+ 1414 08ca 2CD0     		beq	.L208
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1415              		.loc 1 211 0 discriminator 5
+ 1416 08cc A2F56872 		sub	r2, r2, #928
+ 1417 08d0 9342     		cmp	r3, r2
+ 1418 08d2 2AD0     		beq	.L209
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1419              		.loc 1 211 0 discriminator 7
+ 1420 08d4 02F58062 		add	r2, r2, #1024
+ 1421 08d8 9342     		cmp	r3, r2
+ 1422 08da 28D0     		beq	.L210
+ARM GAS  /tmp/ccpQRZUW.s 			page 35
+
+
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1423              		.loc 1 211 0 discriminator 9
+ 1424 08dc A2F58962 		sub	r2, r2, #1096
+ 1425 08e0 9342     		cmp	r3, r2
+ 1426 08e2 26D0     		beq	.L211
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1427              		.loc 1 211 0 discriminator 11
+ 1428 08e4 02F58062 		add	r2, r2, #1024
+ 1429 08e8 9342     		cmp	r3, r2
+ 1430 08ea 25D0     		beq	.L212
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1431              		.loc 1 211 0 discriminator 13
+ 1432 08ec A2F56872 		sub	r2, r2, #928
+ 1433 08f0 9342     		cmp	r3, r2
+ 1434 08f2 24D0     		beq	.L213
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1435              		.loc 1 211 0 discriminator 15
+ 1436 08f4 02F58062 		add	r2, r2, #1024
+ 1437 08f8 9342     		cmp	r3, r2
+ 1438 08fa 23D0     		beq	.L214
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1439              		.loc 1 211 0 discriminator 17
+ 1440 08fc A2F58962 		sub	r2, r2, #1096
+ 1441 0900 9342     		cmp	r3, r2
+ 1442 0902 22D0     		beq	.L215
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1443              		.loc 1 211 0 discriminator 19
+ 1444 0904 02F58062 		add	r2, r2, #1024
+ 1445 0908 9342     		cmp	r3, r2
+ 1446 090a 21D0     		beq	.L216
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1447              		.loc 1 211 0 discriminator 21
+ 1448 090c A2F56872 		sub	r2, r2, #928
+ 1449 0910 9342     		cmp	r3, r2
+ 1450 0912 20D0     		beq	.L217
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1451              		.loc 1 211 0 discriminator 23
+ 1452 0914 02F58062 		add	r2, r2, #1024
+ 1453 0918 9342     		cmp	r3, r2
+ 1454 091a 1FD1     		bne	.L218
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1455              		.loc 1 211 0
+ 1456 091c 4FF48023 		mov	r3, #262144
+ 1457 0920 1EE0     		b	.L43
+ 1458              	.L207:
+ 1459 0922 0423     		movs	r3, #4
+ 1460 0924 1CE0     		b	.L43
+ 1461              	.L208:
+ 1462 0926 0423     		movs	r3, #4
+ 1463 0928 1AE0     		b	.L43
+ 1464              	.L209:
+ 1465 092a 0423     		movs	r3, #4
+ 1466 092c 18E0     		b	.L43
+ 1467              	.L210:
+ 1468 092e 0423     		movs	r3, #4
+ 1469 0930 16E0     		b	.L43
+ 1470              	.L211:
+ARM GAS  /tmp/ccpQRZUW.s 			page 36
+
+
+ 1471 0932 4FF48073 		mov	r3, #256
+ 1472 0936 13E0     		b	.L43
+ 1473              	.L212:
+ 1474 0938 4FF48073 		mov	r3, #256
+ 1475 093c 10E0     		b	.L43
+ 1476              	.L213:
+ 1477 093e 4FF48073 		mov	r3, #256
+ 1478 0942 0DE0     		b	.L43
+ 1479              	.L214:
+ 1480 0944 4FF48073 		mov	r3, #256
+ 1481 0948 0AE0     		b	.L43
+ 1482              	.L215:
+ 1483 094a 4FF48023 		mov	r3, #262144
+ 1484 094e 07E0     		b	.L43
+ 1485              	.L216:
+ 1486 0950 4FF48023 		mov	r3, #262144
+ 1487 0954 04E0     		b	.L43
+ 1488              	.L217:
+ 1489 0956 4FF48023 		mov	r3, #262144
+ 1490 095a 01E0     		b	.L43
+ 1491              	.L218:
+ 1492 095c 4FF08073 		mov	r3, #16777216
+ 1493              	.L43:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1494              		.loc 1 211 0 discriminator 50
+ 1495 0960 814A     		ldr	r2, .L310+8
+ 1496 0962 D360     		str	r3, [r2, #12]
+ 1497 0964 0CE1     		b	.L44
+ 1498              	.L42:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1499              		.loc 1 211 0 discriminator 2
+ 1500 0966 814A     		ldr	r2, .L310+12
+ 1501 0968 9342     		cmp	r3, r2
+ 1502 096a 53D9     		bls	.L45
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1503              		.loc 1 211 0 discriminator 51
+ 1504 096c A83A     		subs	r2, r2, #168
+ 1505 096e 9342     		cmp	r3, r2
+ 1506 0970 2ED0     		beq	.L219
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1507              		.loc 1 211 0 discriminator 53
+ 1508 0972 02F58062 		add	r2, r2, #1024
+ 1509 0976 9342     		cmp	r3, r2
+ 1510 0978 2CD0     		beq	.L220
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1511              		.loc 1 211 0 discriminator 55
+ 1512 097a A2F56872 		sub	r2, r2, #928
+ 1513 097e 9342     		cmp	r3, r2
+ 1514 0980 2AD0     		beq	.L221
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1515              		.loc 1 211 0 discriminator 57
+ 1516 0982 02F58062 		add	r2, r2, #1024
+ 1517 0986 9342     		cmp	r3, r2
+ 1518 0988 28D0     		beq	.L222
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1519              		.loc 1 211 0 discriminator 59
+ 1520 098a A2F58962 		sub	r2, r2, #1096
+ARM GAS  /tmp/ccpQRZUW.s 			page 37
+
+
+ 1521 098e 9342     		cmp	r3, r2
+ 1522 0990 26D0     		beq	.L223
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1523              		.loc 1 211 0 discriminator 61
+ 1524 0992 02F58062 		add	r2, r2, #1024
+ 1525 0996 9342     		cmp	r3, r2
+ 1526 0998 25D0     		beq	.L224
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1527              		.loc 1 211 0 discriminator 63
+ 1528 099a A2F56872 		sub	r2, r2, #928
+ 1529 099e 9342     		cmp	r3, r2
+ 1530 09a0 24D0     		beq	.L225
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1531              		.loc 1 211 0 discriminator 65
+ 1532 09a2 02F58062 		add	r2, r2, #1024
+ 1533 09a6 9342     		cmp	r3, r2
+ 1534 09a8 23D0     		beq	.L226
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1535              		.loc 1 211 0 discriminator 67
+ 1536 09aa A2F58962 		sub	r2, r2, #1096
+ 1537 09ae 9342     		cmp	r3, r2
+ 1538 09b0 22D0     		beq	.L227
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1539              		.loc 1 211 0 discriminator 69
+ 1540 09b2 02F58062 		add	r2, r2, #1024
+ 1541 09b6 9342     		cmp	r3, r2
+ 1542 09b8 21D0     		beq	.L228
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1543              		.loc 1 211 0 discriminator 71
+ 1544 09ba A2F56872 		sub	r2, r2, #928
+ 1545 09be 9342     		cmp	r3, r2
+ 1546 09c0 20D0     		beq	.L229
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1547              		.loc 1 211 0 discriminator 73
+ 1548 09c2 02F58062 		add	r2, r2, #1024
+ 1549 09c6 9342     		cmp	r3, r2
+ 1550 09c8 1FD1     		bne	.L230
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1551              		.loc 1 211 0
+ 1552 09ca 4FF48023 		mov	r3, #262144
+ 1553 09ce 1EE0     		b	.L46
+ 1554              	.L219:
+ 1555 09d0 0423     		movs	r3, #4
+ 1556 09d2 1CE0     		b	.L46
+ 1557              	.L220:
+ 1558 09d4 0423     		movs	r3, #4
+ 1559 09d6 1AE0     		b	.L46
+ 1560              	.L221:
+ 1561 09d8 0423     		movs	r3, #4
+ 1562 09da 18E0     		b	.L46
+ 1563              	.L222:
+ 1564 09dc 0423     		movs	r3, #4
+ 1565 09de 16E0     		b	.L46
+ 1566              	.L223:
+ 1567 09e0 4FF48073 		mov	r3, #256
+ 1568 09e4 13E0     		b	.L46
+ 1569              	.L224:
+ARM GAS  /tmp/ccpQRZUW.s 			page 38
+
+
+ 1570 09e6 4FF48073 		mov	r3, #256
+ 1571 09ea 10E0     		b	.L46
+ 1572              	.L225:
+ 1573 09ec 4FF48073 		mov	r3, #256
+ 1574 09f0 0DE0     		b	.L46
+ 1575              	.L226:
+ 1576 09f2 4FF48073 		mov	r3, #256
+ 1577 09f6 0AE0     		b	.L46
+ 1578              	.L227:
+ 1579 09f8 4FF48023 		mov	r3, #262144
+ 1580 09fc 07E0     		b	.L46
+ 1581              	.L228:
+ 1582 09fe 4FF48023 		mov	r3, #262144
+ 1583 0a02 04E0     		b	.L46
+ 1584              	.L229:
+ 1585 0a04 4FF48023 		mov	r3, #262144
+ 1586 0a08 01E0     		b	.L46
+ 1587              	.L230:
+ 1588 0a0a 4FF08073 		mov	r3, #16777216
+ 1589              	.L46:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1590              		.loc 1 211 0 discriminator 100
+ 1591 0a0e 564A     		ldr	r2, .L310+8
+ 1592 0a10 9360     		str	r3, [r2, #8]
+ 1593 0a12 B5E0     		b	.L44
+ 1594              	.L45:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1595              		.loc 1 211 0 discriminator 52
+ 1596 0a14 564A     		ldr	r2, .L310+16
+ 1597 0a16 9342     		cmp	r3, r2
+ 1598 0a18 53D9     		bls	.L48
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1599              		.loc 1 211 0 discriminator 102
+ 1600 0a1a 483A     		subs	r2, r2, #72
+ 1601 0a1c 9342     		cmp	r3, r2
+ 1602 0a1e 2ED0     		beq	.L231
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1603              		.loc 1 211 0 discriminator 104
+ 1604 0a20 02F58062 		add	r2, r2, #1024
+ 1605 0a24 9342     		cmp	r3, r2
+ 1606 0a26 2CD0     		beq	.L232
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1607              		.loc 1 211 0 discriminator 106
+ 1608 0a28 A2F56872 		sub	r2, r2, #928
+ 1609 0a2c 9342     		cmp	r3, r2
+ 1610 0a2e 2AD0     		beq	.L233
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1611              		.loc 1 211 0 discriminator 108
+ 1612 0a30 02F58062 		add	r2, r2, #1024
+ 1613 0a34 9342     		cmp	r3, r2
+ 1614 0a36 28D0     		beq	.L234
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1615              		.loc 1 211 0 discriminator 110
+ 1616 0a38 A2F58962 		sub	r2, r2, #1096
+ 1617 0a3c 9342     		cmp	r3, r2
+ 1618 0a3e 26D0     		beq	.L235
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ARM GAS  /tmp/ccpQRZUW.s 			page 39
+
+
+ 1619              		.loc 1 211 0 discriminator 112
+ 1620 0a40 02F58062 		add	r2, r2, #1024
+ 1621 0a44 9342     		cmp	r3, r2
+ 1622 0a46 25D0     		beq	.L236
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1623              		.loc 1 211 0 discriminator 114
+ 1624 0a48 A2F56872 		sub	r2, r2, #928
+ 1625 0a4c 9342     		cmp	r3, r2
+ 1626 0a4e 24D0     		beq	.L237
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1627              		.loc 1 211 0 discriminator 116
+ 1628 0a50 02F58062 		add	r2, r2, #1024
+ 1629 0a54 9342     		cmp	r3, r2
+ 1630 0a56 23D0     		beq	.L238
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1631              		.loc 1 211 0 discriminator 118
+ 1632 0a58 A2F58962 		sub	r2, r2, #1096
+ 1633 0a5c 9342     		cmp	r3, r2
+ 1634 0a5e 22D0     		beq	.L239
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1635              		.loc 1 211 0 discriminator 120
+ 1636 0a60 02F58062 		add	r2, r2, #1024
+ 1637 0a64 9342     		cmp	r3, r2
+ 1638 0a66 21D0     		beq	.L240
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1639              		.loc 1 211 0 discriminator 122
+ 1640 0a68 A2F56872 		sub	r2, r2, #928
+ 1641 0a6c 9342     		cmp	r3, r2
+ 1642 0a6e 20D0     		beq	.L241
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1643              		.loc 1 211 0 discriminator 124
+ 1644 0a70 02F58062 		add	r2, r2, #1024
+ 1645 0a74 9342     		cmp	r3, r2
+ 1646 0a76 1FD1     		bne	.L242
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1647              		.loc 1 211 0
+ 1648 0a78 4FF48023 		mov	r3, #262144
+ 1649 0a7c 1EE0     		b	.L49
+ 1650              	.L231:
+ 1651 0a7e 0423     		movs	r3, #4
+ 1652 0a80 1CE0     		b	.L49
+ 1653              	.L232:
+ 1654 0a82 0423     		movs	r3, #4
+ 1655 0a84 1AE0     		b	.L49
+ 1656              	.L233:
+ 1657 0a86 0423     		movs	r3, #4
+ 1658 0a88 18E0     		b	.L49
+ 1659              	.L234:
+ 1660 0a8a 0423     		movs	r3, #4
+ 1661 0a8c 16E0     		b	.L49
+ 1662              	.L235:
+ 1663 0a8e 4FF48073 		mov	r3, #256
+ 1664 0a92 13E0     		b	.L49
+ 1665              	.L236:
+ 1666 0a94 4FF48073 		mov	r3, #256
+ 1667 0a98 10E0     		b	.L49
+ 1668              	.L237:
+ARM GAS  /tmp/ccpQRZUW.s 			page 40
+
+
+ 1669 0a9a 4FF48073 		mov	r3, #256
+ 1670 0a9e 0DE0     		b	.L49
+ 1671              	.L238:
+ 1672 0aa0 4FF48073 		mov	r3, #256
+ 1673 0aa4 0AE0     		b	.L49
+ 1674              	.L239:
+ 1675 0aa6 4FF48023 		mov	r3, #262144
+ 1676 0aaa 07E0     		b	.L49
+ 1677              	.L240:
+ 1678 0aac 4FF48023 		mov	r3, #262144
+ 1679 0ab0 04E0     		b	.L49
+ 1680              	.L241:
+ 1681 0ab2 4FF48023 		mov	r3, #262144
+ 1682 0ab6 01E0     		b	.L49
+ 1683              	.L242:
+ 1684 0ab8 4FF08073 		mov	r3, #16777216
+ 1685              	.L49:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1686              		.loc 1 211 0 discriminator 151
+ 1687 0abc 284A     		ldr	r2, .L310
+ 1688 0abe D360     		str	r3, [r2, #12]
+ 1689 0ac0 5EE0     		b	.L44
+ 1690              	.L48:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1691              		.loc 1 211 0 discriminator 103
+ 1692 0ac2 2C4A     		ldr	r2, .L310+20
+ 1693 0ac4 9342     		cmp	r3, r2
+ 1694 0ac6 2ED0     		beq	.L243
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1695              		.loc 1 211 0 discriminator 153
+ 1696 0ac8 02F58062 		add	r2, r2, #1024
+ 1697 0acc 9342     		cmp	r3, r2
+ 1698 0ace 2CD0     		beq	.L244
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1699              		.loc 1 211 0 discriminator 155
+ 1700 0ad0 A2F56872 		sub	r2, r2, #928
+ 1701 0ad4 9342     		cmp	r3, r2
+ 1702 0ad6 2AD0     		beq	.L245
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1703              		.loc 1 211 0 discriminator 157
+ 1704 0ad8 02F58062 		add	r2, r2, #1024
+ 1705 0adc 9342     		cmp	r3, r2
+ 1706 0ade 28D0     		beq	.L246
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1707              		.loc 1 211 0 discriminator 159
+ 1708 0ae0 A2F58962 		sub	r2, r2, #1096
+ 1709 0ae4 9342     		cmp	r3, r2
+ 1710 0ae6 26D0     		beq	.L247
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1711              		.loc 1 211 0 discriminator 161
+ 1712 0ae8 02F58062 		add	r2, r2, #1024
+ 1713 0aec 9342     		cmp	r3, r2
+ 1714 0aee 25D0     		beq	.L248
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1715              		.loc 1 211 0 discriminator 163
+ 1716 0af0 A2F56872 		sub	r2, r2, #928
+ 1717 0af4 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccpQRZUW.s 			page 41
+
+
+ 1718 0af6 24D0     		beq	.L249
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1719              		.loc 1 211 0 discriminator 165
+ 1720 0af8 02F58062 		add	r2, r2, #1024
+ 1721 0afc 9342     		cmp	r3, r2
+ 1722 0afe 23D0     		beq	.L250
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1723              		.loc 1 211 0 discriminator 167
+ 1724 0b00 A2F58962 		sub	r2, r2, #1096
+ 1725 0b04 9342     		cmp	r3, r2
+ 1726 0b06 22D0     		beq	.L251
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1727              		.loc 1 211 0 discriminator 169
+ 1728 0b08 02F58062 		add	r2, r2, #1024
+ 1729 0b0c 9342     		cmp	r3, r2
+ 1730 0b0e 21D0     		beq	.L252
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1731              		.loc 1 211 0 discriminator 171
+ 1732 0b10 A2F56872 		sub	r2, r2, #928
+ 1733 0b14 9342     		cmp	r3, r2
+ 1734 0b16 20D0     		beq	.L253
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1735              		.loc 1 211 0 discriminator 173
+ 1736 0b18 02F58062 		add	r2, r2, #1024
+ 1737 0b1c 9342     		cmp	r3, r2
+ 1738 0b1e 2BD1     		bne	.L254
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1739              		.loc 1 211 0
+ 1740 0b20 4FF48023 		mov	r3, #262144
+ 1741 0b24 2AE0     		b	.L50
+ 1742              	.L243:
+ 1743 0b26 0423     		movs	r3, #4
+ 1744 0b28 28E0     		b	.L50
+ 1745              	.L244:
+ 1746 0b2a 0423     		movs	r3, #4
+ 1747 0b2c 26E0     		b	.L50
+ 1748              	.L245:
+ 1749 0b2e 0423     		movs	r3, #4
+ 1750 0b30 24E0     		b	.L50
+ 1751              	.L246:
+ 1752 0b32 0423     		movs	r3, #4
+ 1753 0b34 22E0     		b	.L50
+ 1754              	.L247:
+ 1755 0b36 4FF48073 		mov	r3, #256
+ 1756 0b3a 1FE0     		b	.L50
+ 1757              	.L248:
+ 1758 0b3c 4FF48073 		mov	r3, #256
+ 1759 0b40 1CE0     		b	.L50
+ 1760              	.L249:
+ 1761 0b42 4FF48073 		mov	r3, #256
+ 1762 0b46 19E0     		b	.L50
+ 1763              	.L250:
+ 1764 0b48 4FF48073 		mov	r3, #256
+ 1765 0b4c 16E0     		b	.L50
+ 1766              	.L251:
+ 1767 0b4e 4FF48023 		mov	r3, #262144
+ 1768 0b52 13E0     		b	.L50
+ARM GAS  /tmp/ccpQRZUW.s 			page 42
+
+
+ 1769              	.L252:
+ 1770 0b54 4FF48023 		mov	r3, #262144
+ 1771 0b58 10E0     		b	.L50
+ 1772              	.L253:
+ 1773 0b5a 4FF48023 		mov	r3, #262144
+ 1774 0b5e 0DE0     		b	.L50
+ 1775              	.L311:
+ 1776              		.align	2
+ 1777              	.L310:
+ 1778 0b60 00600240 		.word	1073897472
+ 1779 0b64 58640240 		.word	1073898584
+ 1780 0b68 00640240 		.word	1073898496
+ 1781 0b6c B8600240 		.word	1073897656
+ 1782 0b70 58600240 		.word	1073897560
+ 1783 0b74 10600240 		.word	1073897488
+ 1784              	.L254:
+ 1785 0b78 4FF08073 		mov	r3, #16777216
+ 1786              	.L50:
+ 211:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 1787              		.loc 1 211 0 discriminator 200
+ 1788 0b7c B64A     		ldr	r2, .L312
+ 1789 0b7e 9360     		str	r3, [r2, #8]
+ 1790              	.L44:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1791              		.loc 1 212 0 is_stmt 1
+ 1792 0b80 2368     		ldr	r3, [r4]
+ 1793 0b82 B64A     		ldr	r2, .L312+4
+ 1794 0b84 9342     		cmp	r3, r2
+ 1795 0b86 50D9     		bls	.L51
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1796              		.loc 1 212 0 is_stmt 0 discriminator 1
+ 1797 0b88 A2F58962 		sub	r2, r2, #1096
+ 1798 0b8c 9342     		cmp	r3, r2
+ 1799 0b8e 2ED0     		beq	.L255
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1800              		.loc 1 212 0 discriminator 3
+ 1801 0b90 02F58062 		add	r2, r2, #1024
+ 1802 0b94 9342     		cmp	r3, r2
+ 1803 0b96 2CD0     		beq	.L256
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1804              		.loc 1 212 0 discriminator 5
+ 1805 0b98 A2F56872 		sub	r2, r2, #928
+ 1806 0b9c 9342     		cmp	r3, r2
+ 1807 0b9e 2AD0     		beq	.L257
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1808              		.loc 1 212 0 discriminator 7
+ 1809 0ba0 02F58062 		add	r2, r2, #1024
+ 1810 0ba4 9342     		cmp	r3, r2
+ 1811 0ba6 28D0     		beq	.L258
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1812              		.loc 1 212 0 discriminator 9
+ 1813 0ba8 A2F58962 		sub	r2, r2, #1096
+ 1814 0bac 9342     		cmp	r3, r2
+ 1815 0bae 26D0     		beq	.L259
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1816              		.loc 1 212 0 discriminator 11
+ 1817 0bb0 02F58062 		add	r2, r2, #1024
+ARM GAS  /tmp/ccpQRZUW.s 			page 43
+
+
+ 1818 0bb4 9342     		cmp	r3, r2
+ 1819 0bb6 24D0     		beq	.L260
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1820              		.loc 1 212 0 discriminator 13
+ 1821 0bb8 A2F56872 		sub	r2, r2, #928
+ 1822 0bbc 9342     		cmp	r3, r2
+ 1823 0bbe 22D0     		beq	.L261
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1824              		.loc 1 212 0 discriminator 15
+ 1825 0bc0 02F58062 		add	r2, r2, #1024
+ 1826 0bc4 9342     		cmp	r3, r2
+ 1827 0bc6 20D0     		beq	.L262
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1828              		.loc 1 212 0 discriminator 17
+ 1829 0bc8 A2F58962 		sub	r2, r2, #1096
+ 1830 0bcc 9342     		cmp	r3, r2
+ 1831 0bce 1ED0     		beq	.L263
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1832              		.loc 1 212 0 discriminator 19
+ 1833 0bd0 02F58062 		add	r2, r2, #1024
+ 1834 0bd4 9342     		cmp	r3, r2
+ 1835 0bd6 1DD0     		beq	.L264
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1836              		.loc 1 212 0 discriminator 21
+ 1837 0bd8 A2F56872 		sub	r2, r2, #928
+ 1838 0bdc 9342     		cmp	r3, r2
+ 1839 0bde 1CD0     		beq	.L265
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1840              		.loc 1 212 0 discriminator 23
+ 1841 0be0 02F58062 		add	r2, r2, #1024
+ 1842 0be4 9342     		cmp	r3, r2
+ 1843 0be6 1BD1     		bne	.L266
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1844              		.loc 1 212 0
+ 1845 0be8 4FF48033 		mov	r3, #65536
+ 1846 0bec 1AE0     		b	.L52
+ 1847              	.L255:
+ 1848 0bee 0123     		movs	r3, #1
+ 1849 0bf0 18E0     		b	.L52
+ 1850              	.L256:
+ 1851 0bf2 0123     		movs	r3, #1
+ 1852 0bf4 16E0     		b	.L52
+ 1853              	.L257:
+ 1854 0bf6 0123     		movs	r3, #1
+ 1855 0bf8 14E0     		b	.L52
+ 1856              	.L258:
+ 1857 0bfa 0123     		movs	r3, #1
+ 1858 0bfc 12E0     		b	.L52
+ 1859              	.L259:
+ 1860 0bfe 4023     		movs	r3, #64
+ 1861 0c00 10E0     		b	.L52
+ 1862              	.L260:
+ 1863 0c02 4023     		movs	r3, #64
+ 1864 0c04 0EE0     		b	.L52
+ 1865              	.L261:
+ 1866 0c06 4023     		movs	r3, #64
+ 1867 0c08 0CE0     		b	.L52
+ARM GAS  /tmp/ccpQRZUW.s 			page 44
+
+
+ 1868              	.L262:
+ 1869 0c0a 4023     		movs	r3, #64
+ 1870 0c0c 0AE0     		b	.L52
+ 1871              	.L263:
+ 1872 0c0e 4FF48033 		mov	r3, #65536
+ 1873 0c12 07E0     		b	.L52
+ 1874              	.L264:
+ 1875 0c14 4FF48033 		mov	r3, #65536
+ 1876 0c18 04E0     		b	.L52
+ 1877              	.L265:
+ 1878 0c1a 4FF48033 		mov	r3, #65536
+ 1879 0c1e 01E0     		b	.L52
+ 1880              	.L266:
+ 1881 0c20 4FF48003 		mov	r3, #4194304
+ 1882              	.L52:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1883              		.loc 1 212 0 discriminator 50
+ 1884 0c24 8E4A     		ldr	r2, .L312+8
+ 1885 0c26 D360     		str	r3, [r2, #12]
+ 1886 0c28 F4E0     		b	.L53
+ 1887              	.L51:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1888              		.loc 1 212 0 discriminator 2
+ 1889 0c2a 8E4A     		ldr	r2, .L312+12
+ 1890 0c2c 9342     		cmp	r3, r2
+ 1891 0c2e 4FD9     		bls	.L54
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1892              		.loc 1 212 0 discriminator 51
+ 1893 0c30 A83A     		subs	r2, r2, #168
+ 1894 0c32 9342     		cmp	r3, r2
+ 1895 0c34 2ED0     		beq	.L267
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1896              		.loc 1 212 0 discriminator 53
+ 1897 0c36 02F58062 		add	r2, r2, #1024
+ 1898 0c3a 9342     		cmp	r3, r2
+ 1899 0c3c 2CD0     		beq	.L268
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1900              		.loc 1 212 0 discriminator 55
+ 1901 0c3e A2F56872 		sub	r2, r2, #928
+ 1902 0c42 9342     		cmp	r3, r2
+ 1903 0c44 2AD0     		beq	.L269
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1904              		.loc 1 212 0 discriminator 57
+ 1905 0c46 02F58062 		add	r2, r2, #1024
+ 1906 0c4a 9342     		cmp	r3, r2
+ 1907 0c4c 28D0     		beq	.L270
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1908              		.loc 1 212 0 discriminator 59
+ 1909 0c4e A2F58962 		sub	r2, r2, #1096
+ 1910 0c52 9342     		cmp	r3, r2
+ 1911 0c54 26D0     		beq	.L271
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1912              		.loc 1 212 0 discriminator 61
+ 1913 0c56 02F58062 		add	r2, r2, #1024
+ 1914 0c5a 9342     		cmp	r3, r2
+ 1915 0c5c 24D0     		beq	.L272
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ARM GAS  /tmp/ccpQRZUW.s 			page 45
+
+
+ 1916              		.loc 1 212 0 discriminator 63
+ 1917 0c5e A2F56872 		sub	r2, r2, #928
+ 1918 0c62 9342     		cmp	r3, r2
+ 1919 0c64 22D0     		beq	.L273
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1920              		.loc 1 212 0 discriminator 65
+ 1921 0c66 02F58062 		add	r2, r2, #1024
+ 1922 0c6a 9342     		cmp	r3, r2
+ 1923 0c6c 20D0     		beq	.L274
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1924              		.loc 1 212 0 discriminator 67
+ 1925 0c6e A2F58962 		sub	r2, r2, #1096
+ 1926 0c72 9342     		cmp	r3, r2
+ 1927 0c74 1ED0     		beq	.L275
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1928              		.loc 1 212 0 discriminator 69
+ 1929 0c76 02F58062 		add	r2, r2, #1024
+ 1930 0c7a 9342     		cmp	r3, r2
+ 1931 0c7c 1DD0     		beq	.L276
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1932              		.loc 1 212 0 discriminator 71
+ 1933 0c7e A2F56872 		sub	r2, r2, #928
+ 1934 0c82 9342     		cmp	r3, r2
+ 1935 0c84 1CD0     		beq	.L277
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1936              		.loc 1 212 0 discriminator 73
+ 1937 0c86 02F58062 		add	r2, r2, #1024
+ 1938 0c8a 9342     		cmp	r3, r2
+ 1939 0c8c 1BD1     		bne	.L278
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1940              		.loc 1 212 0
+ 1941 0c8e 4FF48033 		mov	r3, #65536
+ 1942 0c92 1AE0     		b	.L55
+ 1943              	.L267:
+ 1944 0c94 0123     		movs	r3, #1
+ 1945 0c96 18E0     		b	.L55
+ 1946              	.L268:
+ 1947 0c98 0123     		movs	r3, #1
+ 1948 0c9a 16E0     		b	.L55
+ 1949              	.L269:
+ 1950 0c9c 0123     		movs	r3, #1
+ 1951 0c9e 14E0     		b	.L55
+ 1952              	.L270:
+ 1953 0ca0 0123     		movs	r3, #1
+ 1954 0ca2 12E0     		b	.L55
+ 1955              	.L271:
+ 1956 0ca4 4023     		movs	r3, #64
+ 1957 0ca6 10E0     		b	.L55
+ 1958              	.L272:
+ 1959 0ca8 4023     		movs	r3, #64
+ 1960 0caa 0EE0     		b	.L55
+ 1961              	.L273:
+ 1962 0cac 4023     		movs	r3, #64
+ 1963 0cae 0CE0     		b	.L55
+ 1964              	.L274:
+ 1965 0cb0 4023     		movs	r3, #64
+ 1966 0cb2 0AE0     		b	.L55
+ARM GAS  /tmp/ccpQRZUW.s 			page 46
+
+
+ 1967              	.L275:
+ 1968 0cb4 4FF48033 		mov	r3, #65536
+ 1969 0cb8 07E0     		b	.L55
+ 1970              	.L276:
+ 1971 0cba 4FF48033 		mov	r3, #65536
+ 1972 0cbe 04E0     		b	.L55
+ 1973              	.L277:
+ 1974 0cc0 4FF48033 		mov	r3, #65536
+ 1975 0cc4 01E0     		b	.L55
+ 1976              	.L278:
+ 1977 0cc6 4FF48003 		mov	r3, #4194304
+ 1978              	.L55:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1979              		.loc 1 212 0 discriminator 100
+ 1980 0cca 654A     		ldr	r2, .L312+8
+ 1981 0ccc 9360     		str	r3, [r2, #8]
+ 1982 0cce A1E0     		b	.L53
+ 1983              	.L54:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1984              		.loc 1 212 0 discriminator 52
+ 1985 0cd0 654A     		ldr	r2, .L312+16
+ 1986 0cd2 9342     		cmp	r3, r2
+ 1987 0cd4 4FD9     		bls	.L57
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1988              		.loc 1 212 0 discriminator 102
+ 1989 0cd6 483A     		subs	r2, r2, #72
+ 1990 0cd8 9342     		cmp	r3, r2
+ 1991 0cda 2ED0     		beq	.L279
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1992              		.loc 1 212 0 discriminator 104
+ 1993 0cdc 02F58062 		add	r2, r2, #1024
+ 1994 0ce0 9342     		cmp	r3, r2
+ 1995 0ce2 2CD0     		beq	.L280
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 1996              		.loc 1 212 0 discriminator 106
+ 1997 0ce4 A2F56872 		sub	r2, r2, #928
+ 1998 0ce8 9342     		cmp	r3, r2
+ 1999 0cea 2AD0     		beq	.L281
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2000              		.loc 1 212 0 discriminator 108
+ 2001 0cec 02F58062 		add	r2, r2, #1024
+ 2002 0cf0 9342     		cmp	r3, r2
+ 2003 0cf2 28D0     		beq	.L282
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2004              		.loc 1 212 0 discriminator 110
+ 2005 0cf4 A2F58962 		sub	r2, r2, #1096
+ 2006 0cf8 9342     		cmp	r3, r2
+ 2007 0cfa 26D0     		beq	.L283
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2008              		.loc 1 212 0 discriminator 112
+ 2009 0cfc 02F58062 		add	r2, r2, #1024
+ 2010 0d00 9342     		cmp	r3, r2
+ 2011 0d02 24D0     		beq	.L284
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2012              		.loc 1 212 0 discriminator 114
+ 2013 0d04 A2F56872 		sub	r2, r2, #928
+ 2014 0d08 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccpQRZUW.s 			page 47
+
+
+ 2015 0d0a 22D0     		beq	.L285
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2016              		.loc 1 212 0 discriminator 116
+ 2017 0d0c 02F58062 		add	r2, r2, #1024
+ 2018 0d10 9342     		cmp	r3, r2
+ 2019 0d12 20D0     		beq	.L286
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2020              		.loc 1 212 0 discriminator 118
+ 2021 0d14 A2F58962 		sub	r2, r2, #1096
+ 2022 0d18 9342     		cmp	r3, r2
+ 2023 0d1a 1ED0     		beq	.L287
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2024              		.loc 1 212 0 discriminator 120
+ 2025 0d1c 02F58062 		add	r2, r2, #1024
+ 2026 0d20 9342     		cmp	r3, r2
+ 2027 0d22 1DD0     		beq	.L288
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2028              		.loc 1 212 0 discriminator 122
+ 2029 0d24 A2F56872 		sub	r2, r2, #928
+ 2030 0d28 9342     		cmp	r3, r2
+ 2031 0d2a 1CD0     		beq	.L289
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2032              		.loc 1 212 0 discriminator 124
+ 2033 0d2c 02F58062 		add	r2, r2, #1024
+ 2034 0d30 9342     		cmp	r3, r2
+ 2035 0d32 1BD1     		bne	.L290
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2036              		.loc 1 212 0
+ 2037 0d34 4FF48033 		mov	r3, #65536
+ 2038 0d38 1AE0     		b	.L58
+ 2039              	.L279:
+ 2040 0d3a 0123     		movs	r3, #1
+ 2041 0d3c 18E0     		b	.L58
+ 2042              	.L280:
+ 2043 0d3e 0123     		movs	r3, #1
+ 2044 0d40 16E0     		b	.L58
+ 2045              	.L281:
+ 2046 0d42 0123     		movs	r3, #1
+ 2047 0d44 14E0     		b	.L58
+ 2048              	.L282:
+ 2049 0d46 0123     		movs	r3, #1
+ 2050 0d48 12E0     		b	.L58
+ 2051              	.L283:
+ 2052 0d4a 4023     		movs	r3, #64
+ 2053 0d4c 10E0     		b	.L58
+ 2054              	.L284:
+ 2055 0d4e 4023     		movs	r3, #64
+ 2056 0d50 0EE0     		b	.L58
+ 2057              	.L285:
+ 2058 0d52 4023     		movs	r3, #64
+ 2059 0d54 0CE0     		b	.L58
+ 2060              	.L286:
+ 2061 0d56 4023     		movs	r3, #64
+ 2062 0d58 0AE0     		b	.L58
+ 2063              	.L287:
+ 2064 0d5a 4FF48033 		mov	r3, #65536
+ 2065 0d5e 07E0     		b	.L58
+ARM GAS  /tmp/ccpQRZUW.s 			page 48
+
+
+ 2066              	.L288:
+ 2067 0d60 4FF48033 		mov	r3, #65536
+ 2068 0d64 04E0     		b	.L58
+ 2069              	.L289:
+ 2070 0d66 4FF48033 		mov	r3, #65536
+ 2071 0d6a 01E0     		b	.L58
+ 2072              	.L290:
+ 2073 0d6c 4FF48003 		mov	r3, #4194304
+ 2074              	.L58:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2075              		.loc 1 212 0 discriminator 151
+ 2076 0d70 394A     		ldr	r2, .L312
+ 2077 0d72 D360     		str	r3, [r2, #12]
+ 2078 0d74 4EE0     		b	.L53
+ 2079              	.L57:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2080              		.loc 1 212 0 discriminator 103
+ 2081 0d76 3D4A     		ldr	r2, .L312+20
+ 2082 0d78 9342     		cmp	r3, r2
+ 2083 0d7a 2ED0     		beq	.L291
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2084              		.loc 1 212 0 discriminator 153
+ 2085 0d7c 02F58062 		add	r2, r2, #1024
+ 2086 0d80 9342     		cmp	r3, r2
+ 2087 0d82 2CD0     		beq	.L292
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2088              		.loc 1 212 0 discriminator 155
+ 2089 0d84 A2F56872 		sub	r2, r2, #928
+ 2090 0d88 9342     		cmp	r3, r2
+ 2091 0d8a 2AD0     		beq	.L293
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2092              		.loc 1 212 0 discriminator 157
+ 2093 0d8c 02F58062 		add	r2, r2, #1024
+ 2094 0d90 9342     		cmp	r3, r2
+ 2095 0d92 28D0     		beq	.L294
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2096              		.loc 1 212 0 discriminator 159
+ 2097 0d94 A2F58962 		sub	r2, r2, #1096
+ 2098 0d98 9342     		cmp	r3, r2
+ 2099 0d9a 26D0     		beq	.L295
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2100              		.loc 1 212 0 discriminator 161
+ 2101 0d9c 02F58062 		add	r2, r2, #1024
+ 2102 0da0 9342     		cmp	r3, r2
+ 2103 0da2 24D0     		beq	.L296
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2104              		.loc 1 212 0 discriminator 163
+ 2105 0da4 A2F56872 		sub	r2, r2, #928
+ 2106 0da8 9342     		cmp	r3, r2
+ 2107 0daa 22D0     		beq	.L297
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2108              		.loc 1 212 0 discriminator 165
+ 2109 0dac 02F58062 		add	r2, r2, #1024
+ 2110 0db0 9342     		cmp	r3, r2
+ 2111 0db2 20D0     		beq	.L298
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2112              		.loc 1 212 0 discriminator 167
+ARM GAS  /tmp/ccpQRZUW.s 			page 49
+
+
+ 2113 0db4 A2F58962 		sub	r2, r2, #1096
+ 2114 0db8 9342     		cmp	r3, r2
+ 2115 0dba 1ED0     		beq	.L299
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2116              		.loc 1 212 0 discriminator 169
+ 2117 0dbc 02F58062 		add	r2, r2, #1024
+ 2118 0dc0 9342     		cmp	r3, r2
+ 2119 0dc2 1DD0     		beq	.L300
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2120              		.loc 1 212 0 discriminator 171
+ 2121 0dc4 A2F56872 		sub	r2, r2, #928
+ 2122 0dc8 9342     		cmp	r3, r2
+ 2123 0dca 1CD0     		beq	.L301
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2124              		.loc 1 212 0 discriminator 173
+ 2125 0dcc 02F58062 		add	r2, r2, #1024
+ 2126 0dd0 9342     		cmp	r3, r2
+ 2127 0dd2 1BD1     		bne	.L302
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2128              		.loc 1 212 0
+ 2129 0dd4 4FF48033 		mov	r3, #65536
+ 2130 0dd8 1AE0     		b	.L59
+ 2131              	.L291:
+ 2132 0dda 0123     		movs	r3, #1
+ 2133 0ddc 18E0     		b	.L59
+ 2134              	.L292:
+ 2135 0dde 0123     		movs	r3, #1
+ 2136 0de0 16E0     		b	.L59
+ 2137              	.L293:
+ 2138 0de2 0123     		movs	r3, #1
+ 2139 0de4 14E0     		b	.L59
+ 2140              	.L294:
+ 2141 0de6 0123     		movs	r3, #1
+ 2142 0de8 12E0     		b	.L59
+ 2143              	.L295:
+ 2144 0dea 4023     		movs	r3, #64
+ 2145 0dec 10E0     		b	.L59
+ 2146              	.L296:
+ 2147 0dee 4023     		movs	r3, #64
+ 2148 0df0 0EE0     		b	.L59
+ 2149              	.L297:
+ 2150 0df2 4023     		movs	r3, #64
+ 2151 0df4 0CE0     		b	.L59
+ 2152              	.L298:
+ 2153 0df6 4023     		movs	r3, #64
+ 2154 0df8 0AE0     		b	.L59
+ 2155              	.L299:
+ 2156 0dfa 4FF48033 		mov	r3, #65536
+ 2157 0dfe 07E0     		b	.L59
+ 2158              	.L300:
+ 2159 0e00 4FF48033 		mov	r3, #65536
+ 2160 0e04 04E0     		b	.L59
+ 2161              	.L301:
+ 2162 0e06 4FF48033 		mov	r3, #65536
+ 2163 0e0a 01E0     		b	.L59
+ 2164              	.L302:
+ 2165 0e0c 4FF48003 		mov	r3, #4194304
+ARM GAS  /tmp/ccpQRZUW.s 			page 50
+
+
+ 2166              	.L59:
+ 212:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2167              		.loc 1 212 0 discriminator 200
+ 2168 0e10 114A     		ldr	r2, .L312
+ 2169 0e12 9360     		str	r3, [r2, #8]
+ 2170              	.L53:
+ 215:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     hdma->Instance->FCR |= DMA_IT_FE;
+ 2171              		.loc 1 215 0 is_stmt 1
+ 2172 0e14 2268     		ldr	r2, [r4]
+ 2173 0e16 1368     		ldr	r3, [r2]
+ 2174 0e18 43F01603 		orr	r3, r3, #22
+ 2175 0e1c 1360     		str	r3, [r2]
+ 216:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2176              		.loc 1 216 0
+ 2177 0e1e 2268     		ldr	r2, [r4]
+ 2178 0e20 5369     		ldr	r3, [r2, #20]
+ 2179 0e22 43F08003 		orr	r3, r3, #128
+ 2180 0e26 5361     		str	r3, [r2, #20]
+ 218:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 2181              		.loc 1 218 0
+ 2182 0e28 236C     		ldr	r3, [r4, #64]
+ 2183 0e2a 0BB9     		cbnz	r3, .L60
+ 218:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     {
+ 2184              		.loc 1 218 0 is_stmt 0 discriminator 1
+ 2185 0e2c A36C     		ldr	r3, [r4, #72]
+ 2186 0e2e 23B1     		cbz	r3, .L61
+ 2187              	.L60:
+ 220:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     }
+ 2188              		.loc 1 220 0 is_stmt 1
+ 2189 0e30 2268     		ldr	r2, [r4]
+ 2190 0e32 1368     		ldr	r3, [r2]
+ 2191 0e34 43F00803 		orr	r3, r3, #8
+ 2192 0e38 1360     		str	r3, [r2]
+ 2193              	.L61:
+ 224:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 2194              		.loc 1 224 0
+ 2195 0e3a 2268     		ldr	r2, [r4]
+ 2196 0e3c 1368     		ldr	r3, [r2]
+ 2197 0e3e 43F00103 		orr	r3, r3, #1
+ 2198 0e42 1360     		str	r3, [r2]
+ 175:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 2199              		.loc 1 175 0
+ 2200 0e44 0020     		movs	r0, #0
+ 2201 0e46 38BD     		pop	{r3, r4, r5, pc}
+ 2202              	.LVL28:
+ 2203              	.L14:
+ 229:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****     
+ 2204              		.loc 1 229 0
+ 2205 0e48 0023     		movs	r3, #0
+ 2206              	.LVL29:
+ 2207 0e4a 80F83430 		strb	r3, [r0, #52]
+ 2208              	.LVL30:
+ 232:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }  
+ 2209              		.loc 1 232 0
+ 2210 0e4e 0220     		movs	r0, #2
+ 2211              	.LVL31:
+ 2212 0e50 38BD     		pop	{r3, r4, r5, pc}
+ARM GAS  /tmp/ccpQRZUW.s 			page 51
+
+
+ 2213              	.LVL32:
+ 2214              	.L62:
+ 188:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   
+ 2215              		.loc 1 188 0
+ 2216 0e52 0220     		movs	r0, #2
+ 2217              	.LVL33:
+ 235:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 2218              		.loc 1 235 0
+ 2219 0e54 38BD     		pop	{r3, r4, r5, pc}
+ 2220              	.LVL34:
+ 2221              	.L313:
+ 2222 0e56 00BF     		.align	2
+ 2223              	.L312:
+ 2224 0e58 00600240 		.word	1073897472
+ 2225 0e5c 58640240 		.word	1073898584
+ 2226 0e60 00640240 		.word	1073898496
+ 2227 0e64 B8600240 		.word	1073897656
+ 2228 0e68 58600240 		.word	1073897560
+ 2229 0e6c 10600240 		.word	1073897488
+ 2230              		.cfi_endproc
+ 2231              	.LFE137:
+ 2233              		.section	.text.HAL_DMAEx_ChangeMemory,"ax",%progbits
+ 2234              		.align	2
+ 2235              		.global	HAL_DMAEx_ChangeMemory
+ 2236              		.thumb
+ 2237              		.thumb_func
+ 2239              	HAL_DMAEx_ChangeMemory:
+ 2240              	.LFB138:
+ 252:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   if(memory == MEMORY0)
+ 2241              		.loc 1 252 0
+ 2242              		.cfi_startproc
+ 2243              		@ args = 0, pretend = 0, frame = 0
+ 2244              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2245              		@ link register save eliminated.
+ 2246              	.LVL35:
+ 253:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   {
+ 2247              		.loc 1 253 0
+ 2248 0000 12B9     		cbnz	r2, .L315
+ 256:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 2249              		.loc 1 256 0
+ 2250 0002 0368     		ldr	r3, [r0]
+ 2251 0004 D960     		str	r1, [r3, #12]
+ 2252 0006 01E0     		b	.L316
+ 2253              	.L315:
+ 261:HALLIB/Src/stm32f7xx_hal_dma_ex.c ****   }
+ 2254              		.loc 1 261 0
+ 2255 0008 0368     		ldr	r3, [r0]
+ 2256 000a 1961     		str	r1, [r3, #16]
+ 2257              	.L316:
+ 265:HALLIB/Src/stm32f7xx_hal_dma_ex.c **** 
+ 2258              		.loc 1 265 0
+ 2259 000c 0020     		movs	r0, #0
+ 2260              	.LVL36:
+ 2261 000e 7047     		bx	lr
+ 2262              		.cfi_endproc
+ 2263              	.LFE138:
+ 2265              		.text
+ARM GAS  /tmp/ccpQRZUW.s 			page 52
+
+
+ 2266              	.Letext0:
+ 2267              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 2268              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 2269              		.file 4 "Inc/stm32f767xx.h"
+ 2270              		.file 5 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 2271              		.file 6 "HALLIB/Inc/stm32f7xx_hal_dma.h"
+ 2272              		.file 7 "HALLIB/Inc/stm32f7xx_hal_dma_ex.h"
+ 2273              		.file 8 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccpQRZUW.s 			page 53
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_dma_ex.c
+     /tmp/ccpQRZUW.s:21     .text.DMA_MultiBufferSetConfig:00000000 $t
+     /tmp/ccpQRZUW.s:25     .text.DMA_MultiBufferSetConfig:00000000 DMA_MultiBufferSetConfig
+     /tmp/ccpQRZUW.s:74     .text.HAL_DMAEx_MultiBufferStart:00000000 $t
+     /tmp/ccpQRZUW.s:79     .text.HAL_DMAEx_MultiBufferStart:00000000 HAL_DMAEx_MultiBufferStart
+     /tmp/ccpQRZUW.s:166    .text.HAL_DMAEx_MultiBufferStart_IT:00000000 $t
+     /tmp/ccpQRZUW.s:171    .text.HAL_DMAEx_MultiBufferStart_IT:00000000 HAL_DMAEx_MultiBufferStart_IT
+     /tmp/ccpQRZUW.s:611    .text.HAL_DMAEx_MultiBufferStart_IT:000002fc $d
+     /tmp/ccpQRZUW.s:618    .text.HAL_DMAEx_MultiBufferStart_IT:00000314 $t
+     /tmp/ccpQRZUW.s:1000   .text.HAL_DMAEx_MultiBufferStart_IT:000005c8 $d
+     /tmp/ccpQRZUW.s:1007   .text.HAL_DMAEx_MultiBufferStart_IT:000005e0 $t
+     /tmp/ccpQRZUW.s:1389   .text.HAL_DMAEx_MultiBufferStart_IT:00000894 $d
+     /tmp/ccpQRZUW.s:1396   .text.HAL_DMAEx_MultiBufferStart_IT:000008ac $t
+     /tmp/ccpQRZUW.s:1778   .text.HAL_DMAEx_MultiBufferStart_IT:00000b60 $d
+     /tmp/ccpQRZUW.s:1785   .text.HAL_DMAEx_MultiBufferStart_IT:00000b78 $t
+     /tmp/ccpQRZUW.s:2224   .text.HAL_DMAEx_MultiBufferStart_IT:00000e58 $d
+     /tmp/ccpQRZUW.s:2234   .text.HAL_DMAEx_ChangeMemory:00000000 $t
+     /tmp/ccpQRZUW.s:2239   .text.HAL_DMAEx_ChangeMemory:00000000 HAL_DMAEx_ChangeMemory
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,2236 @@
+ARM GAS  /tmp/ccVBB28f.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_dac.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_DAC_MspInit,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_DAC_MspInit
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_DAC_MspInit:
+  27              	.LFB138:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_dac.c"
+   1:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_dac.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @file    stm32f7xx_hal_dac.c
+   4:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief   DAC HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         functionalities of the Digital to Analog Converter (DAC) peripheral:
+   8:HALLIB/Src/stm32f7xx_hal_dac.c ****   *           + Initialization and de-initialization functions
+   9:HALLIB/Src/stm32f7xx_hal_dac.c ****   *           + IO operation functions
+  10:HALLIB/Src/stm32f7xx_hal_dac.c ****   *           + Peripheral Control functions
+  11:HALLIB/Src/stm32f7xx_hal_dac.c ****   *           + Peripheral State and Errors functions      
+  12:HALLIB/Src/stm32f7xx_hal_dac.c ****   *     
+  13:HALLIB/Src/stm32f7xx_hal_dac.c ****   *
+  14:HALLIB/Src/stm32f7xx_hal_dac.c ****   @verbatim      
+  15:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+  16:HALLIB/Src/stm32f7xx_hal_dac.c ****                       ##### DAC Peripheral features #####
+  17:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+  18:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]        
+  19:HALLIB/Src/stm32f7xx_hal_dac.c ****       *** DAC Channels ***
+  20:HALLIB/Src/stm32f7xx_hal_dac.c ****       ====================  
+  21:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]  
+  22:HALLIB/Src/stm32f7xx_hal_dac.c ****     The device integrates two 12-bit Digital Analog Converters that can 
+  23:HALLIB/Src/stm32f7xx_hal_dac.c ****     be used independently or simultaneously (dual mode):
+  24:HALLIB/Src/stm32f7xx_hal_dac.c ****       (#) DAC channel1 with DAC_OUT1 (PA4) as output
+  25:HALLIB/Src/stm32f7xx_hal_dac.c ****       (#) DAC channel2 with DAC_OUT2 (PA5) as output
+  26:HALLIB/Src/stm32f7xx_hal_dac.c ****       
+  27:HALLIB/Src/stm32f7xx_hal_dac.c ****       *** DAC Triggers ***
+  28:HALLIB/Src/stm32f7xx_hal_dac.c ****       ====================
+  29:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]
+  30:HALLIB/Src/stm32f7xx_hal_dac.c ****     Digital to Analog conversion can be non-triggered using DAC_TRIGGER_NONE
+ARM GAS  /tmp/ccVBB28f.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_dac.c ****     and DAC_OUT1/DAC_OUT2 is available once writing to DHRx register. 
+  32:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..] 
+  33:HALLIB/Src/stm32f7xx_hal_dac.c ****     Digital to Analog conversion can be triggered by:
+  34:HALLIB/Src/stm32f7xx_hal_dac.c ****       (#) External event: EXTI Line 9 (any GPIOx_Pin9) using DAC_TRIGGER_EXT_IT9.
+  35:HALLIB/Src/stm32f7xx_hal_dac.c ****           The used pin (GPIOx_Pin9) must be configured in input mode.
+  36:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  37:HALLIB/Src/stm32f7xx_hal_dac.c ****       (#) Timers TRGO: TIM2, TIM4, TIM5, TIM6, TIM7 and TIM8 
+  38:HALLIB/Src/stm32f7xx_hal_dac.c ****           (DAC_TRIGGER_T2_TRGO, DAC_TRIGGER_T4_TRGO...)
+  39:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  40:HALLIB/Src/stm32f7xx_hal_dac.c ****       (#) Software using DAC_TRIGGER_SOFTWARE
+  41:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  42:HALLIB/Src/stm32f7xx_hal_dac.c ****       *** DAC Buffer mode feature ***
+  43:HALLIB/Src/stm32f7xx_hal_dac.c ****       =============================== 
+  44:HALLIB/Src/stm32f7xx_hal_dac.c ****       [..] 
+  45:HALLIB/Src/stm32f7xx_hal_dac.c ****       Each DAC channel integrates an output buffer that can be used to 
+  46:HALLIB/Src/stm32f7xx_hal_dac.c ****       reduce the output impedance, and to drive external loads directly
+  47:HALLIB/Src/stm32f7xx_hal_dac.c ****       without having to add an external operational amplifier.
+  48:HALLIB/Src/stm32f7xx_hal_dac.c ****       To enable, the output buffer use  
+  49:HALLIB/Src/stm32f7xx_hal_dac.c ****       sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  50:HALLIB/Src/stm32f7xx_hal_dac.c ****       [..]           
+  51:HALLIB/Src/stm32f7xx_hal_dac.c ****       (@) Refer to the device datasheet for more details about output 
+  52:HALLIB/Src/stm32f7xx_hal_dac.c ****           impedance value with and without output buffer.
+  53:HALLIB/Src/stm32f7xx_hal_dac.c ****             
+  54:HALLIB/Src/stm32f7xx_hal_dac.c ****        *** DAC wave generation feature ***
+  55:HALLIB/Src/stm32f7xx_hal_dac.c ****        =================================== 
+  56:HALLIB/Src/stm32f7xx_hal_dac.c ****        [..]     
+  57:HALLIB/Src/stm32f7xx_hal_dac.c ****        Both DAC channels can be used to generate
+  58:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) Noise wave using HAL_DACEx_NoiseWaveGenerate() 
+  59:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) Triangle wave using HAL_DACEx_TriangleWaveGenerate()
+  60:HALLIB/Src/stm32f7xx_hal_dac.c ****             
+  61:HALLIB/Src/stm32f7xx_hal_dac.c ****        *** DAC data format ***
+  62:HALLIB/Src/stm32f7xx_hal_dac.c ****        =======================
+  63:HALLIB/Src/stm32f7xx_hal_dac.c ****        [..]   
+  64:HALLIB/Src/stm32f7xx_hal_dac.c ****        The DAC data format can be:
+  65:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) 8-bit right alignment using DAC_ALIGN_8B_R
+  66:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) 12-bit left alignment using DAC_ALIGN_12B_L
+  67:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) 12-bit right alignment using DAC_ALIGN_12B_R
+  68:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  69:HALLIB/Src/stm32f7xx_hal_dac.c ****        *** DAC data value to voltage correspondence ***  
+  70:HALLIB/Src/stm32f7xx_hal_dac.c ****        ================================================ 
+  71:HALLIB/Src/stm32f7xx_hal_dac.c ****        [..] 
+  72:HALLIB/Src/stm32f7xx_hal_dac.c ****        The analog output voltage on each DAC channel pin is determined
+  73:HALLIB/Src/stm32f7xx_hal_dac.c ****        by the following equation: 
+  74:HALLIB/Src/stm32f7xx_hal_dac.c ****        DAC_OUTx = VREF+ * DOR / 4095
+  75:HALLIB/Src/stm32f7xx_hal_dac.c ****        with  DOR is the Data Output Register
+  76:HALLIB/Src/stm32f7xx_hal_dac.c ****           VEF+ is the input voltage reference (refer to the device datasheet)
+  77:HALLIB/Src/stm32f7xx_hal_dac.c ****         e.g. To set DAC_OUT1 to 0.7V, use
+  78:HALLIB/Src/stm32f7xx_hal_dac.c ****           Assuming that VREF+ = 3.3V, DAC_OUT1 = (3.3 * 868) / 4095 = 0.7V
+  79:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  80:HALLIB/Src/stm32f7xx_hal_dac.c ****        *** DMA requests  ***
+  81:HALLIB/Src/stm32f7xx_hal_dac.c ****        =====================
+  82:HALLIB/Src/stm32f7xx_hal_dac.c ****        [..]    
+  83:HALLIB/Src/stm32f7xx_hal_dac.c ****        A DMA1 request can be generated when an external trigger (but not
+  84:HALLIB/Src/stm32f7xx_hal_dac.c ****        a software trigger) occurs if DMA1 requests are enabled using
+  85:HALLIB/Src/stm32f7xx_hal_dac.c ****        HAL_DAC_Start_DMA()
+  86:HALLIB/Src/stm32f7xx_hal_dac.c ****        [..]
+  87:HALLIB/Src/stm32f7xx_hal_dac.c ****        DMA1 requests are mapped as following:
+ARM GAS  /tmp/ccVBB28f.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) DAC channel1 : mapped on DMA1 Stream5 channel7 which must be 
+  89:HALLIB/Src/stm32f7xx_hal_dac.c ****              already configured
+  90:HALLIB/Src/stm32f7xx_hal_dac.c ****          (#) DAC channel2 : mapped on DMA1 Stream6 channel7 which must be 
+  91:HALLIB/Src/stm32f7xx_hal_dac.c ****              already configured
+  92:HALLIB/Src/stm32f7xx_hal_dac.c ****        
+  93:HALLIB/Src/stm32f7xx_hal_dac.c ****     -@- For Dual mode and specific signal (Triangle and noise) generation please 
+  94:HALLIB/Src/stm32f7xx_hal_dac.c ****         refer to Extension Features Driver description        
+  95:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  96:HALLIB/Src/stm32f7xx_hal_dac.c ****       
+  97:HALLIB/Src/stm32f7xx_hal_dac.c ****                       ##### How to use this driver #####
+  98:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+  99:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]          
+ 100:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) DAC APB clock must be enabled to get write access to DAC
+ 101:HALLIB/Src/stm32f7xx_hal_dac.c ****           registers using HAL_DAC_Init()
+ 102:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Configure DAC_OUTx (DAC_OUT1: PA4, DAC_OUT2: PA5) in analog mode.
+ 103:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Configure the DAC channel using HAL_DAC_ConfigChannel() function.
+ 104:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Enable the DAC channel using HAL_DAC_Start() or HAL_DAC_Start_DMA functions
+ 105:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 106:HALLIB/Src/stm32f7xx_hal_dac.c ****      *** Polling mode IO operation ***
+ 107:HALLIB/Src/stm32f7xx_hal_dac.c ****      =================================
+ 108:HALLIB/Src/stm32f7xx_hal_dac.c ****      [..]    
+ 109:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) Start the DAC peripheral using HAL_DAC_Start() 
+ 110:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) To read the DAC last data output value, use the HAL_DAC_GetValue() function.
+ 111:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) Stop the DAC peripheral using HAL_DAC_Stop()
+ 112:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 113:HALLIB/Src/stm32f7xx_hal_dac.c **** 	   
+ 114:HALLIB/Src/stm32f7xx_hal_dac.c ****      *** DMA mode IO operation ***    
+ 115:HALLIB/Src/stm32f7xx_hal_dac.c ****      ==============================
+ 116:HALLIB/Src/stm32f7xx_hal_dac.c ****      [..]    
+ 117:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) Start the DAC peripheral using HAL_DAC_Start_DMA(), at this stage the user specify the l
+ 118:HALLIB/Src/stm32f7xx_hal_dac.c ****            of data to be transferred at each end of conversion 
+ 119:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) At The end of data transfer HAL_DAC_ConvCpltCallbackCh1()or HAL_DAC_ConvCpltCallbackCh2(
+ 120:HALLIB/Src/stm32f7xx_hal_dac.c ****            function is executed and user can add his own code by customization of function pointer 
+ 121:HALLIB/Src/stm32f7xx_hal_dac.c ****            HAL_DAC_ConvCpltCallbackCh1 or HAL_DAC_ConvCpltCallbackCh2
+ 122:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) In case of transfer Error, HAL_DAC_ErrorCallbackCh1() function is executed and user can 
+ 123:HALLIB/Src/stm32f7xx_hal_dac.c ****             add his own code by customization of function pointer HAL_DAC_ErrorCallbackCh1
+ 124:HALLIB/Src/stm32f7xx_hal_dac.c ****        (+) Stop the DAC peripheral using HAL_DAC_Stop_DMA()
+ 125:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 126:HALLIB/Src/stm32f7xx_hal_dac.c ****                     
+ 127:HALLIB/Src/stm32f7xx_hal_dac.c ****      *** DAC HAL driver macros list ***
+ 128:HALLIB/Src/stm32f7xx_hal_dac.c ****      ============================================= 
+ 129:HALLIB/Src/stm32f7xx_hal_dac.c ****      [..]
+ 130:HALLIB/Src/stm32f7xx_hal_dac.c ****        Below the list of most used macros in DAC HAL driver.
+ 131:HALLIB/Src/stm32f7xx_hal_dac.c ****        
+ 132:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) __HAL_DAC_ENABLE : Enable the DAC peripheral
+ 133:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) __HAL_DAC_DISABLE : Disable the DAC peripheral
+ 134:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) __HAL_DAC_CLEAR_FLAG: Clear the DAC's pending flags
+ 135:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) __HAL_DAC_GET_FLAG: Get the selected DAC's flag status
+ 136:HALLIB/Src/stm32f7xx_hal_dac.c ****       
+ 137:HALLIB/Src/stm32f7xx_hal_dac.c ****      [..]
+ 138:HALLIB/Src/stm32f7xx_hal_dac.c ****       (@) You can refer to the DAC HAL driver header file for more useful macros  
+ 139:HALLIB/Src/stm32f7xx_hal_dac.c ****    
+ 140:HALLIB/Src/stm32f7xx_hal_dac.c ****  @endverbatim    
+ 141:HALLIB/Src/stm32f7xx_hal_dac.c ****   ******************************************************************************
+ 142:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @attention
+ 143:HALLIB/Src/stm32f7xx_hal_dac.c ****   *
+ 144:HALLIB/Src/stm32f7xx_hal_dac.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+ARM GAS  /tmp/ccVBB28f.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_dac.c ****   *
+ 146:HALLIB/Src/stm32f7xx_hal_dac.c ****   * Redistribution and use in source and binary forms, with or without modification,
+ 147:HALLIB/Src/stm32f7xx_hal_dac.c ****   * are permitted provided that the following conditions are met:
+ 148:HALLIB/Src/stm32f7xx_hal_dac.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+ 149:HALLIB/Src/stm32f7xx_hal_dac.c ****   *      this list of conditions and the following disclaimer.
+ 150:HALLIB/Src/stm32f7xx_hal_dac.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+ 151:HALLIB/Src/stm32f7xx_hal_dac.c ****   *      this list of conditions and the following disclaimer in the documentation
+ 152:HALLIB/Src/stm32f7xx_hal_dac.c ****   *      and/or other materials provided with the distribution.
+ 153:HALLIB/Src/stm32f7xx_hal_dac.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+ 154:HALLIB/Src/stm32f7xx_hal_dac.c ****   *      may be used to endorse or promote products derived from this software
+ 155:HALLIB/Src/stm32f7xx_hal_dac.c ****   *      without specific prior written permission.
+ 156:HALLIB/Src/stm32f7xx_hal_dac.c ****   *
+ 157:HALLIB/Src/stm32f7xx_hal_dac.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ 158:HALLIB/Src/stm32f7xx_hal_dac.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ 159:HALLIB/Src/stm32f7xx_hal_dac.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ 160:HALLIB/Src/stm32f7xx_hal_dac.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ 161:HALLIB/Src/stm32f7xx_hal_dac.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ 162:HALLIB/Src/stm32f7xx_hal_dac.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ 163:HALLIB/Src/stm32f7xx_hal_dac.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ 164:HALLIB/Src/stm32f7xx_hal_dac.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ 165:HALLIB/Src/stm32f7xx_hal_dac.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ 166:HALLIB/Src/stm32f7xx_hal_dac.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 167:HALLIB/Src/stm32f7xx_hal_dac.c ****   *
+ 168:HALLIB/Src/stm32f7xx_hal_dac.c ****   ******************************************************************************
+ 169:HALLIB/Src/stm32f7xx_hal_dac.c ****   */ 
+ 170:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 171:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 172:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Includes ------------------------------------------------------------------*/
+ 173:HALLIB/Src/stm32f7xx_hal_dac.c **** #include "stm32f7xx_hal.h"
+ 174:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 175:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @addtogroup STM32F7xx_HAL_Driver
+ 176:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 177:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 178:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 179:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC DAC
+ 180:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief DAC driver modules
+ 181:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 182:HALLIB/Src/stm32f7xx_hal_dac.c ****   */ 
+ 183:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 184:HALLIB/Src/stm32f7xx_hal_dac.c **** #ifdef HAL_DAC_MODULE_ENABLED
+ 185:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 186:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Private typedef -----------------------------------------------------------*/
+ 187:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Private define ------------------------------------------------------------*/
+ 188:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Private macro -------------------------------------------------------------*/
+ 189:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Private variables ---------------------------------------------------------*/
+ 190:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @addtogroup DAC_Private_Functions
+ 191:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 192:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 193:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Private function prototypes -----------------------------------------------*/
+ 194:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAConvCpltCh1(DMA_HandleTypeDef *hdma);
+ 195:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAErrorCh1(DMA_HandleTypeDef *hdma);
+ 196:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAHalfConvCpltCh1(DMA_HandleTypeDef *hdma); 
+ 197:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 198:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @}
+ 199:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 200:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 201:HALLIB/Src/stm32f7xx_hal_dac.c **** /* Exported functions --------------------------------------------------------*/
+ARM GAS  /tmp/ccVBB28f.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC_Exported_Functions DAC Exported Functions
+ 203:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 204:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 205:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 206:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC_Exported_Functions_Group1 Initialization and de-initialization functions 
+ 207:HALLIB/Src/stm32f7xx_hal_dac.c ****  *  @brief    Initialization and Configuration functions 
+ 208:HALLIB/Src/stm32f7xx_hal_dac.c ****  *
+ 209:HALLIB/Src/stm32f7xx_hal_dac.c **** @verbatim    
+ 210:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+ 211:HALLIB/Src/stm32f7xx_hal_dac.c ****               ##### Initialization and de-initialization functions #####
+ 212:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+ 213:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]  This section provides functions allowing to:
+ 214:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Initialize and configure the DAC. 
+ 215:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) De-initialize the DAC. 
+ 216:HALLIB/Src/stm32f7xx_hal_dac.c ****          
+ 217:HALLIB/Src/stm32f7xx_hal_dac.c **** @endverbatim
+ 218:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 219:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 220:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 221:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 222:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Initializes the DAC peripheral according to the specified parameters
+ 223:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         in the DAC_InitStruct.
+ 224:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 225:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 226:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 227:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 228:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Init(DAC_HandleTypeDef* hdac)
+ 229:HALLIB/Src/stm32f7xx_hal_dac.c **** { 
+ 230:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+ 231:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(hdac == NULL)
+ 232:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 233:HALLIB/Src/stm32f7xx_hal_dac.c ****      return HAL_ERROR;
+ 234:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 235:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 236:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_ALL_INSTANCE(hdac->Instance));
+ 237:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 238:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(hdac->State == HAL_DAC_STATE_RESET)
+ 239:HALLIB/Src/stm32f7xx_hal_dac.c ****   { 
+ 240:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Allocate lock resource and initialize it */
+ 241:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->Lock = HAL_UNLOCKED; 
+ 242:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Init the low level hardware */
+ 243:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DAC_MspInit(hdac);
+ 244:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 245:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 246:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Initialize the DAC state*/
+ 247:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_BUSY;
+ 248:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 249:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set DAC error code to none */
+ 250:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->ErrorCode = HAL_DAC_ERROR_NONE;
+ 251:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 252:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Initialize the DAC state*/
+ 253:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_READY;
+ 254:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 255:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 256:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 257:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 258:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ARM GAS  /tmp/ccVBB28f.s 			page 6
+
+
+ 259:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 260:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Deinitializes the DAC peripheral registers to their default reset values.
+ 261:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 262:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 263:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 264:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 265:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_DeInit(DAC_HandleTypeDef* hdac)
+ 266:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 267:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+ 268:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(hdac == NULL)
+ 269:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 270:HALLIB/Src/stm32f7xx_hal_dac.c ****      return HAL_ERROR;
+ 271:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 272:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 273:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 274:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_ALL_INSTANCE(hdac->Instance));
+ 275:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 276:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 277:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_BUSY;
+ 278:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 279:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* DeInit the low level hardware */
+ 280:HALLIB/Src/stm32f7xx_hal_dac.c ****   HAL_DAC_MspDeInit(hdac);
+ 281:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 282:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set DAC error code to none */
+ 283:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->ErrorCode = HAL_DAC_ERROR_NONE;
+ 284:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 285:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 286:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_RESET;
+ 287:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 288:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Release Lock */
+ 289:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_UNLOCK(hdac);
+ 290:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 291:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 292:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 293:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 294:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 295:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 296:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Initializes the DAC MSP.
+ 297:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 298:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 299:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 300:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 301:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_MspInit(DAC_HandleTypeDef* hdac)
+ 302:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+  29              		.loc 1 302 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE138:
+  39 0002 00BF     		.section	.text.HAL_DAC_Init,"ax",%progbits
+  40              		.align	2
+  41              		.global	HAL_DAC_Init
+  42              		.thumb
+ARM GAS  /tmp/ccVBB28f.s 			page 7
+
+
+  43              		.thumb_func
+  45              	HAL_DAC_Init:
+  46              	.LFB136:
+ 229:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+  47              		.loc 1 229 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              	.LVL1:
+ 231:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+  52              		.loc 1 231 0
+  53 0000 80B1     		cbz	r0, .L5
+ 229:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+  54              		.loc 1 229 0
+  55 0002 10B5     		push	{r4, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 4, -8
+  59              		.cfi_offset 14, -4
+  60 0004 0446     		mov	r4, r0
+ 238:HALLIB/Src/stm32f7xx_hal_dac.c ****   { 
+  61              		.loc 1 238 0
+  62 0006 0379     		ldrb	r3, [r0, #4]	@ zero_extendqisi2
+  63 0008 13F0FF0F 		tst	r3, #255
+  64 000c 03D1     		bne	.L4
+ 241:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Init the low level hardware */
+  65              		.loc 1 241 0
+  66 000e 0023     		movs	r3, #0
+  67 0010 4371     		strb	r3, [r0, #5]
+ 243:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+  68              		.loc 1 243 0
+  69 0012 FFF7FEFF 		bl	HAL_DAC_MspInit
+  70              	.LVL2:
+  71              	.L4:
+ 247:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  72              		.loc 1 247 0
+  73 0016 0223     		movs	r3, #2
+  74 0018 2371     		strb	r3, [r4, #4]
+ 250:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  75              		.loc 1 250 0
+  76 001a 0020     		movs	r0, #0
+  77 001c 2061     		str	r0, [r4, #16]
+ 253:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+  78              		.loc 1 253 0
+  79 001e 0123     		movs	r3, #1
+  80 0020 2371     		strb	r3, [r4, #4]
+ 256:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+  81              		.loc 1 256 0
+  82 0022 10BD     		pop	{r4, pc}
+  83              	.LVL3:
+  84              	.L5:
+  85              	.LCFI1:
+  86              		.cfi_def_cfa_offset 0
+  87              		.cfi_restore 4
+  88              		.cfi_restore 14
+ 233:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+  89              		.loc 1 233 0
+ARM GAS  /tmp/ccVBB28f.s 			page 8
+
+
+  90 0024 0120     		movs	r0, #1
+  91              	.LVL4:
+  92 0026 7047     		bx	lr
+  93              		.cfi_endproc
+  94              	.LFE136:
+  96              		.section	.text.HAL_DAC_MspDeInit,"ax",%progbits
+  97              		.align	2
+  98              		.weak	HAL_DAC_MspDeInit
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	HAL_DAC_MspDeInit:
+ 103              	.LFB139:
+ 303:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 304:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 305:HALLIB/Src/stm32f7xx_hal_dac.c ****  
+ 306:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 307:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_MspInit could be implemented in the user file
+ 308:HALLIB/Src/stm32f7xx_hal_dac.c ****    */ 
+ 309:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 310:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 311:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 312:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  DeInitializes the DAC MSP.
+ 313:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 314:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.  
+ 315:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 316:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 317:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_MspDeInit(DAC_HandleTypeDef* hdac)
+ 318:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 104              		.loc 1 318 0
+ 105              		.cfi_startproc
+ 106              		@ args = 0, pretend = 0, frame = 0
+ 107              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108              		@ link register save eliminated.
+ 109              	.LVL5:
+ 110 0000 7047     		bx	lr
+ 111              		.cfi_endproc
+ 112              	.LFE139:
+ 114 0002 00BF     		.section	.text.HAL_DAC_DeInit,"ax",%progbits
+ 115              		.align	2
+ 116              		.global	HAL_DAC_DeInit
+ 117              		.thumb
+ 118              		.thumb_func
+ 120              	HAL_DAC_DeInit:
+ 121              	.LFB137:
+ 266:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+ 122              		.loc 1 266 0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 0
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126              	.LVL6:
+ 268:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 127              		.loc 1 268 0
+ 128 0000 50B1     		cbz	r0, .L11
+ 266:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check DAC handle */
+ 129              		.loc 1 266 0
+ 130 0002 10B5     		push	{r4, lr}
+ 131              	.LCFI2:
+ARM GAS  /tmp/ccVBB28f.s 			page 9
+
+
+ 132              		.cfi_def_cfa_offset 8
+ 133              		.cfi_offset 4, -8
+ 134              		.cfi_offset 14, -4
+ 135 0004 0446     		mov	r4, r0
+ 277:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 136              		.loc 1 277 0
+ 137 0006 0223     		movs	r3, #2
+ 138 0008 0371     		strb	r3, [r0, #4]
+ 280:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 139              		.loc 1 280 0
+ 140 000a FFF7FEFF 		bl	HAL_DAC_MspDeInit
+ 141              	.LVL7:
+ 283:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 142              		.loc 1 283 0
+ 143 000e 0020     		movs	r0, #0
+ 144 0010 2061     		str	r0, [r4, #16]
+ 286:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 145              		.loc 1 286 0
+ 146 0012 2071     		strb	r0, [r4, #4]
+ 289:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 147              		.loc 1 289 0
+ 148 0014 6071     		strb	r0, [r4, #5]
+ 292:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 149              		.loc 1 292 0
+ 150 0016 10BD     		pop	{r4, pc}
+ 151              	.LVL8:
+ 152              	.L11:
+ 153              	.LCFI3:
+ 154              		.cfi_def_cfa_offset 0
+ 155              		.cfi_restore 4
+ 156              		.cfi_restore 14
+ 270:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 157              		.loc 1 270 0
+ 158 0018 0120     		movs	r0, #1
+ 159              	.LVL9:
+ 160 001a 7047     		bx	lr
+ 161              		.cfi_endproc
+ 162              	.LFE137:
+ 164              		.section	.text.HAL_DAC_Start,"ax",%progbits
+ 165              		.align	2
+ 166              		.global	HAL_DAC_Start
+ 167              		.thumb
+ 168              		.thumb_func
+ 170              	HAL_DAC_Start:
+ 171              	.LFB140:
+ 319:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 320:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 321:HALLIB/Src/stm32f7xx_hal_dac.c ****  
+ 322:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 323:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_MspDeInit could be implemented in the user file
+ 324:HALLIB/Src/stm32f7xx_hal_dac.c ****    */ 
+ 325:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 326:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 327:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 328:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @}
+ 329:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 330:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ARM GAS  /tmp/ccVBB28f.s 			page 10
+
+
+ 331:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC_Exported_Functions_Group2 IO operation functions
+ 332:HALLIB/Src/stm32f7xx_hal_dac.c ****  *  @brief    IO operation functions 
+ 333:HALLIB/Src/stm32f7xx_hal_dac.c ****  *
+ 334:HALLIB/Src/stm32f7xx_hal_dac.c **** @verbatim   
+ 335:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+ 336:HALLIB/Src/stm32f7xx_hal_dac.c ****              ##### IO operation functions #####
+ 337:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================  
+ 338:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]  This section provides functions allowing to:
+ 339:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Start conversion.
+ 340:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Stop conversion.
+ 341:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Start conversion and enable DMA transfer.
+ 342:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Stop conversion and disable DMA transfer.
+ 343:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Get result of conversion.
+ 344:HALLIB/Src/stm32f7xx_hal_dac.c ****                      
+ 345:HALLIB/Src/stm32f7xx_hal_dac.c **** @endverbatim
+ 346:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 347:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 348:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 349:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 350:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Enables DAC and starts conversion of channel.
+ 351:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 352:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 353:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 354:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 355:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 356:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected
+ 357:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 358:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 359:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Start(DAC_HandleTypeDef* hdac, uint32_t Channel)
+ 360:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 172              		.loc 1 360 0
+ 173              		.cfi_startproc
+ 174              		@ args = 0, pretend = 0, frame = 0
+ 175              		@ frame_needed = 0, uses_anonymous_args = 0
+ 176              		@ link register save eliminated.
+ 177              	.LVL10:
+ 361:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 362:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 363:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 364:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 365:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 366:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process locked */
+ 367:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_LOCK(hdac);
+ 178              		.loc 1 367 0
+ 179 0000 4379     		ldrb	r3, [r0, #5]	@ zero_extendqisi2
+ 180 0002 012B     		cmp	r3, #1
+ 181 0004 32D0     		beq	.L18
+ 360:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 182              		.loc 1 360 0 discriminator 2
+ 183 0006 10B4     		push	{r4}
+ 184              	.LCFI4:
+ 185              		.cfi_def_cfa_offset 4
+ 186              		.cfi_offset 4, -4
+ 187              		.loc 1 367 0 discriminator 2
+ 188 0008 0123     		movs	r3, #1
+ 189 000a 4371     		strb	r3, [r0, #5]
+ 368:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ARM GAS  /tmp/ccVBB28f.s 			page 11
+
+
+ 369:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 370:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_BUSY;
+ 190              		.loc 1 370 0 discriminator 2
+ 191 000c 0222     		movs	r2, #2
+ 192 000e 0271     		strb	r2, [r0, #4]
+ 371:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 372:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Enable the Peripheral */
+ 373:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_DAC_ENABLE(hdac, Channel);
+ 193              		.loc 1 373 0 discriminator 2
+ 194 0010 0268     		ldr	r2, [r0]
+ 195 0012 1468     		ldr	r4, [r2]
+ 196 0014 8B40     		lsls	r3, r3, r1
+ 197 0016 2343     		orrs	r3, r3, r4
+ 198 0018 1360     		str	r3, [r2]
+ 374:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 375:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 199              		.loc 1 375 0 discriminator 2
+ 200 001a 81B9     		cbnz	r1, .L16
+ 376:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 377:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp1 = hdac->Instance->CR & DAC_CR_TEN1;
+ 201              		.loc 1 377 0
+ 202 001c 0268     		ldr	r2, [r0]
+ 203 001e 1168     		ldr	r1, [r2]
+ 204              	.LVL11:
+ 378:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp2 = hdac->Instance->CR & DAC_CR_TSEL1;
+ 205              		.loc 1 378 0
+ 206 0020 1368     		ldr	r3, [r2]
+ 207 0022 03F03803 		and	r3, r3, #56
+ 208              	.LVL12:
+ 379:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Check if software trigger enabled */
+ 380:HALLIB/Src/stm32f7xx_hal_dac.c ****     if((tmp1 ==  DAC_CR_TEN1) && (tmp2 ==  DAC_CR_TSEL1))
+ 209              		.loc 1 380 0
+ 210 0026 382B     		cmp	r3, #56
+ 211 0028 14BF     		ite	ne
+ 212 002a 0023     		movne	r3, #0
+ 213              	.LVL13:
+ 214 002c 0123     		moveq	r3, #1
+ 215 002e 13EA9103 		ands	r3, r3, r1, lsr #2
+ 216 0032 15D0     		beq	.L17
+ 381:HALLIB/Src/stm32f7xx_hal_dac.c ****     {
+ 382:HALLIB/Src/stm32f7xx_hal_dac.c ****       /* Enable the selected DAC software conversion */
+ 383:HALLIB/Src/stm32f7xx_hal_dac.c ****       hdac->Instance->SWTRIGR |= (uint32_t)DAC_SWTRIGR_SWTRIG1;
+ 217              		.loc 1 383 0
+ 218 0034 5368     		ldr	r3, [r2, #4]
+ 219 0036 43F00103 		orr	r3, r3, #1
+ 220 003a 5360     		str	r3, [r2, #4]
+ 221 003c 10E0     		b	.L17
+ 222              	.LVL14:
+ 223              	.L16:
+ 384:HALLIB/Src/stm32f7xx_hal_dac.c ****     }
+ 385:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 386:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 387:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 388:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp1 = hdac->Instance->CR & DAC_CR_TEN2;
+ 224              		.loc 1 388 0
+ 225 003e 0268     		ldr	r2, [r0]
+ 226 0040 1168     		ldr	r1, [r2]
+ARM GAS  /tmp/ccVBB28f.s 			page 12
+
+
+ 227              	.LVL15:
+ 389:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp2 = hdac->Instance->CR & DAC_CR_TSEL2;    
+ 228              		.loc 1 389 0
+ 229 0042 1368     		ldr	r3, [r2]
+ 230 0044 03F46013 		and	r3, r3, #3670016
+ 231              	.LVL16:
+ 390:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Check if software trigger enabled */
+ 391:HALLIB/Src/stm32f7xx_hal_dac.c ****     if((tmp1 == DAC_CR_TEN2) && (tmp2 == DAC_CR_TSEL2))
+ 232              		.loc 1 391 0
+ 233 0048 B3F5601F 		cmp	r3, #3670016
+ 234 004c 14BF     		ite	ne
+ 235 004e 0023     		movne	r3, #0
+ 236              	.LVL17:
+ 237 0050 0123     		moveq	r3, #1
+ 238 0052 13EA9143 		ands	r3, r3, r1, lsr #18
+ 239 0056 03D0     		beq	.L17
+ 392:HALLIB/Src/stm32f7xx_hal_dac.c ****     {
+ 393:HALLIB/Src/stm32f7xx_hal_dac.c ****       /* Enable the selected DAC software conversion*/
+ 394:HALLIB/Src/stm32f7xx_hal_dac.c ****       hdac->Instance->SWTRIGR |= (uint32_t)DAC_SWTRIGR_SWTRIG2;
+ 240              		.loc 1 394 0
+ 241 0058 5368     		ldr	r3, [r2, #4]
+ 242 005a 43F00203 		orr	r3, r3, #2
+ 243 005e 5360     		str	r3, [r2, #4]
+ 244              	.LVL18:
+ 245              	.L17:
+ 395:HALLIB/Src/stm32f7xx_hal_dac.c ****     }
+ 396:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 397:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 398:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 399:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_READY;
+ 246              		.loc 1 399 0
+ 247 0060 0123     		movs	r3, #1
+ 248 0062 0371     		strb	r3, [r0, #4]
+ 400:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 401:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process unlocked */
+ 402:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_UNLOCK(hdac);
+ 249              		.loc 1 402 0
+ 250 0064 0023     		movs	r3, #0
+ 251 0066 4371     		strb	r3, [r0, #5]
+ 403:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 404:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 405:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 252              		.loc 1 405 0
+ 253 0068 1846     		mov	r0, r3
+ 254              	.LVL19:
+ 255 006a 01E0     		b	.L15
+ 256              	.LVL20:
+ 257              	.L18:
+ 258              	.LCFI5:
+ 259              		.cfi_def_cfa_offset 0
+ 260              		.cfi_restore 4
+ 367:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 261              		.loc 1 367 0
+ 262 006c 0220     		movs	r0, #2
+ 263              	.LVL21:
+ 264 006e 7047     		bx	lr
+ 265              	.LVL22:
+ARM GAS  /tmp/ccVBB28f.s 			page 13
+
+
+ 266              	.L15:
+ 267              	.LCFI6:
+ 268              		.cfi_def_cfa_offset 4
+ 269              		.cfi_offset 4, -4
+ 406:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 270              		.loc 1 406 0
+ 271 0070 5DF8044B 		ldr	r4, [sp], #4
+ 272              	.LCFI7:
+ 273              		.cfi_restore 4
+ 274              		.cfi_def_cfa_offset 0
+ 275 0074 7047     		bx	lr
+ 276              		.cfi_endproc
+ 277              	.LFE140:
+ 279 0076 00BF     		.section	.text.HAL_DAC_Stop,"ax",%progbits
+ 280              		.align	2
+ 281              		.global	HAL_DAC_Stop
+ 282              		.thumb
+ 283              		.thumb_func
+ 285              	HAL_DAC_Stop:
+ 286              	.LFB141:
+ 407:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 408:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 409:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Disables DAC and stop conversion of channel.
+ 410:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 411:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 412:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 413:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 414:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 415:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected  
+ 416:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 417:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 418:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Stop(DAC_HandleTypeDef* hdac, uint32_t Channel)
+ 419:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 287              		.loc 1 419 0
+ 288              		.cfi_startproc
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291              		@ link register save eliminated.
+ 292              	.LVL23:
+ 293 0000 10B4     		push	{r4}
+ 294              	.LCFI8:
+ 295              		.cfi_def_cfa_offset 4
+ 296              		.cfi_offset 4, -4
+ 420:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 421:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 422:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 423:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable the Peripheral */
+ 424:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_DAC_DISABLE(hdac, Channel);
+ 297              		.loc 1 424 0
+ 298 0002 0468     		ldr	r4, [r0]
+ 299 0004 2368     		ldr	r3, [r4]
+ 300 0006 0122     		movs	r2, #1
+ 301 0008 02FA01F1 		lsl	r1, r2, r1
+ 302              	.LVL24:
+ 303 000c 23EA0103 		bic	r3, r3, r1
+ 304 0010 2360     		str	r3, [r4]
+ 425:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ARM GAS  /tmp/ccVBB28f.s 			page 14
+
+
+ 426:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 427:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_READY;
+ 305              		.loc 1 427 0
+ 306 0012 0271     		strb	r2, [r0, #4]
+ 428:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 429:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 430:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 431:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 307              		.loc 1 431 0
+ 308 0014 0020     		movs	r0, #0
+ 309              	.LVL25:
+ 310 0016 5DF8044B 		ldr	r4, [sp], #4
+ 311              	.LCFI9:
+ 312              		.cfi_restore 4
+ 313              		.cfi_def_cfa_offset 0
+ 314 001a 7047     		bx	lr
+ 315              		.cfi_endproc
+ 316              	.LFE141:
+ 318              		.section	.text.HAL_DAC_Start_DMA,"ax",%progbits
+ 319              		.align	2
+ 320              		.global	HAL_DAC_Start_DMA
+ 321              		.thumb
+ 322              		.thumb_func
+ 324              	HAL_DAC_Start_DMA:
+ 325              	.LFB142:
+ 432:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 433:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 434:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Enables DAC and starts conversion of channel.
+ 435:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 436:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 437:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 438:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 439:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 440:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected
+ 441:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  pData The Source memory Buffer address.
+ 442:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Length The length of data to be transferred from memory to DAC peripheral
+ 443:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Alignment Specifies the data alignment for DAC channel.
+ 444:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 445:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_8B_R: 8bit right data alignment selected
+ 446:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_12B_L: 12bit left data alignment selected
+ 447:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_12B_R: 12bit right data alignment selected
+ 448:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 449:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 450:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Start_DMA(DAC_HandleTypeDef* hdac, uint32_t Channel, uint32_t* pData, uin
+ 451:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 326              		.loc 1 451 0
+ 327              		.cfi_startproc
+ 328              		@ args = 4, pretend = 0, frame = 0
+ 329              		@ frame_needed = 0, uses_anonymous_args = 0
+ 330              	.LVL26:
+ 331 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 332              	.LCFI10:
+ 333              		.cfi_def_cfa_offset 24
+ 334              		.cfi_offset 3, -24
+ 335              		.cfi_offset 4, -20
+ 336              		.cfi_offset 5, -16
+ 337              		.cfi_offset 6, -12
+ARM GAS  /tmp/ccVBB28f.s 			page 15
+
+
+ 338              		.cfi_offset 7, -8
+ 339              		.cfi_offset 14, -4
+ 340 0002 069E     		ldr	r6, [sp, #24]
+ 341              	.LVL27:
+ 452:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmpreg = 0;
+ 453:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 454:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 455:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 456:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_ALIGN(Alignment));
+ 457:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 458:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process locked */
+ 459:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_LOCK(hdac);
+ 342              		.loc 1 459 0
+ 343 0004 4479     		ldrb	r4, [r0, #5]	@ zero_extendqisi2
+ 344 0006 012C     		cmp	r4, #1
+ 345 0008 62D0     		beq	.L35
+ 346              		.loc 1 459 0 is_stmt 0 discriminator 2
+ 347 000a 0124     		movs	r4, #1
+ 348 000c 4471     		strb	r4, [r0, #5]
+ 460:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 461:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 462:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_BUSY;
+ 349              		.loc 1 462 0 is_stmt 1 discriminator 2
+ 350 000e 0224     		movs	r4, #2
+ 351 0010 0471     		strb	r4, [r0, #4]
+ 463:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 464:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 352              		.loc 1 464 0 discriminator 2
+ 353 0012 D9B9     		cbnz	r1, .L25
+ 465:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 466:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA transfer complete callback for channel1 */
+ 467:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle1->XferCpltCallback = DAC_DMAConvCpltCh1;
+ 354              		.loc 1 467 0
+ 355 0014 8468     		ldr	r4, [r0, #8]
+ 356 0016 2F4D     		ldr	r5, .L41
+ 357 0018 E563     		str	r5, [r4, #60]
+ 468:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 469:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA half transfer complete callback for channel1 */
+ 470:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle1->XferHalfCpltCallback = DAC_DMAHalfConvCpltCh1;
+ 358              		.loc 1 470 0
+ 359 001a 8468     		ldr	r4, [r0, #8]
+ 360 001c 2E4D     		ldr	r5, .L41+4
+ 361 001e 2564     		str	r5, [r4, #64]
+ 471:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 472:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA error callback for channel1 */
+ 473:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle1->XferErrorCallback = DAC_DMAErrorCh1;
+ 362              		.loc 1 473 0
+ 363 0020 8468     		ldr	r4, [r0, #8]
+ 364 0022 2E4D     		ldr	r5, .L41+8
+ 365 0024 E564     		str	r5, [r4, #76]
+ 474:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 475:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the selected DAC channel1 DMA request */
+ 476:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->Instance->CR |= DAC_CR_DMAEN1;
+ 366              		.loc 1 476 0
+ 367 0026 0568     		ldr	r5, [r0]
+ 368 0028 2C68     		ldr	r4, [r5]
+ 369 002a 44F48054 		orr	r4, r4, #4096
+ARM GAS  /tmp/ccVBB28f.s 			page 16
+
+
+ 370 002e 2C60     		str	r4, [r5]
+ 477:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 478:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Case of use of channel 1 */
+ 479:HALLIB/Src/stm32f7xx_hal_dac.c ****     switch(Alignment)
+ 371              		.loc 1 479 0
+ 372 0030 042E     		cmp	r6, #4
+ 373 0032 05D0     		beq	.L27
+ 374 0034 082E     		cmp	r6, #8
+ 375 0036 06D0     		beq	.L28
+ 376 0038 26BB     		cbnz	r6, .L38
+ 480:HALLIB/Src/stm32f7xx_hal_dac.c ****     {
+ 481:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_12B_R:
+ 482:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR12R1 address */
+ 483:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR12R1;
+ 377              		.loc 1 483 0
+ 378 003a 0668     		ldr	r6, [r0]
+ 379 003c 0836     		adds	r6, r6, #8
+ 380              	.LVL28:
+ 484:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 381              		.loc 1 484 0
+ 382 003e 24E0     		b	.L26
+ 383              	.LVL29:
+ 384              	.L27:
+ 485:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_12B_L:
+ 486:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR12L1 address */
+ 487:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR12L1;
+ 385              		.loc 1 487 0
+ 386 0040 0668     		ldr	r6, [r0]
+ 387 0042 0C36     		adds	r6, r6, #12
+ 388              	.LVL30:
+ 488:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 389              		.loc 1 488 0
+ 390 0044 21E0     		b	.L26
+ 391              	.LVL31:
+ 392              	.L28:
+ 489:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_8B_R:
+ 490:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR8R1 address */
+ 491:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR8R1;
+ 393              		.loc 1 491 0
+ 394 0046 0668     		ldr	r6, [r0]
+ 395 0048 1036     		adds	r6, r6, #16
+ 396              	.LVL32:
+ 492:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 397              		.loc 1 492 0
+ 398 004a 1EE0     		b	.L26
+ 399              	.LVL33:
+ 400              	.L25:
+ 493:HALLIB/Src/stm32f7xx_hal_dac.c ****       default:
+ 494:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 495:HALLIB/Src/stm32f7xx_hal_dac.c ****     }
+ 496:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 497:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 498:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 499:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA transfer complete callback for channel2 */
+ 500:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle2->XferCpltCallback = DAC_DMAConvCpltCh2;
+ 401              		.loc 1 500 0
+ 402 004c C468     		ldr	r4, [r0, #12]
+ARM GAS  /tmp/ccVBB28f.s 			page 17
+
+
+ 403 004e 244D     		ldr	r5, .L41+12
+ 404 0050 E563     		str	r5, [r4, #60]
+ 501:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 502:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA half transfer complete callback for channel2 */
+ 503:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle2->XferHalfCpltCallback = DAC_DMAHalfConvCpltCh2;
+ 405              		.loc 1 503 0
+ 406 0052 C468     		ldr	r4, [r0, #12]
+ 407 0054 234D     		ldr	r5, .L41+16
+ 408 0056 2564     		str	r5, [r4, #64]
+ 504:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 505:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set the DMA error callback for channel2 */
+ 506:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->DMA_Handle2->XferErrorCallback = DAC_DMAErrorCh2;
+ 409              		.loc 1 506 0
+ 410 0058 C468     		ldr	r4, [r0, #12]
+ 411 005a 234D     		ldr	r5, .L41+20
+ 412 005c E564     		str	r5, [r4, #76]
+ 507:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 508:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the selected DAC channel2 DMA request */
+ 509:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->Instance->CR |= DAC_CR_DMAEN2;
+ 413              		.loc 1 509 0
+ 414 005e 0568     		ldr	r5, [r0]
+ 415 0060 2C68     		ldr	r4, [r5]
+ 416 0062 44F08054 		orr	r4, r4, #268435456
+ 417 0066 2C60     		str	r4, [r5]
+ 510:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 511:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Case of use of channel 2 */
+ 512:HALLIB/Src/stm32f7xx_hal_dac.c ****     switch(Alignment)
+ 418              		.loc 1 512 0
+ 419 0068 042E     		cmp	r6, #4
+ 420 006a 05D0     		beq	.L30
+ 421 006c 082E     		cmp	r6, #8
+ 422 006e 06D0     		beq	.L31
+ 423 0070 56B9     		cbnz	r6, .L39
+ 513:HALLIB/Src/stm32f7xx_hal_dac.c ****     {
+ 514:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_12B_R:
+ 515:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR12R2 address */
+ 516:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR12R2;
+ 424              		.loc 1 516 0
+ 425 0072 0668     		ldr	r6, [r0]
+ 426 0074 1436     		adds	r6, r6, #20
+ 427              	.LVL34:
+ 517:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 428              		.loc 1 517 0
+ 429 0076 08E0     		b	.L26
+ 430              	.LVL35:
+ 431              	.L30:
+ 518:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_12B_L:
+ 519:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR12L2 address */
+ 520:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR12L2;
+ 432              		.loc 1 520 0
+ 433 0078 0668     		ldr	r6, [r0]
+ 434 007a 1836     		adds	r6, r6, #24
+ 435              	.LVL36:
+ 521:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 436              		.loc 1 521 0
+ 437 007c 05E0     		b	.L26
+ 438              	.LVL37:
+ARM GAS  /tmp/ccVBB28f.s 			page 18
+
+
+ 439              	.L31:
+ 522:HALLIB/Src/stm32f7xx_hal_dac.c ****       case DAC_ALIGN_8B_R:
+ 523:HALLIB/Src/stm32f7xx_hal_dac.c ****         /* Get DHR8R2 address */
+ 524:HALLIB/Src/stm32f7xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR8R2;
+ 440              		.loc 1 524 0
+ 441 007e 0668     		ldr	r6, [r0]
+ 442 0080 1C36     		adds	r6, r6, #28
+ 443              	.LVL38:
+ 525:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 444              		.loc 1 525 0
+ 445 0082 02E0     		b	.L26
+ 446              	.LVL39:
+ 447              	.L38:
+ 452:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 448              		.loc 1 452 0
+ 449 0084 0026     		movs	r6, #0
+ 450 0086 00E0     		b	.L26
+ 451              	.L39:
+ 452 0088 0026     		movs	r6, #0
+ 453              	.LVL40:
+ 454              	.L26:
+ 455 008a 1746     		mov	r7, r2
+ 456 008c 0D46     		mov	r5, r1
+ 457 008e 0446     		mov	r4, r0
+ 458              	.LVL41:
+ 526:HALLIB/Src/stm32f7xx_hal_dac.c ****       default:
+ 527:HALLIB/Src/stm32f7xx_hal_dac.c ****         break;
+ 528:HALLIB/Src/stm32f7xx_hal_dac.c ****     }
+ 529:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 530:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 531:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Enable the DMA Stream */
+ 532:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 459              		.loc 1 532 0
+ 460 0090 51B9     		cbnz	r1, .L33
+ 533:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 534:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the DAC DMA underrun interrupt */
+ 535:HALLIB/Src/stm32f7xx_hal_dac.c ****     __HAL_DAC_ENABLE_IT(hdac, DAC_IT_DMAUDR1);
+ 461              		.loc 1 535 0
+ 462 0092 0168     		ldr	r1, [r0]
+ 463              	.LVL42:
+ 464 0094 0A68     		ldr	r2, [r1]
+ 465              	.LVL43:
+ 466 0096 42F40052 		orr	r2, r2, #8192
+ 467 009a 0A60     		str	r2, [r1]
+ 536:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 537:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the DMA Stream */
+ 538:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DMA_Start_IT(hdac->DMA_Handle1, (uint32_t)pData, tmpreg, Length);
+ 468              		.loc 1 538 0
+ 469 009c 3246     		mov	r2, r6
+ 470 009e 3946     		mov	r1, r7
+ 471 00a0 8068     		ldr	r0, [r0, #8]
+ 472              	.LVL44:
+ 473 00a2 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 474              	.LVL45:
+ 475 00a6 09E0     		b	.L34
+ 476              	.LVL46:
+ 477              	.L33:
+ARM GAS  /tmp/ccVBB28f.s 			page 19
+
+
+ 539:HALLIB/Src/stm32f7xx_hal_dac.c ****   } 
+ 540:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 541:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 542:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the DAC DMA underrun interrupt */
+ 543:HALLIB/Src/stm32f7xx_hal_dac.c ****     __HAL_DAC_ENABLE_IT(hdac, DAC_IT_DMAUDR2);
+ 478              		.loc 1 543 0
+ 479 00a8 0168     		ldr	r1, [r0]
+ 480              	.LVL47:
+ 481 00aa 0A68     		ldr	r2, [r1]
+ 482              	.LVL48:
+ 483 00ac 42F00052 		orr	r2, r2, #536870912
+ 484 00b0 0A60     		str	r2, [r1]
+ 544:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 545:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Enable the DMA Stream */
+ 546:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DMA_Start_IT(hdac->DMA_Handle2, (uint32_t)pData, tmpreg, Length);
+ 485              		.loc 1 546 0
+ 486 00b2 3246     		mov	r2, r6
+ 487 00b4 3946     		mov	r1, r7
+ 488 00b6 C068     		ldr	r0, [r0, #12]
+ 489              	.LVL49:
+ 490 00b8 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 491              	.LVL50:
+ 492              	.L34:
+ 547:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 548:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 549:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Enable the Peripheral */
+ 550:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_DAC_ENABLE(hdac, Channel);
+ 493              		.loc 1 550 0
+ 494 00bc 2368     		ldr	r3, [r4]
+ 495 00be 1A68     		ldr	r2, [r3]
+ 496 00c0 0121     		movs	r1, #1
+ 497 00c2 01FA05F5 		lsl	r5, r1, r5
+ 498              	.LVL51:
+ 499 00c6 1543     		orrs	r5, r5, r2
+ 500 00c8 1D60     		str	r5, [r3]
+ 551:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 552:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process Unlocked */
+ 553:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_UNLOCK(hdac);
+ 501              		.loc 1 553 0
+ 502 00ca 0020     		movs	r0, #0
+ 503 00cc 6071     		strb	r0, [r4, #5]
+ 554:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 555:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 556:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 504              		.loc 1 556 0
+ 505 00ce F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 506              	.LVL52:
+ 507              	.L35:
+ 459:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 508              		.loc 1 459 0
+ 509 00d0 0220     		movs	r0, #2
+ 510              	.LVL53:
+ 557:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 511              		.loc 1 557 0
+ 512 00d2 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 513              	.LVL54:
+ 514              	.L42:
+ARM GAS  /tmp/ccVBB28f.s 			page 20
+
+
+ 515              		.align	2
+ 516              	.L41:
+ 517 00d4 00000000 		.word	DAC_DMAConvCpltCh1
+ 518 00d8 00000000 		.word	DAC_DMAHalfConvCpltCh1
+ 519 00dc 00000000 		.word	DAC_DMAErrorCh1
+ 520 00e0 00000000 		.word	DAC_DMAConvCpltCh2
+ 521 00e4 00000000 		.word	DAC_DMAHalfConvCpltCh2
+ 522 00e8 00000000 		.word	DAC_DMAErrorCh2
+ 523              		.cfi_endproc
+ 524              	.LFE142:
+ 526              		.section	.text.HAL_DAC_Stop_DMA,"ax",%progbits
+ 527              		.align	2
+ 528              		.global	HAL_DAC_Stop_DMA
+ 529              		.thumb
+ 530              		.thumb_func
+ 532              	HAL_DAC_Stop_DMA:
+ 533              	.LFB143:
+ 558:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 559:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 560:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Disables DAC and stop conversion of channel.
+ 561:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 562:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 563:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 564:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 565:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 566:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected   
+ 567:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 568:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 569:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Stop_DMA(DAC_HandleTypeDef* hdac, uint32_t Channel)
+ 570:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 534              		.loc 1 570 0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 0
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 538              	.LVL55:
+ 539 0000 10B5     		push	{r4, lr}
+ 540              	.LCFI11:
+ 541              		.cfi_def_cfa_offset 8
+ 542              		.cfi_offset 4, -8
+ 543              		.cfi_offset 14, -4
+ 544 0002 0446     		mov	r4, r0
+ 545              	.LVL56:
+ 571:HALLIB/Src/stm32f7xx_hal_dac.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 572:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 573:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 574:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 575:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 576:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable the selected DAC channel DMA request */
+ 577:HALLIB/Src/stm32f7xx_hal_dac.c ****    hdac->Instance->CR &= ~(DAC_CR_DMAEN1 << Channel);
+ 546              		.loc 1 577 0
+ 547 0004 0068     		ldr	r0, [r0]
+ 548              	.LVL57:
+ 549 0006 0268     		ldr	r2, [r0]
+ 550 0008 4FF48053 		mov	r3, #4096
+ 551 000c 8B40     		lsls	r3, r3, r1
+ 552 000e 22EA0303 		bic	r3, r2, r3
+ 553 0012 0360     		str	r3, [r0]
+ARM GAS  /tmp/ccVBB28f.s 			page 21
+
+
+ 578:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 579:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable the Peripheral */
+ 580:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_DAC_DISABLE(hdac, Channel);
+ 554              		.loc 1 580 0
+ 555 0014 2068     		ldr	r0, [r4]
+ 556 0016 0268     		ldr	r2, [r0]
+ 557 0018 0123     		movs	r3, #1
+ 558 001a 8B40     		lsls	r3, r3, r1
+ 559 001c 22EA0303 		bic	r3, r2, r3
+ 560 0020 0360     		str	r3, [r0]
+ 581:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 582:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable the DMA Channel */
+ 583:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Channel1 is used */
+ 584:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 561              		.loc 1 584 0
+ 562 0022 19B9     		cbnz	r1, .L44
+ 585:HALLIB/Src/stm32f7xx_hal_dac.c ****   { 
+ 586:HALLIB/Src/stm32f7xx_hal_dac.c ****     status = HAL_DMA_Abort(hdac->DMA_Handle1);
+ 563              		.loc 1 586 0
+ 564 0024 A068     		ldr	r0, [r4, #8]
+ 565 0026 FFF7FEFF 		bl	HAL_DMA_Abort
+ 566              	.LVL58:
+ 567 002a 02E0     		b	.L45
+ 568              	.LVL59:
+ 569              	.L44:
+ 587:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 588:HALLIB/Src/stm32f7xx_hal_dac.c ****   else /* Channel2 is used for */
+ 589:HALLIB/Src/stm32f7xx_hal_dac.c ****   { 
+ 590:HALLIB/Src/stm32f7xx_hal_dac.c ****     status = HAL_DMA_Abort(hdac->DMA_Handle2); 
+ 570              		.loc 1 590 0
+ 571 002c E068     		ldr	r0, [r4, #12]
+ 572 002e FFF7FEFF 		bl	HAL_DMA_Abort
+ 573              	.LVL60:
+ 574              	.L45:
+ 591:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 592:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 593:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check if DMA Channel effectively disabled */
+ 594:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(status != HAL_OK)
+ 575              		.loc 1 594 0
+ 576 0032 10B1     		cbz	r0, .L46
+ 595:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 596:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Update DAC state machine to error */
+ 597:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->State = HAL_DAC_STATE_ERROR;      
+ 577              		.loc 1 597 0
+ 578 0034 0423     		movs	r3, #4
+ 579 0036 2371     		strb	r3, [r4, #4]
+ 580 0038 10BD     		pop	{r4, pc}
+ 581              	.LVL61:
+ 582              	.L46:
+ 598:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 599:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 600:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 601:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Change DAC state */
+ 602:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->State = HAL_DAC_STATE_READY;
+ 583              		.loc 1 602 0
+ 584 003a 0123     		movs	r3, #1
+ 585 003c 2371     		strb	r3, [r4, #4]
+ARM GAS  /tmp/ccVBB28f.s 			page 22
+
+
+ 603:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 604:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 605:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 606:HALLIB/Src/stm32f7xx_hal_dac.c ****   return status;
+ 607:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 586              		.loc 1 607 0
+ 587 003e 10BD     		pop	{r4, pc}
+ 588              		.cfi_endproc
+ 589              	.LFE143:
+ 591              		.section	.text.HAL_DAC_GetValue,"ax",%progbits
+ 592              		.align	2
+ 593              		.global	HAL_DAC_GetValue
+ 594              		.thumb
+ 595              		.thumb_func
+ 597              	HAL_DAC_GetValue:
+ 598              	.LFB144:
+ 608:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 609:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 610:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Returns the last data output value of the selected DAC channel.
+ 611:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 612:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 613:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 614:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 615:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 616:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected
+ 617:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval The selected DAC channel data output value.
+ 618:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 619:HALLIB/Src/stm32f7xx_hal_dac.c **** uint32_t HAL_DAC_GetValue(DAC_HandleTypeDef* hdac, uint32_t Channel)
+ 620:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 599              		.loc 1 620 0
+ 600              		.cfi_startproc
+ 601              		@ args = 0, pretend = 0, frame = 0
+ 602              		@ frame_needed = 0, uses_anonymous_args = 0
+ 603              		@ link register save eliminated.
+ 604              	.LVL62:
+ 621:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 622:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 623:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 624:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Returns the DAC channel data output register value */
+ 625:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 605              		.loc 1 625 0
+ 606 0000 11B9     		cbnz	r1, .L50
+ 626:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 627:HALLIB/Src/stm32f7xx_hal_dac.c ****     return hdac->Instance->DOR1;
+ 607              		.loc 1 627 0
+ 608 0002 0368     		ldr	r3, [r0]
+ 609 0004 D86A     		ldr	r0, [r3, #44]
+ 610              	.LVL63:
+ 611 0006 7047     		bx	lr
+ 612              	.LVL64:
+ 613              	.L50:
+ 628:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 629:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 630:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 631:HALLIB/Src/stm32f7xx_hal_dac.c ****     return hdac->Instance->DOR2;
+ 614              		.loc 1 631 0
+ 615 0008 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/ccVBB28f.s 			page 23
+
+
+ 616 000a 186B     		ldr	r0, [r3, #48]
+ 617              	.LVL65:
+ 632:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 633:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 618              		.loc 1 633 0
+ 619 000c 7047     		bx	lr
+ 620              		.cfi_endproc
+ 621              	.LFE144:
+ 623 000e 00BF     		.section	.text.HAL_DAC_ConvCpltCallbackCh1,"ax",%progbits
+ 624              		.align	2
+ 625              		.weak	HAL_DAC_ConvCpltCallbackCh1
+ 626              		.thumb
+ 627              		.thumb_func
+ 629              	HAL_DAC_ConvCpltCallbackCh1:
+ 630              	.LFB146:
+ 634:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 635:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 636:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Handles DAC interrupt request  
+ 637:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 638:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 639:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 640:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 641:HALLIB/Src/stm32f7xx_hal_dac.c **** void HAL_DAC_IRQHandler(DAC_HandleTypeDef* hdac)
+ 642:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 643:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check underrun channel 1 flag */
+ 644:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(__HAL_DAC_GET_FLAG(hdac, DAC_FLAG_DMAUDR1))
+ 645:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 646:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Change DAC state to error state */
+ 647:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->State = HAL_DAC_STATE_ERROR;
+ 648:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 649:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set DAC error code to channel1 DMA underrun error */
+ 650:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->ErrorCode |= HAL_DAC_ERROR_DMAUNDERRUNCH1;
+ 651:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 652:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Clear the underrun flag */
+ 653:HALLIB/Src/stm32f7xx_hal_dac.c ****     __HAL_DAC_CLEAR_FLAG(hdac,DAC_FLAG_DMAUDR1);
+ 654:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 655:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Disable the selected DAC channel1 DMA request */
+ 656:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->Instance->CR &= ~DAC_CR_DMAEN1;
+ 657:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 658:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Error callback */ 
+ 659:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DAC_DMAUnderrunCallbackCh1(hdac);
+ 660:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 661:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check underrun channel 2 flag */
+ 662:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(__HAL_DAC_GET_FLAG(hdac, DAC_FLAG_DMAUDR2))
+ 663:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 664:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Change DAC state to error state */
+ 665:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->State = HAL_DAC_STATE_ERROR;
+ 666:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 667:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Set DAC error code to channel2 DMA underrun error */
+ 668:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->ErrorCode |= HAL_DAC_ERROR_DMAUNDERRUNCH2;
+ 669:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 670:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Clear the underrun flag */
+ 671:HALLIB/Src/stm32f7xx_hal_dac.c ****     __HAL_DAC_CLEAR_FLAG(hdac,DAC_FLAG_DMAUDR2);
+ 672:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 673:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Disable the selected DAC channel1 DMA request */
+ 674:HALLIB/Src/stm32f7xx_hal_dac.c ****     hdac->Instance->CR &= ~DAC_CR_DMAEN2;
+ 675:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ARM GAS  /tmp/ccVBB28f.s 			page 24
+
+
+ 676:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Error callback */ 
+ 677:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DACEx_DMAUnderrunCallbackCh2(hdac);
+ 678:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 679:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 680:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 681:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 682:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Conversion complete callback in non blocking mode for Channel1 
+ 683:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 684:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 685:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 686:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 687:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef* hdac)
+ 688:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 631              		.loc 1 688 0
+ 632              		.cfi_startproc
+ 633              		@ args = 0, pretend = 0, frame = 0
+ 634              		@ frame_needed = 0, uses_anonymous_args = 0
+ 635              		@ link register save eliminated.
+ 636              	.LVL66:
+ 637 0000 7047     		bx	lr
+ 638              		.cfi_endproc
+ 639              	.LFE146:
+ 641 0002 00BF     		.section	.text.DAC_DMAConvCpltCh1,"ax",%progbits
+ 642              		.align	2
+ 643              		.thumb
+ 644              		.thumb_func
+ 646              	DAC_DMAConvCpltCh1:
+ 647              	.LFB154:
+ 689:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 690:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 691:HALLIB/Src/stm32f7xx_hal_dac.c ****  
+ 692:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 693:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_ConvCpltCallback could be implemented in the user file
+ 694:HALLIB/Src/stm32f7xx_hal_dac.c ****    */
+ 695:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 696:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 697:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 698:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Conversion half DMA transfer callback in non blocking mode for Channel1 
+ 699:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 700:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 701:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 702:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 703:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef* hdac)
+ 704:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 705:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 706:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 707:HALLIB/Src/stm32f7xx_hal_dac.c ****    
+ 708:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 709:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_ConvHalfCpltCallbackCh1 could be implemented in the user file
+ 710:HALLIB/Src/stm32f7xx_hal_dac.c ****    */
+ 711:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 712:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 713:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 714:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Error DAC callback for Channel1.
+ 715:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 716:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 717:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ARM GAS  /tmp/ccVBB28f.s 			page 25
+
+
+ 718:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 719:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_ErrorCallbackCh1(DAC_HandleTypeDef *hdac)
+ 720:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 721:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 722:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 723:HALLIB/Src/stm32f7xx_hal_dac.c ****  
+ 724:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 725:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_ErrorCallbackCh1 could be implemented in the user file
+ 726:HALLIB/Src/stm32f7xx_hal_dac.c ****    */
+ 727:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 728:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 729:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 730:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  DMA underrun DAC callback for channel1.
+ 731:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 732:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 733:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 734:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 735:HALLIB/Src/stm32f7xx_hal_dac.c **** __weak void HAL_DAC_DMAUnderrunCallbackCh1(DAC_HandleTypeDef *hdac)
+ 736:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 737:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 738:HALLIB/Src/stm32f7xx_hal_dac.c ****   UNUSED(hdac);
+ 739:HALLIB/Src/stm32f7xx_hal_dac.c ****  
+ 740:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 741:HALLIB/Src/stm32f7xx_hal_dac.c ****             the HAL_DAC_DMAUnderrunCallbackCh1 could be implemented in the user file
+ 742:HALLIB/Src/stm32f7xx_hal_dac.c ****    */
+ 743:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 744:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 745:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 746:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @}
+ 747:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 748:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 749:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC_Exported_Functions_Group3 Peripheral Control functions
+ 750:HALLIB/Src/stm32f7xx_hal_dac.c ****  *  @brief   	Peripheral Control functions 
+ 751:HALLIB/Src/stm32f7xx_hal_dac.c ****  *
+ 752:HALLIB/Src/stm32f7xx_hal_dac.c **** @verbatim   
+ 753:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+ 754:HALLIB/Src/stm32f7xx_hal_dac.c ****              ##### Peripheral Control functions #####
+ 755:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================  
+ 756:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]  This section provides functions allowing to:
+ 757:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Configure channels. 
+ 758:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Set the specified data holding register value for DAC channel.
+ 759:HALLIB/Src/stm32f7xx_hal_dac.c ****       
+ 760:HALLIB/Src/stm32f7xx_hal_dac.c **** @endverbatim
+ 761:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 762:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 763:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 764:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 765:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Configures the selected DAC channel.
+ 766:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 767:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 768:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  sConfig DAC configuration structure.
+ 769:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 770:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 771:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 772:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected
+ 773:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 774:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ARM GAS  /tmp/ccVBB28f.s 			page 26
+
+
+ 775:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_ConfigChannel(DAC_HandleTypeDef* hdac, DAC_ChannelConfTypeDef* sConfig, u
+ 776:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 777:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmpreg1 = 0, tmpreg2 = 0;
+ 778:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 779:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the DAC parameters */
+ 780:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_TRIGGER(sConfig->DAC_Trigger));
+ 781:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_OUTPUT_BUFFER_STATE(sConfig->DAC_OutputBuffer));
+ 782:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 783:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 784:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process locked */
+ 785:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_LOCK(hdac);
+ 786:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 787:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 788:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_BUSY;
+ 789:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 790:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Get the DAC CR value */
+ 791:HALLIB/Src/stm32f7xx_hal_dac.c ****   tmpreg1 = hdac->Instance->CR;
+ 792:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Clear BOFFx, TENx, TSELx, WAVEx and MAMPx bits */
+ 793:HALLIB/Src/stm32f7xx_hal_dac.c ****   tmpreg1 &= ~(((uint32_t)(DAC_CR_MAMP1 | DAC_CR_WAVE1 | DAC_CR_TSEL1 | DAC_CR_TEN1 | DAC_CR_BOFF1)
+ 794:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Configure for the selected DAC channel: buffer output, trigger */
+ 795:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set TSELx and TENx bits according to DAC_Trigger value */
+ 796:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set BOFFx bit according to DAC_OutputBuffer value */   
+ 797:HALLIB/Src/stm32f7xx_hal_dac.c ****   tmpreg2 = (sConfig->DAC_Trigger | sConfig->DAC_OutputBuffer);
+ 798:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Calculate CR register value depending on DAC_Channel */
+ 799:HALLIB/Src/stm32f7xx_hal_dac.c ****   tmpreg1 |= tmpreg2 << Channel;
+ 800:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Write to DAC CR */
+ 801:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->Instance->CR = tmpreg1;
+ 802:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable wave generation */
+ 803:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->Instance->CR &= ~(DAC_CR_WAVE1 << Channel);
+ 804:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 805:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Change DAC state */
+ 806:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_READY;
+ 807:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 808:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Process unlocked */
+ 809:HALLIB/Src/stm32f7xx_hal_dac.c ****   __HAL_UNLOCK(hdac);
+ 810:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 811:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 812:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 813:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 814:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 815:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 816:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Set the specified data holding register value for DAC channel.
+ 817:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 818:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 819:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Channel The selected DAC channel. 
+ 820:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 821:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_1: DAC Channel1 selected
+ 822:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_CHANNEL_2: DAC Channel2 selected  
+ 823:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Alignment Specifies the data alignment.
+ 824:HALLIB/Src/stm32f7xx_hal_dac.c ****   *          This parameter can be one of the following values:
+ 825:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_8B_R: 8bit right data alignment selected
+ 826:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_12B_L: 12bit left data alignment selected
+ 827:HALLIB/Src/stm32f7xx_hal_dac.c ****   *            @arg DAC_ALIGN_12B_R: 12bit right data alignment selected
+ 828:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  Data Data to be loaded in the selected data holding register.
+ 829:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL status
+ 830:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 831:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_SetValue(DAC_HandleTypeDef* hdac, uint32_t Channel, uint32_t Alignment, u
+ARM GAS  /tmp/ccVBB28f.s 			page 27
+
+
+ 832:HALLIB/Src/stm32f7xx_hal_dac.c **** {  
+ 833:HALLIB/Src/stm32f7xx_hal_dac.c ****   __IO uint32_t tmp = 0;
+ 834:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 835:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check the parameters */
+ 836:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_CHANNEL(Channel));
+ 837:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_ALIGN(Alignment));
+ 838:HALLIB/Src/stm32f7xx_hal_dac.c ****   assert_param(IS_DAC_DATA(Data));
+ 839:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 840:HALLIB/Src/stm32f7xx_hal_dac.c ****   tmp = (uint32_t)hdac->Instance; 
+ 841:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 842:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 843:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp += DAC_DHR12R1_ALIGNMENT(Alignment);
+ 844:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 845:HALLIB/Src/stm32f7xx_hal_dac.c ****   else
+ 846:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 847:HALLIB/Src/stm32f7xx_hal_dac.c ****     tmp += DAC_DHR12R2_ALIGNMENT(Alignment);
+ 848:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 849:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 850:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set the DAC channel1 selected data holding register */
+ 851:HALLIB/Src/stm32f7xx_hal_dac.c ****   *(__IO uint32_t *) tmp = Data;
+ 852:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 853:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return function status */
+ 854:HALLIB/Src/stm32f7xx_hal_dac.c ****   return HAL_OK;
+ 855:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 856:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 857:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 858:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @}
+ 859:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 860:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 861:HALLIB/Src/stm32f7xx_hal_dac.c **** /** @defgroup DAC_Exported_Functions_Group4 Peripheral State and Errors functions
+ 862:HALLIB/Src/stm32f7xx_hal_dac.c ****  *  @brief   Peripheral State and Errors functions 
+ 863:HALLIB/Src/stm32f7xx_hal_dac.c ****  *
+ 864:HALLIB/Src/stm32f7xx_hal_dac.c **** @verbatim   
+ 865:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================
+ 866:HALLIB/Src/stm32f7xx_hal_dac.c ****             ##### Peripheral State and Errors functions #####
+ 867:HALLIB/Src/stm32f7xx_hal_dac.c ****   ==============================================================================  
+ 868:HALLIB/Src/stm32f7xx_hal_dac.c ****     [..]
+ 869:HALLIB/Src/stm32f7xx_hal_dac.c ****     This subsection provides functions allowing to
+ 870:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Check the DAC state.
+ 871:HALLIB/Src/stm32f7xx_hal_dac.c ****       (+) Check the DAC Errors.
+ 872:HALLIB/Src/stm32f7xx_hal_dac.c ****         
+ 873:HALLIB/Src/stm32f7xx_hal_dac.c **** @endverbatim
+ 874:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @{
+ 875:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 876:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 877:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 878:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  return the DAC state
+ 879:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 880:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 881:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval HAL state
+ 882:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 883:HALLIB/Src/stm32f7xx_hal_dac.c **** HAL_DAC_StateTypeDef HAL_DAC_GetState(DAC_HandleTypeDef* hdac)
+ 884:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 885:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return DAC state */
+ 886:HALLIB/Src/stm32f7xx_hal_dac.c ****   return hdac->State;
+ 887:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 888:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ARM GAS  /tmp/ccVBB28f.s 			page 28
+
+
+ 889:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 890:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 891:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  Return the DAC error code
+ 892:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+ 893:HALLIB/Src/stm32f7xx_hal_dac.c ****   *         the configuration information for the specified DAC.
+ 894:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval DAC Error Code
+ 895:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 896:HALLIB/Src/stm32f7xx_hal_dac.c **** uint32_t HAL_DAC_GetError(DAC_HandleTypeDef *hdac)
+ 897:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 898:HALLIB/Src/stm32f7xx_hal_dac.c ****   return hdac->ErrorCode;
+ 899:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 900:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 901:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 902:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @}
+ 903:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 904:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 905:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 906:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  DMA conversion complete callback. 
+ 907:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 908:HALLIB/Src/stm32f7xx_hal_dac.c ****   *                the configuration information for the specified DMA module.
+ 909:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 910:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 911:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAConvCpltCh1(DMA_HandleTypeDef *hdma)   
+ 912:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 648              		.loc 1 912 0
+ 649              		.cfi_startproc
+ 650              		@ args = 0, pretend = 0, frame = 0
+ 651              		@ frame_needed = 0, uses_anonymous_args = 0
+ 652              	.LVL67:
+ 653              		.loc 1 912 0
+ 654 0000 10B5     		push	{r4, lr}
+ 655              	.LCFI12:
+ 656              		.cfi_def_cfa_offset 8
+ 657              		.cfi_offset 4, -8
+ 658              		.cfi_offset 14, -4
+ 913:HALLIB/Src/stm32f7xx_hal_dac.c ****   DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ 659              		.loc 1 913 0
+ 660 0002 846B     		ldr	r4, [r0, #56]
+ 661              	.LVL68:
+ 914:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 915:HALLIB/Src/stm32f7xx_hal_dac.c ****   HAL_DAC_ConvCpltCallbackCh1(hdac); 
+ 662              		.loc 1 915 0
+ 663 0004 2046     		mov	r0, r4
+ 664              	.LVL69:
+ 665 0006 FFF7FEFF 		bl	HAL_DAC_ConvCpltCallbackCh1
+ 666              	.LVL70:
+ 916:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 917:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State= HAL_DAC_STATE_READY;
+ 667              		.loc 1 917 0
+ 668 000a 0123     		movs	r3, #1
+ 669 000c 2371     		strb	r3, [r4, #4]
+ 670 000e 10BD     		pop	{r4, pc}
+ 671              		.cfi_endproc
+ 672              	.LFE154:
+ 674              		.section	.text.HAL_DAC_ConvHalfCpltCallbackCh1,"ax",%progbits
+ 675              		.align	2
+ 676              		.weak	HAL_DAC_ConvHalfCpltCallbackCh1
+ARM GAS  /tmp/ccVBB28f.s 			page 29
+
+
+ 677              		.thumb
+ 678              		.thumb_func
+ 680              	HAL_DAC_ConvHalfCpltCallbackCh1:
+ 681              	.LFB147:
+ 704:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 682              		.loc 1 704 0
+ 683              		.cfi_startproc
+ 684              		@ args = 0, pretend = 0, frame = 0
+ 685              		@ frame_needed = 0, uses_anonymous_args = 0
+ 686              		@ link register save eliminated.
+ 687              	.LVL71:
+ 688 0000 7047     		bx	lr
+ 689              		.cfi_endproc
+ 690              	.LFE147:
+ 692 0002 00BF     		.section	.text.DAC_DMAHalfConvCpltCh1,"ax",%progbits
+ 693              		.align	2
+ 694              		.thumb
+ 695              		.thumb_func
+ 697              	DAC_DMAHalfConvCpltCh1:
+ 698              	.LFB155:
+ 918:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 919:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 920:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 921:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  DMA half transfer complete callback. 
+ 922:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 923:HALLIB/Src/stm32f7xx_hal_dac.c ****   *                the configuration information for the specified DMA module.
+ 924:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 925:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 926:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAHalfConvCpltCh1(DMA_HandleTypeDef *hdma)   
+ 927:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 699              		.loc 1 927 0
+ 700              		.cfi_startproc
+ 701              		@ args = 0, pretend = 0, frame = 0
+ 702              		@ frame_needed = 0, uses_anonymous_args = 0
+ 703              	.LVL72:
+ 704              		.loc 1 927 0
+ 705 0000 08B5     		push	{r3, lr}
+ 706              	.LCFI13:
+ 707              		.cfi_def_cfa_offset 8
+ 708              		.cfi_offset 3, -8
+ 709              		.cfi_offset 14, -4
+ 710              	.LVL73:
+ 928:HALLIB/Src/stm32f7xx_hal_dac.c ****     DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ 929:HALLIB/Src/stm32f7xx_hal_dac.c ****     /* Conversion complete callback */
+ 930:HALLIB/Src/stm32f7xx_hal_dac.c ****     HAL_DAC_ConvHalfCpltCallbackCh1(hdac); 
+ 711              		.loc 1 930 0
+ 712 0002 806B     		ldr	r0, [r0, #56]
+ 713              	.LVL74:
+ 714 0004 FFF7FEFF 		bl	HAL_DAC_ConvHalfCpltCallbackCh1
+ 715              	.LVL75:
+ 716 0008 08BD     		pop	{r3, pc}
+ 717              		.cfi_endproc
+ 718              	.LFE155:
+ 720 000a 00BF     		.section	.text.HAL_DAC_ErrorCallbackCh1,"ax",%progbits
+ 721              		.align	2
+ 722              		.weak	HAL_DAC_ErrorCallbackCh1
+ 723              		.thumb
+ARM GAS  /tmp/ccVBB28f.s 			page 30
+
+
+ 724              		.thumb_func
+ 726              	HAL_DAC_ErrorCallbackCh1:
+ 727              	.LFB148:
+ 720:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 728              		.loc 1 720 0
+ 729              		.cfi_startproc
+ 730              		@ args = 0, pretend = 0, frame = 0
+ 731              		@ frame_needed = 0, uses_anonymous_args = 0
+ 732              		@ link register save eliminated.
+ 733              	.LVL76:
+ 734 0000 7047     		bx	lr
+ 735              		.cfi_endproc
+ 736              	.LFE148:
+ 738 0002 00BF     		.section	.text.DAC_DMAErrorCh1,"ax",%progbits
+ 739              		.align	2
+ 740              		.thumb
+ 741              		.thumb_func
+ 743              	DAC_DMAErrorCh1:
+ 744              	.LFB156:
+ 931:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 932:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 933:HALLIB/Src/stm32f7xx_hal_dac.c **** /**
+ 934:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @brief  DMA error callback 
+ 935:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 936:HALLIB/Src/stm32f7xx_hal_dac.c ****   *                the configuration information for the specified DMA module.
+ 937:HALLIB/Src/stm32f7xx_hal_dac.c ****   * @retval None
+ 938:HALLIB/Src/stm32f7xx_hal_dac.c ****   */
+ 939:HALLIB/Src/stm32f7xx_hal_dac.c **** static void DAC_DMAErrorCh1(DMA_HandleTypeDef *hdma)   
+ 940:HALLIB/Src/stm32f7xx_hal_dac.c **** {
+ 745              		.loc 1 940 0
+ 746              		.cfi_startproc
+ 747              		@ args = 0, pretend = 0, frame = 0
+ 748              		@ frame_needed = 0, uses_anonymous_args = 0
+ 749              	.LVL77:
+ 750              		.loc 1 940 0
+ 751 0000 10B5     		push	{r4, lr}
+ 752              	.LCFI14:
+ 753              		.cfi_def_cfa_offset 8
+ 754              		.cfi_offset 4, -8
+ 755              		.cfi_offset 14, -4
+ 941:HALLIB/Src/stm32f7xx_hal_dac.c ****   DAC_HandleTypeDef* hdac = ( DAC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ 756              		.loc 1 941 0
+ 757 0002 846B     		ldr	r4, [r0, #56]
+ 758              	.LVL78:
+ 942:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 943:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Set DAC error code to DMA error */
+ 944:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->ErrorCode |= HAL_DAC_ERROR_DMA;
+ 759              		.loc 1 944 0
+ 760 0004 2369     		ldr	r3, [r4, #16]
+ 761 0006 43F00403 		orr	r3, r3, #4
+ 762 000a 2361     		str	r3, [r4, #16]
+ 945:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 946:HALLIB/Src/stm32f7xx_hal_dac.c ****   HAL_DAC_ErrorCallbackCh1(hdac); 
+ 763              		.loc 1 946 0
+ 764 000c 2046     		mov	r0, r4
+ 765              	.LVL79:
+ 766 000e FFF7FEFF 		bl	HAL_DAC_ErrorCallbackCh1
+ARM GAS  /tmp/ccVBB28f.s 			page 31
+
+
+ 767              	.LVL80:
+ 947:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 948:HALLIB/Src/stm32f7xx_hal_dac.c ****   hdac->State= HAL_DAC_STATE_READY;
+ 768              		.loc 1 948 0
+ 769 0012 0123     		movs	r3, #1
+ 770 0014 2371     		strb	r3, [r4, #4]
+ 771 0016 10BD     		pop	{r4, pc}
+ 772              		.cfi_endproc
+ 773              	.LFE156:
+ 775              		.section	.text.HAL_DAC_DMAUnderrunCallbackCh1,"ax",%progbits
+ 776              		.align	2
+ 777              		.weak	HAL_DAC_DMAUnderrunCallbackCh1
+ 778              		.thumb
+ 779              		.thumb_func
+ 781              	HAL_DAC_DMAUnderrunCallbackCh1:
+ 782              	.LFB149:
+ 736:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
+ 783              		.loc 1 736 0
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 0
+ 786              		@ frame_needed = 0, uses_anonymous_args = 0
+ 787              		@ link register save eliminated.
+ 788              	.LVL81:
+ 789 0000 7047     		bx	lr
+ 790              		.cfi_endproc
+ 791              	.LFE149:
+ 793 0002 00BF     		.section	.text.HAL_DAC_IRQHandler,"ax",%progbits
+ 794              		.align	2
+ 795              		.global	HAL_DAC_IRQHandler
+ 796              		.thumb
+ 797              		.thumb_func
+ 799              	HAL_DAC_IRQHandler:
+ 800              	.LFB145:
+ 642:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check underrun channel 1 flag */
+ 801              		.loc 1 642 0
+ 802              		.cfi_startproc
+ 803              		@ args = 0, pretend = 0, frame = 0
+ 804              		@ frame_needed = 0, uses_anonymous_args = 0
+ 805              	.LVL82:
+ 642:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Check underrun channel 1 flag */
+ 806              		.loc 1 642 0
+ 807 0000 10B5     		push	{r4, lr}
+ 808              	.LCFI15:
+ 809              		.cfi_def_cfa_offset 8
+ 810              		.cfi_offset 4, -8
+ 811              		.cfi_offset 14, -4
+ 812 0002 0446     		mov	r4, r0
+ 644:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 813              		.loc 1 644 0
+ 814 0004 0368     		ldr	r3, [r0]
+ 815 0006 5A6B     		ldr	r2, [r3, #52]
+ 816 0008 12F4005F 		tst	r2, #8192
+ 817 000c 0FD0     		beq	.L63
+ 647:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 818              		.loc 1 647 0
+ 819 000e 0422     		movs	r2, #4
+ 820 0010 0271     		strb	r2, [r0, #4]
+ARM GAS  /tmp/ccVBB28f.s 			page 32
+
+
+ 650:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 821              		.loc 1 650 0
+ 822 0012 0269     		ldr	r2, [r0, #16]
+ 823 0014 42F00102 		orr	r2, r2, #1
+ 824 0018 0261     		str	r2, [r0, #16]
+ 653:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 825              		.loc 1 653 0
+ 826 001a 4FF40052 		mov	r2, #8192
+ 827 001e 5A63     		str	r2, [r3, #52]
+ 656:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 828              		.loc 1 656 0
+ 829 0020 0268     		ldr	r2, [r0]
+ 830 0022 1368     		ldr	r3, [r2]
+ 831 0024 23F48053 		bic	r3, r3, #4096
+ 832 0028 1360     		str	r3, [r2]
+ 659:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 833              		.loc 1 659 0
+ 834 002a FFF7FEFF 		bl	HAL_DAC_DMAUnderrunCallbackCh1
+ 835              	.LVL83:
+ 836              	.L63:
+ 662:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 837              		.loc 1 662 0
+ 838 002e 2368     		ldr	r3, [r4]
+ 839 0030 5A6B     		ldr	r2, [r3, #52]
+ 840 0032 12F0005F 		tst	r2, #536870912
+ 841 0036 10D0     		beq	.L62
+ 665:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 842              		.loc 1 665 0
+ 843 0038 0422     		movs	r2, #4
+ 844 003a 2271     		strb	r2, [r4, #4]
+ 668:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 845              		.loc 1 668 0
+ 846 003c 2269     		ldr	r2, [r4, #16]
+ 847 003e 42F00202 		orr	r2, r2, #2
+ 848 0042 2261     		str	r2, [r4, #16]
+ 671:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 849              		.loc 1 671 0
+ 850 0044 4FF00052 		mov	r2, #536870912
+ 851 0048 5A63     		str	r2, [r3, #52]
+ 674:HALLIB/Src/stm32f7xx_hal_dac.c ****     
+ 852              		.loc 1 674 0
+ 853 004a 2268     		ldr	r2, [r4]
+ 854 004c 1368     		ldr	r3, [r2]
+ 855 004e 23F08053 		bic	r3, r3, #268435456
+ 856 0052 1360     		str	r3, [r2]
+ 677:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 857              		.loc 1 677 0
+ 858 0054 2046     		mov	r0, r4
+ 859 0056 FFF7FEFF 		bl	HAL_DACEx_DMAUnderrunCallbackCh2
+ 860              	.LVL84:
+ 861              	.L62:
+ 862 005a 10BD     		pop	{r4, pc}
+ 863              		.cfi_endproc
+ 864              	.LFE145:
+ 866              		.section	.text.HAL_DAC_ConfigChannel,"ax",%progbits
+ 867              		.align	2
+ 868              		.global	HAL_DAC_ConfigChannel
+ARM GAS  /tmp/ccVBB28f.s 			page 33
+
+
+ 869              		.thumb
+ 870              		.thumb_func
+ 872              	HAL_DAC_ConfigChannel:
+ 873              	.LFB150:
+ 776:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmpreg1 = 0, tmpreg2 = 0;
+ 874              		.loc 1 776 0
+ 875              		.cfi_startproc
+ 876              		@ args = 0, pretend = 0, frame = 0
+ 877              		@ frame_needed = 0, uses_anonymous_args = 0
+ 878              		@ link register save eliminated.
+ 879              	.LVL85:
+ 785:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 880              		.loc 1 785 0
+ 881 0000 4379     		ldrb	r3, [r0, #5]	@ zero_extendqisi2
+ 882 0002 012B     		cmp	r3, #1
+ 883 0004 1ED0     		beq	.L68
+ 776:HALLIB/Src/stm32f7xx_hal_dac.c ****   uint32_t tmpreg1 = 0, tmpreg2 = 0;
+ 884              		.loc 1 776 0 discriminator 2
+ 885 0006 F0B4     		push	{r4, r5, r6, r7}
+ 886              	.LCFI16:
+ 887              		.cfi_def_cfa_offset 16
+ 888              		.cfi_offset 4, -16
+ 889              		.cfi_offset 5, -12
+ 890              		.cfi_offset 6, -8
+ 891              		.cfi_offset 7, -4
+ 785:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 892              		.loc 1 785 0 discriminator 2
+ 893 0008 0126     		movs	r6, #1
+ 894 000a 4671     		strb	r6, [r0, #5]
+ 788:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 895              		.loc 1 788 0 discriminator 2
+ 896 000c 0223     		movs	r3, #2
+ 897 000e 0371     		strb	r3, [r0, #4]
+ 791:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Clear BOFFx, TENx, TSELx, WAVEx and MAMPx bits */
+ 898              		.loc 1 791 0 discriminator 2
+ 899 0010 0768     		ldr	r7, [r0]
+ 900 0012 3D68     		ldr	r5, [r7]
+ 901              	.LVL86:
+ 793:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Configure for the selected DAC channel: buffer output, trigger */
+ 902              		.loc 1 793 0 discriminator 2
+ 903 0014 40F6FE73 		movw	r3, #4094
+ 904 0018 9340     		lsls	r3, r3, r2
+ 905 001a 25EA0304 		bic	r4, r5, r3
+ 906              	.LVL87:
+ 797:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Calculate CR register value depending on DAC_Channel */
+ 907              		.loc 1 797 0 discriminator 2
+ 908 001e 0B68     		ldr	r3, [r1]
+ 909 0020 4968     		ldr	r1, [r1, #4]
+ 910              	.LVL88:
+ 911 0022 0B43     		orrs	r3, r3, r1
+ 912              	.LVL89:
+ 799:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Write to DAC CR */
+ 913              		.loc 1 799 0 discriminator 2
+ 914 0024 9340     		lsls	r3, r3, r2
+ 915              	.LVL90:
+ 916 0026 2343     		orrs	r3, r3, r4
+ 917              	.LVL91:
+ARM GAS  /tmp/ccVBB28f.s 			page 34
+
+
+ 801:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Disable wave generation */
+ 918              		.loc 1 801 0 discriminator 2
+ 919 0028 3B60     		str	r3, [r7]
+ 920              	.LVL92:
+ 803:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 921              		.loc 1 803 0 discriminator 2
+ 922 002a 0468     		ldr	r4, [r0]
+ 923 002c 2368     		ldr	r3, [r4]
+ 924              	.LVL93:
+ 925 002e C021     		movs	r1, #192
+ 926 0030 01FA02F2 		lsl	r2, r1, r2
+ 927              	.LVL94:
+ 928 0034 23EA0202 		bic	r2, r3, r2
+ 929 0038 2260     		str	r2, [r4]
+ 930              	.LVL95:
+ 806:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 931              		.loc 1 806 0 discriminator 2
+ 932 003a 0671     		strb	r6, [r0, #4]
+ 809:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 933              		.loc 1 809 0 discriminator 2
+ 934 003c 0023     		movs	r3, #0
+ 935 003e 4371     		strb	r3, [r0, #5]
+ 812:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 936              		.loc 1 812 0 discriminator 2
+ 937 0040 1846     		mov	r0, r3
+ 938              	.LVL96:
+ 939 0042 01E0     		b	.L67
+ 940              	.LVL97:
+ 941              	.L68:
+ 942              	.LCFI17:
+ 943              		.cfi_def_cfa_offset 0
+ 944              		.cfi_restore 4
+ 945              		.cfi_restore 5
+ 946              		.cfi_restore 6
+ 947              		.cfi_restore 7
+ 785:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 948              		.loc 1 785 0
+ 949 0044 0220     		movs	r0, #2
+ 950              	.LVL98:
+ 951 0046 7047     		bx	lr
+ 952              	.LVL99:
+ 953              	.L67:
+ 954              	.LCFI18:
+ 955              		.cfi_def_cfa_offset 16
+ 956              		.cfi_offset 4, -16
+ 957              		.cfi_offset 5, -12
+ 958              		.cfi_offset 6, -8
+ 959              		.cfi_offset 7, -4
+ 813:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 960              		.loc 1 813 0
+ 961 0048 F0BC     		pop	{r4, r5, r6, r7}
+ 962              	.LCFI19:
+ 963              		.cfi_restore 7
+ 964              		.cfi_restore 6
+ 965              		.cfi_restore 5
+ 966              		.cfi_restore 4
+ 967              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccVBB28f.s 			page 35
+
+
+ 968 004a 7047     		bx	lr
+ 969              		.cfi_endproc
+ 970              	.LFE150:
+ 972              		.section	.text.HAL_DAC_SetValue,"ax",%progbits
+ 973              		.align	2
+ 974              		.global	HAL_DAC_SetValue
+ 975              		.thumb
+ 976              		.thumb_func
+ 978              	HAL_DAC_SetValue:
+ 979              	.LFB151:
+ 832:HALLIB/Src/stm32f7xx_hal_dac.c ****   __IO uint32_t tmp = 0;
+ 980              		.loc 1 832 0
+ 981              		.cfi_startproc
+ 982              		@ args = 0, pretend = 0, frame = 8
+ 983              		@ frame_needed = 0, uses_anonymous_args = 0
+ 984              		@ link register save eliminated.
+ 985              	.LVL100:
+ 986 0000 10B4     		push	{r4}
+ 987              	.LCFI20:
+ 988              		.cfi_def_cfa_offset 4
+ 989              		.cfi_offset 4, -4
+ 990 0002 83B0     		sub	sp, sp, #12
+ 991              	.LCFI21:
+ 992              		.cfi_def_cfa_offset 16
+ 833:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ 993              		.loc 1 833 0
+ 994 0004 0024     		movs	r4, #0
+ 995 0006 0194     		str	r4, [sp, #4]
+ 840:HALLIB/Src/stm32f7xx_hal_dac.c ****   if(Channel == DAC_CHANNEL_1)
+ 996              		.loc 1 840 0
+ 997 0008 0068     		ldr	r0, [r0]
+ 998              	.LVL101:
+ 999 000a 0190     		str	r0, [sp, #4]
+ 841:HALLIB/Src/stm32f7xx_hal_dac.c ****   {
+ 1000              		.loc 1 841 0
+ 1001 000c 21B9     		cbnz	r1, .L72
+ 843:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 1002              		.loc 1 843 0
+ 1003 000e 0199     		ldr	r1, [sp, #4]
+ 1004              	.LVL102:
+ 1005 0010 0A44     		add	r2, r2, r1
+ 1006              	.LVL103:
+ 1007 0012 0832     		adds	r2, r2, #8
+ 1008 0014 0192     		str	r2, [sp, #4]
+ 1009 0016 03E0     		b	.L73
+ 1010              	.LVL104:
+ 1011              	.L72:
+ 847:HALLIB/Src/stm32f7xx_hal_dac.c ****   }
+ 1012              		.loc 1 847 0
+ 1013 0018 0199     		ldr	r1, [sp, #4]
+ 1014              	.LVL105:
+ 1015 001a 0A44     		add	r2, r2, r1
+ 1016              	.LVL106:
+ 1017 001c 1432     		adds	r2, r2, #20
+ 1018 001e 0192     		str	r2, [sp, #4]
+ 1019              	.L73:
+ 851:HALLIB/Src/stm32f7xx_hal_dac.c ****   
+ARM GAS  /tmp/ccVBB28f.s 			page 36
+
+
+ 1020              		.loc 1 851 0
+ 1021 0020 019A     		ldr	r2, [sp, #4]
+ 1022 0022 1360     		str	r3, [r2]
+ 855:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 1023              		.loc 1 855 0
+ 1024 0024 0020     		movs	r0, #0
+ 1025 0026 03B0     		add	sp, sp, #12
+ 1026              	.LCFI22:
+ 1027              		.cfi_def_cfa_offset 4
+ 1028              		@ sp needed
+ 1029 0028 5DF8044B 		ldr	r4, [sp], #4
+ 1030              	.LCFI23:
+ 1031              		.cfi_restore 4
+ 1032              		.cfi_def_cfa_offset 0
+ 1033 002c 7047     		bx	lr
+ 1034              		.cfi_endproc
+ 1035              	.LFE151:
+ 1037 002e 00BF     		.section	.text.HAL_DAC_GetState,"ax",%progbits
+ 1038              		.align	2
+ 1039              		.global	HAL_DAC_GetState
+ 1040              		.thumb
+ 1041              		.thumb_func
+ 1043              	HAL_DAC_GetState:
+ 1044              	.LFB152:
+ 884:HALLIB/Src/stm32f7xx_hal_dac.c ****   /* Return DAC state */
+ 1045              		.loc 1 884 0
+ 1046              		.cfi_startproc
+ 1047              		@ args = 0, pretend = 0, frame = 0
+ 1048              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1049              		@ link register save eliminated.
+ 1050              	.LVL107:
+ 886:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 1051              		.loc 1 886 0
+ 1052 0000 0079     		ldrb	r0, [r0, #4]	@ zero_extendqisi2
+ 1053              	.LVL108:
+ 887:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 1054              		.loc 1 887 0
+ 1055 0002 7047     		bx	lr
+ 1056              		.cfi_endproc
+ 1057              	.LFE152:
+ 1059              		.section	.text.HAL_DAC_GetError,"ax",%progbits
+ 1060              		.align	2
+ 1061              		.global	HAL_DAC_GetError
+ 1062              		.thumb
+ 1063              		.thumb_func
+ 1065              	HAL_DAC_GetError:
+ 1066              	.LFB153:
+ 897:HALLIB/Src/stm32f7xx_hal_dac.c ****   return hdac->ErrorCode;
+ 1067              		.loc 1 897 0
+ 1068              		.cfi_startproc
+ 1069              		@ args = 0, pretend = 0, frame = 0
+ 1070              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1071              		@ link register save eliminated.
+ 1072              	.LVL109:
+ 898:HALLIB/Src/stm32f7xx_hal_dac.c **** }
+ 1073              		.loc 1 898 0
+ 1074 0000 0069     		ldr	r0, [r0, #16]
+ARM GAS  /tmp/ccVBB28f.s 			page 37
+
+
+ 1075              	.LVL110:
+ 899:HALLIB/Src/stm32f7xx_hal_dac.c **** 
+ 1076              		.loc 1 899 0
+ 1077 0002 7047     		bx	lr
+ 1078              		.cfi_endproc
+ 1079              	.LFE153:
+ 1081              		.text
+ 1082              	.Letext0:
+ 1083              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 1084              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 1085              		.file 4 "Inc/stm32f767xx.h"
+ 1086              		.file 5 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 1087              		.file 6 "HALLIB/Inc/stm32f7xx_hal_dma.h"
+ 1088              		.file 7 "HALLIB/Inc/stm32f7xx_hal_dac.h"
+ 1089              		.file 8 "HALLIB/Inc/stm32f7xx_hal_dac_ex.h"
+ 1090              		.file 9 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccVBB28f.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_dac.c
+     /tmp/ccVBB28f.s:21     .text.HAL_DAC_MspInit:00000000 $t
+     /tmp/ccVBB28f.s:26     .text.HAL_DAC_MspInit:00000000 HAL_DAC_MspInit
+     /tmp/ccVBB28f.s:40     .text.HAL_DAC_Init:00000000 $t
+     /tmp/ccVBB28f.s:45     .text.HAL_DAC_Init:00000000 HAL_DAC_Init
+     /tmp/ccVBB28f.s:97     .text.HAL_DAC_MspDeInit:00000000 $t
+     /tmp/ccVBB28f.s:102    .text.HAL_DAC_MspDeInit:00000000 HAL_DAC_MspDeInit
+     /tmp/ccVBB28f.s:115    .text.HAL_DAC_DeInit:00000000 $t
+     /tmp/ccVBB28f.s:120    .text.HAL_DAC_DeInit:00000000 HAL_DAC_DeInit
+     /tmp/ccVBB28f.s:165    .text.HAL_DAC_Start:00000000 $t
+     /tmp/ccVBB28f.s:170    .text.HAL_DAC_Start:00000000 HAL_DAC_Start
+     /tmp/ccVBB28f.s:280    .text.HAL_DAC_Stop:00000000 $t
+     /tmp/ccVBB28f.s:285    .text.HAL_DAC_Stop:00000000 HAL_DAC_Stop
+     /tmp/ccVBB28f.s:319    .text.HAL_DAC_Start_DMA:00000000 $t
+     /tmp/ccVBB28f.s:324    .text.HAL_DAC_Start_DMA:00000000 HAL_DAC_Start_DMA
+     /tmp/ccVBB28f.s:517    .text.HAL_DAC_Start_DMA:000000d4 $d
+     /tmp/ccVBB28f.s:646    .text.DAC_DMAConvCpltCh1:00000000 DAC_DMAConvCpltCh1
+     /tmp/ccVBB28f.s:697    .text.DAC_DMAHalfConvCpltCh1:00000000 DAC_DMAHalfConvCpltCh1
+     /tmp/ccVBB28f.s:743    .text.DAC_DMAErrorCh1:00000000 DAC_DMAErrorCh1
+     /tmp/ccVBB28f.s:527    .text.HAL_DAC_Stop_DMA:00000000 $t
+     /tmp/ccVBB28f.s:532    .text.HAL_DAC_Stop_DMA:00000000 HAL_DAC_Stop_DMA
+     /tmp/ccVBB28f.s:592    .text.HAL_DAC_GetValue:00000000 $t
+     /tmp/ccVBB28f.s:597    .text.HAL_DAC_GetValue:00000000 HAL_DAC_GetValue
+     /tmp/ccVBB28f.s:624    .text.HAL_DAC_ConvCpltCallbackCh1:00000000 $t
+     /tmp/ccVBB28f.s:629    .text.HAL_DAC_ConvCpltCallbackCh1:00000000 HAL_DAC_ConvCpltCallbackCh1
+     /tmp/ccVBB28f.s:642    .text.DAC_DMAConvCpltCh1:00000000 $t
+     /tmp/ccVBB28f.s:675    .text.HAL_DAC_ConvHalfCpltCallbackCh1:00000000 $t
+     /tmp/ccVBB28f.s:680    .text.HAL_DAC_ConvHalfCpltCallbackCh1:00000000 HAL_DAC_ConvHalfCpltCallbackCh1
+     /tmp/ccVBB28f.s:693    .text.DAC_DMAHalfConvCpltCh1:00000000 $t
+     /tmp/ccVBB28f.s:721    .text.HAL_DAC_ErrorCallbackCh1:00000000 $t
+     /tmp/ccVBB28f.s:726    .text.HAL_DAC_ErrorCallbackCh1:00000000 HAL_DAC_ErrorCallbackCh1
+     /tmp/ccVBB28f.s:739    .text.DAC_DMAErrorCh1:00000000 $t
+     /tmp/ccVBB28f.s:776    .text.HAL_DAC_DMAUnderrunCallbackCh1:00000000 $t
+     /tmp/ccVBB28f.s:781    .text.HAL_DAC_DMAUnderrunCallbackCh1:00000000 HAL_DAC_DMAUnderrunCallbackCh1
+     /tmp/ccVBB28f.s:794    .text.HAL_DAC_IRQHandler:00000000 $t
+     /tmp/ccVBB28f.s:799    .text.HAL_DAC_IRQHandler:00000000 HAL_DAC_IRQHandler
+     /tmp/ccVBB28f.s:867    .text.HAL_DAC_ConfigChannel:00000000 $t
+     /tmp/ccVBB28f.s:872    .text.HAL_DAC_ConfigChannel:00000000 HAL_DAC_ConfigChannel
+     /tmp/ccVBB28f.s:973    .text.HAL_DAC_SetValue:00000000 $t
+     /tmp/ccVBB28f.s:978    .text.HAL_DAC_SetValue:00000000 HAL_DAC_SetValue
+     /tmp/ccVBB28f.s:1038   .text.HAL_DAC_GetState:00000000 $t
+     /tmp/ccVBB28f.s:1043   .text.HAL_DAC_GetState:00000000 HAL_DAC_GetState
+     /tmp/ccVBB28f.s:1060   .text.HAL_DAC_GetError:00000000 $t
+     /tmp/ccVBB28f.s:1065   .text.HAL_DAC_GetError:00000000 HAL_DAC_GetError
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+HAL_DMA_Start_IT
+DAC_DMAConvCpltCh2
+DAC_DMAHalfConvCpltCh2
+DAC_DMAErrorCh2
+HAL_DMA_Abort
+HAL_DACEx_DMAUnderrunCallbackCh2

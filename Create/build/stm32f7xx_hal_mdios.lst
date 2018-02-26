@@ -1,0 +1,1453 @@
+ARM GAS  /tmp/cccLH3Jm.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_mdios.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_MDIOS_MspInit,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_MDIOS_MspInit
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_MDIOS_MspInit:
+  27              	.LFB138:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_mdios.c"
+   1:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_mdios.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @file    stm32f7xx_hal_mdios.c
+   4:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief   MDIOS HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *          This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *          functionalities of the MDIOS Peripheral.
+   8:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *           + Initialization and de-initialization functions
+   9:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *           + IO operation functions
+  10:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *           + Peripheral Control functions
+  11:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *           
+  12:HALLIB/Src/stm32f7xx_hal_mdios.c ****   @verbatim       
+  13:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================
+  14:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         ##### How to use this driver #####
+  15:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================
+  16:HALLIB/Src/stm32f7xx_hal_mdios.c ****     [..]
+  17:HALLIB/Src/stm32f7xx_hal_mdios.c ****     The MDIOS HAL driver can be used as follows:
+  18:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  19:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Declare a MDIOS_HandleTypeDef handle structure.
+  20:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  21:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Initialize the MDIOS low level resources by implementing the HAL_MDIOS_MspInit() API:
+  22:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Enable the MDIOS interface clock.
+  23:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) MDIOS pins configuration:
+  24:HALLIB/Src/stm32f7xx_hal_mdios.c ****             (+++) Enable clocks for the MDIOS GPIOs.
+  25:HALLIB/Src/stm32f7xx_hal_mdios.c ****             (+++) Configure the MDIOS pins as alternate function.
+  26:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) NVIC configuration if you need to use interrupt process:
+  27:HALLIB/Src/stm32f7xx_hal_mdios.c ****             (+++) Configure the MDIOS interrupt priority.
+  28:HALLIB/Src/stm32f7xx_hal_mdios.c ****             (+++) Enable the NVIC MDIOS IRQ handle.
+  29:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  30:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Program the Port Address and the Preamble Check in the Init structure.
+ARM GAS  /tmp/cccLH3Jm.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  32:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Initialize the MDIOS registers by calling the HAL_MDIOS_Init() API.
+  33:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  34:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Perform direct slave read/write operations using the following APIs:
+  35:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Read the value of a DINn register: HAL_MDIOS_ReadReg()
+  36:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Write a value to a DOUTn register: HAL_MDIOS_WriteReg()
+  37:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  38:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Get the Master read/write operations flags using the following APIs:
+  39:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Bit map of DOUTn registers read by Master: HAL_MDIOS_GetReadRegAddress()
+  40:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Bit map of DINn registers written by Master : HAL_MDIOS_GetWrittenRegAddress()
+  41:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  42:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Clear the read/write flags using the following APIs:
+  43:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Clear read flags of a set of registers: HAL_MDIOS_ClearReadRegAddress()
+  44:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) Clear write flags of a set of registers: HAL_MDIOS_ClearWriteRegAddress()
+  45:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  46:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Enable interrupts on events using HAL_MDIOS_EnableEvents(), when called
+  47:HALLIB/Src/stm32f7xx_hal_mdios.c ****         the MDIOS will generate an interrupt in the following cases: 
+  48:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) a DINn register written by the Master
+  49:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) a DOUTn register read by the Master
+  50:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) an error occur
+  51:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  52:HALLIB/Src/stm32f7xx_hal_mdios.c ****        -@@- A callback is executed for each genereted interrupt, so the driver provides the followi
+  53:HALLIB/Src/stm32f7xx_hal_mdios.c ****             HAL_MDIOS_WriteCpltCallback(), HAL_MDIOS_ReadCpltCallback() and HAL_MDIOS_ErrorCallback
+  54:HALLIB/Src/stm32f7xx_hal_mdios.c ****        -@@- HAL_MDIOS_IRQHandler() must be called from the MDIOS IRQ Handler, to handle the interru
+  55:HALLIB/Src/stm32f7xx_hal_mdios.c ****             and execute the previous callbacks
+  56:HALLIB/Src/stm32f7xx_hal_mdios.c ****    
+  57:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) Reset the MDIOS peripheral and all related ressources by calling the HAL_MDIOS_DeInit() API
+  58:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (##) HAL_MDIOS_MspDeInit() must be implemented to reset low level ressources 
+  59:HALLIB/Src/stm32f7xx_hal_mdios.c ****             (GPIO, Clocks, NVIC configuration ...)
+  60:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  61:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  62:HALLIB/Src/stm32f7xx_hal_mdios.c ****   @endverbatim
+  63:HALLIB/Src/stm32f7xx_hal_mdios.c ****   ******************************************************************************
+  64:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @attention
+  65:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+  66:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  67:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+  68:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  69:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * are permitted provided that the following conditions are met:
+  70:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  71:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *      this list of conditions and the following disclaimer.
+  72:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  73:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *      this list of conditions and the following disclaimer in the documentation
+  74:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *      and/or other materials provided with the distribution.
+  75:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  76:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *      may be used to endorse or promote products derived from this software
+  77:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *      without specific prior written permission.
+  78:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+  79:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  80:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  81:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  82:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  83:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  84:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  85:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  86:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  87:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ARM GAS  /tmp/cccLH3Jm.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  89:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+  90:HALLIB/Src/stm32f7xx_hal_mdios.c ****   ******************************************************************************  
+  91:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+  92:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  93:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Includes ------------------------------------------------------------------*/
+  94:HALLIB/Src/stm32f7xx_hal_mdios.c **** #include "stm32f7xx_hal.h"
+  95:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+  96:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  97:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+  98:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+  99:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 100:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @defgroup MDIOS MDIOS
+ 101:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief HAL MDIOS module driver
+ 102:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+ 103:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 104:HALLIB/Src/stm32f7xx_hal_mdios.c **** #ifdef HAL_MDIOS_MODULE_ENABLED
+ 105:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 106:HALLIB/Src/stm32f7xx_hal_mdios.c **** #if defined (MDIOS)
+ 107:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 108:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private typedef -----------------------------------------------------------*/
+ 109:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private define ------------------------------------------------------------*/
+ 110:HALLIB/Src/stm32f7xx_hal_mdios.c **** #define MDIOS_PORT_ADDRESS_SHIFT        ((uint32_t)8)
+ 111:HALLIB/Src/stm32f7xx_hal_mdios.c **** #define	MDIOS_ALL_REG_FLAG	        ((uint32_t)0xFFFFFFFFU)
+ 112:HALLIB/Src/stm32f7xx_hal_mdios.c **** #define	MDIOS_ALL_ERRORS_FLAG           ((uint32_t)(MDIOS_SR_PERF | MDIOS_SR_SERF | MDIOS_SR_TERF))
+ 113:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 114:HALLIB/Src/stm32f7xx_hal_mdios.c **** #define MDIOS_DIN_BASE_ADDR             (MDIOS_BASE + 0x100)
+ 115:HALLIB/Src/stm32f7xx_hal_mdios.c **** #define MDIOS_DOUT_BASE_ADDR            (MDIOS_BASE + 0x180)
+ 116:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 117:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private macro -------------------------------------------------------------*/ 
+ 118:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private variables ---------------------------------------------------------*/
+ 119:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private function prototypes -----------------------------------------------*/
+ 120:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Private functions ---------------------------------------------------------*/
+ 121:HALLIB/Src/stm32f7xx_hal_mdios.c **** /* Exported functions --------------------------------------------------------*/
+ 122:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @defgroup MDIOS_Exported_Functions MDIOS Exported Functions
+ 123:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+ 124:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 125:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 126:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @defgroup MDIOS_Exported_Functions_Group1 Initialization/de-initialization functions 
+ 127:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *  @brief    Initialization and Configuration functions 
+ 128:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+ 129:HALLIB/Src/stm32f7xx_hal_mdios.c **** @verbatim                                               
+ 130:HALLIB/Src/stm32f7xx_hal_mdios.c **** ===============================================================================
+ 131:HALLIB/Src/stm32f7xx_hal_mdios.c ****             ##### Initialization and Configuration functions #####
+ 132:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================  
+ 133:HALLIB/Src/stm32f7xx_hal_mdios.c ****     [..]
+ 134:HALLIB/Src/stm32f7xx_hal_mdios.c ****     This subsection provides a set of functions allowing to initialize the MDIOS
+ 135:HALLIB/Src/stm32f7xx_hal_mdios.c ****       (+) The following parameters can be configured: 
+ 136:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (++) Port Address
+ 137:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (++) Preamble Check
+ 138:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 139:HALLIB/Src/stm32f7xx_hal_mdios.c **** @endverbatim
+ 140:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+ 141:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 142:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 143:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 144:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Initializes the MDIOS according to the specified parameters in 
+ARM GAS  /tmp/cccLH3Jm.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *         the MDIOS_InitTypeDef and creates the associated handle .
+ 146:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios pointer to a MDIOS_HandleTypeDef structure that contains
+ 147:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *         the configuration information for MDIOS module
+ 148:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 149:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 150:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_Init(MDIOS_HandleTypeDef *hmdios)
+ 151:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 152:HALLIB/Src/stm32f7xx_hal_mdios.c ****   uint32_t tmpcr = 0;
+ 153:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 154:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the MDIOS handle allocation */
+ 155:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(hmdios == NULL)
+ 156:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 157:HALLIB/Src/stm32f7xx_hal_mdios.c ****     return HAL_ERROR;
+ 158:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 159:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 160:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 161:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_ALL_INSTANCE(hmdios->Instance));
+ 162:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_PORTADDRESS(hmdios->Init.PortAddress));
+ 163:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_PREAMBLECHECK(hmdios->Init.PreambleCheck));
+ 164:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 165:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 166:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 167:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 168:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(hmdios->State == HAL_MDIOS_STATE_RESET)
+ 169:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 170:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* Init the low level hardware */
+ 171:HALLIB/Src/stm32f7xx_hal_mdios.c ****     HAL_MDIOS_MspInit(hmdios);
+ 172:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 173:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 174:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Change the MDIOS state */
+ 175:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->State = HAL_MDIOS_STATE_BUSY;
+ 176:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 177:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Get the MDIOS CR value */
+ 178:HALLIB/Src/stm32f7xx_hal_mdios.c ****   tmpcr = hmdios->Instance->CR;
+ 179:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 180:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Clear PORT_ADDRESS, DPC and EN bits */
+ 181:HALLIB/Src/stm32f7xx_hal_mdios.c ****   tmpcr &= ((uint32_t)~(MDIOS_CR_EN | MDIOS_CR_DPC | MDIOS_CR_PORT_ADDRESS));
+ 182:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 183:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Set MDIOS control parametrs and enable the peripheral */
+ 184:HALLIB/Src/stm32f7xx_hal_mdios.c ****   tmpcr |=  (uint32_t)(((hmdios->Init.PortAddress) << MDIOS_PORT_ADDRESS_SHIFT)    |\
+ 185:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         (hmdios->Init.PreambleCheck) | \
+ 186:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         (MDIOS_CR_EN));
+ 187:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 188:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Write the MDIOS CR */
+ 189:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->Instance->CR = tmpcr;
+ 190:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 191:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Change the MDIOS state */
+ 192:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->State = HAL_MDIOS_STATE_READY;
+ 193:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 194:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Release Lock */
+ 195:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 196:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 197:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Return function status */
+ 198:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;
+ 199:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 200:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 201:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ARM GAS  /tmp/cccLH3Jm.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 203:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  DeInitializes the MDIOS peripheral.
+ 204:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios MDIOS handle
+ 205:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 206:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 207:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_DeInit(MDIOS_HandleTypeDef *hmdios)
+ 208:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 209:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the MDIOS handle allocation */
+ 210:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(hmdios == NULL)
+ 211:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 212:HALLIB/Src/stm32f7xx_hal_mdios.c ****     return HAL_ERROR;
+ 213:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 214:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 215:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 216:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_ALL_INSTANCE(hmdios->Instance));
+ 217:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 218:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Change the MDIOS state */
+ 219:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->State = HAL_MDIOS_STATE_BUSY;
+ 220:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 221:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Disable the Peripheral */
+ 222:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_MDIOS_DISABLE(hmdios);
+ 223:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 224:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* DeInit the low level hardware */
+ 225:HALLIB/Src/stm32f7xx_hal_mdios.c ****   HAL_MDIOS_MspDeInit(hmdios);
+ 226:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 227:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Change the MDIOS state */
+ 228:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->State = HAL_MDIOS_STATE_RESET;
+ 229:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 230:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Release Lock */
+ 231:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 232:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 233:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Return function status */
+ 234:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;
+ 235:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 236:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 237:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 238:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  MDIOS MSP Init
+ 239:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 240:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 241:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 242:HALLIB/Src/stm32f7xx_hal_mdios.c ****  __weak void HAL_MDIOS_MspInit(MDIOS_HandleTypeDef *hmdios)
+ 243:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+  29              		.loc 1 243 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE138:
+  39 0002 00BF     		.section	.text.HAL_MDIOS_Init,"ax",%progbits
+  40              		.align	2
+  41              		.global	HAL_MDIOS_Init
+  42              		.thumb
+  43              		.thumb_func
+  45              	HAL_MDIOS_Init:
+ARM GAS  /tmp/cccLH3Jm.s 			page 6
+
+
+  46              	.LFB136:
+ 151:HALLIB/Src/stm32f7xx_hal_mdios.c ****   uint32_t tmpcr = 0;
+  47              		.loc 1 151 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              	.LVL1:
+ 155:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+  52              		.loc 1 155 0
+  53 0000 F8B1     		cbz	r0, .L5
+ 151:HALLIB/Src/stm32f7xx_hal_mdios.c ****   uint32_t tmpcr = 0;
+  54              		.loc 1 151 0
+  55 0002 10B5     		push	{r4, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 4, -8
+  59              		.cfi_offset 14, -4
+  60 0004 0446     		mov	r4, r0
+ 166:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  61              		.loc 1 166 0
+  62 0006 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+  63 0008 012B     		cmp	r3, #1
+  64 000a 1CD0     		beq	.L6
+ 166:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  65              		.loc 1 166 0 is_stmt 0 discriminator 2
+  66 000c 0123     		movs	r3, #1
+  67 000e 4373     		strb	r3, [r0, #13]
+ 168:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+  68              		.loc 1 168 0 is_stmt 1 discriminator 2
+  69 0010 037B     		ldrb	r3, [r0, #12]	@ zero_extendqisi2
+  70 0012 13F0FF0F 		tst	r3, #255
+  71 0016 01D1     		bne	.L4
+ 171:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+  72              		.loc 1 171 0
+  73 0018 FFF7FEFF 		bl	HAL_MDIOS_MspInit
+  74              	.LVL2:
+  75              	.L4:
+ 175:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  76              		.loc 1 175 0
+  77 001c 0223     		movs	r3, #2
+  78 001e 2373     		strb	r3, [r4, #12]
+ 178:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  79              		.loc 1 178 0
+  80 0020 2168     		ldr	r1, [r4]
+  81 0022 0B68     		ldr	r3, [r1]
+  82              	.LVL3:
+ 181:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  83              		.loc 1 181 0
+  84 0024 094A     		ldr	r2, .L8
+  85 0026 1A40     		ands	r2, r2, r3
+  86              	.LVL4:
+ 184:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         (hmdios->Init.PreambleCheck) | \
+  87              		.loc 1 184 0
+  88 0028 6068     		ldr	r0, [r4, #4]
+ 185:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         (MDIOS_CR_EN));
+  89              		.loc 1 185 0
+  90 002a A368     		ldr	r3, [r4, #8]
+ARM GAS  /tmp/cccLH3Jm.s 			page 7
+
+
+ 184:HALLIB/Src/stm32f7xx_hal_mdios.c ****                         (hmdios->Init.PreambleCheck) | \
+  91              		.loc 1 184 0
+  92 002c 43EA0023 		orr	r3, r3, r0, lsl #8
+  93 0030 1343     		orrs	r3, r3, r2
+  94 0032 43F00103 		orr	r3, r3, #1
+  95              	.LVL5:
+ 189:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  96              		.loc 1 189 0
+  97 0036 0B60     		str	r3, [r1]
+ 192:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+  98              		.loc 1 192 0
+  99 0038 0123     		movs	r3, #1
+ 100              	.LVL6:
+ 101 003a 2373     		strb	r3, [r4, #12]
+ 102              	.LVL7:
+ 195:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 103              		.loc 1 195 0
+ 104 003c 0020     		movs	r0, #0
+ 105 003e 6073     		strb	r0, [r4, #13]
+ 198:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 106              		.loc 1 198 0
+ 107 0040 10BD     		pop	{r4, pc}
+ 108              	.LVL8:
+ 109              	.L5:
+ 110              	.LCFI1:
+ 111              		.cfi_def_cfa_offset 0
+ 112              		.cfi_restore 4
+ 113              		.cfi_restore 14
+ 157:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 114              		.loc 1 157 0
+ 115 0042 0120     		movs	r0, #1
+ 116              	.LVL9:
+ 200:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 117              		.loc 1 200 0
+ 118 0044 7047     		bx	lr
+ 119              	.LVL10:
+ 120              	.L6:
+ 121              	.LCFI2:
+ 122              		.cfi_def_cfa_offset 8
+ 123              		.cfi_offset 4, -8
+ 124              		.cfi_offset 14, -4
+ 166:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 125              		.loc 1 166 0
+ 126 0046 0220     		movs	r0, #2
+ 127              	.LVL11:
+ 200:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 128              		.loc 1 200 0
+ 129 0048 10BD     		pop	{r4, pc}
+ 130              	.LVL12:
+ 131              	.L9:
+ 132 004a 00BF     		.align	2
+ 133              	.L8:
+ 134 004c 7EE0FFFF 		.word	-8066
+ 135              		.cfi_endproc
+ 136              	.LFE136:
+ 138              		.section	.text.HAL_MDIOS_MspDeInit,"ax",%progbits
+ 139              		.align	2
+ARM GAS  /tmp/cccLH3Jm.s 			page 8
+
+
+ 140              		.weak	HAL_MDIOS_MspDeInit
+ 141              		.thumb
+ 142              		.thumb_func
+ 144              	HAL_MDIOS_MspDeInit:
+ 145              	.LFB139:
+ 244:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 245:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 246:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 247:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 248:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_MspInit can be implemented in the user file
+ 249:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 250:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 251:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 252:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 253:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  MDIOS MSP DeInit
+ 254:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 255:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 256:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 257:HALLIB/Src/stm32f7xx_hal_mdios.c ****  __weak void HAL_MDIOS_MspDeInit(MDIOS_HandleTypeDef *hmdios)
+ 258:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 146              		.loc 1 258 0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+ 151              	.LVL13:
+ 152 0000 7047     		bx	lr
+ 153              		.cfi_endproc
+ 154              	.LFE139:
+ 156 0002 00BF     		.section	.text.HAL_MDIOS_DeInit,"ax",%progbits
+ 157              		.align	2
+ 158              		.global	HAL_MDIOS_DeInit
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	HAL_MDIOS_DeInit:
+ 163              	.LFB137:
+ 208:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the MDIOS handle allocation */
+ 164              		.loc 1 208 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168              	.LVL14:
+ 210:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 169              		.loc 1 210 0
+ 170 0000 70B1     		cbz	r0, .L13
+ 208:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the MDIOS handle allocation */
+ 171              		.loc 1 208 0
+ 172 0002 10B5     		push	{r4, lr}
+ 173              	.LCFI3:
+ 174              		.cfi_def_cfa_offset 8
+ 175              		.cfi_offset 4, -8
+ 176              		.cfi_offset 14, -4
+ 177 0004 0446     		mov	r4, r0
+ 219:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 178              		.loc 1 219 0
+ 179 0006 0223     		movs	r3, #2
+ 180 0008 0373     		strb	r3, [r0, #12]
+ARM GAS  /tmp/cccLH3Jm.s 			page 9
+
+
+ 222:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 181              		.loc 1 222 0
+ 182 000a 0268     		ldr	r2, [r0]
+ 183 000c 1368     		ldr	r3, [r2]
+ 184 000e 23F00103 		bic	r3, r3, #1
+ 185 0012 1360     		str	r3, [r2]
+ 225:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 186              		.loc 1 225 0
+ 187 0014 FFF7FEFF 		bl	HAL_MDIOS_MspDeInit
+ 188              	.LVL15:
+ 228:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 189              		.loc 1 228 0
+ 190 0018 0020     		movs	r0, #0
+ 191 001a 2073     		strb	r0, [r4, #12]
+ 231:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 192              		.loc 1 231 0
+ 193 001c 6073     		strb	r0, [r4, #13]
+ 234:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 194              		.loc 1 234 0
+ 195 001e 10BD     		pop	{r4, pc}
+ 196              	.LVL16:
+ 197              	.L13:
+ 198              	.LCFI4:
+ 199              		.cfi_def_cfa_offset 0
+ 200              		.cfi_restore 4
+ 201              		.cfi_restore 14
+ 212:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 202              		.loc 1 212 0
+ 203 0020 0120     		movs	r0, #1
+ 204              	.LVL17:
+ 205 0022 7047     		bx	lr
+ 206              		.cfi_endproc
+ 207              	.LFE137:
+ 209              		.section	.text.HAL_MDIOS_WriteReg,"ax",%progbits
+ 210              		.align	2
+ 211              		.global	HAL_MDIOS_WriteReg
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	HAL_MDIOS_WriteReg:
+ 216              	.LFB140:
+ 259:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 260:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 261:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 262:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 263:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_MspDeInit can be implemented in the user file
+ 264:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 265:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 266:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 267:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @}
+ 268:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 269:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 270:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @defgroup MDIOS_Exported_Functions_Group2 IO operation functions 
+ 271:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *  @brief MDIOS Read/Write functions 
+ 272:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+ 273:HALLIB/Src/stm32f7xx_hal_mdios.c **** @verbatim   
+ 274:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================
+ 275:HALLIB/Src/stm32f7xx_hal_mdios.c ****                       ##### IO operation functions #####
+ARM GAS  /tmp/cccLH3Jm.s 			page 10
+
+
+ 276:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================
+ 277:HALLIB/Src/stm32f7xx_hal_mdios.c ****     This subsection provides a set of functions allowing to manage the MDIOS 
+ 278:HALLIB/Src/stm32f7xx_hal_mdios.c ****     read and write operations.
+ 279:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 280:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) APIs that allow to the MDIOS to read/write from/to the 
+ 281:HALLIB/Src/stm32f7xx_hal_mdios.c ****         values of one of the DINn/DOUTn registers:
+ 282:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) Read the value of a DINn register: HAL_MDIOS_ReadReg()
+ 283:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) Write a value to a DOUTn register: HAL_MDIOS_WriteReg()
+ 284:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 285:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) APIs that provide if there are some Slave registres have been 
+ 286:HALLIB/Src/stm32f7xx_hal_mdios.c ****         read or written by the Master:
+ 287:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) DOUTn registers read by Master: HAL_MDIOS_GetReadRegAddress()
+ 288:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) DINn registers written by Master : HAL_MDIOS_GetWrittenRegAddress()
+ 289:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 290:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) APIs that Clear the read/write flags:
+ 291:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) Clear read registers flags: HAL_MDIOS_ClearReadRegAddress()
+ 292:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) Clear write registers flags: HAL_MDIOS_ClearWriteRegAddress()
+ 293:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 294:HALLIB/Src/stm32f7xx_hal_mdios.c ****     (#) A set of Callbacks are provided:
+ 295:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) HAL_MDIOS_WriteCpltCallback()
+ 296:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) HAL_MDIOS_ReadCpltCallback()
+ 297:HALLIB/Src/stm32f7xx_hal_mdios.c ****         (+) HAL_MDIOS_ErrorCallback() 
+ 298:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 299:HALLIB/Src/stm32f7xx_hal_mdios.c **** @endverbatim
+ 300:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+ 301:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 302:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 303:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 304:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Writes to an MDIOS output register
+ 305:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 306:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  RegNum MDIOS input register number    
+ 307:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  Data Data to write
+ 308:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 309:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 310:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_WriteReg(MDIOS_HandleTypeDef *hmdios, uint32_t RegNum, uint16_t Data)
+ 311:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 217              		.loc 1 311 0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 222              	.LVL18:
+ 312:HALLIB/Src/stm32f7xx_hal_mdios.c ****   uint32_t tmpreg;
+ 313:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 314:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 315:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_REGISTER(RegNum));
+ 316:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 317:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 318:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 223              		.loc 1 318 0
+ 224 0000 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+ 225 0002 012B     		cmp	r3, #1
+ 226 0004 07D0     		beq	.L18
+ 319:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 320:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Get the addr of output register to be written by the MDIOS */
+ 321:HALLIB/Src/stm32f7xx_hal_mdios.c ****   tmpreg = MDIOS_DOUT_BASE_ADDR + (4 * RegNum);
+ 227              		.loc 1 321 0 discriminator 2
+ARM GAS  /tmp/cccLH3Jm.s 			page 11
+
+
+ 228 0006 054B     		ldr	r3, .L19
+ 229 0008 0B44     		add	r3, r3, r1
+ 230 000a 9B00     		lsls	r3, r3, #2
+ 231              	.LVL19:
+ 322:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 323:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Write to DOUTn register */
+ 324:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *((uint32_t *)tmpreg) = Data;  
+ 232              		.loc 1 324 0 discriminator 2
+ 233 000c 1A60     		str	r2, [r3]
+ 325:HALLIB/Src/stm32f7xx_hal_mdios.c ****         
+ 326:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* Process Unlocked */
+ 327:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 234              		.loc 1 327 0 discriminator 2
+ 235 000e 0023     		movs	r3, #0
+ 236              	.LVL20:
+ 237 0010 4373     		strb	r3, [r0, #13]
+ 328:HALLIB/Src/stm32f7xx_hal_mdios.c ****         
+ 329:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;   
+ 238              		.loc 1 329 0 discriminator 2
+ 239 0012 1846     		mov	r0, r3
+ 240              	.LVL21:
+ 241 0014 7047     		bx	lr
+ 242              	.LVL22:
+ 243              	.L18:
+ 318:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 244              		.loc 1 318 0
+ 245 0016 0220     		movs	r0, #2
+ 246              	.LVL23:
+ 330:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 247              		.loc 1 330 0
+ 248 0018 7047     		bx	lr
+ 249              	.L20:
+ 250 001a 00BF     		.align	2
+ 251              	.L19:
+ 252 001c 605E0010 		.word	268459616
+ 253              		.cfi_endproc
+ 254              	.LFE140:
+ 256              		.section	.text.HAL_MDIOS_ReadReg,"ax",%progbits
+ 257              		.align	2
+ 258              		.global	HAL_MDIOS_ReadReg
+ 259              		.thumb
+ 260              		.thumb_func
+ 262              	HAL_MDIOS_ReadReg:
+ 263              	.LFB141:
+ 331:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 332:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 333:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Reads an MDIOS input register
+ 334:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 335:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  RegNum MDIOS input register number
+ 336:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  pData pointer to Data
+ 337:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 338:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 339:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_ReadReg(MDIOS_HandleTypeDef *hmdios, uint32_t RegNum, uint16_t *pData)
+ 340:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 264              		.loc 1 340 0
+ 265              		.cfi_startproc
+ 266              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cccLH3Jm.s 			page 12
+
+
+ 267              		@ frame_needed = 0, uses_anonymous_args = 0
+ 268              		@ link register save eliminated.
+ 269              	.LVL24:
+ 341:HALLIB/Src/stm32f7xx_hal_mdios.c ****   uint32_t tmpreg;
+ 342:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 343:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 344:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_REGISTER(RegNum));
+ 345:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 346:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 347:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 270              		.loc 1 347 0
+ 271 0000 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+ 272 0002 012B     		cmp	r3, #1
+ 273 0004 0AD0     		beq	.L23
+ 274              		.loc 1 347 0 is_stmt 0 discriminator 2
+ 275 0006 0123     		movs	r3, #1
+ 276 0008 4373     		strb	r3, [r0, #13]
+ 348:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 349:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Get the addr of input register to be read by the MDIOS */
+ 350:HALLIB/Src/stm32f7xx_hal_mdios.c ****   tmpreg = MDIOS_DIN_BASE_ADDR + (4 * RegNum);
+ 277              		.loc 1 350 0 is_stmt 1 discriminator 2
+ 278 000a 054B     		ldr	r3, .L24
+ 279 000c 0B44     		add	r3, r3, r1
+ 280 000e 9B00     		lsls	r3, r3, #2
+ 281              	.LVL25:
+ 351:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 352:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Read DINn register */
+ 353:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *pData = (uint16_t)(*((uint32_t *)tmpreg));
+ 282              		.loc 1 353 0 discriminator 2
+ 283 0010 1B88     		ldrh	r3, [r3]
+ 284              	.LVL26:
+ 285 0012 1380     		strh	r3, [r2]	@ movhi
+ 354:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 355:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Unlocked */
+ 356:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 286              		.loc 1 356 0 discriminator 2
+ 287 0014 0023     		movs	r3, #0
+ 288 0016 4373     		strb	r3, [r0, #13]
+ 357:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 358:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;
+ 289              		.loc 1 358 0 discriminator 2
+ 290 0018 1846     		mov	r0, r3
+ 291              	.LVL27:
+ 292 001a 7047     		bx	lr
+ 293              	.LVL28:
+ 294              	.L23:
+ 347:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 295              		.loc 1 347 0
+ 296 001c 0220     		movs	r0, #2
+ 297              	.LVL29:
+ 359:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 298              		.loc 1 359 0
+ 299 001e 7047     		bx	lr
+ 300              	.L25:
+ 301              		.align	2
+ 302              	.L24:
+ 303 0020 405E0010 		.word	268459584
+ARM GAS  /tmp/cccLH3Jm.s 			page 13
+
+
+ 304              		.cfi_endproc
+ 305              	.LFE141:
+ 307              		.section	.text.HAL_MDIOS_GetWrittenRegAddress,"ax",%progbits
+ 308              		.align	2
+ 309              		.global	HAL_MDIOS_GetWrittenRegAddress
+ 310              		.thumb
+ 311              		.thumb_func
+ 313              	HAL_MDIOS_GetWrittenRegAddress:
+ 314              	.LFB142:
+ 360:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 361:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 362:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Gets Written registers by MDIO master
+ 363:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 364:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval bit map of written registers addresses
+ 365:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 366:HALLIB/Src/stm32f7xx_hal_mdios.c **** uint32_t HAL_MDIOS_GetWrittenRegAddress(MDIOS_HandleTypeDef *hmdios)
+ 367:HALLIB/Src/stm32f7xx_hal_mdios.c **** {        
+ 315              		.loc 1 367 0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319              		@ link register save eliminated.
+ 320              	.LVL30:
+ 368:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return hmdios->Instance->WRFR;   
+ 321              		.loc 1 368 0
+ 322 0000 0368     		ldr	r3, [r0]
+ 323 0002 5868     		ldr	r0, [r3, #4]
+ 324              	.LVL31:
+ 369:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 325              		.loc 1 369 0
+ 326 0004 7047     		bx	lr
+ 327              		.cfi_endproc
+ 328              	.LFE142:
+ 330 0006 00BF     		.section	.text.HAL_MDIOS_GetReadRegAddress,"ax",%progbits
+ 331              		.align	2
+ 332              		.global	HAL_MDIOS_GetReadRegAddress
+ 333              		.thumb
+ 334              		.thumb_func
+ 336              	HAL_MDIOS_GetReadRegAddress:
+ 337              	.LFB143:
+ 370:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 371:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 372:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Gets Read registers by MDIO master
+ 373:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 374:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval bit map of read registers addresses
+ 375:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 376:HALLIB/Src/stm32f7xx_hal_mdios.c **** uint32_t HAL_MDIOS_GetReadRegAddress(MDIOS_HandleTypeDef *hmdios)
+ 377:HALLIB/Src/stm32f7xx_hal_mdios.c **** {        
+ 338              		.loc 1 377 0
+ 339              		.cfi_startproc
+ 340              		@ args = 0, pretend = 0, frame = 0
+ 341              		@ frame_needed = 0, uses_anonymous_args = 0
+ 342              		@ link register save eliminated.
+ 343              	.LVL32:
+ 378:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return hmdios->Instance->RDFR;   
+ 344              		.loc 1 378 0
+ 345 0000 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/cccLH3Jm.s 			page 14
+
+
+ 346 0002 D868     		ldr	r0, [r3, #12]
+ 347              	.LVL33:
+ 379:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 348              		.loc 1 379 0
+ 349 0004 7047     		bx	lr
+ 350              		.cfi_endproc
+ 351              	.LFE143:
+ 353 0006 00BF     		.section	.text.HAL_MDIOS_ClearWriteRegAddress,"ax",%progbits
+ 354              		.align	2
+ 355              		.global	HAL_MDIOS_ClearWriteRegAddress
+ 356              		.thumb
+ 357              		.thumb_func
+ 359              	HAL_MDIOS_ClearWriteRegAddress:
+ 360              	.LFB144:
+ 380:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 381:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 382:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Clears Write registers flag
+ 383:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 384:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  RegNum registers addresses to be cleared
+ 385:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status 
+ 386:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 387:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_ClearWriteRegAddress(MDIOS_HandleTypeDef *hmdios, uint32_t RegNum)
+ 388:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 361              		.loc 1 388 0
+ 362              		.cfi_startproc
+ 363              		@ args = 0, pretend = 0, frame = 0
+ 364              		@ frame_needed = 0, uses_anonymous_args = 0
+ 365              		@ link register save eliminated.
+ 366              	.LVL34:
+ 389:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 390:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_REGISTER(RegNum));
+ 391:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 392:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 393:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 367              		.loc 1 393 0
+ 368 0000 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+ 369 0002 012B     		cmp	r3, #1
+ 370 0004 09D0     		beq	.L30
+ 371              		.loc 1 393 0 is_stmt 0 discriminator 2
+ 372 0006 0123     		movs	r3, #1
+ 373 0008 4373     		strb	r3, [r0, #13]
+ 394:HALLIB/Src/stm32f7xx_hal_mdios.c ****          
+ 395:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Clear write registers flags */
+ 396:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->Instance->CWRFR |= (RegNum);
+ 374              		.loc 1 396 0 is_stmt 1 discriminator 2
+ 375 000a 0368     		ldr	r3, [r0]
+ 376 000c 9A68     		ldr	r2, [r3, #8]
+ 377 000e 1143     		orrs	r1, r1, r2
+ 378              	.LVL35:
+ 379 0010 9960     		str	r1, [r3, #8]
+ 397:HALLIB/Src/stm32f7xx_hal_mdios.c ****  
+ 398:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Release Lock */
+ 399:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 380              		.loc 1 399 0 discriminator 2
+ 381 0012 0023     		movs	r3, #0
+ 382 0014 4373     		strb	r3, [r0, #13]
+ 400:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ARM GAS  /tmp/cccLH3Jm.s 			page 15
+
+
+ 401:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;  
+ 383              		.loc 1 401 0 discriminator 2
+ 384 0016 1846     		mov	r0, r3
+ 385              	.LVL36:
+ 386 0018 7047     		bx	lr
+ 387              	.LVL37:
+ 388              	.L30:
+ 393:HALLIB/Src/stm32f7xx_hal_mdios.c ****          
+ 389              		.loc 1 393 0
+ 390 001a 0220     		movs	r0, #2
+ 391              	.LVL38:
+ 402:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 392              		.loc 1 402 0
+ 393 001c 7047     		bx	lr
+ 394              		.cfi_endproc
+ 395              	.LFE144:
+ 397              		.section	.text.HAL_MDIOS_ClearReadRegAddress,"ax",%progbits
+ 398              		.align	2
+ 399              		.global	HAL_MDIOS_ClearReadRegAddress
+ 400              		.thumb
+ 401              		.thumb_func
+ 403              	HAL_MDIOS_ClearReadRegAddress:
+ 404              	.LFB145:
+ 403:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 404:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 405:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Clears Read register flag
+ 406:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 407:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  RegNum registers addresses to be cleared
+ 408:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 409:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 410:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_ClearReadRegAddress(MDIOS_HandleTypeDef *hmdios, uint32_t RegNum)
+ 411:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 405              		.loc 1 411 0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409              		@ link register save eliminated.
+ 410              	.LVL39:
+ 412:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Check the parameters */
+ 413:HALLIB/Src/stm32f7xx_hal_mdios.c ****   assert_param(IS_MDIOS_REGISTER(RegNum));
+ 414:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 415:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 416:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 411              		.loc 1 416 0
+ 412 0000 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+ 413 0002 012B     		cmp	r3, #1
+ 414 0004 09D0     		beq	.L33
+ 415              		.loc 1 416 0 is_stmt 0 discriminator 2
+ 416 0006 0123     		movs	r3, #1
+ 417 0008 4373     		strb	r3, [r0, #13]
+ 417:HALLIB/Src/stm32f7xx_hal_mdios.c ****           
+ 418:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Clear read registers flags */
+ 419:HALLIB/Src/stm32f7xx_hal_mdios.c ****   hmdios->Instance->CRDFR |= (RegNum); 
+ 418              		.loc 1 419 0 is_stmt 1 discriminator 2
+ 419 000a 0368     		ldr	r3, [r0]
+ 420 000c 1A69     		ldr	r2, [r3, #16]
+ 421 000e 1143     		orrs	r1, r1, r2
+ARM GAS  /tmp/cccLH3Jm.s 			page 16
+
+
+ 422              	.LVL40:
+ 423 0010 1961     		str	r1, [r3, #16]
+ 420:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 421:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Release Lock */
+ 422:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 424              		.loc 1 422 0 discriminator 2
+ 425 0012 0023     		movs	r3, #0
+ 426 0014 4373     		strb	r3, [r0, #13]
+ 423:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 424:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;    
+ 427              		.loc 1 424 0 discriminator 2
+ 428 0016 1846     		mov	r0, r3
+ 429              	.LVL41:
+ 430 0018 7047     		bx	lr
+ 431              	.LVL42:
+ 432              	.L33:
+ 416:HALLIB/Src/stm32f7xx_hal_mdios.c ****           
+ 433              		.loc 1 416 0
+ 434 001a 0220     		movs	r0, #2
+ 435              	.LVL43:
+ 425:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 436              		.loc 1 425 0
+ 437 001c 7047     		bx	lr
+ 438              		.cfi_endproc
+ 439              	.LFE145:
+ 441              		.section	.text.HAL_MDIOS_EnableEvents,"ax",%progbits
+ 442              		.align	2
+ 443              		.global	HAL_MDIOS_EnableEvents
+ 444              		.thumb
+ 445              		.thumb_func
+ 447              	HAL_MDIOS_EnableEvents:
+ 448              	.LFB146:
+ 426:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 427:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 428:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Enables Events for MDIOS peripheral 
+ 429:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 430:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval HAL status
+ 431:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 432:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_StatusTypeDef HAL_MDIOS_EnableEvents(MDIOS_HandleTypeDef *hmdios)
+ 433:HALLIB/Src/stm32f7xx_hal_mdios.c **** {        
+ 449              		.loc 1 433 0
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 0
+ 452              		@ frame_needed = 0, uses_anonymous_args = 0
+ 453              		@ link register save eliminated.
+ 454              	.LVL44:
+ 434:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Locked */
+ 435:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_LOCK(hmdios);
+ 455              		.loc 1 435 0
+ 456 0000 437B     		ldrb	r3, [r0, #13]	@ zero_extendqisi2
+ 457 0002 012B     		cmp	r3, #1
+ 458 0004 0AD0     		beq	.L36
+ 459              		.loc 1 435 0 is_stmt 0 discriminator 2
+ 460 0006 0123     		movs	r3, #1
+ 461 0008 4373     		strb	r3, [r0, #13]
+ 436:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 437:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Enable MDIOS interrupts: Register Write, Register Read and Error ITs */
+ARM GAS  /tmp/cccLH3Jm.s 			page 17
+
+
+ 438:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_MDIOS_ENABLE_IT(hmdios, (MDIOS_IT_WRITE | MDIOS_IT_READ | MDIOS_IT_ERROR));
+ 462              		.loc 1 438 0 is_stmt 1 discriminator 2
+ 463 000a 0268     		ldr	r2, [r0]
+ 464 000c 1368     		ldr	r3, [r2]
+ 465 000e 43F00E03 		orr	r3, r3, #14
+ 466 0012 1360     		str	r3, [r2]
+ 439:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 440:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Process Unlocked */
+ 441:HALLIB/Src/stm32f7xx_hal_mdios.c ****   __HAL_UNLOCK(hmdios);
+ 467              		.loc 1 441 0 discriminator 2
+ 468 0014 0023     		movs	r3, #0
+ 469 0016 4373     		strb	r3, [r0, #13]
+ 442:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 443:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return HAL_OK;   
+ 470              		.loc 1 443 0 discriminator 2
+ 471 0018 1846     		mov	r0, r3
+ 472              	.LVL45:
+ 473 001a 7047     		bx	lr
+ 474              	.LVL46:
+ 475              	.L36:
+ 435:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 476              		.loc 1 435 0
+ 477 001c 0220     		movs	r0, #2
+ 478              	.LVL47:
+ 444:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 479              		.loc 1 444 0
+ 480 001e 7047     		bx	lr
+ 481              		.cfi_endproc
+ 482              	.LFE146:
+ 484              		.section	.text.HAL_MDIOS_WriteCpltCallback,"ax",%progbits
+ 485              		.align	2
+ 486              		.weak	HAL_MDIOS_WriteCpltCallback
+ 487              		.thumb
+ 488              		.thumb_func
+ 490              	HAL_MDIOS_WriteCpltCallback:
+ 491              	.LFB148:
+ 445:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 446:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 447:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief This function handles MDIOS interrupt request.
+ 448:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param hmdios MDIOS handle
+ 449:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 450:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 451:HALLIB/Src/stm32f7xx_hal_mdios.c **** void HAL_MDIOS_IRQHandler(MDIOS_HandleTypeDef *hmdios)
+ 452:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 453:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Write Register Interrupt enabled ? */
+ 454:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(__HAL_MDIOS_GET_IT_SOURCE(hmdios, MDIOS_IT_WRITE) != RESET)
+ 455:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 456:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* Write register flag */
+ 457:HALLIB/Src/stm32f7xx_hal_mdios.c ****     if(HAL_MDIOS_GetWrittenRegAddress(hmdios) != RESET)
+ 458:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 459:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Write callback function */
+ 460:HALLIB/Src/stm32f7xx_hal_mdios.c ****       HAL_MDIOS_WriteCpltCallback(hmdios);
+ 461:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 462:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Clear write register flag */
+ 463:HALLIB/Src/stm32f7xx_hal_mdios.c ****       HAL_MDIOS_ClearWriteRegAddress(hmdios, MDIOS_ALL_REG_FLAG);
+ 464:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 465:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ARM GAS  /tmp/cccLH3Jm.s 			page 18
+
+
+ 466:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 467:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Read Register Interrupt enabled ? */
+ 468:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(__HAL_MDIOS_GET_IT_SOURCE(hmdios, MDIOS_IT_READ) != RESET)
+ 469:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 470:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* Read register flag */
+ 471:HALLIB/Src/stm32f7xx_hal_mdios.c ****     if(HAL_MDIOS_GetReadRegAddress(hmdios) != RESET)
+ 472:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 473:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Read callback function  */
+ 474:HALLIB/Src/stm32f7xx_hal_mdios.c ****       HAL_MDIOS_ReadCpltCallback(hmdios);
+ 475:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 476:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Clear read register flag */
+ 477:HALLIB/Src/stm32f7xx_hal_mdios.c ****       HAL_MDIOS_ClearReadRegAddress(hmdios, MDIOS_ALL_REG_FLAG);
+ 478:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 479:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 480:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 481:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Error Interrupt enabled ? */
+ 482:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(__HAL_MDIOS_GET_IT_SOURCE(hmdios, MDIOS_IT_ERROR) != RESET)
+ 483:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 484:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* All Errors Flag */
+ 485:HALLIB/Src/stm32f7xx_hal_mdios.c ****     if(__HAL_MDIOS_GET_ERROR_FLAG(hmdios, MDIOS_ALL_ERRORS_FLAG) !=RESET)
+ 486:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 487:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Error Callback */
+ 488:HALLIB/Src/stm32f7xx_hal_mdios.c ****       HAL_MDIOS_ErrorCallback(hmdios);
+ 489:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 490:HALLIB/Src/stm32f7xx_hal_mdios.c ****       /* Clear errors flag */
+ 491:HALLIB/Src/stm32f7xx_hal_mdios.c ****       __HAL_MDIOS_CLEAR_ERROR_FLAG(hmdios, MDIOS_ALL_ERRORS_FLAG);
+ 492:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 493:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 494:HALLIB/Src/stm32f7xx_hal_mdios.c ****    
+ 495:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* check MDIOS WAKEUP exti flag */
+ 496:HALLIB/Src/stm32f7xx_hal_mdios.c ****   if(__HAL_MDIOS_WAKEUP_EXTI_GET_FLAG() != RESET)
+ 497:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 498:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* MDIOS WAKEUP interrupt user callback */
+ 499:HALLIB/Src/stm32f7xx_hal_mdios.c ****     HAL_MDIOS_WakeUpCallback(hmdios);
+ 500:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 501:HALLIB/Src/stm32f7xx_hal_mdios.c ****     /* Clear MDIOS WAKEUP Exti pending bit */
+ 502:HALLIB/Src/stm32f7xx_hal_mdios.c ****     __HAL_MDIOS_WAKEUP_EXTI_CLEAR_FLAG();
+ 503:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 504:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 505:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 506:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 507:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Write Complete Callback
+ 508:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 509:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 510:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 511:HALLIB/Src/stm32f7xx_hal_mdios.c ****  __weak void HAL_MDIOS_WriteCpltCallback(MDIOS_HandleTypeDef *hmdios)
+ 512:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 492              		.loc 1 512 0
+ 493              		.cfi_startproc
+ 494              		@ args = 0, pretend = 0, frame = 0
+ 495              		@ frame_needed = 0, uses_anonymous_args = 0
+ 496              		@ link register save eliminated.
+ 497              	.LVL48:
+ 498 0000 7047     		bx	lr
+ 499              		.cfi_endproc
+ 500              	.LFE148:
+ 502 0002 00BF     		.section	.text.HAL_MDIOS_ReadCpltCallback,"ax",%progbits
+ARM GAS  /tmp/cccLH3Jm.s 			page 19
+
+
+ 503              		.align	2
+ 504              		.weak	HAL_MDIOS_ReadCpltCallback
+ 505              		.thumb
+ 506              		.thumb_func
+ 508              	HAL_MDIOS_ReadCpltCallback:
+ 509              	.LFB149:
+ 513:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 514:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 515:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 516:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 517:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_WriteCpltCallback can be implemented in the user file
+ 518:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 519:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 520:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 521:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 522:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Read Complete Callback
+ 523:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 524:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 525:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 526:HALLIB/Src/stm32f7xx_hal_mdios.c ****  __weak void HAL_MDIOS_ReadCpltCallback(MDIOS_HandleTypeDef *hmdios)
+ 527:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 510              		.loc 1 527 0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+ 514              		@ link register save eliminated.
+ 515              	.LVL49:
+ 516 0000 7047     		bx	lr
+ 517              		.cfi_endproc
+ 518              	.LFE149:
+ 520 0002 00BF     		.section	.text.HAL_MDIOS_ErrorCallback,"ax",%progbits
+ 521              		.align	2
+ 522              		.weak	HAL_MDIOS_ErrorCallback
+ 523              		.thumb
+ 524              		.thumb_func
+ 526              	HAL_MDIOS_ErrorCallback:
+ 527              	.LFB150:
+ 528:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 529:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 530:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 531:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 532:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_ReadCpltCallback can be implemented in the user file
+ 533:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 534:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 535:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 536:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 537:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief Error Callback
+ 538:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param hmdios mdios handle
+ 539:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 540:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 541:HALLIB/Src/stm32f7xx_hal_mdios.c ****  __weak void HAL_MDIOS_ErrorCallback(MDIOS_HandleTypeDef *hmdios)
+ 542:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 528              		.loc 1 542 0
+ 529              		.cfi_startproc
+ 530              		@ args = 0, pretend = 0, frame = 0
+ 531              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532              		@ link register save eliminated.
+ARM GAS  /tmp/cccLH3Jm.s 			page 20
+
+
+ 533              	.LVL50:
+ 534 0000 7047     		bx	lr
+ 535              		.cfi_endproc
+ 536              	.LFE150:
+ 538 0002 00BF     		.section	.text.HAL_MDIOS_WakeUpCallback,"ax",%progbits
+ 539              		.align	2
+ 540              		.weak	HAL_MDIOS_WakeUpCallback
+ 541              		.thumb
+ 542              		.thumb_func
+ 544              	HAL_MDIOS_WakeUpCallback:
+ 545              	.LFB151:
+ 543:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 544:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 545:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 546:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 547:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_ErrorCallback can be implemented in the user file
+ 548:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 549:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 550:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 551:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 552:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  MDIOS WAKEUP interrupt callback
+ 553:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param hmdios mdios handle
+ 554:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval None
+ 555:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 556:HALLIB/Src/stm32f7xx_hal_mdios.c **** __weak void HAL_MDIOS_WakeUpCallback(MDIOS_HandleTypeDef *hmdios)
+ 557:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 546              		.loc 1 557 0
+ 547              		.cfi_startproc
+ 548              		@ args = 0, pretend = 0, frame = 0
+ 549              		@ frame_needed = 0, uses_anonymous_args = 0
+ 550              		@ link register save eliminated.
+ 551              	.LVL51:
+ 552 0000 7047     		bx	lr
+ 553              		.cfi_endproc
+ 554              	.LFE151:
+ 556 0002 00BF     		.section	.text.HAL_MDIOS_IRQHandler,"ax",%progbits
+ 557              		.align	2
+ 558              		.global	HAL_MDIOS_IRQHandler
+ 559              		.thumb
+ 560              		.thumb_func
+ 562              	HAL_MDIOS_IRQHandler:
+ 563              	.LFB147:
+ 452:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Write Register Interrupt enabled ? */
+ 564              		.loc 1 452 0
+ 565              		.cfi_startproc
+ 566              		@ args = 0, pretend = 0, frame = 0
+ 567              		@ frame_needed = 0, uses_anonymous_args = 0
+ 568              	.LVL52:
+ 452:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Write Register Interrupt enabled ? */
+ 569              		.loc 1 452 0
+ 570 0000 10B5     		push	{r4, lr}
+ 571              	.LCFI5:
+ 572              		.cfi_def_cfa_offset 8
+ 573              		.cfi_offset 4, -8
+ 574              		.cfi_offset 14, -4
+ 575 0002 0446     		mov	r4, r0
+ 454:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ARM GAS  /tmp/cccLH3Jm.s 			page 21
+
+
+ 576              		.loc 1 454 0
+ 577 0004 0368     		ldr	r3, [r0]
+ 578 0006 1B68     		ldr	r3, [r3]
+ 579 0008 13F0020F 		tst	r3, #2
+ 580 000c 0AD0     		beq	.L42
+ 457:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 581              		.loc 1 457 0
+ 582 000e FFF7FEFF 		bl	HAL_MDIOS_GetWrittenRegAddress
+ 583              	.LVL53:
+ 584 0012 38B1     		cbz	r0, .L42
+ 460:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 585              		.loc 1 460 0
+ 586 0014 2046     		mov	r0, r4
+ 587 0016 FFF7FEFF 		bl	HAL_MDIOS_WriteCpltCallback
+ 588              	.LVL54:
+ 463:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 589              		.loc 1 463 0
+ 590 001a 4FF0FF31 		mov	r1, #-1
+ 591 001e 2046     		mov	r0, r4
+ 592 0020 FFF7FEFF 		bl	HAL_MDIOS_ClearWriteRegAddress
+ 593              	.LVL55:
+ 594              	.L42:
+ 468:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 595              		.loc 1 468 0
+ 596 0024 2368     		ldr	r3, [r4]
+ 597 0026 1B68     		ldr	r3, [r3]
+ 598 0028 13F0040F 		tst	r3, #4
+ 599 002c 0BD0     		beq	.L43
+ 471:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 600              		.loc 1 471 0
+ 601 002e 2046     		mov	r0, r4
+ 602 0030 FFF7FEFF 		bl	HAL_MDIOS_GetReadRegAddress
+ 603              	.LVL56:
+ 604 0034 38B1     		cbz	r0, .L43
+ 474:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 605              		.loc 1 474 0
+ 606 0036 2046     		mov	r0, r4
+ 607 0038 FFF7FEFF 		bl	HAL_MDIOS_ReadCpltCallback
+ 608              	.LVL57:
+ 477:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 609              		.loc 1 477 0
+ 610 003c 4FF0FF31 		mov	r1, #-1
+ 611 0040 2046     		mov	r0, r4
+ 612 0042 FFF7FEFF 		bl	HAL_MDIOS_ClearReadRegAddress
+ 613              	.LVL58:
+ 614              	.L43:
+ 482:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 615              		.loc 1 482 0
+ 616 0046 2368     		ldr	r3, [r4]
+ 617 0048 1A68     		ldr	r2, [r3]
+ 618 004a 12F0080F 		tst	r2, #8
+ 619 004e 0BD0     		beq	.L44
+ 485:HALLIB/Src/stm32f7xx_hal_mdios.c ****     {
+ 620              		.loc 1 485 0
+ 621 0050 5B69     		ldr	r3, [r3, #20]
+ 622 0052 13F0070F 		tst	r3, #7
+ 623 0056 07D0     		beq	.L44
+ARM GAS  /tmp/cccLH3Jm.s 			page 22
+
+
+ 488:HALLIB/Src/stm32f7xx_hal_mdios.c ****       
+ 624              		.loc 1 488 0
+ 625 0058 2046     		mov	r0, r4
+ 626 005a FFF7FEFF 		bl	HAL_MDIOS_ErrorCallback
+ 627              	.LVL59:
+ 491:HALLIB/Src/stm32f7xx_hal_mdios.c ****     }
+ 628              		.loc 1 491 0
+ 629 005e 2268     		ldr	r2, [r4]
+ 630 0060 9369     		ldr	r3, [r2, #24]
+ 631 0062 43F00703 		orr	r3, r3, #7
+ 632 0066 9361     		str	r3, [r2, #24]
+ 633              	.L44:
+ 496:HALLIB/Src/stm32f7xx_hal_mdios.c ****   {
+ 634              		.loc 1 496 0
+ 635 0068 064B     		ldr	r3, .L47
+ 636 006a 5B69     		ldr	r3, [r3, #20]
+ 637 006c 13F0807F 		tst	r3, #16777216
+ 638 0070 06D0     		beq	.L41
+ 499:HALLIB/Src/stm32f7xx_hal_mdios.c ****     
+ 639              		.loc 1 499 0
+ 640 0072 2046     		mov	r0, r4
+ 641 0074 FFF7FEFF 		bl	HAL_MDIOS_WakeUpCallback
+ 642              	.LVL60:
+ 502:HALLIB/Src/stm32f7xx_hal_mdios.c ****   }
+ 643              		.loc 1 502 0
+ 644 0078 4FF08072 		mov	r2, #16777216
+ 645 007c 014B     		ldr	r3, .L47
+ 646 007e 5A61     		str	r2, [r3, #20]
+ 647              	.L41:
+ 648 0080 10BD     		pop	{r4, pc}
+ 649              	.LVL61:
+ 650              	.L48:
+ 651 0082 00BF     		.align	2
+ 652              	.L47:
+ 653 0084 003C0140 		.word	1073822720
+ 654              		.cfi_endproc
+ 655              	.LFE147:
+ 657              		.section	.text.HAL_MDIOS_GetError,"ax",%progbits
+ 658              		.align	2
+ 659              		.global	HAL_MDIOS_GetError
+ 660              		.thumb
+ 661              		.thumb_func
+ 663              	HAL_MDIOS_GetError:
+ 664              	.LFB152:
+ 558:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Prevent unused argument(s) compilation warning */
+ 559:HALLIB/Src/stm32f7xx_hal_mdios.c ****   UNUSED(hmdios);
+ 560:HALLIB/Src/stm32f7xx_hal_mdios.c ****   
+ 561:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 562:HALLIB/Src/stm32f7xx_hal_mdios.c ****             the HAL_MDIOS_WakeUpCallback could be implemented in the user file
+ 563:HALLIB/Src/stm32f7xx_hal_mdios.c ****    */ 
+ 564:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 565:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 566:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 567:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @}
+ 568:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 569:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 570:HALLIB/Src/stm32f7xx_hal_mdios.c **** /** @defgroup MDIOS_Exported_Functions_Group3 Peripheral Control functions 
+ARM GAS  /tmp/cccLH3Jm.s 			page 23
+
+
+ 571:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *  @brief   MDIOS control functions 
+ 572:HALLIB/Src/stm32f7xx_hal_mdios.c ****   *
+ 573:HALLIB/Src/stm32f7xx_hal_mdios.c **** @verbatim   
+ 574:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================
+ 575:HALLIB/Src/stm32f7xx_hal_mdios.c ****                       ##### Peripheral Control functions #####
+ 576:HALLIB/Src/stm32f7xx_hal_mdios.c ****  ===============================================================================  
+ 577:HALLIB/Src/stm32f7xx_hal_mdios.c ****     [..]
+ 578:HALLIB/Src/stm32f7xx_hal_mdios.c ****     This subsection provides a set of functions allowing to control the MDIOS.
+ 579:HALLIB/Src/stm32f7xx_hal_mdios.c ****      (+) HAL_MDIOS_GetState() API, helpful to check in run-time the state. 
+ 580:HALLIB/Src/stm32f7xx_hal_mdios.c ****      (+) HAL_MDIOS_GetError() API, returns the errors occured during data transfer. 
+ 581:HALLIB/Src/stm32f7xx_hal_mdios.c ****         
+ 582:HALLIB/Src/stm32f7xx_hal_mdios.c **** @endverbatim
+ 583:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @{
+ 584:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 585:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 586:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 587:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Gets MDIOS error flags 
+ 588:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 589:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval bit map of occured errors 
+ 590:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 591:HALLIB/Src/stm32f7xx_hal_mdios.c **** uint32_t HAL_MDIOS_GetError(MDIOS_HandleTypeDef *hmdios)
+ 592:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 665              		.loc 1 592 0
+ 666              		.cfi_startproc
+ 667              		@ args = 0, pretend = 0, frame = 0
+ 668              		@ frame_needed = 0, uses_anonymous_args = 0
+ 669              		@ link register save eliminated.
+ 670              	.LVL62:
+ 593:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* return errors flags on status register */
+ 594:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return hmdios->Instance->SR;
+ 671              		.loc 1 594 0
+ 672 0000 0368     		ldr	r3, [r0]
+ 673 0002 5869     		ldr	r0, [r3, #20]
+ 674              	.LVL63:
+ 595:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 675              		.loc 1 595 0
+ 676 0004 7047     		bx	lr
+ 677              		.cfi_endproc
+ 678              	.LFE152:
+ 680 0006 00BF     		.section	.text.HAL_MDIOS_GetState,"ax",%progbits
+ 681              		.align	2
+ 682              		.global	HAL_MDIOS_GetState
+ 683              		.thumb
+ 684              		.thumb_func
+ 686              	HAL_MDIOS_GetState:
+ 687              	.LFB153:
+ 596:HALLIB/Src/stm32f7xx_hal_mdios.c **** 
+ 597:HALLIB/Src/stm32f7xx_hal_mdios.c **** /**
+ 598:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @brief  Return the MDIOS HAL state
+ 599:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @param  hmdios mdios handle
+ 600:HALLIB/Src/stm32f7xx_hal_mdios.c ****   * @retval MDIOS state
+ 601:HALLIB/Src/stm32f7xx_hal_mdios.c ****   */
+ 602:HALLIB/Src/stm32f7xx_hal_mdios.c **** HAL_MDIOS_StateTypeDef HAL_MDIOS_GetState(MDIOS_HandleTypeDef *hmdios)
+ 603:HALLIB/Src/stm32f7xx_hal_mdios.c **** {
+ 688              		.loc 1 603 0
+ 689              		.cfi_startproc
+ 690              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cccLH3Jm.s 			page 24
+
+
+ 691              		@ frame_needed = 0, uses_anonymous_args = 0
+ 692              		@ link register save eliminated.
+ 693              	.LVL64:
+ 604:HALLIB/Src/stm32f7xx_hal_mdios.c ****   /* Return MDIOS state */
+ 605:HALLIB/Src/stm32f7xx_hal_mdios.c ****   return hmdios->State;
+ 694              		.loc 1 605 0
+ 695 0000 007B     		ldrb	r0, [r0, #12]	@ zero_extendqisi2
+ 696              	.LVL65:
+ 606:HALLIB/Src/stm32f7xx_hal_mdios.c **** }
+ 697              		.loc 1 606 0
+ 698 0002 7047     		bx	lr
+ 699              		.cfi_endproc
+ 700              	.LFE153:
+ 702              		.text
+ 703              	.Letext0:
+ 704              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 705              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 706              		.file 4 "Inc/stm32f767xx.h"
+ 707              		.file 5 "Inc/stm32f7xx.h"
+ 708              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 709              		.file 7 "HALLIB/Inc/stm32f7xx_hal_mdios.h"
+ 710              		.file 8 "CORE/core_cm7.h"
+ARM GAS  /tmp/cccLH3Jm.s 			page 25
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_mdios.c
+     /tmp/cccLH3Jm.s:21     .text.HAL_MDIOS_MspInit:00000000 $t
+     /tmp/cccLH3Jm.s:26     .text.HAL_MDIOS_MspInit:00000000 HAL_MDIOS_MspInit
+     /tmp/cccLH3Jm.s:40     .text.HAL_MDIOS_Init:00000000 $t
+     /tmp/cccLH3Jm.s:45     .text.HAL_MDIOS_Init:00000000 HAL_MDIOS_Init
+     /tmp/cccLH3Jm.s:134    .text.HAL_MDIOS_Init:0000004c $d
+     /tmp/cccLH3Jm.s:139    .text.HAL_MDIOS_MspDeInit:00000000 $t
+     /tmp/cccLH3Jm.s:144    .text.HAL_MDIOS_MspDeInit:00000000 HAL_MDIOS_MspDeInit
+     /tmp/cccLH3Jm.s:157    .text.HAL_MDIOS_DeInit:00000000 $t
+     /tmp/cccLH3Jm.s:162    .text.HAL_MDIOS_DeInit:00000000 HAL_MDIOS_DeInit
+     /tmp/cccLH3Jm.s:210    .text.HAL_MDIOS_WriteReg:00000000 $t
+     /tmp/cccLH3Jm.s:215    .text.HAL_MDIOS_WriteReg:00000000 HAL_MDIOS_WriteReg
+     /tmp/cccLH3Jm.s:252    .text.HAL_MDIOS_WriteReg:0000001c $d
+     /tmp/cccLH3Jm.s:257    .text.HAL_MDIOS_ReadReg:00000000 $t
+     /tmp/cccLH3Jm.s:262    .text.HAL_MDIOS_ReadReg:00000000 HAL_MDIOS_ReadReg
+     /tmp/cccLH3Jm.s:303    .text.HAL_MDIOS_ReadReg:00000020 $d
+     /tmp/cccLH3Jm.s:308    .text.HAL_MDIOS_GetWrittenRegAddress:00000000 $t
+     /tmp/cccLH3Jm.s:313    .text.HAL_MDIOS_GetWrittenRegAddress:00000000 HAL_MDIOS_GetWrittenRegAddress
+     /tmp/cccLH3Jm.s:331    .text.HAL_MDIOS_GetReadRegAddress:00000000 $t
+     /tmp/cccLH3Jm.s:336    .text.HAL_MDIOS_GetReadRegAddress:00000000 HAL_MDIOS_GetReadRegAddress
+     /tmp/cccLH3Jm.s:354    .text.HAL_MDIOS_ClearWriteRegAddress:00000000 $t
+     /tmp/cccLH3Jm.s:359    .text.HAL_MDIOS_ClearWriteRegAddress:00000000 HAL_MDIOS_ClearWriteRegAddress
+     /tmp/cccLH3Jm.s:398    .text.HAL_MDIOS_ClearReadRegAddress:00000000 $t
+     /tmp/cccLH3Jm.s:403    .text.HAL_MDIOS_ClearReadRegAddress:00000000 HAL_MDIOS_ClearReadRegAddress
+     /tmp/cccLH3Jm.s:442    .text.HAL_MDIOS_EnableEvents:00000000 $t
+     /tmp/cccLH3Jm.s:447    .text.HAL_MDIOS_EnableEvents:00000000 HAL_MDIOS_EnableEvents
+     /tmp/cccLH3Jm.s:485    .text.HAL_MDIOS_WriteCpltCallback:00000000 $t
+     /tmp/cccLH3Jm.s:490    .text.HAL_MDIOS_WriteCpltCallback:00000000 HAL_MDIOS_WriteCpltCallback
+     /tmp/cccLH3Jm.s:503    .text.HAL_MDIOS_ReadCpltCallback:00000000 $t
+     /tmp/cccLH3Jm.s:508    .text.HAL_MDIOS_ReadCpltCallback:00000000 HAL_MDIOS_ReadCpltCallback
+     /tmp/cccLH3Jm.s:521    .text.HAL_MDIOS_ErrorCallback:00000000 $t
+     /tmp/cccLH3Jm.s:526    .text.HAL_MDIOS_ErrorCallback:00000000 HAL_MDIOS_ErrorCallback
+     /tmp/cccLH3Jm.s:539    .text.HAL_MDIOS_WakeUpCallback:00000000 $t
+     /tmp/cccLH3Jm.s:544    .text.HAL_MDIOS_WakeUpCallback:00000000 HAL_MDIOS_WakeUpCallback
+     /tmp/cccLH3Jm.s:557    .text.HAL_MDIOS_IRQHandler:00000000 $t
+     /tmp/cccLH3Jm.s:562    .text.HAL_MDIOS_IRQHandler:00000000 HAL_MDIOS_IRQHandler
+     /tmp/cccLH3Jm.s:653    .text.HAL_MDIOS_IRQHandler:00000084 $d
+     /tmp/cccLH3Jm.s:658    .text.HAL_MDIOS_GetError:00000000 $t
+     /tmp/cccLH3Jm.s:663    .text.HAL_MDIOS_GetError:00000000 HAL_MDIOS_GetError
+     /tmp/cccLH3Jm.s:681    .text.HAL_MDIOS_GetState:00000000 $t
+     /tmp/cccLH3Jm.s:686    .text.HAL_MDIOS_GetState:00000000 HAL_MDIOS_GetState
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,3200 @@
+ARM GAS  /tmp/ccNl1RIb.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_adc_ex.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.ADC_MultiModeDMAError,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	ADC_MultiModeDMAError:
+  26              	.LFB150:
+  27              		.file 1 "HALLIB/Src/stm32f7xx_hal_adc_ex.c"
+   1:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @file    stm32f7xx_hal_adc_ex.c
+   4:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief   This file provides firmware functions to manage the following 
+   6:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *          functionalities of the ADC extension peripheral:
+   7:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *           + Extended features functions
+   8:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         
+   9:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   @verbatim
+  10:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ==============================================================================
+  11:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                     ##### How to use this driver #####
+  12:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ==============================================================================
+  13:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     [..]
+  14:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     (#)Initialize the ADC low level resources by implementing the HAL_ADC_MspInit():
+  15:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (##) Enable the ADC interface clock using __HAL_RCC_ADC_CLK_ENABLE()
+  16:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (##) ADC pins configuration
+  17:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Enable the clock for the ADC GPIOs using the following function:
+  18:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                    __HAL_RCC_GPIOx_CLK_ENABLE()  
+  19:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Configure these ADC pins in analog mode using HAL_GPIO_Init() 
+  20:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (##) In case of using interrupts (e.g. HAL_ADC_Start_IT())
+  21:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Configure the ADC interrupt priority using HAL_NVIC_SetPriority()
+  22:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Enable the ADC IRQ handler using HAL_NVIC_EnableIRQ()
+  23:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) In ADC IRQ handler, call HAL_ADC_IRQHandler()
+  24:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (##) In case of using DMA to control data transfer (e.g. HAL_ADC_Start_DMA())
+  25:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Enable the DMAx interface clock using __HAL_RCC_DMAx_CLK_ENABLE()
+  26:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Configure and enable two DMA streams stream for managing data
+  27:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                  transfer from peripheral to memory (output stream)
+  28:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Associate the initialized DMA handle to the ADC DMA handle
+  29:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                  using  __HAL_LINKDMA()
+  30:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****              (+++) Configure the priority and enable the NVIC for the transfer complete
+  31:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                  interrupt on the two DMA Streams. The output stream should have higher
+ARM GAS  /tmp/ccNl1RIb.s 			page 2
+
+
+  32:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                  priority than the input stream.                  
+  33:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (#) Configure the ADC Prescaler, conversion resolution and data alignment 
+  34:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****          using the HAL_ADC_Init() function. 
+  35:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  36:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (#) Configure the ADC Injected channels group features, use HAL_ADC_Init()
+  37:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****          and HAL_ADC_ConfigChannel() functions.
+  38:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****          
+  39:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (#) Three operation modes are available within this driver :     
+  40:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  41:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      *** Polling mode IO operation ***
+  42:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      =================================
+  43:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      [..]    
+  44:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Start the ADC peripheral using HAL_ADCEx_InjectedStart() 
+  45:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Wait for end of conversion using HAL_ADCEx_InjectedPollForConversion(), at this stage
+  46:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****            user can specify the value of timeout according to his end application      
+  47:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) To read the ADC converted values, use the HAL_ADCEx_InjectedGetValue() function.
+  48:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Stop the ADC peripheral using HAL_ADCEx_InjectedStop()
+  49:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  50:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      *** Interrupt mode IO operation ***    
+  51:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      ===================================
+  52:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      [..]    
+  53:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Start the ADC peripheral using HAL_ADCEx_InjectedStart_IT() 
+  54:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Use HAL_ADC_IRQHandler() called under ADC_IRQHandler() Interrupt subroutine
+  55:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) At ADC end of conversion HAL_ADCEx_InjectedConvCpltCallback() function is executed and u
+  56:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             add his own code by customization of function pointer HAL_ADCEx_InjectedConvCpltCallbac
+  57:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) In case of ADC Error, HAL_ADCEx_InjectedErrorCallback() function is executed and user ca
+  58:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             add his own code by customization of function pointer HAL_ADCEx_InjectedErrorCallback
+  59:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Stop the ADC peripheral using HAL_ADCEx_InjectedStop_IT()
+  60:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        
+  61:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             
+  62:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      *** DMA mode IO operation ***    
+  63:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      ==============================
+  64:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      [..]    
+  65:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Start the ADC peripheral using HAL_ADCEx_InjectedStart_DMA(), at this stage the user spe
+  66:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****            of data to be transferred at each end of conversion 
+  67:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) At The end of data transfer ba HAL_ADCEx_InjectedConvCpltCallback() function is executed
+  68:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             add his own code by customization of function pointer HAL_ADCEx_InjectedConvCpltCallbac
+  69:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) In case of transfer Error, HAL_ADCEx_InjectedErrorCallback() function is executed and us
+  70:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             add his own code by customization of function pointer HAL_ADCEx_InjectedErrorCallback
+  71:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         (+) Stop the ADC peripheral using HAL_ADCEx_InjectedStop_DMA()
+  72:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         
+  73:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      *** Multi mode ADCs Regular channels configuration ***
+  74:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      ======================================================
+  75:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      [..]        
+  76:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Select the Multi mode ADC regular channels features (dual or triple mode)  
+  77:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****           and configure the DMA mode using HAL_ADCEx_MultiModeConfigChannel() functions. 
+  78:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Start the ADC peripheral using HAL_ADCEx_MultiModeStart_DMA(), at this stage the user sp
+  79:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****            of data to be transferred at each end of conversion           
+  80:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (+) Read the ADCs converted values using the HAL_ADCEx_MultiModeGetValue() function.
+  81:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  82:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  83:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     @endverbatim
+  84:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ******************************************************************************
+  85:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @attention
+  86:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+  87:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  88:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ARM GAS  /tmp/ccNl1RIb.s 			page 3
+
+
+  89:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  90:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * are permitted provided that the following conditions are met:
+  91:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  92:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *      this list of conditions and the following disclaimer.
+  93:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  94:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  95:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *      and/or other materials provided with the distribution.
+  96:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  97:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *      may be used to endorse or promote products derived from this software
+  98:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *      without specific prior written permission.
+  99:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ 100:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ 101:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ 102:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ 103:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ 104:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ 105:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ 106:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ 107:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ 108:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ 109:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 110:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ 111:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ******************************************************************************
+ 112:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */ 
+ 113:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 114:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Includes ------------------------------------------------------------------*/
+ 115:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #include "stm32f7xx_hal.h"
+ 116:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 117:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /** @addtogroup STM32F7xx_HAL_Driver
+ 118:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @{
+ 119:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 120:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 121:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /** @defgroup ADCEx ADCEx
+ 122:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief ADC Extended driver modules
+ 123:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @{
+ 124:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */ 
+ 125:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 126:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #ifdef HAL_ADC_MODULE_ENABLED
+ 127:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 128:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Private typedef -----------------------------------------------------------*/
+ 129:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Private define ------------------------------------------------------------*/ 
+ 130:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Private macro -------------------------------------------------------------*/
+ 131:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Private variables ---------------------------------------------------------*/
+ 132:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /** @addtogroup ADCEx_Private_Functions
+ 133:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @{
+ 134:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 135:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Private function prototypes -----------------------------------------------*/
+ 136:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef *hdma);
+ 137:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAError(DMA_HandleTypeDef *hdma);
+ 138:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef *hdma); 
+ 139:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 140:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @}
+ 141:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 142:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 143:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /* Exported functions --------------------------------------------------------*/
+ 144:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /** @defgroup ADCEx_Exported_Functions ADC Exported Functions
+ 145:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @{
+ARM GAS  /tmp/ccNl1RIb.s 			page 4
+
+
+ 146:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 147:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 148:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /** @defgroup ADCEx_Exported_Functions_Group1  Extended features functions 
+ 149:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *  @brief    Extended features functions  
+ 150:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ 151:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** @verbatim   
+ 152:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****  ===============================================================================
+ 153:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                  ##### Extended features functions #####
+ 154:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****  ===============================================================================  
+ 155:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     [..]  This section provides functions allowing to:
+ 156:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Start conversion of injected channel.
+ 157:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Stop conversion of injected channel.
+ 158:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Start multimode and enable DMA transfer.
+ 159:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Stop multimode and disable DMA transfer.
+ 160:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Get result of injected channel conversion.
+ 161:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Get result of multimode conversion.
+ 162:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Configure injected channels.
+ 163:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (+) Configure multimode.
+ 164:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                
+ 165:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** @endverbatim
+ 166:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @{
+ 167:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 168:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 169:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 170:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Enables the selected ADC software start conversion of the injected channels.
+ 171:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 172:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 173:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status
+ 174:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 175:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef* hadc)
+ 176:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 177:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 178:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 179:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 180:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 181:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 182:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 183:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Enable the ADC peripheral */
+ 184:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 185:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check if ADC peripheral is disabled in order to enable it and wait during 
+ 186:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      Tstab time the ADC's stabilization */
+ 187:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if((hadc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
+ 188:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 189:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the Peripheral */
+ 190:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_ENABLE(hadc);
+ 191:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 192:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Delay for ADC stabilization time */
+ 193:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Compute number of CPU cycles to wait for */
+ 194:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000));
+ 195:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 196:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 197:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       counter--;
+ 198:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 199:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 200:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 201:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Start conversion if ADC is effectively enabled */
+ 202:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(HAL_IS_BIT_SET(hadc->Instance->CR2, ADC_CR2_ADON))
+ARM GAS  /tmp/ccNl1RIb.s 			page 5
+
+
+ 203:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 204:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC state                                                          */
+ 205:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Clear state bitfield related to injected group conversion results    */
+ 206:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Set state bitfield related to injected operation                     */
+ 207:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_STATE_CLR_SET(hadc->State,
+ 208:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_INJ_EOC,
+ 209:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_INJ_BUSY);
+ 210:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 211:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if a regular conversion is ongoing */
+ 212:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Note: On this device, there is no ADC error code fields related to     */
+ 213:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       conversions on group injected only. In case of conversion on     */
+ 214:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       going on group regular, no error code is reset.                  */
+ 215:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (HAL_IS_BIT_CLR(hadc->State, HAL_ADC_STATE_REG_BUSY))
+ 216:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 217:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Reset ADC all error code fields */
+ 218:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_CLEAR_ERRORCODE(hadc);
+ 219:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 220:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 221:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Process unlocked */
+ 222:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Unlock before starting ADC conversions: in case of potential           */
+ 223:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* interruption, to let the process to ADC IRQ Handler.                   */
+ 224:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_UNLOCK(hadc);
+ 225:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 226:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Clear injected group conversion flag */
+ 227:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* (To ensure of no unknown state from potential previous ADC operations) */
+ 228:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_JEOC);
+ 229:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 230:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if Multimode enabled */
+ 231:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(HAL_IS_BIT_CLR(ADC->CCR, ADC_CCR_MULTI))
+ 232:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 233:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp1 = HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_JEXTEN);
+ 234:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 235:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if(tmp1 && tmp2)
+ 236:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 237:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Enable the selected ADC software conversion for injected group */
+ 238:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         hadc->Instance->CR2 |= ADC_CR2_JSWSTART;
+ 239:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 240:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 241:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     else
+ 242:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 243:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp1 = HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_JEXTEN);
+ 244:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 245:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if((hadc->Instance == ADC1) && tmp1 && tmp2)  
+ 246:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 247:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Enable the selected ADC software conversion for injected group */
+ 248:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         hadc->Instance->CR2 |= ADC_CR2_JSWSTART;
+ 249:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 250:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 251:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 252:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 253:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 254:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 255:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 256:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 257:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 258:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Enables the interrupt and starts ADC conversion of injected channels.
+ 259:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ARM GAS  /tmp/ccNl1RIb.s 			page 6
+
+
+ 260:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 261:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ 262:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status.
+ 263:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 264:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef* hadc)
+ 265:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 266:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 267:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 268:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 269:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 270:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 271:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 272:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Enable the ADC peripheral */
+ 273:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 274:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check if ADC peripheral is disabled in order to enable it and wait during 
+ 275:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      Tstab time the ADC's stabilization */
+ 276:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if((hadc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
+ 277:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 278:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the Peripheral */
+ 279:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_ENABLE(hadc);
+ 280:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 281:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Delay for ADC stabilization time */
+ 282:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Compute number of CPU cycles to wait for */
+ 283:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000));
+ 284:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 285:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 286:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       counter--;
+ 287:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 288:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 289:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 290:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Start conversion if ADC is effectively enabled */
+ 291:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(HAL_IS_BIT_SET(hadc->Instance->CR2, ADC_CR2_ADON))
+ 292:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 293:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC state                                                          */
+ 294:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Clear state bitfield related to injected group conversion results    */
+ 295:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Set state bitfield related to injected operation                     */
+ 296:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_STATE_CLR_SET(hadc->State,
+ 297:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_INJ_EOC,
+ 298:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_INJ_BUSY);
+ 299:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 300:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if a regular conversion is ongoing */
+ 301:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Note: On this device, there is no ADC error code fields related to     */
+ 302:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       conversions on group injected only. In case of conversion on     */
+ 303:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       going on group regular, no error code is reset.                  */
+ 304:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (HAL_IS_BIT_CLR(hadc->State, HAL_ADC_STATE_REG_BUSY))
+ 305:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 306:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Reset ADC all error code fields */
+ 307:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_CLEAR_ERRORCODE(hadc);
+ 308:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 309:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 310:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Process unlocked */
+ 311:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Unlock before starting ADC conversions: in case of potential           */
+ 312:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* interruption, to let the process to ADC IRQ Handler.                   */
+ 313:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_UNLOCK(hadc);
+ 314:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 315:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Clear injected group conversion flag */
+ 316:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* (To ensure of no unknown state from potential previous ADC operations) */
+ARM GAS  /tmp/ccNl1RIb.s 			page 7
+
+
+ 317:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_JEOC);
+ 318:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 319:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable end of conversion interrupt for injected channels */
+ 320:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_ENABLE_IT(hadc, ADC_IT_JEOC);
+ 321:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 322:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if Multimode enabled */
+ 323:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(HAL_IS_BIT_CLR(ADC->CCR, ADC_CCR_MULTI))
+ 324:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 325:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp1 = HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_JEXTEN);
+ 326:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 327:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if(tmp1 && tmp2)
+ 328:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 329:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Enable the selected ADC software conversion for injected group */
+ 330:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         hadc->Instance->CR2 |= ADC_CR2_JSWSTART;
+ 331:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 332:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 333:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     else
+ 334:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 335:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp1 = HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_JEXTEN);
+ 336:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 337:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if((hadc->Instance == ADC1) && tmp1 && tmp2)  
+ 338:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 339:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Enable the selected ADC software conversion for injected group */
+ 340:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         hadc->Instance->CR2 |= ADC_CR2_JSWSTART;
+ 341:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 342:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 343:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 344:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 345:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 346:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 347:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 348:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 349:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 350:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Stop conversion of injected channels. Disable ADC peripheral if
+ 351:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         no regular conversion is on going.
+ 352:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   If ADC must be disabled and if conversion is on going on 
+ 353:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         regular group, function HAL_ADC_Stop must be used to stop both
+ 354:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         injected and regular groups, and disable the ADC.
+ 355:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   If injected group mode auto-injection is enabled,
+ 356:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         function HAL_ADC_Stop must be used.
+ 357:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   In case of auto-injection mode, HAL_ADC_Stop must be used.
+ 358:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc ADC handle
+ 359:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 360:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 361:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef* hadc)
+ 362:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 363:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 364:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 365:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 366:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
+ 367:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 368:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 369:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 370:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 371:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Stop potential conversion and disable ADC peripheral                     */
+ 372:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Conditioned to:                                                          */
+ 373:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* - No conversion on the other group (regular group) is intended to        */
+ARM GAS  /tmp/ccNl1RIb.s 			page 8
+
+
+ 374:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*   continue (injected and regular groups stop conversion and ADC disable  */
+ 375:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*   are common)                                                            */
+ 376:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* - In case of auto-injection mode, HAL_ADC_Stop must be used.             */
+ 377:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(((hadc->State & HAL_ADC_STATE_REG_BUSY) == RESET)  &&
+ 378:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 379:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 380:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Stop potential conversion on going, on regular and injected groups */
+ 381:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable ADC peripheral */
+ 382:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_DISABLE(hadc);
+ 383:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 384:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if ADC is effectively disabled */
+ 385:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_ADON))
+ 386:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 387:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set ADC state */
+ 388:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_STATE_CLR_SET(hadc->State,
+ 389:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ 390:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_READY);
+ 391:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 392:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 393:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+ 394:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 395:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Update ADC state machine to error */
+ 396:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     SET_BIT(hadc->State, HAL_ADC_STATE_ERROR_CONFIG);
+ 397:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 398:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     tmp_hal_status = HAL_ERROR;
+ 399:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 400:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 401:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process unlocked */
+ 402:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_UNLOCK(hadc);
+ 403:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 404:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 405:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return tmp_hal_status;
+ 406:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 407:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 408:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 409:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Poll for injected conversion complete
+ 410:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 411:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 412:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  Timeout Timeout value in millisecond.  
+ 413:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status
+ 414:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 415:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef* hadc, uint32_t Timeout)
+ 416:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 417:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tickstart = 0;
+ 418:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 419:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Get tick */ 
+ 420:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   tickstart = HAL_GetTick();
+ 421:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 422:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check End of conversion flag */
+ 423:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   while(!(__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_JEOC)))
+ 424:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 425:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check for the Timeout */
+ 426:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(Timeout != HAL_MAX_DELAY)
+ 427:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 428:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+ 429:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 430:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         hadc->State= HAL_ADC_STATE_TIMEOUT;
+ARM GAS  /tmp/ccNl1RIb.s 			page 9
+
+
+ 431:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Process unlocked */
+ 432:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         __HAL_UNLOCK(hadc);
+ 433:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         return HAL_TIMEOUT;
+ 434:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 435:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 436:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 437:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 438:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Clear injected group conversion flag */
+ 439:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_JSTRT | ADC_FLAG_JEOC);
+ 440:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 441:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Update ADC state machine */
+ 442:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   SET_BIT(hadc->State, HAL_ADC_STATE_INJ_EOC);
+ 443:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 444:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Determine whether any further conversion upcoming on group injected      */
+ 445:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* by external trigger, continuous mode or scan sequence on going.          */
+ 446:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Note: On STM32F7, there is no independent flag of end of sequence.       */
+ 447:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*       The test of scan sequence on going is done either with scan        */
+ 448:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*       sequence disabled or with end of conversion flag set to            */
+ 449:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*       of end of sequence.                                                */
+ 450:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(ADC_IS_SOFTWARE_START_INJECTED(hadc)                    &&
+ 451:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->JSQR, ADC_JSQR_JL)  ||
+ 452:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)    ) &&
+ 453:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO) &&
+ 454:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (ADC_IS_SOFTWARE_START_REGULAR(hadc)       &&
+ 455:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (hadc->Init.ContinuousConvMode == DISABLE)   )       )   )
+ 456:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 457:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC state */
+ 458:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     CLEAR_BIT(hadc->State, HAL_ADC_STATE_INJ_BUSY);
+ 459:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 460:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (HAL_IS_BIT_CLR(hadc->State, HAL_ADC_STATE_REG_BUSY))
+ 461:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     { 
+ 462:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       SET_BIT(hadc->State, HAL_ADC_STATE_READY);
+ 463:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 464:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 465:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 466:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return ADC state */
+ 467:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 468:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }      
+ 469:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 470:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 471:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Stop conversion of injected channels, disable interruption of 
+ 472:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         end-of-conversion. Disable ADC peripheral if no regular conversion
+ 473:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         is on going.
+ 474:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   If ADC must be disabled and if conversion is on going on 
+ 475:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         regular group, function HAL_ADC_Stop must be used to stop both
+ 476:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         injected and regular groups, and disable the ADC.
+ 477:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   If injected group mode auto-injection is enabled,
+ 478:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         function HAL_ADC_Stop must be used.
+ 479:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc ADC handle
+ 480:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 481:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 482:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef* hadc)
+ 483:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 484:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 485:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 486:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 487:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
+ARM GAS  /tmp/ccNl1RIb.s 			page 10
+
+
+ 488:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 489:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 490:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 491:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 492:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Stop potential conversion and disable ADC peripheral                     */
+ 493:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Conditioned to:                                                          */
+ 494:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* - No conversion on the other group (regular group) is intended to        */
+ 495:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*   continue (injected and regular groups stop conversion and ADC disable  */
+ 496:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*   are common)                                                            */
+ 497:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* - In case of auto-injection mode, HAL_ADC_Stop must be used.             */ 
+ 498:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(((hadc->State & HAL_ADC_STATE_REG_BUSY) == RESET)  &&
+ 499:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 500:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 501:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Stop potential conversion on going, on regular and injected groups */
+ 502:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable ADC peripheral */
+ 503:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_DISABLE(hadc);
+ 504:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 505:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Check if ADC is effectively disabled */
+ 506:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_ADON))
+ 507:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 508:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Disable ADC end of conversion interrupt for injected channels */
+ 509:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       __HAL_ADC_DISABLE_IT(hadc, ADC_IT_JEOC);
+ 510:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 511:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set ADC state */
+ 512:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_STATE_CLR_SET(hadc->State,
+ 513:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ 514:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_READY);
+ 515:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 516:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 517:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+ 518:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 519:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Update ADC state machine to error */
+ 520:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     SET_BIT(hadc->State, HAL_ADC_STATE_ERROR_CONFIG);
+ 521:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 522:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     tmp_hal_status = HAL_ERROR;
+ 523:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 524:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 525:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process unlocked */
+ 526:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_UNLOCK(hadc);
+ 527:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 528:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 529:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return tmp_hal_status;
+ 530:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 531:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 532:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 533:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Gets the converted value from data register of injected channel.
+ 534:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 535:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 536:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  InjectedRank the ADC injected rank.
+ 537:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *          This parameter can be one of the following values:
+ 538:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *            @arg ADC_INJECTED_RANK_1: Injected Channel1 selected
+ 539:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *            @arg ADC_INJECTED_RANK_2: Injected Channel2 selected
+ 540:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *            @arg ADC_INJECTED_RANK_3: Injected Channel3 selected
+ 541:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *            @arg ADC_INJECTED_RANK_4: Injected Channel4 selected
+ 542:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 543:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 544:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef* hadc, uint32_t InjectedRank)
+ARM GAS  /tmp/ccNl1RIb.s 			page 11
+
+
+ 545:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 546:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t tmp = 0;
+ 547:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 548:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 549:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_INJECTED_RANK(InjectedRank));
+ 550:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 551:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Clear injected group conversion flag to have similar behaviour as        */
+ 552:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* regular group: reading data register also clears end of conversion flag. */
+ 553:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_JEOC);
+ 554:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 555:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return the selected ADC converted value */ 
+ 556:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   switch(InjectedRank)
+ 557:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 558:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_4:
+ 559:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 560:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp =  hadc->Instance->JDR4;
+ 561:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }  
+ 562:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     break;
+ 563:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_3: 
+ 564:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {  
+ 565:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp =  hadc->Instance->JDR3;
+ 566:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }  
+ 567:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     break;
+ 568:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_2: 
+ 569:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {  
+ 570:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp =  hadc->Instance->JDR2;
+ 571:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 572:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     break;
+ 573:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_1:
+ 574:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 575:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp =  hadc->Instance->JDR1;
+ 576:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 577:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     break;
+ 578:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     default:
+ 579:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     break;  
+ 580:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 581:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return tmp;
+ 582:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 583:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 584:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 585:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Enables ADC DMA request after last transfer (Multi-ADC mode) and enables ADC peripheral
+ 586:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * 
+ 587:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @note   Caution: This function must be used only with the ADC master.  
+ 588:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *
+ 589:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 590:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 591:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  pData   Pointer to buffer in which transferred from ADC peripheral to memory will be st
+ 592:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  Length  The length of data to be transferred from ADC peripheral to memory.  
+ 593:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status
+ 594:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 595:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData, uint32_t L
+ 596:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 597:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 598:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 599:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 600:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.ContinuousConvMode));
+ 601:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_EXT_TRIG_EDGE(hadc->Init.ExternalTrigConvEdge));
+ARM GAS  /tmp/ccNl1RIb.s 			page 12
+
+
+ 602:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.DMAContinuousRequests));
+ 603:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 604:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 605:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 606:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 607:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check if ADC peripheral is disabled in order to enable it and wait during 
+ 608:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      Tstab time the ADC's stabilization */
+ 609:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if((hadc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
+ 610:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 611:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the Peripheral */
+ 612:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_ENABLE(hadc);
+ 613:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 614:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Delay for temperature sensor stabilization time */
+ 615:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Compute number of CPU cycles to wait for */
+ 616:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000));
+ 617:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 618:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 619:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       counter--;
+ 620:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 621:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 622:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 623:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Start conversion if ADC is effectively enabled */
+ 624:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(HAL_IS_BIT_SET(hadc->Instance->CR2, ADC_CR2_ADON))
+ 625:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 626:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC state                                                          */
+ 627:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Clear state bitfield related to regular group conversion results     */
+ 628:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* - Set state bitfield related to regular group operation                */
+ 629:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_STATE_CLR_SET(hadc->State,
+ 630:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_REG_EOC | HAL_ADC_STATE_REG_OVR,
+ 631:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_REG_BUSY);
+ 632:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 633:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* If conversions on group regular are also triggering group injected,    */
+ 634:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* update ADC state.                                                      */
+ 635:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (READ_BIT(hadc->Instance->CR1, ADC_CR1_JAUTO) != RESET)
+ 636:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 637:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_STATE_CLR_SET(hadc->State, HAL_ADC_STATE_INJ_EOC, HAL_ADC_STATE_INJ_BUSY);  
+ 638:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 639:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 640:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* State machine update: Check if an injected conversion is ongoing */
+ 641:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (HAL_IS_BIT_SET(hadc->State, HAL_ADC_STATE_INJ_BUSY))
+ 642:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 643:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Reset ADC error code fields related to conversions on group regular */
+ 644:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));         
+ 645:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 646:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     else
+ 647:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 648:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Reset ADC all error code fields */
+ 649:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC_CLEAR_ERRORCODE(hadc);
+ 650:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 651:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 652:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Process unlocked */
+ 653:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Unlock before starting ADC conversions: in case of potential           */
+ 654:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* interruption, to let the process to ADC IRQ Handler.                   */
+ 655:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_UNLOCK(hadc);
+ 656:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 657:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set the DMA transfer complete callback */
+ 658:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->DMA_Handle->XferCpltCallback = ADC_MultiModeDMAConvCplt;
+ARM GAS  /tmp/ccNl1RIb.s 			page 13
+
+
+ 659:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 660:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set the DMA half transfer complete callback */
+ 661:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->DMA_Handle->XferHalfCpltCallback = ADC_MultiModeDMAHalfConvCplt;
+ 662:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 663:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set the DMA error callback */
+ 664:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->DMA_Handle->XferErrorCallback = ADC_MultiModeDMAError ;
+ 665:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 666:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Manage ADC and DMA start: ADC overrun interruption, DMA start, ADC     */
+ 667:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* start (in case of SW start):                                           */
+ 668:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 669:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Clear regular group conversion flag and overrun flag */
+ 670:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* (To ensure of no unknown state from potential previous ADC operations) */
+ 671:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_EOC);
+ 672:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 673:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable ADC overrun interrupt */
+ 674:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_ENABLE_IT(hadc, ADC_IT_OVR);
+ 675:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 676:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if (hadc->Init.DMAContinuousRequests != DISABLE)
+ 677:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 678:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Enable the selected ADC DMA request after last transfer */
+ 679:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC->CCR |= ADC_CCR_DDS;
+ 680:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 681:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     else
+ 682:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 683:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Disable the selected ADC EOC rising on each regular channel conversion */
+ 684:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       ADC->CCR &= ~ADC_CCR_DDS;
+ 685:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 686:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 687:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the DMA Stream */
+ 688:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     HAL_DMA_Start_IT(hadc->DMA_Handle, (uint32_t)&ADC->CDR, (uint32_t)pData, Length);
+ 689:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 690:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* if no external trigger present enable software conversion of regular channels */
+ 691:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if((hadc->Instance->CR2 & ADC_CR2_EXTEN) == RESET) 
+ 692:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 693:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Enable the selected ADC software conversion for regular group */
+ 694:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
+ 695:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 696:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 697:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 698:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 699:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 700:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 701:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 702:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 703:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Disables ADC DMA (multi-ADC mode) and disables ADC peripheral    
+ 704:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 705:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 706:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status
+ 707:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 708:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef* hadc)
+ 709:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 710:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 711:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 712:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 713:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
+ 714:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 715:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ARM GAS  /tmp/ccNl1RIb.s 			page 14
+
+
+ 716:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 717:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 718:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Stop potential conversion on going, on regular and injected groups */
+ 719:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Disable ADC peripheral */
+ 720:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_ADC_DISABLE(hadc);
+ 721:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 722:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check if ADC is effectively disabled */
+ 723:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_ADON))
+ 724:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 725:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable the selected ADC DMA mode for multimode */
+ 726:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC->CCR &= ~ADC_CCR_DDS;
+ 727:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 728:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable the DMA channel (in case of DMA in circular mode or stop while */
+ 729:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* DMA transfer is on going)                                              */
+ 730:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     tmp_hal_status = HAL_DMA_Abort(hadc->DMA_Handle);
+ 731:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 732:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable ADC overrun interrupt */
+ 733:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     __HAL_ADC_DISABLE_IT(hadc, ADC_IT_OVR);
+ 734:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 735:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC state */
+ 736:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_STATE_CLR_SET(hadc->State,
+ 737:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ 738:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY);
+ 739:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 740:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 741:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process unlocked */
+ 742:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_UNLOCK(hadc);
+ 743:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 744:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 745:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return tmp_hal_status;
+ 746:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 747:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 748:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 749:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Returns the last ADC1, ADC2 and ADC3 regular conversions results 
+ 750:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         data in the selected multi mode.
+ 751:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 752:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 753:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval The converted data value.
+ 754:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 755:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef* hadc)
+ 756:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 757:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return the multi mode conversion value */
+ 758:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return ADC->CDR;
+ 759:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 760:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 761:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 762:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Injected conversion complete callback in non blocking mode 
+ 763:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 764:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 765:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 766:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 767:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** __weak void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc)
+ 768:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 769:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 770:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   UNUSED(hadc);
+ 771:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 772:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****             the HAL_ADC_InjectedConvCpltCallback could be implemented in the user file
+ARM GAS  /tmp/ccNl1RIb.s 			page 15
+
+
+ 773:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****    */
+ 774:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 775:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 776:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 777:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Configures for the selected ADC injected channel its corresponding
+ 778:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         rank in the sequencer and its sample time.
+ 779:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ 780:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *         the configuration information for the specified ADC.
+ 781:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  sConfigInjected ADC configuration structure for injected channel. 
+ 782:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 783:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 784:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(ADC_HandleTypeDef* hadc, ADC_InjectionConfTypeDef
+ 785:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 786:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 787:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #ifdef USE_FULL_ASSERT  
+ 788:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tmp = 0;
+ 789:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #endif /* USE_FULL_ASSERT  */
+ 790:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 791:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 792:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_CHANNEL(sConfigInjected->InjectedChannel));
+ 793:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_INJECTED_RANK(sConfigInjected->InjectedRank));
+ 794:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_SAMPLE_TIME(sConfigInjected->InjectedSamplingTime));
+ 795:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_EXT_INJEC_TRIG(sConfigInjected->ExternalTrigInjecConv));
+ 796:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_INJECTED_LENGTH(sConfigInjected->InjectedNbrOfConversion));
+ 797:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_FUNCTIONAL_STATE(sConfigInjected->AutoInjectedConv));
+ 798:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_FUNCTIONAL_STATE(sConfigInjected->InjectedDiscontinuousConvMode));
+ 799:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 800:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #ifdef USE_FULL_ASSERT
+ 801:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   tmp = ADC_GET_RESOLUTION(hadc);
+ 802:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_RANGE(tmp, sConfigInjected->InjectedOffset));
+ 803:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** #endif /* USE_FULL_ASSERT  */
+ 804:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 805:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(sConfigInjected->ExternalTrigInjecConv != ADC_INJECTED_SOFTWARE_START)
+ 806:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 807:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     assert_param(IS_ADC_EXT_INJEC_TRIG_EDGE(sConfigInjected->ExternalTrigInjecConvEdge));
+ 808:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 809:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 810:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 811:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 812:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 813:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* if ADC_Channel_10 ... ADC_Channel_18 is selected */
+ 814:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if (sConfigInjected->InjectedChannel > ADC_CHANNEL_9)
+ 815:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 816:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Clear the old sample time */
+ 817:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->SMPR1 &= ~ADC_SMPR1(ADC_SMPR1_SMP10, sConfigInjected->InjectedChannel);
+ 818:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 819:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set the new sample time */
+ 820:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->SMPR1 |= ADC_SMPR1(sConfigInjected->InjectedSamplingTime, sConfigInjected->Inje
+ 821:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 822:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else /* ADC_Channel include in ADC_Channel_[0..9] */
+ 823:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 824:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Clear the old sample time */
+ 825:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->SMPR2 &= ~ADC_SMPR2(ADC_SMPR2_SMP0, sConfigInjected->InjectedChannel);
+ 826:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 827:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set the new sample time */
+ 828:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->SMPR2 |= ADC_SMPR2(sConfigInjected->InjectedSamplingTime, sConfigInjected->Inje
+ 829:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ARM GAS  /tmp/ccNl1RIb.s 			page 16
+
+
+ 830:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 831:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*---------------------------- ADCx JSQR Configuration -----------------*/
+ 832:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   hadc->Instance->JSQR &= ~(ADC_JSQR_JL);
+ 833:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   hadc->Instance->JSQR |=  ADC_SQR1(sConfigInjected->InjectedNbrOfConversion);
+ 834:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 835:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Rank configuration */
+ 836:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 837:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Clear the old SQx bits for the selected rank */
+ 838:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   hadc->Instance->JSQR &= ~ADC_JSQR(ADC_JSQR_JSQ1, sConfigInjected->InjectedRank,sConfigInjected->I
+ 839:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****    
+ 840:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Set the SQx bits for the selected rank */
+ 841:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   hadc->Instance->JSQR |= ADC_JSQR(sConfigInjected->InjectedChannel, sConfigInjected->InjectedRank,
+ 842:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 843:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Enable external trigger if trigger selection is different of software  */
+ 844:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* start.                                                                 */
+ 845:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Note: This configuration keeps the hardware feature of parameter       */
+ 846:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*       ExternalTrigConvEdge "trigger edge none" equivalent to           */
+ 847:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /*       software start.                                                  */ 
+ 848:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if(sConfigInjected->ExternalTrigInjecConv != ADC_INJECTED_SOFTWARE_START)
+ 849:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 850:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Select external trigger to start conversion */
+ 851:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 &= ~(ADC_CR2_JEXTSEL);
+ 852:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 |=  sConfigInjected->ExternalTrigInjecConv;
+ 853:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 854:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Select external trigger polarity */
+ 855:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 &= ~(ADC_CR2_JEXTEN);
+ 856:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 |= sConfigInjected->ExternalTrigInjecConvEdge;
+ 857:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 858:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+ 859:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 860:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Reset the external trigger */
+ 861:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 &= ~(ADC_CR2_JEXTSEL);
+ 862:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 &= ~(ADC_CR2_JEXTEN);  
+ 863:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 864:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 865:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if (sConfigInjected->AutoInjectedConv != DISABLE)
+ 866:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 867:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the selected ADC automatic injected group conversion */
+ 868:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR1 |= ADC_CR1_JAUTO;
+ 869:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 870:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+ 871:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 872:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable the selected ADC automatic injected group conversion */
+ 873:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR1 &= ~(ADC_CR1_JAUTO);
+ 874:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 875:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 876:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if (sConfigInjected->InjectedDiscontinuousConvMode != DISABLE)
+ 877:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 878:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the selected ADC injected discontinuous mode */
+ 879:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR1 |= ADC_CR1_JDISCEN;
+ 880:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 881:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+ 882:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 883:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Disable the selected ADC injected discontinuous mode */
+ 884:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR1 &= ~(ADC_CR1_JDISCEN);
+ 885:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 886:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ARM GAS  /tmp/ccNl1RIb.s 			page 17
+
+
+ 887:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   switch(sConfigInjected->InjectedRank)
+ 888:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 889:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case 1:
+ 890:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set injected channel 1 offset */
+ 891:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR1 &= ~(ADC_JOFR1_JOFFSET1);
+ 892:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR1 |= sConfigInjected->InjectedOffset;
+ 893:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 894:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case 2:
+ 895:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set injected channel 2 offset */
+ 896:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR2 &= ~(ADC_JOFR2_JOFFSET2);
+ 897:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR2 |= sConfigInjected->InjectedOffset;
+ 898:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 899:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case 3:
+ 900:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set injected channel 3 offset */
+ 901:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR3 &= ~(ADC_JOFR3_JOFFSET3);
+ 902:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR3 |= sConfigInjected->InjectedOffset;
+ 903:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 904:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     default:
+ 905:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set injected channel 4 offset */
+ 906:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR4 &= ~(ADC_JOFR4_JOFFSET4);
+ 907:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR4 |= sConfigInjected->InjectedOffset;
+ 908:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 909:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 910:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 911:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* if ADC1 Channel_18 is selected enable VBAT Channel */
+ 912:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if ((hadc->Instance == ADC1) && (sConfigInjected->InjectedChannel == ADC_CHANNEL_VBAT))
+ 913:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 914:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the VBAT channel*/
+ 915:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC->CCR |= ADC_CCR_VBATE;
+ 916:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 917:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 918:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* if ADC1 Channel_16 or Channel_17 is selected enable TSVREFE Channel(Temperature sensor and VRE
+ 919:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if ((hadc->Instance == ADC1) && ((sConfigInjected->InjectedChannel == ADC_CHANNEL_TEMPSENSOR) || 
+ 920:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 921:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Enable the TSVREFE channel*/
+ 922:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC->CCR |= ADC_CCR_TSVREFE;
+ 923:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 924:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 925:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process unlocked */
+ 926:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_UNLOCK(hadc);
+ 927:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 928:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 929:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 930:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 931:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 932:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 933:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  Configures the ADC multi-mode 
+ 934:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hadc       pointer to a ADC_HandleTypeDef structure that contains
+ 935:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *                     the configuration information for the specified ADC.  
+ 936:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  multimode  pointer to an ADC_MultiModeTypeDef structure that contains 
+ 937:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *                     the configuration information for  multimode.
+ 938:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval HAL status
+ 939:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 940:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** HAL_StatusTypeDef HAL_ADCEx_MultiModeConfigChannel(ADC_HandleTypeDef* hadc, ADC_MultiModeTypeDef* m
+ 941:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 942:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 943:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_MODE(multimode->Mode));
+ARM GAS  /tmp/ccNl1RIb.s 			page 18
+
+
+ 944:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_DMA_ACCESS_MODE(multimode->DMAAccessMode));
+ 945:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   assert_param(IS_ADC_SAMPLING_DELAY(multimode->TwoSamplingDelay));
+ 946:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 947:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process locked */
+ 948:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_LOCK(hadc);
+ 949:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 950:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Set ADC mode */
+ 951:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR &= ~(ADC_CCR_MULTI);
+ 952:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->Mode;
+ 953:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 954:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Set the ADC DMA access mode */
+ 955:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR &= ~(ADC_CCR_DMA);
+ 956:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->DMAAccessMode;
+ 957:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 958:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Set delay between two sampling phases */
+ 959:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR &= ~(ADC_CCR_DELAY);
+ 960:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->TwoSamplingDelay;
+ 961:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 962:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Process unlocked */
+ 963:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __HAL_UNLOCK(hadc);
+ 964:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 965:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return function status */
+ 966:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   return HAL_OK;
+ 967:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 968:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 969:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+ 970:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @}
+ 971:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 972:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 973:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /**
+ 974:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  DMA transfer complete callback. 
+ 975:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 976:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *                the configuration information for the specified DMA module.
+ 977:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+ 978:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+ 979:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef *hdma)   
+ 980:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+ 981:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Retrieve ADC handle corresponding to current DMA handle */
+ 982:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC_HandleTypeDef* hadc = ( ADC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ 983:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 984:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Update state machine on conversion status if not in error state */
+ 985:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   if (HAL_IS_BIT_CLR(hadc->State, HAL_ADC_STATE_ERROR_INTERNAL | HAL_ADC_STATE_ERROR_DMA))
+ 986:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 987:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Update ADC state machine */
+ 988:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     SET_BIT(hadc->State, HAL_ADC_STATE_REG_EOC);
+ 989:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 990:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Determine whether any further conversion upcoming on group regular   */
+ 991:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* by external trigger, continuous mode or scan sequence on going.      */
+ 992:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Note: On STM32F7, there is no independent flag of end of sequence.   */
+ 993:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       The test of scan sequence on going is done either with scan    */
+ 994:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       sequence disabled or with end of conversion flag set to        */
+ 995:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /*       of end of sequence.                                            */
+ 996:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     if(ADC_IS_SOFTWARE_START_REGULAR(hadc)                   &&
+ 997:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (hadc->Init.ContinuousConvMode == DISABLE)            &&
+ 998:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (HAL_IS_BIT_CLR(hadc->Instance->SQR1, ADC_SQR1_L) || 
+ 999:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)  )   )
+1000:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ARM GAS  /tmp/ccNl1RIb.s 			page 19
+
+
+1001:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Disable ADC end of single conversion interrupt on group regular */
+1002:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Note: Overrun interrupt was enabled with EOC interrupt in          */
+1003:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* HAL_ADC_Start_IT(), but is not disabled here because can be used   */
+1004:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* by overrun IRQ process below.                                      */
+1005:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       __HAL_ADC_DISABLE_IT(hadc, ADC_IT_EOC);
+1006:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+1007:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       /* Set ADC state */
+1008:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       CLEAR_BIT(hadc->State, HAL_ADC_STATE_REG_BUSY);   
+1009:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+1010:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if (HAL_IS_BIT_CLR(hadc->State, HAL_ADC_STATE_INJ_BUSY))
+1011:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+1012:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         SET_BIT(hadc->State, HAL_ADC_STATE_READY);
+1013:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+1014:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+1015:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+1016:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Conversion complete callback */
+1017:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     HAL_ADC_ConvCpltCallback(hadc);
+1018:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+1019:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   else
+1020:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+1021:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Call DMA error callback */
+1022:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->DMA_Handle->XferErrorCallback(hdma);
+1023:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+1024:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+1025:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+1026:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+1027:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  DMA half transfer complete callback. 
+1028:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+1029:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *                the configuration information for the specified DMA module.
+1030:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+1031:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+1032:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef *hdma)   
+1033:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+1034:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_HandleTypeDef* hadc = ( ADC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+1035:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Conversion complete callback */
+1036:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     HAL_ADC_ConvHalfCpltCallback(hadc); 
+1037:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+1038:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+1039:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** /**
+1040:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @brief  DMA error callback 
+1041:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+1042:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   *                the configuration information for the specified DMA module.
+1043:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   * @retval None
+1044:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   */
+1045:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** static void ADC_MultiModeDMAError(DMA_HandleTypeDef *hdma)   
+1046:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** {
+  28              		.loc 1 1046 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+1047:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_HandleTypeDef* hadc = ( ADC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ARM GAS  /tmp/ccNl1RIb.s 			page 20
+
+
+  38              		.loc 1 1047 0
+  39 0002 806B     		ldr	r0, [r0, #56]
+  40              	.LVL1:
+1048:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->State= HAL_ADC_STATE_ERROR_DMA;
+  41              		.loc 1 1048 0
+  42 0004 4023     		movs	r3, #64
+  43 0006 0364     		str	r3, [r0, #64]
+1049:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     /* Set ADC error code to DMA error */
+1050:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->ErrorCode |= HAL_ADC_ERROR_DMA;
+  44              		.loc 1 1050 0
+  45 0008 436C     		ldr	r3, [r0, #68]
+  46 000a 43F00403 		orr	r3, r3, #4
+  47 000e 4364     		str	r3, [r0, #68]
+1051:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     HAL_ADC_ErrorCallback(hadc); 
+  48              		.loc 1 1051 0
+  49 0010 FFF7FEFF 		bl	HAL_ADC_ErrorCallback
+  50              	.LVL2:
+  51 0014 08BD     		pop	{r3, pc}
+  52              		.cfi_endproc
+  53              	.LFE150:
+  55 0016 00BF     		.section	.text.ADC_MultiModeDMAHalfConvCplt,"ax",%progbits
+  56              		.align	2
+  57              		.thumb
+  58              		.thumb_func
+  60              	ADC_MultiModeDMAHalfConvCplt:
+  61              	.LFB149:
+1033:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     ADC_HandleTypeDef* hadc = ( ADC_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  62              		.loc 1 1033 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              	.LVL3:
+  67 0000 08B5     		push	{r3, lr}
+  68              	.LCFI1:
+  69              		.cfi_def_cfa_offset 8
+  70              		.cfi_offset 3, -8
+  71              		.cfi_offset 14, -4
+  72              	.LVL4:
+1036:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+  73              		.loc 1 1036 0
+  74 0002 806B     		ldr	r0, [r0, #56]
+  75              	.LVL5:
+  76 0004 FFF7FEFF 		bl	HAL_ADC_ConvHalfCpltCallback
+  77              	.LVL6:
+  78 0008 08BD     		pop	{r3, pc}
+  79              		.cfi_endproc
+  80              	.LFE149:
+  82 000a 00BF     		.section	.text.ADC_MultiModeDMAConvCplt,"ax",%progbits
+  83              		.align	2
+  84              		.thumb
+  85              		.thumb_func
+  87              	ADC_MultiModeDMAConvCplt:
+  88              	.LFB148:
+ 980:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Retrieve ADC handle corresponding to current DMA handle */
+  89              		.loc 1 980 0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccNl1RIb.s 			page 21
+
+
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              	.LVL7:
+  94 0000 08B5     		push	{r3, lr}
+  95              	.LCFI2:
+  96              		.cfi_def_cfa_offset 8
+  97              		.cfi_offset 3, -8
+  98              		.cfi_offset 14, -4
+ 982:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+  99              		.loc 1 982 0
+ 100 0002 836B     		ldr	r3, [r0, #56]
+ 101              	.LVL8:
+ 985:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 102              		.loc 1 985 0
+ 103 0004 1A6C     		ldr	r2, [r3, #64]
+ 104 0006 12F0500F 		tst	r2, #80
+ 105 000a 26D1     		bne	.L6
+ 988:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 106              		.loc 1 988 0
+ 107 000c 1A6C     		ldr	r2, [r3, #64]
+ 108 000e 42F40072 		orr	r2, r2, #512
+ 109 0012 1A64     		str	r2, [r3, #64]
+ 996:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (hadc->Init.ContinuousConvMode == DISABLE)            &&
+ 110              		.loc 1 996 0
+ 111 0014 1A68     		ldr	r2, [r3]
+ 112 0016 9168     		ldr	r1, [r2, #8]
+ 113 0018 11F0405F 		tst	r1, #805306368
+ 114 001c 19D1     		bne	.L7
+ 997:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (HAL_IS_BIT_CLR(hadc->Instance->SQR1, ADC_SQR1_L) || 
+ 115              		.loc 1 997 0 discriminator 1
+ 116 001e 9969     		ldr	r1, [r3, #24]
+ 996:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (hadc->Init.ContinuousConvMode == DISABLE)            &&
+ 117              		.loc 1 996 0 discriminator 1
+ 118 0020 B9B9     		cbnz	r1, .L7
+ 998:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)  )   )
+ 119              		.loc 1 998 0
+ 120 0022 D16A     		ldr	r1, [r2, #44]
+ 997:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****        (HAL_IS_BIT_CLR(hadc->Instance->SQR1, ADC_SQR1_L) || 
+ 121              		.loc 1 997 0
+ 122 0024 11F4700F 		tst	r1, #15728640
+ 123 0028 03D0     		beq	.L8
+ 999:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 124              		.loc 1 999 0
+ 125 002a 9168     		ldr	r1, [r2, #8]
+ 998:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)  )   )
+ 126              		.loc 1 998 0
+ 127 002c 11F4806F 		tst	r1, #1024
+ 128 0030 0FD1     		bne	.L7
+ 129              	.L8:
+1005:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 130              		.loc 1 1005 0
+ 131 0032 5168     		ldr	r1, [r2, #4]
+ 132 0034 21F02001 		bic	r1, r1, #32
+ 133 0038 5160     		str	r1, [r2, #4]
+1008:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 134              		.loc 1 1008 0
+ 135 003a 1A6C     		ldr	r2, [r3, #64]
+ 136 003c 22F48072 		bic	r2, r2, #256
+ARM GAS  /tmp/ccNl1RIb.s 			page 22
+
+
+ 137 0040 1A64     		str	r2, [r3, #64]
+1010:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 138              		.loc 1 1010 0
+ 139 0042 1A6C     		ldr	r2, [r3, #64]
+ 140 0044 12F4805F 		tst	r2, #4096
+ 141 0048 03D1     		bne	.L7
+1012:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 142              		.loc 1 1012 0
+ 143 004a 1A6C     		ldr	r2, [r3, #64]
+ 144 004c 42F00102 		orr	r2, r2, #1
+ 145 0050 1A64     		str	r2, [r3, #64]
+ 146              	.L7:
+1017:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 147              		.loc 1 1017 0
+ 148 0052 1846     		mov	r0, r3
+ 149              	.LVL9:
+ 150 0054 FFF7FEFF 		bl	HAL_ADC_ConvCpltCallback
+ 151              	.LVL10:
+ 152 0058 08BD     		pop	{r3, pc}
+ 153              	.LVL11:
+ 154              	.L6:
+1022:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 155              		.loc 1 1022 0
+ 156 005a 9B6B     		ldr	r3, [r3, #56]
+ 157              	.LVL12:
+ 158 005c DB6C     		ldr	r3, [r3, #76]
+ 159 005e 9847     		blx	r3
+ 160              	.LVL13:
+ 161 0060 08BD     		pop	{r3, pc}
+ 162              		.cfi_endproc
+ 163              	.LFE148:
+ 165 0062 00BF     		.section	.text.HAL_ADCEx_InjectedStart,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	HAL_ADCEx_InjectedStart
+ 168              		.thumb
+ 169              		.thumb_func
+ 171              	HAL_ADCEx_InjectedStart:
+ 172              	.LFB136:
+ 176:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 173              		.loc 1 176 0
+ 174              		.cfi_startproc
+ 175              		@ args = 0, pretend = 0, frame = 8
+ 176              		@ frame_needed = 0, uses_anonymous_args = 0
+ 177              		@ link register save eliminated.
+ 178              	.LVL14:
+ 179 0000 82B0     		sub	sp, sp, #8
+ 180              	.LCFI3:
+ 181              		.cfi_def_cfa_offset 8
+ 177:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 182              		.loc 1 177 0
+ 183 0002 0023     		movs	r3, #0
+ 184 0004 0193     		str	r3, [sp, #4]
+ 185              	.LVL15:
+ 181:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 186              		.loc 1 181 0
+ 187 0006 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 188 000a 012B     		cmp	r3, #1
+ARM GAS  /tmp/ccNl1RIb.s 			page 23
+
+
+ 189 000c 64D0     		beq	.L18
+ 181:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 190              		.loc 1 181 0 is_stmt 0 discriminator 2
+ 191 000e 0123     		movs	r3, #1
+ 192 0010 80F83C30 		strb	r3, [r0, #60]
+ 187:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 193              		.loc 1 187 0 is_stmt 1 discriminator 2
+ 194 0014 0368     		ldr	r3, [r0]
+ 195 0016 9A68     		ldr	r2, [r3, #8]
+ 196 0018 12F0010F 		tst	r2, #1
+ 197 001c 13D1     		bne	.L13
+ 190:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 198              		.loc 1 190 0
+ 199 001e 9A68     		ldr	r2, [r3, #8]
+ 200 0020 42F00102 		orr	r2, r2, #1
+ 201 0024 9A60     		str	r2, [r3, #8]
+ 194:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 202              		.loc 1 194 0
+ 203 0026 324B     		ldr	r3, .L24
+ 204 0028 1B68     		ldr	r3, [r3]
+ 205 002a 324A     		ldr	r2, .L24+4
+ 206 002c A2FB0323 		umull	r2, r3, r2, r3
+ 207 0030 9B0C     		lsrs	r3, r3, #18
+ 208 0032 03EB4303 		add	r3, r3, r3, lsl #1
+ 209 0036 0193     		str	r3, [sp, #4]
+ 195:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 210              		.loc 1 195 0
+ 211 0038 02E0     		b	.L14
+ 212              	.L15:
+ 197:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 213              		.loc 1 197 0
+ 214 003a 019B     		ldr	r3, [sp, #4]
+ 215 003c 013B     		subs	r3, r3, #1
+ 216 003e 0193     		str	r3, [sp, #4]
+ 217              	.L14:
+ 195:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 218              		.loc 1 195 0
+ 219 0040 019B     		ldr	r3, [sp, #4]
+ 220 0042 002B     		cmp	r3, #0
+ 221 0044 F9D1     		bne	.L15
+ 222              	.L13:
+ 202:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 223              		.loc 1 202 0
+ 224 0046 0268     		ldr	r2, [r0]
+ 225 0048 9368     		ldr	r3, [r2, #8]
+ 226 004a 13F0010F 		tst	r3, #1
+ 227 004e 45D0     		beq	.L19
+ 207:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_INJ_EOC,
+ 228              		.loc 1 207 0
+ 229 0050 016C     		ldr	r1, [r0, #64]
+ 230 0052 294B     		ldr	r3, .L24+8
+ 231 0054 0B40     		ands	r3, r3, r1
+ 232 0056 43F48053 		orr	r3, r3, #4096
+ 233 005a 0364     		str	r3, [r0, #64]
+ 215:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 234              		.loc 1 215 0
+ 235 005c 036C     		ldr	r3, [r0, #64]
+ARM GAS  /tmp/ccNl1RIb.s 			page 24
+
+
+ 236 005e 13F4807F 		tst	r3, #256
+ 237 0062 01D1     		bne	.L16
+ 218:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 238              		.loc 1 218 0
+ 239 0064 0023     		movs	r3, #0
+ 240 0066 4364     		str	r3, [r0, #68]
+ 241              	.L16:
+ 224:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 242              		.loc 1 224 0
+ 243 0068 0023     		movs	r3, #0
+ 244 006a 80F83C30 		strb	r3, [r0, #60]
+ 228:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 245              		.loc 1 228 0
+ 246 006e 6FF00403 		mvn	r3, #4
+ 247 0072 1360     		str	r3, [r2]
+ 231:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 248              		.loc 1 231 0
+ 249 0074 214B     		ldr	r3, .L24+12
+ 250 0076 5B68     		ldr	r3, [r3, #4]
+ 251 0078 13F01F0F 		tst	r3, #31
+ 252 007c 14D1     		bne	.L17
+ 233:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 253              		.loc 1 233 0
+ 254 007e 0368     		ldr	r3, [r0]
+ 255 0080 9A68     		ldr	r2, [r3, #8]
+ 256 0082 12F4401F 		tst	r2, #3145728
+ 257 0086 0CBF     		ite	eq
+ 258 0088 0122     		moveq	r2, #1
+ 259 008a 0022     		movne	r2, #0
+ 260              	.LVL16:
+ 234:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if(tmp1 && tmp2)
+ 261              		.loc 1 234 0
+ 262 008c 5968     		ldr	r1, [r3, #4]
+ 263 008e 11F4806F 		tst	r1, #1024
+ 264              	.LVL17:
+ 235:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 265              		.loc 1 235 0
+ 266 0092 02F00102 		and	r2, r2, #1
+ 267              	.LVL18:
+ 268 0096 18BF     		it	ne
+ 269 0098 0022     		movne	r2, #0
+ 270 009a 0AB3     		cbz	r2, .L20
+ 271              	.LVL19:
+ 238:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 272              		.loc 1 238 0
+ 273 009c 9A68     		ldr	r2, [r3, #8]
+ 274 009e 42F48002 		orr	r2, r2, #4194304
+ 275 00a2 9A60     		str	r2, [r3, #8]
+ 254:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 276              		.loc 1 254 0
+ 277 00a4 0020     		movs	r0, #0
+ 278              	.LVL20:
+ 279 00a6 20E0     		b	.L12
+ 280              	.LVL21:
+ 281              	.L17:
+ 243:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 282              		.loc 1 243 0
+ARM GAS  /tmp/ccNl1RIb.s 			page 25
+
+
+ 283 00a8 0368     		ldr	r3, [r0]
+ 284 00aa 9A68     		ldr	r2, [r3, #8]
+ 285 00ac 12F4401F 		tst	r2, #3145728
+ 286 00b0 0CBF     		ite	eq
+ 287 00b2 0121     		moveq	r1, #1
+ 288 00b4 0021     		movne	r1, #0
+ 289              	.LVL22:
+ 244:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if((hadc->Instance == ADC1) && tmp1 && tmp2)  
+ 290              		.loc 1 244 0
+ 291 00b6 5A68     		ldr	r2, [r3, #4]
+ 292 00b8 12F4806F 		tst	r2, #1024
+ 293 00bc 0CBF     		ite	eq
+ 294 00be 0120     		moveq	r0, #1
+ 295              	.LVL23:
+ 296 00c0 0020     		movne	r0, #0
+ 297              	.LVL24:
+ 245:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 298              		.loc 1 245 0
+ 299 00c2 0F4A     		ldr	r2, .L24+16
+ 300 00c4 9342     		cmp	r3, r2
+ 301 00c6 0DD1     		bne	.L21
+ 245:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 302              		.loc 1 245 0 is_stmt 0 discriminator 1
+ 303 00c8 71B1     		cbz	r1, .L22
+ 304 00ca 68B1     		cbz	r0, .L22
+ 248:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 305              		.loc 1 248 0 is_stmt 1
+ 306 00cc 9A68     		ldr	r2, [r3, #8]
+ 307 00ce 42F48002 		orr	r2, r2, #4194304
+ 308 00d2 9A60     		str	r2, [r3, #8]
+ 254:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 309              		.loc 1 254 0
+ 310 00d4 0020     		movs	r0, #0
+ 311              	.LVL25:
+ 312 00d6 08E0     		b	.L12
+ 313              	.LVL26:
+ 314              	.L18:
+ 181:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 315              		.loc 1 181 0
+ 316 00d8 0220     		movs	r0, #2
+ 317              	.LVL27:
+ 318 00da 06E0     		b	.L12
+ 319              	.LVL28:
+ 320              	.L19:
+ 254:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 321              		.loc 1 254 0
+ 322 00dc 0020     		movs	r0, #0
+ 323              	.LVL29:
+ 324 00de 04E0     		b	.L12
+ 325              	.LVL30:
+ 326              	.L20:
+ 327 00e0 0020     		movs	r0, #0
+ 328              	.LVL31:
+ 329 00e2 02E0     		b	.L12
+ 330              	.LVL32:
+ 331              	.L21:
+ 332 00e4 0020     		movs	r0, #0
+ARM GAS  /tmp/ccNl1RIb.s 			page 26
+
+
+ 333              	.LVL33:
+ 334 00e6 00E0     		b	.L12
+ 335              	.LVL34:
+ 336              	.L22:
+ 337 00e8 0020     		movs	r0, #0
+ 338              	.LVL35:
+ 339              	.L12:
+ 255:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 340              		.loc 1 255 0
+ 341 00ea 02B0     		add	sp, sp, #8
+ 342              	.LCFI4:
+ 343              		.cfi_def_cfa_offset 0
+ 344              		@ sp needed
+ 345 00ec 7047     		bx	lr
+ 346              	.L25:
+ 347 00ee 00BF     		.align	2
+ 348              	.L24:
+ 349 00f0 00000000 		.word	SystemCoreClock
+ 350 00f4 83DE1B43 		.word	1125899907
+ 351 00f8 FECFFFFF 		.word	-12290
+ 352 00fc 00230140 		.word	1073816320
+ 353 0100 00200140 		.word	1073815552
+ 354              		.cfi_endproc
+ 355              	.LFE136:
+ 357              		.section	.text.HAL_ADCEx_InjectedStart_IT,"ax",%progbits
+ 358              		.align	2
+ 359              		.global	HAL_ADCEx_InjectedStart_IT
+ 360              		.thumb
+ 361              		.thumb_func
+ 363              	HAL_ADCEx_InjectedStart_IT:
+ 364              	.LFB137:
+ 265:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 365              		.loc 1 265 0
+ 366              		.cfi_startproc
+ 367              		@ args = 0, pretend = 0, frame = 8
+ 368              		@ frame_needed = 0, uses_anonymous_args = 0
+ 369              		@ link register save eliminated.
+ 370              	.LVL36:
+ 371 0000 82B0     		sub	sp, sp, #8
+ 372              	.LCFI5:
+ 373              		.cfi_def_cfa_offset 8
+ 266:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tmp1 = 0, tmp2 = 0;
+ 374              		.loc 1 266 0
+ 375 0002 0023     		movs	r3, #0
+ 376 0004 0193     		str	r3, [sp, #4]
+ 377              	.LVL37:
+ 270:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 378              		.loc 1 270 0
+ 379 0006 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 380 000a 012B     		cmp	r3, #1
+ 381 000c 69D0     		beq	.L33
+ 270:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 382              		.loc 1 270 0 is_stmt 0 discriminator 2
+ 383 000e 0123     		movs	r3, #1
+ 384 0010 80F83C30 		strb	r3, [r0, #60]
+ 276:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 385              		.loc 1 276 0 is_stmt 1 discriminator 2
+ARM GAS  /tmp/ccNl1RIb.s 			page 27
+
+
+ 386 0014 0368     		ldr	r3, [r0]
+ 387 0016 9A68     		ldr	r2, [r3, #8]
+ 388 0018 12F0010F 		tst	r2, #1
+ 389 001c 13D1     		bne	.L28
+ 279:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 390              		.loc 1 279 0
+ 391 001e 9A68     		ldr	r2, [r3, #8]
+ 392 0020 42F00102 		orr	r2, r2, #1
+ 393 0024 9A60     		str	r2, [r3, #8]
+ 283:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 394              		.loc 1 283 0
+ 395 0026 344B     		ldr	r3, .L39
+ 396 0028 1B68     		ldr	r3, [r3]
+ 397 002a 344A     		ldr	r2, .L39+4
+ 398 002c A2FB0323 		umull	r2, r3, r2, r3
+ 399 0030 9B0C     		lsrs	r3, r3, #18
+ 400 0032 03EB4303 		add	r3, r3, r3, lsl #1
+ 401 0036 0193     		str	r3, [sp, #4]
+ 284:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 402              		.loc 1 284 0
+ 403 0038 02E0     		b	.L29
+ 404              	.L30:
+ 286:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 405              		.loc 1 286 0
+ 406 003a 019B     		ldr	r3, [sp, #4]
+ 407 003c 013B     		subs	r3, r3, #1
+ 408 003e 0193     		str	r3, [sp, #4]
+ 409              	.L29:
+ 284:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 410              		.loc 1 284 0
+ 411 0040 019B     		ldr	r3, [sp, #4]
+ 412 0042 002B     		cmp	r3, #0
+ 413 0044 F9D1     		bne	.L30
+ 414              	.L28:
+ 291:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 415              		.loc 1 291 0
+ 416 0046 0268     		ldr	r2, [r0]
+ 417 0048 9368     		ldr	r3, [r2, #8]
+ 418 004a 13F0010F 		tst	r3, #1
+ 419 004e 4AD0     		beq	.L34
+ 296:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_INJ_EOC,
+ 420              		.loc 1 296 0
+ 421 0050 016C     		ldr	r1, [r0, #64]
+ 422 0052 2B4B     		ldr	r3, .L39+8
+ 423 0054 0B40     		ands	r3, r3, r1
+ 424 0056 43F48053 		orr	r3, r3, #4096
+ 425 005a 0364     		str	r3, [r0, #64]
+ 304:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 426              		.loc 1 304 0
+ 427 005c 036C     		ldr	r3, [r0, #64]
+ 428 005e 13F4807F 		tst	r3, #256
+ 429 0062 01D1     		bne	.L31
+ 307:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 430              		.loc 1 307 0
+ 431 0064 0023     		movs	r3, #0
+ 432 0066 4364     		str	r3, [r0, #68]
+ 433              	.L31:
+ARM GAS  /tmp/ccNl1RIb.s 			page 28
+
+
+ 313:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 434              		.loc 1 313 0
+ 435 0068 0023     		movs	r3, #0
+ 436 006a 80F83C30 		strb	r3, [r0, #60]
+ 317:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 437              		.loc 1 317 0
+ 438 006e 6FF00403 		mvn	r3, #4
+ 439 0072 1360     		str	r3, [r2]
+ 320:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 440              		.loc 1 320 0
+ 441 0074 0268     		ldr	r2, [r0]
+ 442 0076 5368     		ldr	r3, [r2, #4]
+ 443 0078 43F08003 		orr	r3, r3, #128
+ 444 007c 5360     		str	r3, [r2, #4]
+ 323:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 445              		.loc 1 323 0
+ 446 007e 214B     		ldr	r3, .L39+12
+ 447 0080 5B68     		ldr	r3, [r3, #4]
+ 448 0082 13F01F0F 		tst	r3, #31
+ 449 0086 14D1     		bne	.L32
+ 325:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 450              		.loc 1 325 0
+ 451 0088 0368     		ldr	r3, [r0]
+ 452 008a 9A68     		ldr	r2, [r3, #8]
+ 453 008c 12F4401F 		tst	r2, #3145728
+ 454 0090 0CBF     		ite	eq
+ 455 0092 0122     		moveq	r2, #1
+ 456 0094 0022     		movne	r2, #0
+ 457              	.LVL38:
+ 326:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if(tmp1 && tmp2)
+ 458              		.loc 1 326 0
+ 459 0096 5968     		ldr	r1, [r3, #4]
+ 460 0098 11F4806F 		tst	r1, #1024
+ 461              	.LVL39:
+ 327:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 462              		.loc 1 327 0
+ 463 009c 02F00102 		and	r2, r2, #1
+ 464              	.LVL40:
+ 465 00a0 18BF     		it	ne
+ 466 00a2 0022     		movne	r2, #0
+ 467 00a4 0AB3     		cbz	r2, .L35
+ 468              	.LVL41:
+ 330:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 469              		.loc 1 330 0
+ 470 00a6 9A68     		ldr	r2, [r3, #8]
+ 471 00a8 42F48002 		orr	r2, r2, #4194304
+ 472 00ac 9A60     		str	r2, [r3, #8]
+ 346:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 473              		.loc 1 346 0
+ 474 00ae 0020     		movs	r0, #0
+ 475              	.LVL42:
+ 476 00b0 20E0     		b	.L27
+ 477              	.LVL43:
+ 478              	.L32:
+ 335:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       tmp2 = HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO);
+ 479              		.loc 1 335 0
+ 480 00b2 0368     		ldr	r3, [r0]
+ARM GAS  /tmp/ccNl1RIb.s 			page 29
+
+
+ 481 00b4 9A68     		ldr	r2, [r3, #8]
+ 482 00b6 12F4401F 		tst	r2, #3145728
+ 483 00ba 0CBF     		ite	eq
+ 484 00bc 0121     		moveq	r1, #1
+ 485 00be 0021     		movne	r1, #0
+ 486              	.LVL44:
+ 336:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       if((hadc->Instance == ADC1) && tmp1 && tmp2)  
+ 487              		.loc 1 336 0
+ 488 00c0 5A68     		ldr	r2, [r3, #4]
+ 489 00c2 12F4806F 		tst	r2, #1024
+ 490 00c6 0CBF     		ite	eq
+ 491 00c8 0120     		moveq	r0, #1
+ 492              	.LVL45:
+ 493 00ca 0020     		movne	r0, #0
+ 494              	.LVL46:
+ 337:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 495              		.loc 1 337 0
+ 496 00cc 0E4A     		ldr	r2, .L39+16
+ 497 00ce 9342     		cmp	r3, r2
+ 498 00d0 0DD1     		bne	.L36
+ 337:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 499              		.loc 1 337 0 is_stmt 0 discriminator 1
+ 500 00d2 71B1     		cbz	r1, .L37
+ 501 00d4 68B1     		cbz	r0, .L37
+ 340:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 502              		.loc 1 340 0 is_stmt 1
+ 503 00d6 9A68     		ldr	r2, [r3, #8]
+ 504 00d8 42F48002 		orr	r2, r2, #4194304
+ 505 00dc 9A60     		str	r2, [r3, #8]
+ 346:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 506              		.loc 1 346 0
+ 507 00de 0020     		movs	r0, #0
+ 508              	.LVL47:
+ 509 00e0 08E0     		b	.L27
+ 510              	.LVL48:
+ 511              	.L33:
+ 270:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 512              		.loc 1 270 0
+ 513 00e2 0220     		movs	r0, #2
+ 514              	.LVL49:
+ 515 00e4 06E0     		b	.L27
+ 516              	.LVL50:
+ 517              	.L34:
+ 346:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 518              		.loc 1 346 0
+ 519 00e6 0020     		movs	r0, #0
+ 520              	.LVL51:
+ 521 00e8 04E0     		b	.L27
+ 522              	.LVL52:
+ 523              	.L35:
+ 524 00ea 0020     		movs	r0, #0
+ 525              	.LVL53:
+ 526 00ec 02E0     		b	.L27
+ 527              	.LVL54:
+ 528              	.L36:
+ 529 00ee 0020     		movs	r0, #0
+ 530              	.LVL55:
+ARM GAS  /tmp/ccNl1RIb.s 			page 30
+
+
+ 531 00f0 00E0     		b	.L27
+ 532              	.LVL56:
+ 533              	.L37:
+ 534 00f2 0020     		movs	r0, #0
+ 535              	.LVL57:
+ 536              	.L27:
+ 347:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 537              		.loc 1 347 0
+ 538 00f4 02B0     		add	sp, sp, #8
+ 539              	.LCFI6:
+ 540              		.cfi_def_cfa_offset 0
+ 541              		@ sp needed
+ 542 00f6 7047     		bx	lr
+ 543              	.L40:
+ 544              		.align	2
+ 545              	.L39:
+ 546 00f8 00000000 		.word	SystemCoreClock
+ 547 00fc 83DE1B43 		.word	1125899907
+ 548 0100 FECFFFFF 		.word	-12290
+ 549 0104 00230140 		.word	1073816320
+ 550 0108 00200140 		.word	1073815552
+ 551              		.cfi_endproc
+ 552              	.LFE137:
+ 554              		.section	.text.HAL_ADCEx_InjectedStop,"ax",%progbits
+ 555              		.align	2
+ 556              		.global	HAL_ADCEx_InjectedStop
+ 557              		.thumb
+ 558              		.thumb_func
+ 560              	HAL_ADCEx_InjectedStop:
+ 561              	.LFB138:
+ 362:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 562              		.loc 1 362 0
+ 563              		.cfi_startproc
+ 564              		@ args = 0, pretend = 0, frame = 0
+ 565              		@ frame_needed = 0, uses_anonymous_args = 0
+ 566              		@ link register save eliminated.
+ 567              	.LVL58:
+ 369:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 568              		.loc 1 369 0
+ 569 0000 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 570 0004 012B     		cmp	r3, #1
+ 571 0006 28D0     		beq	.L45
+ 369:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 572              		.loc 1 369 0 is_stmt 0 discriminator 2
+ 573 0008 0123     		movs	r3, #1
+ 574 000a 80F83C30 		strb	r3, [r0, #60]
+ 377:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 575              		.loc 1 377 0 is_stmt 1 discriminator 2
+ 576 000e 036C     		ldr	r3, [r0, #64]
+ 577 0010 13F4807F 		tst	r3, #256
+ 578 0014 15D1     		bne	.L43
+ 378:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 579              		.loc 1 378 0 discriminator 1
+ 580 0016 0368     		ldr	r3, [r0]
+ 581 0018 5A68     		ldr	r2, [r3, #4]
+ 377:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 582              		.loc 1 377 0 discriminator 1
+ARM GAS  /tmp/ccNl1RIb.s 			page 31
+
+
+ 583 001a 12F4806F 		tst	r2, #1024
+ 584 001e 10D1     		bne	.L43
+ 382:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 585              		.loc 1 382 0
+ 586 0020 9A68     		ldr	r2, [r3, #8]
+ 587 0022 22F00102 		bic	r2, r2, #1
+ 588 0026 9A60     		str	r2, [r3, #8]
+ 385:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 589              		.loc 1 385 0
+ 590 0028 0368     		ldr	r3, [r0]
+ 591 002a 9B68     		ldr	r3, [r3, #8]
+ 592 002c 13F0010F 		tst	r3, #1
+ 593 0030 0DD1     		bne	.L46
+ 388:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ 594              		.loc 1 388 0
+ 595 0032 026C     		ldr	r2, [r0, #64]
+ 596 0034 0A4B     		ldr	r3, .L47
+ 597 0036 1340     		ands	r3, r3, r2
+ 598 0038 43F00103 		orr	r3, r3, #1
+ 599 003c 0364     		str	r3, [r0, #64]
+ 363:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 600              		.loc 1 363 0
+ 601 003e 0023     		movs	r3, #0
+ 602 0040 06E0     		b	.L44
+ 603              	.L43:
+ 396:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 604              		.loc 1 396 0
+ 605 0042 036C     		ldr	r3, [r0, #64]
+ 606 0044 43F02003 		orr	r3, r3, #32
+ 607 0048 0364     		str	r3, [r0, #64]
+ 608              	.LVL59:
+ 398:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 609              		.loc 1 398 0
+ 610 004a 0123     		movs	r3, #1
+ 611 004c 00E0     		b	.L44
+ 612              	.LVL60:
+ 613              	.L46:
+ 363:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 614              		.loc 1 363 0
+ 615 004e 0023     		movs	r3, #0
+ 616              	.LVL61:
+ 617              	.L44:
+ 402:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 618              		.loc 1 402 0
+ 619 0050 0022     		movs	r2, #0
+ 620 0052 80F83C20 		strb	r2, [r0, #60]
+ 405:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 621              		.loc 1 405 0
+ 622 0056 1846     		mov	r0, r3
+ 623              	.LVL62:
+ 624 0058 7047     		bx	lr
+ 625              	.LVL63:
+ 626              	.L45:
+ 369:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 627              		.loc 1 369 0
+ 628 005a 0220     		movs	r0, #2
+ 629              	.LVL64:
+ARM GAS  /tmp/ccNl1RIb.s 			page 32
+
+
+ 406:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 630              		.loc 1 406 0
+ 631 005c 7047     		bx	lr
+ 632              	.L48:
+ 633 005e 00BF     		.align	2
+ 634              	.L47:
+ 635 0060 FEEEFFFF 		.word	-4354
+ 636              		.cfi_endproc
+ 637              	.LFE138:
+ 639              		.section	.text.HAL_ADCEx_InjectedPollForConversion,"ax",%progbits
+ 640              		.align	2
+ 641              		.global	HAL_ADCEx_InjectedPollForConversion
+ 642              		.thumb
+ 643              		.thumb_func
+ 645              	HAL_ADCEx_InjectedPollForConversion:
+ 646              	.LFB139:
+ 416:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   uint32_t tickstart = 0;
+ 647              		.loc 1 416 0
+ 648              		.cfi_startproc
+ 649              		@ args = 0, pretend = 0, frame = 0
+ 650              		@ frame_needed = 0, uses_anonymous_args = 0
+ 651              	.LVL65:
+ 652 0000 70B5     		push	{r4, r5, r6, lr}
+ 653              	.LCFI7:
+ 654              		.cfi_def_cfa_offset 16
+ 655              		.cfi_offset 4, -16
+ 656              		.cfi_offset 5, -12
+ 657              		.cfi_offset 6, -8
+ 658              		.cfi_offset 14, -4
+ 659 0002 0446     		mov	r4, r0
+ 660 0004 0D46     		mov	r5, r1
+ 661              	.LVL66:
+ 420:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 662              		.loc 1 420 0
+ 663 0006 FFF7FEFF 		bl	HAL_GetTick
+ 664              	.LVL67:
+ 665 000a 0646     		mov	r6, r0
+ 666              	.LVL68:
+ 423:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 667              		.loc 1 423 0
+ 668 000c 0FE0     		b	.L51
+ 669              	.LVL69:
+ 670              	.L54:
+ 426:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 671              		.loc 1 426 0
+ 672 000e B5F1FF3F 		cmp	r5, #-1
+ 673 0012 0CD0     		beq	.L51
+ 428:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 674              		.loc 1 428 0
+ 675 0014 25B1     		cbz	r5, .L52
+ 428:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       {
+ 676              		.loc 1 428 0 is_stmt 0 discriminator 1
+ 677 0016 FFF7FEFF 		bl	HAL_GetTick
+ 678              	.LVL70:
+ 679 001a 801B     		subs	r0, r0, r6
+ 680 001c 8542     		cmp	r5, r0
+ 681 001e 06D2     		bcs	.L51
+ARM GAS  /tmp/ccNl1RIb.s 			page 33
+
+
+ 682              	.L52:
+ 430:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         /* Process unlocked */
+ 683              		.loc 1 430 0 is_stmt 1
+ 684 0020 0423     		movs	r3, #4
+ 685 0022 2364     		str	r3, [r4, #64]
+ 432:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****         return HAL_TIMEOUT;
+ 686              		.loc 1 432 0
+ 687 0024 0023     		movs	r3, #0
+ 688 0026 84F83C30 		strb	r3, [r4, #60]
+ 433:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       }
+ 689              		.loc 1 433 0
+ 690 002a 0320     		movs	r0, #3
+ 691 002c 70BD     		pop	{r4, r5, r6, pc}
+ 692              	.LVL71:
+ 693              	.L51:
+ 423:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 694              		.loc 1 423 0
+ 695 002e 2368     		ldr	r3, [r4]
+ 696 0030 1A68     		ldr	r2, [r3]
+ 697 0032 12F0040F 		tst	r2, #4
+ 698 0036 EAD0     		beq	.L54
+ 439:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 699              		.loc 1 439 0
+ 700 0038 6FF00C02 		mvn	r2, #12
+ 701 003c 1A60     		str	r2, [r3]
+ 442:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 702              		.loc 1 442 0
+ 703 003e 236C     		ldr	r3, [r4, #64]
+ 704 0040 43F40053 		orr	r3, r3, #8192
+ 705 0044 2364     		str	r3, [r4, #64]
+ 450:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->JSQR, ADC_JSQR_JL)  ||
+ 706              		.loc 1 450 0
+ 707 0046 2368     		ldr	r3, [r4]
+ 708 0048 9A68     		ldr	r2, [r3, #8]
+ 709 004a 12F4401F 		tst	r2, #3145728
+ 710 004e 1FD1     		bne	.L56
+ 451:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)    ) &&
+ 711              		.loc 1 451 0 discriminator 1
+ 712 0050 9A6B     		ldr	r2, [r3, #56]
+ 450:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->JSQR, ADC_JSQR_JL)  ||
+ 713              		.loc 1 450 0 discriminator 1
+ 714 0052 12F4401F 		tst	r2, #3145728
+ 715 0056 03D0     		beq	.L55
+ 452:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO) &&
+ 716              		.loc 1 452 0
+ 717 0058 9A68     		ldr	r2, [r3, #8]
+ 451:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       HAL_IS_BIT_CLR(hadc->Instance->CR2, ADC_CR2_EOCS)    ) &&
+ 718              		.loc 1 451 0
+ 719 005a 12F4806F 		tst	r2, #1024
+ 720 005e 19D1     		bne	.L57
+ 721              	.L55:
+ 453:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (ADC_IS_SOFTWARE_START_REGULAR(hadc)       &&
+ 722              		.loc 1 453 0
+ 723 0060 5A68     		ldr	r2, [r3, #4]
+ 452:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      (HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO) &&
+ 724              		.loc 1 452 0
+ 725 0062 12F4806F 		tst	r2, #1024
+ARM GAS  /tmp/ccNl1RIb.s 			page 34
+
+
+ 726 0066 17D1     		bne	.L58
+ 454:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (hadc->Init.ContinuousConvMode == DISABLE)   )       )   )
+ 727              		.loc 1 454 0
+ 728 0068 9B68     		ldr	r3, [r3, #8]
+ 453:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (ADC_IS_SOFTWARE_START_REGULAR(hadc)       &&
+ 729              		.loc 1 453 0
+ 730 006a 13F0405F 		tst	r3, #805306368
+ 731 006e 15D1     		bne	.L59
+ 455:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 732              		.loc 1 455 0
+ 733 0070 A369     		ldr	r3, [r4, #24]
+ 454:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       (hadc->Init.ContinuousConvMode == DISABLE)   )       )   )
+ 734              		.loc 1 454 0
+ 735 0072 ABB9     		cbnz	r3, .L60
+ 458:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 736              		.loc 1 458 0
+ 737 0074 236C     		ldr	r3, [r4, #64]
+ 738 0076 23F48053 		bic	r3, r3, #4096
+ 739 007a 2364     		str	r3, [r4, #64]
+ 460:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     { 
+ 740              		.loc 1 460 0
+ 741 007c 236C     		ldr	r3, [r4, #64]
+ 742 007e 13F4807F 		tst	r3, #256
+ 743 0082 0FD1     		bne	.L61
+ 462:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 744              		.loc 1 462 0
+ 745 0084 236C     		ldr	r3, [r4, #64]
+ 746 0086 43F00103 		orr	r3, r3, #1
+ 747 008a 2364     		str	r3, [r4, #64]
+ 467:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }      
+ 748              		.loc 1 467 0
+ 749 008c 0020     		movs	r0, #0
+ 750 008e 70BD     		pop	{r4, r5, r6, pc}
+ 751              	.LVL72:
+ 752              	.L56:
+ 753 0090 0020     		movs	r0, #0
+ 754 0092 70BD     		pop	{r4, r5, r6, pc}
+ 755              	.LVL73:
+ 756              	.L57:
+ 757 0094 0020     		movs	r0, #0
+ 758 0096 70BD     		pop	{r4, r5, r6, pc}
+ 759              	.LVL74:
+ 760              	.L58:
+ 761 0098 0020     		movs	r0, #0
+ 762 009a 70BD     		pop	{r4, r5, r6, pc}
+ 763              	.LVL75:
+ 764              	.L59:
+ 765 009c 0020     		movs	r0, #0
+ 766 009e 70BD     		pop	{r4, r5, r6, pc}
+ 767              	.LVL76:
+ 768              	.L60:
+ 769 00a0 0020     		movs	r0, #0
+ 770 00a2 70BD     		pop	{r4, r5, r6, pc}
+ 771              	.LVL77:
+ 772              	.L61:
+ 773 00a4 0020     		movs	r0, #0
+ 468:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ARM GAS  /tmp/ccNl1RIb.s 			page 35
+
+
+ 774              		.loc 1 468 0
+ 775 00a6 70BD     		pop	{r4, r5, r6, pc}
+ 776              		.cfi_endproc
+ 777              	.LFE139:
+ 779              		.section	.text.HAL_ADCEx_InjectedStop_IT,"ax",%progbits
+ 780              		.align	2
+ 781              		.global	HAL_ADCEx_InjectedStop_IT
+ 782              		.thumb
+ 783              		.thumb_func
+ 785              	HAL_ADCEx_InjectedStop_IT:
+ 786              	.LFB140:
+ 483:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 787              		.loc 1 483 0
+ 788              		.cfi_startproc
+ 789              		@ args = 0, pretend = 0, frame = 0
+ 790              		@ frame_needed = 0, uses_anonymous_args = 0
+ 791              		@ link register save eliminated.
+ 792              	.LVL78:
+ 490:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 793              		.loc 1 490 0
+ 794 0000 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 795 0004 012B     		cmp	r3, #1
+ 796 0006 2CD0     		beq	.L67
+ 490:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 797              		.loc 1 490 0 is_stmt 0 discriminator 2
+ 798 0008 0123     		movs	r3, #1
+ 799 000a 80F83C30 		strb	r3, [r0, #60]
+ 498:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 800              		.loc 1 498 0 is_stmt 1 discriminator 2
+ 801 000e 036C     		ldr	r3, [r0, #64]
+ 802 0010 13F4807F 		tst	r3, #256
+ 803 0014 19D1     		bne	.L65
+ 499:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 804              		.loc 1 499 0 discriminator 1
+ 805 0016 0368     		ldr	r3, [r0]
+ 806 0018 5A68     		ldr	r2, [r3, #4]
+ 498:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****      HAL_IS_BIT_CLR(hadc->Instance->CR1, ADC_CR1_JAUTO)   )
+ 807              		.loc 1 498 0 discriminator 1
+ 808 001a 12F4806F 		tst	r2, #1024
+ 809 001e 14D1     		bne	.L65
+ 503:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 810              		.loc 1 503 0
+ 811 0020 9A68     		ldr	r2, [r3, #8]
+ 812 0022 22F00102 		bic	r2, r2, #1
+ 813 0026 9A60     		str	r2, [r3, #8]
+ 506:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 814              		.loc 1 506 0
+ 815 0028 0368     		ldr	r3, [r0]
+ 816 002a 9A68     		ldr	r2, [r3, #8]
+ 817 002c 12F0010F 		tst	r2, #1
+ 818 0030 11D1     		bne	.L68
+ 509:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 819              		.loc 1 509 0
+ 820 0032 5A68     		ldr	r2, [r3, #4]
+ 821 0034 22F08002 		bic	r2, r2, #128
+ 822 0038 5A60     		str	r2, [r3, #4]
+ 512:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                         HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ARM GAS  /tmp/ccNl1RIb.s 			page 36
+
+
+ 823              		.loc 1 512 0
+ 824 003a 026C     		ldr	r2, [r0, #64]
+ 825 003c 0A4B     		ldr	r3, .L69
+ 826 003e 1340     		ands	r3, r3, r2
+ 827 0040 43F00103 		orr	r3, r3, #1
+ 828 0044 0364     		str	r3, [r0, #64]
+ 484:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 829              		.loc 1 484 0
+ 830 0046 0023     		movs	r3, #0
+ 831 0048 06E0     		b	.L66
+ 832              	.L65:
+ 520:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       
+ 833              		.loc 1 520 0
+ 834 004a 036C     		ldr	r3, [r0, #64]
+ 835 004c 43F02003 		orr	r3, r3, #32
+ 836 0050 0364     		str	r3, [r0, #64]
+ 837              	.LVL79:
+ 522:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 838              		.loc 1 522 0
+ 839 0052 0123     		movs	r3, #1
+ 840 0054 00E0     		b	.L66
+ 841              	.LVL80:
+ 842              	.L68:
+ 484:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 843              		.loc 1 484 0
+ 844 0056 0023     		movs	r3, #0
+ 845              	.LVL81:
+ 846              	.L66:
+ 526:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 847              		.loc 1 526 0
+ 848 0058 0022     		movs	r2, #0
+ 849 005a 80F83C20 		strb	r2, [r0, #60]
+ 529:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 850              		.loc 1 529 0
+ 851 005e 1846     		mov	r0, r3
+ 852              	.LVL82:
+ 853 0060 7047     		bx	lr
+ 854              	.LVL83:
+ 855              	.L67:
+ 490:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 856              		.loc 1 490 0
+ 857 0062 0220     		movs	r0, #2
+ 858              	.LVL84:
+ 530:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 859              		.loc 1 530 0
+ 860 0064 7047     		bx	lr
+ 861              	.L70:
+ 862 0066 00BF     		.align	2
+ 863              	.L69:
+ 864 0068 FEEEFFFF 		.word	-4354
+ 865              		.cfi_endproc
+ 866              	.LFE140:
+ 868              		.section	.text.HAL_ADCEx_InjectedGetValue,"ax",%progbits
+ 869              		.align	2
+ 870              		.global	HAL_ADCEx_InjectedGetValue
+ 871              		.thumb
+ 872              		.thumb_func
+ARM GAS  /tmp/ccNl1RIb.s 			page 37
+
+
+ 874              	HAL_ADCEx_InjectedGetValue:
+ 875              	.LFB141:
+ 545:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t tmp = 0;
+ 876              		.loc 1 545 0
+ 877              		.cfi_startproc
+ 878              		@ args = 0, pretend = 0, frame = 8
+ 879              		@ frame_needed = 0, uses_anonymous_args = 0
+ 880              		@ link register save eliminated.
+ 881              	.LVL85:
+ 882 0000 82B0     		sub	sp, sp, #8
+ 883              	.LCFI8:
+ 884              		.cfi_def_cfa_offset 8
+ 546:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 885              		.loc 1 546 0
+ 886 0002 0023     		movs	r3, #0
+ 887 0004 0193     		str	r3, [sp, #4]
+ 553:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 888              		.loc 1 553 0
+ 889 0006 0368     		ldr	r3, [r0]
+ 890 0008 6FF00402 		mvn	r2, #4
+ 891 000c 1A60     		str	r2, [r3]
+ 556:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 892              		.loc 1 556 0
+ 893 000e 0139     		subs	r1, r1, #1
+ 894              	.LVL86:
+ 895 0010 0329     		cmp	r1, #3
+ 896 0012 12D8     		bhi	.L72
+ 897 0014 DFE801F0 		tbb	[pc, r1]
+ 898              	.L74:
+ 899 0018 0E       		.byte	(.L73-.L74)/2
+ 900 0019 0A       		.byte	(.L75-.L74)/2
+ 901 001a 06       		.byte	(.L76-.L74)/2
+ 902 001b 02       		.byte	(.L77-.L74)/2
+ 903              		.p2align 1
+ 904              	.L77:
+ 560:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }  
+ 905              		.loc 1 560 0
+ 906 001c 0368     		ldr	r3, [r0]
+ 907 001e 9B6C     		ldr	r3, [r3, #72]
+ 908 0020 0193     		str	r3, [sp, #4]
+ 562:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_3: 
+ 909              		.loc 1 562 0
+ 910 0022 0AE0     		b	.L72
+ 911              	.L76:
+ 565:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }  
+ 912              		.loc 1 565 0
+ 913 0024 0368     		ldr	r3, [r0]
+ 914 0026 5B6C     		ldr	r3, [r3, #68]
+ 915 0028 0193     		str	r3, [sp, #4]
+ 567:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_2: 
+ 916              		.loc 1 567 0
+ 917 002a 06E0     		b	.L72
+ 918              	.L75:
+ 570:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 919              		.loc 1 570 0
+ 920 002c 0368     		ldr	r3, [r0]
+ 921 002e 1B6C     		ldr	r3, [r3, #64]
+ARM GAS  /tmp/ccNl1RIb.s 			page 38
+
+
+ 922 0030 0193     		str	r3, [sp, #4]
+ 572:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case ADC_INJECTED_RANK_1:
+ 923              		.loc 1 572 0
+ 924 0032 02E0     		b	.L72
+ 925              	.L73:
+ 575:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 926              		.loc 1 575 0
+ 927 0034 0368     		ldr	r3, [r0]
+ 928 0036 DB6B     		ldr	r3, [r3, #60]
+ 929 0038 0193     		str	r3, [sp, #4]
+ 930              	.L72:
+ 581:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 931              		.loc 1 581 0
+ 932 003a 0198     		ldr	r0, [sp, #4]
+ 933              	.LVL87:
+ 582:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 934              		.loc 1 582 0
+ 935 003c 02B0     		add	sp, sp, #8
+ 936              	.LCFI9:
+ 937              		.cfi_def_cfa_offset 0
+ 938              		@ sp needed
+ 939 003e 7047     		bx	lr
+ 940              		.cfi_endproc
+ 941              	.LFE141:
+ 943              		.section	.text.HAL_ADCEx_MultiModeStart_DMA,"ax",%progbits
+ 944              		.align	2
+ 945              		.global	HAL_ADCEx_MultiModeStart_DMA
+ 946              		.thumb
+ 947              		.thumb_func
+ 949              	HAL_ADCEx_MultiModeStart_DMA:
+ 950              	.LFB142:
+ 596:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   __IO uint32_t counter = 0;
+ 951              		.loc 1 596 0
+ 952              		.cfi_startproc
+ 953              		@ args = 0, pretend = 0, frame = 8
+ 954              		@ frame_needed = 0, uses_anonymous_args = 0
+ 955              	.LVL88:
+ 956 0000 30B5     		push	{r4, r5, lr}
+ 957              	.LCFI10:
+ 958              		.cfi_def_cfa_offset 12
+ 959              		.cfi_offset 4, -12
+ 960              		.cfi_offset 5, -8
+ 961              		.cfi_offset 14, -4
+ 962 0002 83B0     		sub	sp, sp, #12
+ 963              	.LCFI11:
+ 964              		.cfi_def_cfa_offset 24
+ 597:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 965              		.loc 1 597 0
+ 966 0004 0023     		movs	r3, #0
+ 967 0006 0193     		str	r3, [sp, #4]
+ 605:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 968              		.loc 1 605 0
+ 969 0008 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 970 000c 012B     		cmp	r3, #1
+ 971 000e 6FD0     		beq	.L89
+ 605:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 972              		.loc 1 605 0 is_stmt 0 discriminator 2
+ARM GAS  /tmp/ccNl1RIb.s 			page 39
+
+
+ 973 0010 0123     		movs	r3, #1
+ 974 0012 80F83C30 		strb	r3, [r0, #60]
+ 609:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 975              		.loc 1 609 0 is_stmt 1 discriminator 2
+ 976 0016 0368     		ldr	r3, [r0]
+ 977 0018 9C68     		ldr	r4, [r3, #8]
+ 978 001a 14F0010F 		tst	r4, #1
+ 979 001e 13D1     		bne	.L81
+ 612:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 980              		.loc 1 612 0
+ 981 0020 9C68     		ldr	r4, [r3, #8]
+ 982 0022 44F00104 		orr	r4, r4, #1
+ 983 0026 9C60     		str	r4, [r3, #8]
+ 616:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     while(counter != 0)
+ 984              		.loc 1 616 0
+ 985 0028 354B     		ldr	r3, .L93
+ 986 002a 1C68     		ldr	r4, [r3]
+ 987 002c 354B     		ldr	r3, .L93+4
+ 988 002e A3FB0434 		umull	r3, r4, r3, r4
+ 989 0032 A40C     		lsrs	r4, r4, #18
+ 990 0034 04EB4404 		add	r4, r4, r4, lsl #1
+ 991 0038 0194     		str	r4, [sp, #4]
+ 617:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 992              		.loc 1 617 0
+ 993 003a 02E0     		b	.L82
+ 994              	.L83:
+ 619:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 995              		.loc 1 619 0
+ 996 003c 019C     		ldr	r4, [sp, #4]
+ 997 003e 013C     		subs	r4, r4, #1
+ 998 0040 0194     		str	r4, [sp, #4]
+ 999              	.L82:
+ 617:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 1000              		.loc 1 617 0
+ 1001 0042 019C     		ldr	r4, [sp, #4]
+ 1002 0044 002C     		cmp	r4, #0
+ 1003 0046 F9D1     		bne	.L83
+ 1004              	.L81:
+ 624:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1005              		.loc 1 624 0
+ 1006 0048 0368     		ldr	r3, [r0]
+ 1007 004a 9C68     		ldr	r4, [r3, #8]
+ 1008 004c 14F0010F 		tst	r4, #1
+ 1009 0050 50D0     		beq	.L90
+ 629:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_READY | HAL_ADC_STATE_REG_EOC | HAL_ADC_STATE_REG_OVR,
+ 1010              		.loc 1 629 0
+ 1011 0052 056C     		ldr	r5, [r0, #64]
+ 1012 0054 2C4C     		ldr	r4, .L93+8
+ 1013 0056 2C40     		ands	r4, r4, r5
+ 1014 0058 44F48074 		orr	r4, r4, #256
+ 1015 005c 0464     		str	r4, [r0, #64]
+ 635:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 1016              		.loc 1 635 0
+ 1017 005e 5B68     		ldr	r3, [r3, #4]
+ 1018 0060 13F4806F 		tst	r3, #1024
+ 1019 0064 05D0     		beq	.L84
+ 637:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ARM GAS  /tmp/ccNl1RIb.s 			page 40
+
+
+ 1020              		.loc 1 637 0
+ 1021 0066 036C     		ldr	r3, [r0, #64]
+ 1022 0068 23F44053 		bic	r3, r3, #12288
+ 1023 006c 43F48053 		orr	r3, r3, #4096
+ 1024 0070 0364     		str	r3, [r0, #64]
+ 1025              	.L84:
+ 641:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 1026              		.loc 1 641 0
+ 1027 0072 036C     		ldr	r3, [r0, #64]
+ 1028 0074 13F4805F 		tst	r3, #4096
+ 1029 0078 04D0     		beq	.L85
+ 644:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 1030              		.loc 1 644 0
+ 1031 007a 436C     		ldr	r3, [r0, #68]
+ 1032 007c 23F00603 		bic	r3, r3, #6
+ 1033 0080 4364     		str	r3, [r0, #68]
+ 1034 0082 01E0     		b	.L86
+ 1035              	.L85:
+ 649:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 1036              		.loc 1 649 0
+ 1037 0084 0023     		movs	r3, #0
+ 1038 0086 4364     		str	r3, [r0, #68]
+ 1039              	.L86:
+ 655:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1040              		.loc 1 655 0
+ 1041 0088 0023     		movs	r3, #0
+ 1042 008a 80F83C30 		strb	r3, [r0, #60]
+ 658:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1043              		.loc 1 658 0
+ 1044 008e 836B     		ldr	r3, [r0, #56]
+ 1045 0090 1E4C     		ldr	r4, .L93+12
+ 1046 0092 DC63     		str	r4, [r3, #60]
+ 661:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1047              		.loc 1 661 0
+ 1048 0094 836B     		ldr	r3, [r0, #56]
+ 1049 0096 1E4C     		ldr	r4, .L93+16
+ 1050 0098 1C64     		str	r4, [r3, #64]
+ 664:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1051              		.loc 1 664 0
+ 1052 009a 836B     		ldr	r3, [r0, #56]
+ 1053 009c 1D4C     		ldr	r4, .L93+20
+ 1054 009e DC64     		str	r4, [r3, #76]
+ 671:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1055              		.loc 1 671 0
+ 1056 00a0 0368     		ldr	r3, [r0]
+ 1057 00a2 6FF00204 		mvn	r4, #2
+ 1058 00a6 1C60     		str	r4, [r3]
+ 674:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1059              		.loc 1 674 0
+ 1060 00a8 0468     		ldr	r4, [r0]
+ 1061 00aa 6368     		ldr	r3, [r4, #4]
+ 1062 00ac 43F08063 		orr	r3, r3, #67108864
+ 1063 00b0 6360     		str	r3, [r4, #4]
+ 676:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 1064              		.loc 1 676 0
+ 1065 00b2 036B     		ldr	r3, [r0, #48]
+ 1066 00b4 2BB1     		cbz	r3, .L87
+ARM GAS  /tmp/ccNl1RIb.s 			page 41
+
+
+ 679:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 1067              		.loc 1 679 0
+ 1068 00b6 184C     		ldr	r4, .L93+24
+ 1069 00b8 6368     		ldr	r3, [r4, #4]
+ 1070 00ba 43F40053 		orr	r3, r3, #8192
+ 1071 00be 6360     		str	r3, [r4, #4]
+ 1072 00c0 04E0     		b	.L88
+ 1073              	.L87:
+ 684:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 1074              		.loc 1 684 0
+ 1075 00c2 154C     		ldr	r4, .L93+24
+ 1076 00c4 6368     		ldr	r3, [r4, #4]
+ 1077 00c6 23F40053 		bic	r3, r3, #8192
+ 1078 00ca 6360     		str	r3, [r4, #4]
+ 1079              	.L88:
+ 1080 00cc 1346     		mov	r3, r2
+ 1081 00ce 0A46     		mov	r2, r1
+ 1082              	.LVL89:
+ 1083 00d0 0446     		mov	r4, r0
+ 688:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1084              		.loc 1 688 0
+ 1085 00d2 1249     		ldr	r1, .L93+28
+ 1086              	.LVL90:
+ 1087 00d4 806B     		ldr	r0, [r0, #56]
+ 1088              	.LVL91:
+ 1089 00d6 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 1090              	.LVL92:
+ 691:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     {
+ 1091              		.loc 1 691 0
+ 1092 00da 2368     		ldr	r3, [r4]
+ 1093 00dc 9A68     		ldr	r2, [r3, #8]
+ 1094 00de 12F0405F 		tst	r2, #805306368
+ 1095 00e2 09D1     		bne	.L91
+ 694:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     }
+ 1096              		.loc 1 694 0
+ 1097 00e4 9A68     		ldr	r2, [r3, #8]
+ 1098 00e6 42F08042 		orr	r2, r2, #1073741824
+ 1099 00ea 9A60     		str	r2, [r3, #8]
+ 699:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1100              		.loc 1 699 0
+ 1101 00ec 0020     		movs	r0, #0
+ 1102 00ee 04E0     		b	.L80
+ 1103              	.LVL93:
+ 1104              	.L89:
+ 605:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1105              		.loc 1 605 0
+ 1106 00f0 0220     		movs	r0, #2
+ 1107              	.LVL94:
+ 1108 00f2 02E0     		b	.L80
+ 1109              	.LVL95:
+ 1110              	.L90:
+ 699:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1111              		.loc 1 699 0
+ 1112 00f4 0020     		movs	r0, #0
+ 1113              	.LVL96:
+ 1114 00f6 00E0     		b	.L80
+ 1115              	.LVL97:
+ARM GAS  /tmp/ccNl1RIb.s 			page 42
+
+
+ 1116              	.L91:
+ 1117 00f8 0020     		movs	r0, #0
+ 1118              	.LVL98:
+ 1119              	.L80:
+ 700:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1120              		.loc 1 700 0
+ 1121 00fa 03B0     		add	sp, sp, #12
+ 1122              	.LCFI12:
+ 1123              		.cfi_def_cfa_offset 12
+ 1124              		@ sp needed
+ 1125 00fc 30BD     		pop	{r4, r5, pc}
+ 1126              	.L94:
+ 1127 00fe 00BF     		.align	2
+ 1128              	.L93:
+ 1129 0100 00000000 		.word	SystemCoreClock
+ 1130 0104 83DE1B43 		.word	1125899907
+ 1131 0108 FEF8FFFF 		.word	-1794
+ 1132 010c 00000000 		.word	ADC_MultiModeDMAConvCplt
+ 1133 0110 00000000 		.word	ADC_MultiModeDMAHalfConvCplt
+ 1134 0114 00000000 		.word	ADC_MultiModeDMAError
+ 1135 0118 00230140 		.word	1073816320
+ 1136 011c 08230140 		.word	1073816328
+ 1137              		.cfi_endproc
+ 1138              	.LFE142:
+ 1140              		.section	.text.HAL_ADCEx_MultiModeStop_DMA,"ax",%progbits
+ 1141              		.align	2
+ 1142              		.global	HAL_ADCEx_MultiModeStop_DMA
+ 1143              		.thumb
+ 1144              		.thumb_func
+ 1146              	HAL_ADCEx_MultiModeStop_DMA:
+ 1147              	.LFB143:
+ 709:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 1148              		.loc 1 709 0
+ 1149              		.cfi_startproc
+ 1150              		@ args = 0, pretend = 0, frame = 0
+ 1151              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1152              	.LVL99:
+ 716:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1153              		.loc 1 716 0
+ 1154 0000 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 1155 0004 012B     		cmp	r3, #1
+ 1156 0006 27D0     		beq	.L98
+ 709:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+ 1157              		.loc 1 709 0 discriminator 2
+ 1158 0008 10B5     		push	{r4, lr}
+ 1159              	.LCFI13:
+ 1160              		.cfi_def_cfa_offset 8
+ 1161              		.cfi_offset 4, -8
+ 1162              		.cfi_offset 14, -4
+ 1163 000a 0446     		mov	r4, r0
+ 716:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1164              		.loc 1 716 0 discriminator 2
+ 1165 000c 0123     		movs	r3, #1
+ 1166 000e 80F83C30 		strb	r3, [r0, #60]
+ 720:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1167              		.loc 1 720 0 discriminator 2
+ 1168 0012 0268     		ldr	r2, [r0]
+ARM GAS  /tmp/ccNl1RIb.s 			page 43
+
+
+ 1169 0014 9368     		ldr	r3, [r2, #8]
+ 1170 0016 23F00103 		bic	r3, r3, #1
+ 1171 001a 9360     		str	r3, [r2, #8]
+ 723:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1172              		.loc 1 723 0 discriminator 2
+ 1173 001c 0368     		ldr	r3, [r0]
+ 1174 001e 9B68     		ldr	r3, [r3, #8]
+ 1175 0020 13F0010F 		tst	r3, #1
+ 1176 0024 13D1     		bne	.L99
+ 726:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1177              		.loc 1 726 0
+ 1178 0026 0D4A     		ldr	r2, .L102
+ 1179 0028 5368     		ldr	r3, [r2, #4]
+ 1180 002a 23F40053 		bic	r3, r3, #8192
+ 1181 002e 5360     		str	r3, [r2, #4]
+ 730:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1182              		.loc 1 730 0
+ 1183 0030 806B     		ldr	r0, [r0, #56]
+ 1184              	.LVL100:
+ 1185 0032 FFF7FEFF 		bl	HAL_DMA_Abort
+ 1186              	.LVL101:
+ 733:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1187              		.loc 1 733 0
+ 1188 0036 2268     		ldr	r2, [r4]
+ 1189 0038 5368     		ldr	r3, [r2, #4]
+ 1190 003a 23F08063 		bic	r3, r3, #67108864
+ 1191 003e 5360     		str	r3, [r2, #4]
+ 736:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****                       HAL_ADC_STATE_REG_BUSY | HAL_ADC_STATE_INJ_BUSY,
+ 1192              		.loc 1 736 0
+ 1193 0040 226C     		ldr	r2, [r4, #64]
+ 1194 0042 074B     		ldr	r3, .L102+4
+ 1195 0044 1340     		ands	r3, r3, r2
+ 1196 0046 43F00103 		orr	r3, r3, #1
+ 1197 004a 2364     		str	r3, [r4, #64]
+ 1198 004c 00E0     		b	.L97
+ 1199              	.LVL102:
+ 1200              	.L99:
+ 710:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1201              		.loc 1 710 0
+ 1202 004e 0020     		movs	r0, #0
+ 1203              	.LVL103:
+ 1204              	.L97:
+ 742:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1205              		.loc 1 742 0
+ 1206 0050 0023     		movs	r3, #0
+ 1207 0052 84F83C30 		strb	r3, [r4, #60]
+ 745:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1208              		.loc 1 745 0
+ 1209 0056 10BD     		pop	{r4, pc}
+ 1210              	.LVL104:
+ 1211              	.L98:
+ 1212              	.LCFI14:
+ 1213              		.cfi_def_cfa_offset 0
+ 1214              		.cfi_restore 4
+ 1215              		.cfi_restore 14
+ 716:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1216              		.loc 1 716 0
+ARM GAS  /tmp/ccNl1RIb.s 			page 44
+
+
+ 1217 0058 0220     		movs	r0, #2
+ 1218              	.LVL105:
+ 1219 005a 7047     		bx	lr
+ 1220              	.L103:
+ 1221              		.align	2
+ 1222              	.L102:
+ 1223 005c 00230140 		.word	1073816320
+ 1224 0060 FEEEFFFF 		.word	-4354
+ 1225              		.cfi_endproc
+ 1226              	.LFE143:
+ 1228              		.section	.text.HAL_ADCEx_MultiModeGetValue,"ax",%progbits
+ 1229              		.align	2
+ 1230              		.global	HAL_ADCEx_MultiModeGetValue
+ 1231              		.thumb
+ 1232              		.thumb_func
+ 1234              	HAL_ADCEx_MultiModeGetValue:
+ 1235              	.LFB144:
+ 756:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Return the multi mode conversion value */
+ 1236              		.loc 1 756 0
+ 1237              		.cfi_startproc
+ 1238              		@ args = 0, pretend = 0, frame = 0
+ 1239              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1240              		@ link register save eliminated.
+ 1241              	.LVL106:
+ 758:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1242              		.loc 1 758 0
+ 1243 0000 014B     		ldr	r3, .L105
+ 1244 0002 9868     		ldr	r0, [r3, #8]
+ 1245              	.LVL107:
+ 759:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1246              		.loc 1 759 0
+ 1247 0004 7047     		bx	lr
+ 1248              	.L106:
+ 1249 0006 00BF     		.align	2
+ 1250              	.L105:
+ 1251 0008 00230140 		.word	1073816320
+ 1252              		.cfi_endproc
+ 1253              	.LFE144:
+ 1255              		.section	.text.HAL_ADCEx_InjectedConvCpltCallback,"ax",%progbits
+ 1256              		.align	2
+ 1257              		.weak	HAL_ADCEx_InjectedConvCpltCallback
+ 1258              		.thumb
+ 1259              		.thumb_func
+ 1261              	HAL_ADCEx_InjectedConvCpltCallback:
+ 1262              	.LFB145:
+ 768:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 1263              		.loc 1 768 0
+ 1264              		.cfi_startproc
+ 1265              		@ args = 0, pretend = 0, frame = 0
+ 1266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1267              		@ link register save eliminated.
+ 1268              	.LVL108:
+ 1269 0000 7047     		bx	lr
+ 1270              		.cfi_endproc
+ 1271              	.LFE145:
+ 1273 0002 00BF     		.section	.text.HAL_ADCEx_InjectedConfigChannel,"ax",%progbits
+ 1274              		.align	2
+ARM GAS  /tmp/ccNl1RIb.s 			page 45
+
+
+ 1275              		.global	HAL_ADCEx_InjectedConfigChannel
+ 1276              		.thumb
+ 1277              		.thumb_func
+ 1279              	HAL_ADCEx_InjectedConfigChannel:
+ 1280              	.LFB146:
+ 785:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1281              		.loc 1 785 0
+ 1282              		.cfi_startproc
+ 1283              		@ args = 0, pretend = 0, frame = 0
+ 1284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1285              		@ link register save eliminated.
+ 1286              	.LVL109:
+ 811:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1287              		.loc 1 811 0
+ 1288 0000 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 1289 0004 012B     		cmp	r3, #1
+ 1290 0006 00F0EB80 		beq	.L125
+ 785:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1291              		.loc 1 785 0 discriminator 2
+ 1292 000a 30B4     		push	{r4, r5}
+ 1293              	.LCFI15:
+ 1294              		.cfi_def_cfa_offset 8
+ 1295              		.cfi_offset 4, -8
+ 1296              		.cfi_offset 5, -4
+ 811:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1297              		.loc 1 811 0 discriminator 2
+ 1298 000c 0123     		movs	r3, #1
+ 1299 000e 80F83C30 		strb	r3, [r0, #60]
+ 814:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1300              		.loc 1 814 0 discriminator 2
+ 1301 0012 0B68     		ldr	r3, [r1]
+ 1302 0014 092B     		cmp	r3, #9
+ 1303 0016 17D9     		bls	.L110
+ 817:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1304              		.loc 1 817 0
+ 1305 0018 0568     		ldr	r5, [r0]
+ 1306 001a EA68     		ldr	r2, [r5, #12]
+ 1307 001c 9BB2     		uxth	r3, r3
+ 1308 001e 03EB4303 		add	r3, r3, r3, lsl #1
+ 1309 0022 1E3B     		subs	r3, r3, #30
+ 1310 0024 0724     		movs	r4, #7
+ 1311 0026 04FA03F3 		lsl	r3, r4, r3
+ 1312 002a 22EA0303 		bic	r3, r2, r3
+ 1313 002e EB60     		str	r3, [r5, #12]
+ 820:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1314              		.loc 1 820 0
+ 1315 0030 0468     		ldr	r4, [r0]
+ 1316 0032 E568     		ldr	r5, [r4, #12]
+ 1317 0034 8A68     		ldr	r2, [r1, #8]
+ 1318 0036 0B88     		ldrh	r3, [r1]
+ 1319 0038 03EB4303 		add	r3, r3, r3, lsl #1
+ 1320 003c 1E3B     		subs	r3, r3, #30
+ 1321 003e 02FA03F3 		lsl	r3, r2, r3
+ 1322 0042 2B43     		orrs	r3, r3, r5
+ 1323 0044 E360     		str	r3, [r4, #12]
+ 1324 0046 13E0     		b	.L111
+ 1325              	.L110:
+ARM GAS  /tmp/ccNl1RIb.s 			page 46
+
+
+ 825:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1326              		.loc 1 825 0
+ 1327 0048 0568     		ldr	r5, [r0]
+ 1328 004a 2A69     		ldr	r2, [r5, #16]
+ 1329 004c 9BB2     		uxth	r3, r3
+ 1330 004e 03EB4303 		add	r3, r3, r3, lsl #1
+ 1331 0052 0724     		movs	r4, #7
+ 1332 0054 04FA03F3 		lsl	r3, r4, r3
+ 1333 0058 22EA0303 		bic	r3, r2, r3
+ 1334 005c 2B61     		str	r3, [r5, #16]
+ 828:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1335              		.loc 1 828 0
+ 1336 005e 0468     		ldr	r4, [r0]
+ 1337 0060 2569     		ldr	r5, [r4, #16]
+ 1338 0062 8B68     		ldr	r3, [r1, #8]
+ 1339 0064 0A88     		ldrh	r2, [r1]
+ 1340 0066 02EB4202 		add	r2, r2, r2, lsl #1
+ 1341 006a 9340     		lsls	r3, r3, r2
+ 1342 006c 2B43     		orrs	r3, r3, r5
+ 1343 006e 2361     		str	r3, [r4, #16]
+ 1344              	.L111:
+ 832:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   hadc->Instance->JSQR |=  ADC_SQR1(sConfigInjected->InjectedNbrOfConversion);
+ 1345              		.loc 1 832 0
+ 1346 0070 0268     		ldr	r2, [r0]
+ 1347 0072 936B     		ldr	r3, [r2, #56]
+ 1348 0074 23F44013 		bic	r3, r3, #3145728
+ 1349 0078 9363     		str	r3, [r2, #56]
+ 833:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1350              		.loc 1 833 0
+ 1351 007a 0468     		ldr	r4, [r0]
+ 1352 007c A26B     		ldr	r2, [r4, #56]
+ 1353 007e 0B69     		ldr	r3, [r1, #16]
+ 1354 0080 013B     		subs	r3, r3, #1
+ 1355 0082 42EA0353 		orr	r3, r2, r3, lsl #20
+ 1356 0086 A363     		str	r3, [r4, #56]
+ 838:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****    
+ 1357              		.loc 1 838 0
+ 1358 0088 0568     		ldr	r5, [r0]
+ 1359 008a AC6B     		ldr	r4, [r5, #56]
+ 1360 008c 4A68     		ldr	r2, [r1, #4]
+ 1361 008e 0B69     		ldr	r3, [r1, #16]
+ 1362 0090 D31A     		subs	r3, r2, r3
+ 1363 0092 0333     		adds	r3, r3, #3
+ 1364 0094 DBB2     		uxtb	r3, r3
+ 1365 0096 03EB8303 		add	r3, r3, r3, lsl #2
+ 1366 009a 1F22     		movs	r2, #31
+ 1367 009c 02FA03F3 		lsl	r3, r2, r3
+ 1368 00a0 24EA0303 		bic	r3, r4, r3
+ 1369 00a4 AB63     		str	r3, [r5, #56]
+ 841:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1370              		.loc 1 841 0
+ 1371 00a6 0468     		ldr	r4, [r0]
+ 1372 00a8 A56B     		ldr	r5, [r4, #56]
+ 1373 00aa 4A68     		ldr	r2, [r1, #4]
+ 1374 00ac 0B69     		ldr	r3, [r1, #16]
+ 1375 00ae D31A     		subs	r3, r2, r3
+ 1376 00b0 0333     		adds	r3, r3, #3
+ARM GAS  /tmp/ccNl1RIb.s 			page 47
+
+
+ 1377 00b2 DBB2     		uxtb	r3, r3
+ 1378 00b4 03EB8303 		add	r3, r3, r3, lsl #2
+ 1379 00b8 0A88     		ldrh	r2, [r1]
+ 1380 00ba 02FA03F3 		lsl	r3, r2, r3
+ 1381 00be 2B43     		orrs	r3, r3, r5
+ 1382 00c0 A363     		str	r3, [r4, #56]
+ 848:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {  
+ 1383              		.loc 1 848 0
+ 1384 00c2 CA69     		ldr	r2, [r1, #28]
+ 1385 00c4 484B     		ldr	r3, .L129
+ 1386 00c6 9A42     		cmp	r2, r3
+ 1387 00c8 14D0     		beq	.L112
+ 851:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 |=  sConfigInjected->ExternalTrigInjecConv;
+ 1388              		.loc 1 851 0
+ 1389 00ca 0268     		ldr	r2, [r0]
+ 1390 00cc 9368     		ldr	r3, [r2, #8]
+ 1391 00ce 23F47023 		bic	r3, r3, #983040
+ 1392 00d2 9360     		str	r3, [r2, #8]
+ 852:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     
+ 1393              		.loc 1 852 0
+ 1394 00d4 0268     		ldr	r2, [r0]
+ 1395 00d6 9468     		ldr	r4, [r2, #8]
+ 1396 00d8 CB69     		ldr	r3, [r1, #28]
+ 1397 00da 2343     		orrs	r3, r3, r4
+ 1398 00dc 9360     		str	r3, [r2, #8]
+ 855:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 |= sConfigInjected->ExternalTrigInjecConvEdge;
+ 1399              		.loc 1 855 0
+ 1400 00de 0268     		ldr	r2, [r0]
+ 1401 00e0 9368     		ldr	r3, [r2, #8]
+ 1402 00e2 23F44013 		bic	r3, r3, #3145728
+ 1403 00e6 9360     		str	r3, [r2, #8]
+ 856:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1404              		.loc 1 856 0
+ 1405 00e8 0268     		ldr	r2, [r0]
+ 1406 00ea 9468     		ldr	r4, [r2, #8]
+ 1407 00ec 0B6A     		ldr	r3, [r1, #32]
+ 1408 00ee 2343     		orrs	r3, r3, r4
+ 1409 00f0 9360     		str	r3, [r2, #8]
+ 1410 00f2 09E0     		b	.L113
+ 1411              	.L112:
+ 861:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     hadc->Instance->CR2 &= ~(ADC_CR2_JEXTEN);  
+ 1412              		.loc 1 861 0
+ 1413 00f4 0268     		ldr	r2, [r0]
+ 1414 00f6 9368     		ldr	r3, [r2, #8]
+ 1415 00f8 23F47023 		bic	r3, r3, #983040
+ 1416 00fc 9360     		str	r3, [r2, #8]
+ 862:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1417              		.loc 1 862 0
+ 1418 00fe 0268     		ldr	r2, [r0]
+ 1419 0100 9368     		ldr	r3, [r2, #8]
+ 1420 0102 23F44013 		bic	r3, r3, #3145728
+ 1421 0106 9360     		str	r3, [r2, #8]
+ 1422              	.L113:
+ 865:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1423              		.loc 1 865 0
+ 1424 0108 8B69     		ldr	r3, [r1, #24]
+ 1425 010a 2BB1     		cbz	r3, .L114
+ARM GAS  /tmp/ccNl1RIb.s 			page 48
+
+
+ 868:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1426              		.loc 1 868 0
+ 1427 010c 0268     		ldr	r2, [r0]
+ 1428 010e 5368     		ldr	r3, [r2, #4]
+ 1429 0110 43F48063 		orr	r3, r3, #1024
+ 1430 0114 5360     		str	r3, [r2, #4]
+ 1431 0116 04E0     		b	.L115
+ 1432              	.L114:
+ 873:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1433              		.loc 1 873 0
+ 1434 0118 0268     		ldr	r2, [r0]
+ 1435 011a 5368     		ldr	r3, [r2, #4]
+ 1436 011c 23F48063 		bic	r3, r3, #1024
+ 1437 0120 5360     		str	r3, [r2, #4]
+ 1438              	.L115:
+ 876:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1439              		.loc 1 876 0
+ 1440 0122 4B69     		ldr	r3, [r1, #20]
+ 1441 0124 2BB1     		cbz	r3, .L116
+ 879:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1442              		.loc 1 879 0
+ 1443 0126 0268     		ldr	r2, [r0]
+ 1444 0128 5368     		ldr	r3, [r2, #4]
+ 1445 012a 43F48053 		orr	r3, r3, #4096
+ 1446 012e 5360     		str	r3, [r2, #4]
+ 1447 0130 04E0     		b	.L117
+ 1448              	.L116:
+ 884:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1449              		.loc 1 884 0
+ 1450 0132 0268     		ldr	r2, [r0]
+ 1451 0134 5368     		ldr	r3, [r2, #4]
+ 1452 0136 23F48053 		bic	r3, r3, #4096
+ 1453 013a 5360     		str	r3, [r2, #4]
+ 1454              	.L117:
+ 887:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1455              		.loc 1 887 0
+ 1456 013c 4B68     		ldr	r3, [r1, #4]
+ 1457 013e 022B     		cmp	r3, #2
+ 1458 0140 0ED0     		beq	.L119
+ 1459 0142 032B     		cmp	r3, #3
+ 1460 0144 17D0     		beq	.L120
+ 1461 0146 012B     		cmp	r3, #1
+ 1462 0148 20D1     		bne	.L126
+ 891:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR1 |= sConfigInjected->InjectedOffset;
+ 1463              		.loc 1 891 0
+ 1464 014a 0268     		ldr	r2, [r0]
+ 1465 014c 5469     		ldr	r4, [r2, #20]
+ 1466 014e 274B     		ldr	r3, .L129+4
+ 1467 0150 2340     		ands	r3, r3, r4
+ 1468 0152 5361     		str	r3, [r2, #20]
+ 892:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 1469              		.loc 1 892 0
+ 1470 0154 0268     		ldr	r2, [r0]
+ 1471 0156 5469     		ldr	r4, [r2, #20]
+ 1472 0158 CB68     		ldr	r3, [r1, #12]
+ 1473 015a 2343     		orrs	r3, r3, r4
+ 1474 015c 5361     		str	r3, [r2, #20]
+ARM GAS  /tmp/ccNl1RIb.s 			page 49
+
+
+ 893:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case 2:
+ 1475              		.loc 1 893 0
+ 1476 015e 1FE0     		b	.L122
+ 1477              	.L119:
+ 896:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR2 |= sConfigInjected->InjectedOffset;
+ 1478              		.loc 1 896 0
+ 1479 0160 0268     		ldr	r2, [r0]
+ 1480 0162 9469     		ldr	r4, [r2, #24]
+ 1481 0164 214B     		ldr	r3, .L129+4
+ 1482 0166 2340     		ands	r3, r3, r4
+ 1483 0168 9361     		str	r3, [r2, #24]
+ 897:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 1484              		.loc 1 897 0
+ 1485 016a 0268     		ldr	r2, [r0]
+ 1486 016c 9469     		ldr	r4, [r2, #24]
+ 1487 016e CB68     		ldr	r3, [r1, #12]
+ 1488 0170 2343     		orrs	r3, r3, r4
+ 1489 0172 9361     		str	r3, [r2, #24]
+ 898:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     case 3:
+ 1490              		.loc 1 898 0
+ 1491 0174 14E0     		b	.L122
+ 1492              	.L120:
+ 901:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR3 |= sConfigInjected->InjectedOffset;
+ 1493              		.loc 1 901 0
+ 1494 0176 0268     		ldr	r2, [r0]
+ 1495 0178 D469     		ldr	r4, [r2, #28]
+ 1496 017a 1C4B     		ldr	r3, .L129+4
+ 1497 017c 2340     		ands	r3, r3, r4
+ 1498 017e D361     		str	r3, [r2, #28]
+ 902:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 1499              		.loc 1 902 0
+ 1500 0180 0268     		ldr	r2, [r0]
+ 1501 0182 D469     		ldr	r4, [r2, #28]
+ 1502 0184 CB68     		ldr	r3, [r1, #12]
+ 1503 0186 2343     		orrs	r3, r3, r4
+ 1504 0188 D361     		str	r3, [r2, #28]
+ 903:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****     default:
+ 1505              		.loc 1 903 0
+ 1506 018a 09E0     		b	.L122
+ 1507              	.L126:
+ 906:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       hadc->Instance->JOFR4 |= sConfigInjected->InjectedOffset;
+ 1508              		.loc 1 906 0
+ 1509 018c 0268     		ldr	r2, [r0]
+ 1510 018e 146A     		ldr	r4, [r2, #32]
+ 1511 0190 164B     		ldr	r3, .L129+4
+ 1512 0192 2340     		ands	r3, r3, r4
+ 1513 0194 1362     		str	r3, [r2, #32]
+ 907:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****       break;
+ 1514              		.loc 1 907 0
+ 1515 0196 0268     		ldr	r2, [r0]
+ 1516 0198 146A     		ldr	r4, [r2, #32]
+ 1517 019a CB68     		ldr	r3, [r1, #12]
+ 1518 019c 2343     		orrs	r3, r3, r4
+ 1519 019e 1362     		str	r3, [r2, #32]
+ 1520              	.L122:
+ 912:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1521              		.loc 1 912 0
+ARM GAS  /tmp/ccNl1RIb.s 			page 50
+
+
+ 1522 01a0 0268     		ldr	r2, [r0]
+ 1523 01a2 134B     		ldr	r3, .L129+8
+ 1524 01a4 9A42     		cmp	r2, r3
+ 1525 01a6 07D1     		bne	.L123
+ 912:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1526              		.loc 1 912 0 is_stmt 0 discriminator 1
+ 1527 01a8 0B68     		ldr	r3, [r1]
+ 1528 01aa 122B     		cmp	r3, #18
+ 1529 01ac 04D1     		bne	.L123
+ 915:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1530              		.loc 1 915 0 is_stmt 1
+ 1531 01ae 114A     		ldr	r2, .L129+12
+ 1532 01b0 5368     		ldr	r3, [r2, #4]
+ 1533 01b2 43F48003 		orr	r3, r3, #4194304
+ 1534 01b6 5360     		str	r3, [r2, #4]
+ 1535              	.L123:
+ 919:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1536              		.loc 1 919 0
+ 1537 01b8 0268     		ldr	r2, [r0]
+ 1538 01ba 0D4B     		ldr	r3, .L129+8
+ 1539 01bc 9A42     		cmp	r2, r3
+ 1540 01be 0AD1     		bne	.L124
+ 919:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   {
+ 1541              		.loc 1 919 0 is_stmt 0 discriminator 1
+ 1542 01c0 0B68     		ldr	r3, [r1]
+ 1543 01c2 0D4A     		ldr	r2, .L129+16
+ 1544 01c4 112B     		cmp	r3, #17
+ 1545 01c6 18BF     		it	ne
+ 1546 01c8 9342     		cmpne	r3, r2
+ 1547 01ca 04D1     		bne	.L124
+ 922:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   }
+ 1548              		.loc 1 922 0 is_stmt 1
+ 1549 01cc 094A     		ldr	r2, .L129+12
+ 1550 01ce 5368     		ldr	r3, [r2, #4]
+ 1551 01d0 43F40003 		orr	r3, r3, #8388608
+ 1552 01d4 5360     		str	r3, [r2, #4]
+ 1553              	.L124:
+ 926:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1554              		.loc 1 926 0
+ 1555 01d6 0023     		movs	r3, #0
+ 1556 01d8 80F83C30 		strb	r3, [r0, #60]
+ 929:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1557              		.loc 1 929 0
+ 1558 01dc 1846     		mov	r0, r3
+ 1559              	.LVL110:
+ 1560 01de 01E0     		b	.L109
+ 1561              	.LVL111:
+ 1562              	.L125:
+ 1563              	.LCFI16:
+ 1564              		.cfi_def_cfa_offset 0
+ 1565              		.cfi_restore 4
+ 1566              		.cfi_restore 5
+ 811:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1567              		.loc 1 811 0
+ 1568 01e0 0220     		movs	r0, #2
+ 1569              	.LVL112:
+ 1570 01e2 7047     		bx	lr
+ARM GAS  /tmp/ccNl1RIb.s 			page 51
+
+
+ 1571              	.L109:
+ 1572              	.LCFI17:
+ 1573              		.cfi_def_cfa_offset 8
+ 1574              		.cfi_offset 4, -8
+ 1575              		.cfi_offset 5, -4
+ 930:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1576              		.loc 1 930 0
+ 1577 01e4 30BC     		pop	{r4, r5}
+ 1578              	.LCFI18:
+ 1579              		.cfi_restore 5
+ 1580              		.cfi_restore 4
+ 1581              		.cfi_def_cfa_offset 0
+ 1582 01e6 7047     		bx	lr
+ 1583              	.L130:
+ 1584              		.align	2
+ 1585              	.L129:
+ 1586 01e8 01000F00 		.word	983041
+ 1587 01ec 00F0FFFF 		.word	-4096
+ 1588 01f0 00200140 		.word	1073815552
+ 1589 01f4 00230140 		.word	1073816320
+ 1590 01f8 12000010 		.word	268435474
+ 1591              		.cfi_endproc
+ 1592              	.LFE146:
+ 1594              		.section	.text.HAL_ADCEx_MultiModeConfigChannel,"ax",%progbits
+ 1595              		.align	2
+ 1596              		.global	HAL_ADCEx_MultiModeConfigChannel
+ 1597              		.thumb
+ 1598              		.thumb_func
+ 1600              	HAL_ADCEx_MultiModeConfigChannel:
+ 1601              	.LFB147:
+ 941:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 1602              		.loc 1 941 0
+ 1603              		.cfi_startproc
+ 1604              		@ args = 0, pretend = 0, frame = 0
+ 1605              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1606              		@ link register save eliminated.
+ 1607              	.LVL113:
+ 948:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1608              		.loc 1 948 0
+ 1609 0000 90F83C30 		ldrb	r3, [r0, #60]	@ zero_extendqisi2
+ 1610 0004 012B     		cmp	r3, #1
+ 1611 0006 21D0     		beq	.L133
+ 941:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   /* Check the parameters */
+ 1612              		.loc 1 941 0 discriminator 2
+ 1613 0008 10B4     		push	{r4}
+ 1614              	.LCFI19:
+ 1615              		.cfi_def_cfa_offset 4
+ 1616              		.cfi_offset 4, -4
+ 948:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1617              		.loc 1 948 0 discriminator 2
+ 1618 000a 0123     		movs	r3, #1
+ 1619 000c 80F83C30 		strb	r3, [r0, #60]
+ 951:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->Mode;
+ 1620              		.loc 1 951 0 discriminator 2
+ 1621 0010 114B     		ldr	r3, .L136
+ 1622 0012 5A68     		ldr	r2, [r3, #4]
+ 1623 0014 22F01F02 		bic	r2, r2, #31
+ARM GAS  /tmp/ccNl1RIb.s 			page 52
+
+
+ 1624 0018 5A60     		str	r2, [r3, #4]
+ 952:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1625              		.loc 1 952 0 discriminator 2
+ 1626 001a 5C68     		ldr	r4, [r3, #4]
+ 1627 001c 0A68     		ldr	r2, [r1]
+ 1628 001e 2243     		orrs	r2, r2, r4
+ 1629 0020 5A60     		str	r2, [r3, #4]
+ 955:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->DMAAccessMode;
+ 1630              		.loc 1 955 0 discriminator 2
+ 1631 0022 5A68     		ldr	r2, [r3, #4]
+ 1632 0024 22F44042 		bic	r2, r2, #49152
+ 1633 0028 5A60     		str	r2, [r3, #4]
+ 956:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1634              		.loc 1 956 0 discriminator 2
+ 1635 002a 5C68     		ldr	r4, [r3, #4]
+ 1636 002c 4A68     		ldr	r2, [r1, #4]
+ 1637 002e 2243     		orrs	r2, r2, r4
+ 1638 0030 5A60     		str	r2, [r3, #4]
+ 959:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   ADC->CCR |= multimode->TwoSamplingDelay;
+ 1639              		.loc 1 959 0 discriminator 2
+ 1640 0032 5A68     		ldr	r2, [r3, #4]
+ 1641 0034 22F47062 		bic	r2, r2, #3840
+ 1642 0038 5A60     		str	r2, [r3, #4]
+ 960:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1643              		.loc 1 960 0 discriminator 2
+ 1644 003a 5C68     		ldr	r4, [r3, #4]
+ 1645 003c 8A68     		ldr	r2, [r1, #8]
+ 1646 003e 2243     		orrs	r2, r2, r4
+ 1647 0040 5A60     		str	r2, [r3, #4]
+ 963:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1648              		.loc 1 963 0 discriminator 2
+ 1649 0042 0023     		movs	r3, #0
+ 1650 0044 80F83C30 		strb	r3, [r0, #60]
+ 966:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** }
+ 1651              		.loc 1 966 0 discriminator 2
+ 1652 0048 1846     		mov	r0, r3
+ 1653              	.LVL114:
+ 1654 004a 01E0     		b	.L132
+ 1655              	.LVL115:
+ 1656              	.L133:
+ 1657              	.LCFI20:
+ 1658              		.cfi_def_cfa_offset 0
+ 1659              		.cfi_restore 4
+ 948:HALLIB/Src/stm32f7xx_hal_adc_ex.c ****   
+ 1660              		.loc 1 948 0
+ 1661 004c 0220     		movs	r0, #2
+ 1662              	.LVL116:
+ 1663 004e 7047     		bx	lr
+ 1664              	.L132:
+ 1665              	.LCFI21:
+ 1666              		.cfi_def_cfa_offset 4
+ 1667              		.cfi_offset 4, -4
+ 967:HALLIB/Src/stm32f7xx_hal_adc_ex.c **** 
+ 1668              		.loc 1 967 0
+ 1669 0050 5DF8044B 		ldr	r4, [sp], #4
+ 1670              	.LCFI22:
+ 1671              		.cfi_restore 4
+ARM GAS  /tmp/ccNl1RIb.s 			page 53
+
+
+ 1672              		.cfi_def_cfa_offset 0
+ 1673 0054 7047     		bx	lr
+ 1674              	.L137:
+ 1675 0056 00BF     		.align	2
+ 1676              	.L136:
+ 1677 0058 00230140 		.word	1073816320
+ 1678              		.cfi_endproc
+ 1679              	.LFE147:
+ 1681              		.text
+ 1682              	.Letext0:
+ 1683              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 1684              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 1685              		.file 4 "Inc/stm32f767xx.h"
+ 1686              		.file 5 "Inc/stm32f7xx.h"
+ 1687              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 1688              		.file 7 "HALLIB/Inc/stm32f7xx_hal_dma.h"
+ 1689              		.file 8 "HALLIB/Inc/stm32f7xx_hal_adc.h"
+ 1690              		.file 9 "HALLIB/Inc/stm32f7xx_hal_adc_ex.h"
+ 1691              		.file 10 "CORE/core_cm7.h"
+ 1692              		.file 11 "Inc/system_stm32f7xx.h"
+ 1693              		.file 12 "HALLIB/Inc/stm32f7xx_hal.h"
+ARM GAS  /tmp/ccNl1RIb.s 			page 54
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_adc_ex.c
+     /tmp/ccNl1RIb.s:21     .text.ADC_MultiModeDMAError:00000000 $t
+     /tmp/ccNl1RIb.s:25     .text.ADC_MultiModeDMAError:00000000 ADC_MultiModeDMAError
+     /tmp/ccNl1RIb.s:56     .text.ADC_MultiModeDMAHalfConvCplt:00000000 $t
+     /tmp/ccNl1RIb.s:60     .text.ADC_MultiModeDMAHalfConvCplt:00000000 ADC_MultiModeDMAHalfConvCplt
+     /tmp/ccNl1RIb.s:83     .text.ADC_MultiModeDMAConvCplt:00000000 $t
+     /tmp/ccNl1RIb.s:87     .text.ADC_MultiModeDMAConvCplt:00000000 ADC_MultiModeDMAConvCplt
+     /tmp/ccNl1RIb.s:166    .text.HAL_ADCEx_InjectedStart:00000000 $t
+     /tmp/ccNl1RIb.s:171    .text.HAL_ADCEx_InjectedStart:00000000 HAL_ADCEx_InjectedStart
+     /tmp/ccNl1RIb.s:349    .text.HAL_ADCEx_InjectedStart:000000f0 $d
+     /tmp/ccNl1RIb.s:358    .text.HAL_ADCEx_InjectedStart_IT:00000000 $t
+     /tmp/ccNl1RIb.s:363    .text.HAL_ADCEx_InjectedStart_IT:00000000 HAL_ADCEx_InjectedStart_IT
+     /tmp/ccNl1RIb.s:546    .text.HAL_ADCEx_InjectedStart_IT:000000f8 $d
+     /tmp/ccNl1RIb.s:555    .text.HAL_ADCEx_InjectedStop:00000000 $t
+     /tmp/ccNl1RIb.s:560    .text.HAL_ADCEx_InjectedStop:00000000 HAL_ADCEx_InjectedStop
+     /tmp/ccNl1RIb.s:635    .text.HAL_ADCEx_InjectedStop:00000060 $d
+     /tmp/ccNl1RIb.s:640    .text.HAL_ADCEx_InjectedPollForConversion:00000000 $t
+     /tmp/ccNl1RIb.s:645    .text.HAL_ADCEx_InjectedPollForConversion:00000000 HAL_ADCEx_InjectedPollForConversion
+     /tmp/ccNl1RIb.s:780    .text.HAL_ADCEx_InjectedStop_IT:00000000 $t
+     /tmp/ccNl1RIb.s:785    .text.HAL_ADCEx_InjectedStop_IT:00000000 HAL_ADCEx_InjectedStop_IT
+     /tmp/ccNl1RIb.s:864    .text.HAL_ADCEx_InjectedStop_IT:00000068 $d
+     /tmp/ccNl1RIb.s:869    .text.HAL_ADCEx_InjectedGetValue:00000000 $t
+     /tmp/ccNl1RIb.s:874    .text.HAL_ADCEx_InjectedGetValue:00000000 HAL_ADCEx_InjectedGetValue
+     /tmp/ccNl1RIb.s:899    .text.HAL_ADCEx_InjectedGetValue:00000018 $d
+     /tmp/ccNl1RIb.s:903    .text.HAL_ADCEx_InjectedGetValue:0000001c $t
+     /tmp/ccNl1RIb.s:944    .text.HAL_ADCEx_MultiModeStart_DMA:00000000 $t
+     /tmp/ccNl1RIb.s:949    .text.HAL_ADCEx_MultiModeStart_DMA:00000000 HAL_ADCEx_MultiModeStart_DMA
+     /tmp/ccNl1RIb.s:1129   .text.HAL_ADCEx_MultiModeStart_DMA:00000100 $d
+     /tmp/ccNl1RIb.s:1141   .text.HAL_ADCEx_MultiModeStop_DMA:00000000 $t
+     /tmp/ccNl1RIb.s:1146   .text.HAL_ADCEx_MultiModeStop_DMA:00000000 HAL_ADCEx_MultiModeStop_DMA
+     /tmp/ccNl1RIb.s:1223   .text.HAL_ADCEx_MultiModeStop_DMA:0000005c $d
+     /tmp/ccNl1RIb.s:1229   .text.HAL_ADCEx_MultiModeGetValue:00000000 $t
+     /tmp/ccNl1RIb.s:1234   .text.HAL_ADCEx_MultiModeGetValue:00000000 HAL_ADCEx_MultiModeGetValue
+     /tmp/ccNl1RIb.s:1251   .text.HAL_ADCEx_MultiModeGetValue:00000008 $d
+     /tmp/ccNl1RIb.s:1256   .text.HAL_ADCEx_InjectedConvCpltCallback:00000000 $t
+     /tmp/ccNl1RIb.s:1261   .text.HAL_ADCEx_InjectedConvCpltCallback:00000000 HAL_ADCEx_InjectedConvCpltCallback
+     /tmp/ccNl1RIb.s:1274   .text.HAL_ADCEx_InjectedConfigChannel:00000000 $t
+     /tmp/ccNl1RIb.s:1279   .text.HAL_ADCEx_InjectedConfigChannel:00000000 HAL_ADCEx_InjectedConfigChannel
+     /tmp/ccNl1RIb.s:1586   .text.HAL_ADCEx_InjectedConfigChannel:000001e8 $d
+     /tmp/ccNl1RIb.s:1595   .text.HAL_ADCEx_MultiModeConfigChannel:00000000 $t
+     /tmp/ccNl1RIb.s:1600   .text.HAL_ADCEx_MultiModeConfigChannel:00000000 HAL_ADCEx_MultiModeConfigChannel
+     /tmp/ccNl1RIb.s:1677   .text.HAL_ADCEx_MultiModeConfigChannel:00000058 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+HAL_ADC_ErrorCallback
+HAL_ADC_ConvHalfCpltCallback
+HAL_ADC_ConvCpltCallback
+SystemCoreClock
+HAL_GetTick
+HAL_DMA_Start_IT
+HAL_DMA_Abort

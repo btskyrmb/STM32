@@ -1,0 +1,571 @@
+ARM GAS  /tmp/cc8w7qg2.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_pcd_ex.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_PCDEx_SetTxFiFo,"ax",%progbits
+  21              		.align	2
+  22              		.global	HAL_PCDEx_SetTxFiFo
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_PCDEx_SetTxFiFo:
+  27              	.LFB136:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_pcd_ex.c"
+   1:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @file    stm32f7xx_hal_pcd_ex.c
+   4:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief   PCD HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *          This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *          functionalities of the USB Peripheral Controller:
+   8:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *           + Extended features functions
+   9:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *
+  10:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   ******************************************************************************
+  11:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @attention
+  12:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *
+  13:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  14:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *
+  15:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * are permitted provided that the following conditions are met:
+  17:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *      this list of conditions and the following disclaimer.
+  19:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  21:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *      and/or other materials provided with the distribution.
+  22:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *      may be used to endorse or promote products derived from this software
+  24:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *      without specific prior written permission.
+  25:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *
+  26:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ARM GAS  /tmp/cc8w7qg2.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  32:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   *
+  37:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   ******************************************************************************
+  38:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */ 
+  39:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  40:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Includes ------------------------------------------------------------------*/
+  41:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** #include "stm32f7xx_hal.h"
+  42:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  43:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  44:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @{
+  45:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+  46:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  47:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /** @defgroup PCDEx PCDEx
+  48:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief PCD Extended HAL module driver
+  49:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @{
+  50:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+  51:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** #ifdef HAL_PCD_MODULE_ENABLED
+  52:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  53:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Private types -------------------------------------------------------------*/
+  54:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Private variables ---------------------------------------------------------*/
+  55:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Private constants ---------------------------------------------------------*/
+  56:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Private macros ------------------------------------------------------------*/
+  57:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Private functions ---------------------------------------------------------*/
+  58:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /* Exported functions --------------------------------------------------------*/
+  59:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  60:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /** @defgroup PCDEx_Exported_Functions PCDEx Exported Functions
+  61:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @{
+  62:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+  63:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  64:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /** @defgroup PCDEx_Exported_Functions_Group1 Peripheral Control functions
+  65:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief    PCDEx control functions 
+  66:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****  *
+  67:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** @verbatim   
+  68:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****  ===============================================================================
+  69:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****                  ##### Extended features functions #####
+  70:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****  ===============================================================================  
+  71:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     [..]  This section provides functions allowing to:
+  72:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       (+) Update FIFO configuration
+  73:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  74:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** @endverbatim
+  75:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @{
+  76:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+  77:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  78:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+  79:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Set Tx FIFO
+  80:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+  81:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  fifo The number of Tx fifo
+  82:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  size Fifo size
+  83:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+  84:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+  85:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_SetTxFiFo(PCD_HandleTypeDef *hpcd, uint8_t fifo, uint16_t size)
+  86:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+  29              		.loc 1 86 0
+ARM GAS  /tmp/cc8w7qg2.s 			page 3
+
+
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 30B4     		push	{r4, r5}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 5, -4
+  40              	.LVL1:
+  87:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   uint8_t i = 0;
+  88:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   uint32_t Tx_Offset = 0;
+  89:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+  90:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   /*  TXn min size = 16 words. (n  : Transmit FIFO index)
+  91:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       When a TxFIFO is not used, the Configuration should be as follows: 
+  92:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****           case 1 :  n > m    and Txn is not used    (n,m  : Transmit FIFO indexes)
+  93:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****          --> Txm can use the space allocated for Txn.
+  94:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****          case2  :  n < m    and Txn is not used    (n,m  : Transmit FIFO indexes)
+  95:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****          --> Txn should be configured with the minimum space of 16 words
+  96:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****      The FIFO is used optimally when used TxFIFOs are allocated in the top 
+  97:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****          of the FIFO.Ex: use EP1 and EP2 as IN instead of EP1 and EP3 as IN ones.
+  98:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****      When DMA is used 3n * FIFO locations should be reserved for internal DMA registers */
+  99:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 100:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   Tx_Offset = hpcd->Instance->GRXFSIZ;
+  41              		.loc 1 100 0
+  42 0002 0468     		ldr	r4, [r0]
+  43 0004 636A     		ldr	r3, [r4, #36]
+  44              	.LVL2:
+ 101:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 102:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   if(fifo == 0)
+  45              		.loc 1 102 0
+  46 0006 19B9     		cbnz	r1, .L2
+ 103:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   {
+ 104:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     hpcd->Instance->DIEPTXF0_HNPTXFSIZ = (uint32_t)(((uint32_t)size << 16) | Tx_Offset);
+  47              		.loc 1 104 0
+  48 0008 43EA0240 		orr	r0, r3, r2, lsl #16
+  49              	.LVL3:
+  50 000c A062     		str	r0, [r4, #40]
+  51 000e 18E0     		b	.L3
+  52              	.LVL4:
+  53              	.L2:
+  54 0010 0D46     		mov	r5, r1
+ 105:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   }
+ 106:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   else
+ 107:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   {
+ 108:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     Tx_Offset += (hpcd->Instance->DIEPTXF0_HNPTXFSIZ) >> 16;
+  55              		.loc 1 108 0
+  56 0012 A06A     		ldr	r0, [r4, #40]
+  57              	.LVL5:
+  58 0014 03EB1040 		add	r0, r3, r0, lsr #16
+  59              	.LVL6:
+ 109:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  60              		.loc 1 109 0
+  61 0018 0023     		movs	r3, #0
+  62 001a 08E0     		b	.L4
+  63              	.LVL7:
+ARM GAS  /tmp/cc8w7qg2.s 			page 4
+
+
+  64              	.L5:
+ 110:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     {
+ 111:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       Tx_Offset += (hpcd->Instance->DIEPTXF[i] >> 16);
+  65              		.loc 1 111 0 discriminator 3
+  66 001c 03F14001 		add	r1, r3, #64
+  67 0020 04EB8101 		add	r1, r4, r1, lsl #2
+  68 0024 4968     		ldr	r1, [r1, #4]
+  69 0026 00EB1140 		add	r0, r0, r1, lsr #16
+  70              	.LVL8:
+ 109:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  71              		.loc 1 109 0 discriminator 3
+  72 002a 0133     		adds	r3, r3, #1
+  73              	.LVL9:
+  74 002c DBB2     		uxtb	r3, r3
+  75              	.LVL10:
+  76              	.L4:
+ 109:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  77              		.loc 1 109 0 is_stmt 0 discriminator 1
+  78 002e 691E     		subs	r1, r5, #1
+  79 0030 8B42     		cmp	r3, r1
+  80 0032 F3DB     		blt	.L5
+ 112:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     }
+ 113:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 114:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Multiply Tx_Size by 2 to get higher performance */
+ 115:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     hpcd->Instance->DIEPTXF[fifo - 1] = (uint32_t)(((uint32_t)size << 16) | Tx_Offset);
+  81              		.loc 1 115 0 is_stmt 1
+  82 0034 40EA0240 		orr	r0, r0, r2, lsl #16
+  83              	.LVL11:
+  84 0038 05F13F01 		add	r1, r5, #63
+  85 003c 04EB8101 		add	r1, r4, r1, lsl #2
+  86 0040 4860     		str	r0, [r1, #4]
+  87              	.LVL12:
+  88              	.L3:
+ 116:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   }
+ 117:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 118:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;
+ 119:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+  89              		.loc 1 119 0
+  90 0042 0020     		movs	r0, #0
+  91 0044 30BC     		pop	{r4, r5}
+  92              	.LCFI1:
+  93              		.cfi_restore 5
+  94              		.cfi_restore 4
+  95              		.cfi_def_cfa_offset 0
+  96 0046 7047     		bx	lr
+  97              		.cfi_endproc
+  98              	.LFE136:
+ 100              		.section	.text.HAL_PCDEx_SetRxFiFo,"ax",%progbits
+ 101              		.align	2
+ 102              		.global	HAL_PCDEx_SetRxFiFo
+ 103              		.thumb
+ 104              		.thumb_func
+ 106              	HAL_PCDEx_SetRxFiFo:
+ 107              	.LFB137:
+ 120:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 121:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 122:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Set Rx FIFO
+ARM GAS  /tmp/cc8w7qg2.s 			page 5
+
+
+ 123:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 124:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  size Size of Rx fifo
+ 125:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 126:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 127:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_SetRxFiFo(PCD_HandleTypeDef *hpcd, uint16_t size)
+ 128:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 108              		.loc 1 128 0
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 0
+ 111              		@ frame_needed = 0, uses_anonymous_args = 0
+ 112              		@ link register save eliminated.
+ 113              	.LVL13:
+ 129:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->Instance->GRXFSIZ = size;
+ 114              		.loc 1 129 0
+ 115 0000 0368     		ldr	r3, [r0]
+ 116 0002 5962     		str	r1, [r3, #36]
+ 130:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 131:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;
+ 132:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 117              		.loc 1 132 0
+ 118 0004 0020     		movs	r0, #0
+ 119              	.LVL14:
+ 120 0006 7047     		bx	lr
+ 121              		.cfi_endproc
+ 122              	.LFE137:
+ 124              		.section	.text.HAL_PCDEx_ActivateLPM,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	HAL_PCDEx_ActivateLPM
+ 127              		.thumb
+ 128              		.thumb_func
+ 130              	HAL_PCDEx_ActivateLPM:
+ 131              	.LFB138:
+ 133:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 134:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 135:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Activate LPM Feature
+ 136:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 137:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 138:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 139:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_ActivateLPM(PCD_HandleTypeDef *hpcd)
+ 140:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 132              		.loc 1 140 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              		@ link register save eliminated.
+ 137              	.LVL15:
+ 138 0000 0246     		mov	r2, r0
+ 141:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;  
+ 139              		.loc 1 141 0
+ 140 0002 0368     		ldr	r3, [r0]
+ 141              	.LVL16:
+ 142:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 143:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->lpm_active = ENABLE;
+ 142              		.loc 1 143 0
+ 143 0004 0121     		movs	r1, #1
+ 144 0006 C0F8F413 		str	r1, [r0, #1012]
+ 144:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->LPM_State = LPM_L0;
+ARM GAS  /tmp/cc8w7qg2.s 			page 6
+
+
+ 145              		.loc 1 144 0
+ 146 000a 0020     		movs	r0, #0
+ 147              	.LVL17:
+ 148 000c 82F8EC03 		strb	r0, [r2, #1004]
+ 145:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GINTMSK |= USB_OTG_GINTMSK_LPMINTM;
+ 149              		.loc 1 145 0
+ 150 0010 9A69     		ldr	r2, [r3, #24]
+ 151              	.LVL18:
+ 152 0012 42F00062 		orr	r2, r2, #134217728
+ 153 0016 9A61     		str	r2, [r3, #24]
+ 146:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GLPMCFG |= (USB_OTG_GLPMCFG_LPMEN | USB_OTG_GLPMCFG_LPMACK | USB_OTG_GLPMCFG_ENBESL);
+ 154              		.loc 1 146 0
+ 155 0018 596D     		ldr	r1, [r3, #84]
+ 156 001a 024A     		ldr	r2, .L9
+ 157 001c 0A43     		orrs	r2, r2, r1
+ 158 001e 5A65     		str	r2, [r3, #84]
+ 147:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 148:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;  
+ 149:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 159              		.loc 1 149 0
+ 160 0020 7047     		bx	lr
+ 161              	.L10:
+ 162 0022 00BF     		.align	2
+ 163              	.L9:
+ 164 0024 03000010 		.word	268435459
+ 165              		.cfi_endproc
+ 166              	.LFE138:
+ 168              		.section	.text.HAL_PCDEx_DeActivateLPM,"ax",%progbits
+ 169              		.align	2
+ 170              		.global	HAL_PCDEx_DeActivateLPM
+ 171              		.thumb
+ 172              		.thumb_func
+ 174              	HAL_PCDEx_DeActivateLPM:
+ 175              	.LFB139:
+ 150:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 151:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 152:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  DeActivate LPM feature.
+ 153:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 154:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 155:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 156:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_DeActivateLPM(PCD_HandleTypeDef *hpcd)
+ 157:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 176              		.loc 1 157 0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 181              	.LVL19:
+ 158:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;  
+ 182              		.loc 1 158 0
+ 183 0000 0368     		ldr	r3, [r0]
+ 184              	.LVL20:
+ 159:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 160:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->lpm_active = DISABLE;
+ 185              		.loc 1 160 0
+ 186 0002 0021     		movs	r1, #0
+ 187 0004 C0F8F413 		str	r1, [r0, #1012]
+ARM GAS  /tmp/cc8w7qg2.s 			page 7
+
+
+ 161:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GINTMSK &= ~USB_OTG_GINTMSK_LPMINTM;
+ 188              		.loc 1 161 0
+ 189 0008 9A69     		ldr	r2, [r3, #24]
+ 190 000a 22F00062 		bic	r2, r2, #134217728
+ 191 000e 9A61     		str	r2, [r3, #24]
+ 162:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GLPMCFG &= ~(USB_OTG_GLPMCFG_LPMEN | USB_OTG_GLPMCFG_LPMACK | USB_OTG_GLPMCFG_ENBESL);
+ 192              		.loc 1 162 0
+ 193 0010 586D     		ldr	r0, [r3, #84]
+ 194              	.LVL21:
+ 195 0012 024A     		ldr	r2, .L12
+ 196 0014 0240     		ands	r2, r2, r0
+ 197 0016 5A65     		str	r2, [r3, #84]
+ 163:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 164:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;  
+ 165:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 198              		.loc 1 165 0
+ 199 0018 0846     		mov	r0, r1
+ 200 001a 7047     		bx	lr
+ 201              	.L13:
+ 202              		.align	2
+ 203              	.L12:
+ 204 001c FCFFFFEF 		.word	-268435460
+ 205              		.cfi_endproc
+ 206              	.LFE139:
+ 208              		.section	.text.HAL_PCDEx_LPM_Callback,"ax",%progbits
+ 209              		.align	2
+ 210              		.weak	HAL_PCDEx_LPM_Callback
+ 211              		.thumb
+ 212              		.thumb_func
+ 214              	HAL_PCDEx_LPM_Callback:
+ 215              	.LFB140:
+ 166:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 167:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** #if defined (USB_OTG_GCCFG_BCDEN)
+ 168:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 169:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Handle BatteryCharging Process.
+ 170:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 171:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 172:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 173:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** void HAL_PCDEx_BCD_VBUSDetect(PCD_HandleTypeDef *hpcd)
+ 174:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 175:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;  
+ 176:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   uint32_t tickstart = HAL_GetTick();
+ 177:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 178:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   /* Start BCD When device is connected */
+ 179:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   if (USBx_DEVICE->DCTL & USB_OTG_DCTL_SDIS)
+ 180:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   { 
+ 181:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Enable DCD : Data Contact Detect */
+ 182:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     USBx->GCCFG |= USB_OTG_GCCFG_DCDEN;
+ 183:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 184:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Wait Detect flag or a timeout is happen*/
+ 185:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     while ((USBx->GCCFG & USB_OTG_GCCFG_DCDET) == 0)
+ 186:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     {
+ 187:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       /* Check for the Timeout */
+ 188:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       if((HAL_GetTick() - tickstart ) > 1000)
+ 189:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       {
+ 190:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_ERROR);
+ 191:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         return;
+ARM GAS  /tmp/cc8w7qg2.s 			page 8
+
+
+ 192:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       }
+ 193:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     }
+ 194:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 195:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Right response got */
+ 196:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     HAL_Delay(100); 
+ 197:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 198:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Check Detect flag*/
+ 199:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     if (USBx->GCCFG & USB_OTG_GCCFG_DCDET)
+ 200:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     {
+ 201:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_CONTACT_DETECTION);
+ 202:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     }
+ 203:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 204:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /*Primary detection: checks if connected to Standard Downstream Port  
+ 205:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     (without charging capability) */
+ 206:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     USBx->GCCFG &=~ USB_OTG_GCCFG_DCDEN;
+ 207:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     USBx->GCCFG |=  USB_OTG_GCCFG_PDEN;
+ 208:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     HAL_Delay(100); 
+ 209:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     
+ 210:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     if (!(USBx->GCCFG & USB_OTG_GCCFG_PDET))
+ 211:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     {
+ 212:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       /* Case of Standard Downstream Port */
+ 213:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_STD_DOWNSTREAM_PORT);
+ 214:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     }
+ 215:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     else  
+ 216:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     {
+ 217:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       /* start secondary detection to check connection to Charging Downstream 
+ 218:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       Port or Dedicated Charging Port */
+ 219:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       USBx->GCCFG &=~ USB_OTG_GCCFG_PDEN;
+ 220:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       USBx->GCCFG |=  USB_OTG_GCCFG_SDEN;
+ 221:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       HAL_Delay(100); 
+ 222:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       
+ 223:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       if ((USBx->GCCFG) & USB_OTG_GCCFG_SDET)
+ 224:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       { 
+ 225:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         /* case Dedicated Charging Port  */
+ 226:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_DEDICATED_CHARGING_PORT);
+ 227:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       }
+ 228:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       else
+ 229:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       {
+ 230:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         /* case Charging Downstream Port  */
+ 231:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****         HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_CHARGING_DOWNSTREAM_PORT);
+ 232:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****       }
+ 233:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     }
+ 234:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     /* Battery Charging capability discovery finished */
+ 235:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****     HAL_PCDEx_BCD_Callback(hpcd, PCD_BCD_DISCOVERY_COMPLETED);
+ 236:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   }
+ 237:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 238:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 239:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 240:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Activate BatteryCharging feature.
+ 241:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 242:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 243:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 244:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_ActivateBCD(PCD_HandleTypeDef *hpcd)
+ 245:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 246:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;  
+ 247:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 248:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->battery_charging_active = ENABLE; 
+ARM GAS  /tmp/cc8w7qg2.s 			page 9
+
+
+ 249:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GCCFG |= (USB_OTG_GCCFG_BCDEN);
+ 250:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   
+ 251:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;  
+ 252:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 253:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 254:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 255:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Deactivate BatteryCharging feature.
+ 256:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 257:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 258:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 259:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_DeActivateBCD(PCD_HandleTypeDef *hpcd)
+ 260:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 261:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;  
+ 262:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   hpcd->battery_charging_active = DISABLE; 
+ 263:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   USBx->GCCFG &= ~(USB_OTG_GCCFG_BCDEN);
+ 264:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   return HAL_OK;  
+ 265:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 266:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 267:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 268:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 269:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Send BatteryCharging message to user layer callback.
+ 270:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 271:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  msg LPM message
+ 272:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 273:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 274:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** __weak void HAL_PCDEx_BCD_Callback(PCD_HandleTypeDef *hpcd, PCD_BCD_MsgTypeDef msg)
+ 275:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 276:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 277:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   UNUSED(hpcd);
+ 278:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   UNUSED(msg);
+ 279:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 280:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 281:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****             the HAL_PCDEx_BCD_Callback could be implemented in the user file
+ 282:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****    */ 
+ 283:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** }
+ 284:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** 
+ 285:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** #endif /* USB_OTG_GCCFG_BCDEN */
+ 286:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** /**
+ 287:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @brief  Send LPM message to user layer callback.
+ 288:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 289:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @param  msg LPM message
+ 290:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   * @retval HAL status
+ 291:HALLIB/Src/stm32f7xx_hal_pcd_ex.c ****   */
+ 292:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** __weak void HAL_PCDEx_LPM_Callback(PCD_HandleTypeDef *hpcd, PCD_LPM_MsgTypeDef msg)
+ 293:HALLIB/Src/stm32f7xx_hal_pcd_ex.c **** {
+ 216              		.loc 1 293 0
+ 217              		.cfi_startproc
+ 218              		@ args = 0, pretend = 0, frame = 0
+ 219              		@ frame_needed = 0, uses_anonymous_args = 0
+ 220              		@ link register save eliminated.
+ 221              	.LVL22:
+ 222 0000 7047     		bx	lr
+ 223              		.cfi_endproc
+ 224              	.LFE140:
+ 226 0002 00BF     		.text
+ 227              	.Letext0:
+ 228              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ARM GAS  /tmp/cc8w7qg2.s 			page 10
+
+
+ 229              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 230              		.file 4 "Inc/stm32f767xx.h"
+ 231              		.file 5 "Inc/stm32f7xx.h"
+ 232              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 233              		.file 7 "HALLIB/Inc/stm32f7xx_ll_usb.h"
+ 234              		.file 8 "HALLIB/Inc/stm32f7xx_hal_pcd.h"
+ 235              		.file 9 "HALLIB/Inc/stm32f7xx_hal_pcd_ex.h"
+ 236              		.file 10 "CORE/core_cm7.h"
+ARM GAS  /tmp/cc8w7qg2.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_pcd_ex.c
+     /tmp/cc8w7qg2.s:21     .text.HAL_PCDEx_SetTxFiFo:00000000 $t
+     /tmp/cc8w7qg2.s:26     .text.HAL_PCDEx_SetTxFiFo:00000000 HAL_PCDEx_SetTxFiFo
+     /tmp/cc8w7qg2.s:101    .text.HAL_PCDEx_SetRxFiFo:00000000 $t
+     /tmp/cc8w7qg2.s:106    .text.HAL_PCDEx_SetRxFiFo:00000000 HAL_PCDEx_SetRxFiFo
+     /tmp/cc8w7qg2.s:125    .text.HAL_PCDEx_ActivateLPM:00000000 $t
+     /tmp/cc8w7qg2.s:130    .text.HAL_PCDEx_ActivateLPM:00000000 HAL_PCDEx_ActivateLPM
+     /tmp/cc8w7qg2.s:164    .text.HAL_PCDEx_ActivateLPM:00000024 $d
+     /tmp/cc8w7qg2.s:169    .text.HAL_PCDEx_DeActivateLPM:00000000 $t
+     /tmp/cc8w7qg2.s:174    .text.HAL_PCDEx_DeActivateLPM:00000000 HAL_PCDEx_DeActivateLPM
+     /tmp/cc8w7qg2.s:204    .text.HAL_PCDEx_DeActivateLPM:0000001c $d
+     /tmp/cc8w7qg2.s:209    .text.HAL_PCDEx_LPM_Callback:00000000 $t
+     /tmp/cc8w7qg2.s:214    .text.HAL_PCDEx_LPM_Callback:00000000 HAL_PCDEx_LPM_Callback
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

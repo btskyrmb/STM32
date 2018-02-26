@@ -1,0 +1,526 @@
+ARM GAS  /tmp/cc0qbK0M.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_wwdg.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_WWDG_MspInit,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_WWDG_MspInit
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_WWDG_MspInit:
+  27              	.LFB137:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_wwdg.c"
+   1:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @file    stm32f7xx_hal_wwdg.c
+   4:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief   WWDG HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *          This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *          functionalities of the Window Watchdog (WWDG) peripheral:
+   8:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *           + Initialization and Configuration function
+   9:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *           + IO operation functions
+  10:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   @verbatim
+  11:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+  12:HALLIB/Src/stm32f7xx_hal_wwdg.c ****                       ##### WWDG specific features #####
+  13:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+  14:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   [..]
+  15:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     Once enabled the WWDG generates a system reset on expiry of a programmed
+  16:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     time period, unless the program refreshes the counter (T[6;0] downcounter)
+  17:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     before reaching 0x3F value (i.e. a reset is generated when the counter
+  18:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     value rolls over from 0x40 to 0x3F).
+  19:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  20:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) An MCU reset is also generated if the counter value is refreshed
+  21:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         before the counter has reached the refresh window value. This
+  22:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         implies that the counter must be refreshed in a limited window.
+  23:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  24:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Once enabled the WWDG cannot be disabled except by a system reset.
+  25:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  26:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) WWDGRST flag in RCC_CSR register informs when a WWDG reset has 
+  27:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         occurred (check available with __HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST)).
+  28:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  29:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) The WWDG downcounter input clock is derived from the APB clock divided
+  30:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         by a programmable prescaler.
+ARM GAS  /tmp/cc0qbK0M.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  32:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) WWDG downcounter clock (Hz) = PCLK1 / (4096 * Prescaler)
+  33:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  34:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) WWDG timeout (ms) = (1000 * (T[5;0] + 1)) / (WWDG downcounter clock)
+  35:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         where T[5;0] are the lowest 6 bits of downcounter.
+  36:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  37:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) WWDG Counter refresh is allowed between the following limits :
+  38:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         (++) min time (ms) = (1000 * (T[5;0] - Window)) / (WWDG downcounter clock)
+  39:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         (++) max time (ms) = (1000 * (T[5;0] - 0x40)) / (WWDG downcounter clock)
+  40:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  41:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Min-max timeout value @80 MHz(PCLK1): ~51.2 us / ~26.22 ms
+  42:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  43:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) The Early Wakeup Interrupt (EWI) can be used if specific safety 
+  44:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         operations or data logging must be performed before the actual reset is
+  45:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         generated. When the downcounter reaches the value 0x40, an EWI interrupt
+  46:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         is generated and the corresponding interrupt service routine (ISR) can 
+  47:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         be used to trigger specific actions (such as communications or data 
+  48:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         logging), before resetting the device.
+  49:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         In some applications, the EWI interrupt can be used to manage a software
+  50:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         system check and/or system recovery/graceful degradation, without 
+  51:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         generating a WWDG reset. In this case, the corresponding interrupt 
+  52:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         service routine (ISR) should reload the WWDG counter to avoid the WWDG 
+  53:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         reset, then trigger the required actions.
+  54:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         Note:When the EWI interrupt cannot be served, e.g. due to a system lock 
+  55:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         in a higher priority task, the WWDG reset will eventually be generated.
+  56:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  57:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Debug mode : When the microcontroller enters debug mode (core halted),
+  58:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         the WWDG counter either continues to work normally or stops, depending 
+  59:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         on DBG_WWDG_STOP configuration bit in DBG module, accessible through
+  60:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         __HAL_DBGMCU_FREEZE_WWDG() and __HAL_DBGMCU_UNFREEZE_WWDG() macros
+  61:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  62:HALLIB/Src/stm32f7xx_hal_wwdg.c ****                      ##### How to use this driver #####
+  63:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+  64:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   [..]
+  65:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Enable WWDG APB1 clock using __HAL_RCC_WWDG_CLK_ENABLE().
+  66:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  67:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Set the WWDG prescaler, refresh window, counter value and Early Wakeup 
+  68:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         Interrupt mode using using HAL_WWDG_Init() function.
+  69:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         This enables WWDG peripheral and the downcounter starts downcounting 
+  70:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         from given counter value.
+  71:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         Init function can be called again to modify all watchdog parameters, 
+  72:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         however if EWI mode has been set once, it can't be clear until next 
+  73:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         reset.
+  74:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  75:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) The application program must refresh the WWDG counter at regular
+  76:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         intervals during normal operation to prevent an MCU reset using
+  77:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         HAL_WWDG_Refresh() function. This operation must occur only when
+  78:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         the counter is lower than the window value already programmed.
+  79:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  80:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) if Early Wakeup Interrupt mode is enable an interrupt is generated when 
+  81:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         the counter reaches 0x40. User can add his own code in weak function 
+  82:HALLIB/Src/stm32f7xx_hal_wwdg.c ****         HAL_WWDG_EarlyWakeupCallback().
+  83:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  84:HALLIB/Src/stm32f7xx_hal_wwdg.c ****      *** WWDG HAL driver macros list ***
+  85:HALLIB/Src/stm32f7xx_hal_wwdg.c ****      ==================================
+  86:HALLIB/Src/stm32f7xx_hal_wwdg.c ****      [..]
+  87:HALLIB/Src/stm32f7xx_hal_wwdg.c ****        Below the list of most used macros in WWDG HAL driver.
+ARM GAS  /tmp/cc0qbK0M.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  89:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       (+) __HAL_WWDG_GET_IT_SOURCE: Check the selected WWDG's interrupt source.
+  90:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       (+) __HAL_WWDG_GET_FLAG: Get the selected WWDG's flag status.
+  91:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       (+) __HAL_WWDG_CLEAR_FLAG: Clear the WWDG's pending flags.
+  92:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  93:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   @endverbatim
+  94:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ******************************************************************************
+  95:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @attention
+  96:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *
+  97:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  98:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *
+  99:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * Redistribution and use in source and binary forms, with or without modification,
+ 100:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * are permitted provided that the following conditions are met:
+ 101:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+ 102:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *      this list of conditions and the following disclaimer.
+ 103:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+ 104:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *      this list of conditions and the following disclaimer in the documentation
+ 105:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *      and/or other materials provided with the distribution.
+ 106:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+ 107:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *      may be used to endorse or promote products derived from this software
+ 108:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *      without specific prior written permission.
+ 109:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *
+ 110:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ 111:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ 112:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ 113:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ 114:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ 115:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ 116:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ 117:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ 118:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ 119:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 120:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *
+ 121:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ******************************************************************************
+ 122:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 123:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 124:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Includes ------------------------------------------------------------------*/
+ 125:HALLIB/Src/stm32f7xx_hal_wwdg.c **** #include "stm32f7xx_hal.h"
+ 126:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 127:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /** @addtogroup STM32F7xx_HAL_Driver
+ 128:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @{
+ 129:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 130:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 131:HALLIB/Src/stm32f7xx_hal_wwdg.c **** #ifdef HAL_WWDG_MODULE_ENABLED
+ 132:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /** @defgroup WWDG WWDG
+ 133:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief WWDG HAL module driver.
+ 134:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @{
+ 135:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 136:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 137:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Private typedef -----------------------------------------------------------*/
+ 138:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Private define ------------------------------------------------------------*/
+ 139:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Private macro -------------------------------------------------------------*/
+ 140:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Private variables ---------------------------------------------------------*/
+ 141:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Private function prototypes -----------------------------------------------*/
+ 142:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /* Exported functions --------------------------------------------------------*/
+ 143:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 144:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /** @defgroup WWDG_Exported_Functions WWDG Exported Functions
+ARM GAS  /tmp/cc0qbK0M.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @{
+ 146:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 147:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 148:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /** @defgroup WWDG_Exported_Functions_Group1 Initialization and Configuration functions
+ 149:HALLIB/Src/stm32f7xx_hal_wwdg.c ****  *  @brief    Initialization and Configuration functions.
+ 150:HALLIB/Src/stm32f7xx_hal_wwdg.c ****  *
+ 151:HALLIB/Src/stm32f7xx_hal_wwdg.c **** @verbatim
+ 152:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+ 153:HALLIB/Src/stm32f7xx_hal_wwdg.c ****           ##### Initialization and Configuration functions #####
+ 154:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+ 155:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   [..]  
+ 156:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     This section provides functions allowing to:
+ 157:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       (+) Initialize and start the WWDG according to the specified parameters
+ 158:HALLIB/Src/stm32f7xx_hal_wwdg.c ****           in the WWDG_InitTypeDef of associated handle.
+ 159:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       (+) Initialize the WWDG MSP.
+ 160:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 161:HALLIB/Src/stm32f7xx_hal_wwdg.c **** @endverbatim
+ 162:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @{
+ 163:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 164:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 165:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ 166:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief  Initialize the WWDG according to the specified.
+ 167:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         parameters in the WWDG_InitTypeDef of  associated handle.
+ 168:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @param  hwwdg  pointer to a WWDG_HandleTypeDef structure that contains
+ 169:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *                the configuration information for the specified WWDG module.
+ 170:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @retval HAL status
+ 171:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 172:HALLIB/Src/stm32f7xx_hal_wwdg.c **** HAL_StatusTypeDef HAL_WWDG_Init(WWDG_HandleTypeDef *hwwdg)
+ 173:HALLIB/Src/stm32f7xx_hal_wwdg.c **** {
+ 174:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check the WWDG handle allocation */
+ 175:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   if(hwwdg == NULL)
+ 176:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   {
+ 177:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     return HAL_ERROR;
+ 178:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   }
+ 179:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 180:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check the parameters */
+ 181:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   assert_param(IS_WWDG_ALL_INSTANCE(hwwdg->Instance));
+ 182:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   assert_param(IS_WWDG_PRESCALER(hwwdg->Init.Prescaler));
+ 183:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   assert_param(IS_WWDG_WINDOW(hwwdg->Init.Window));
+ 184:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   assert_param(IS_WWDG_COUNTER(hwwdg->Init.Counter));
+ 185:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   assert_param(IS_WWDG_EWI_MODE(hwwdg->Init.EWIMode));
+ 186:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 187:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Init the low level hardware */
+ 188:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   HAL_WWDG_MspInit(hwwdg);
+ 189:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 190:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Set WWDG Counter */
+ 191:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   WRITE_REG(hwwdg->Instance->CR, (WWDG_CR_WDGA | hwwdg->Init.Counter));
+ 192:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 193:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Set WWDG Prescaler and Window */
+ 194:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   WRITE_REG(hwwdg->Instance->CFR, (hwwdg->Init.EWIMode | hwwdg->Init.Prescaler | hwwdg->Init.Window
+ 195:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 196:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Return function status */
+ 197:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   return HAL_OK;
+ 198:HALLIB/Src/stm32f7xx_hal_wwdg.c **** }
+ 199:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 200:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 201:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ARM GAS  /tmp/cc0qbK0M.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief  Initialize the WWDG MSP.
+ 203:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @param  hwwdg  pointer to a WWDG_HandleTypeDef structure that contains
+ 204:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *                the configuration information for the specified WWDG module.
+ 205:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @note   When rewriting this function in user file, mechanism may be added
+ 206:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         to avoid multiple initialize when HAL_WWDG_Init function is called
+ 207:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         again to change parameters.
+ 208:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @retval None
+ 209:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 210:HALLIB/Src/stm32f7xx_hal_wwdg.c **** __weak void HAL_WWDG_MspInit(WWDG_HandleTypeDef *hwwdg)
+ 211:HALLIB/Src/stm32f7xx_hal_wwdg.c **** {
+  29              		.loc 1 211 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE137:
+  39 0002 00BF     		.section	.text.HAL_WWDG_Init,"ax",%progbits
+  40              		.align	2
+  41              		.global	HAL_WWDG_Init
+  42              		.thumb
+  43              		.thumb_func
+  45              	HAL_WWDG_Init:
+  46              	.LFB136:
+ 173:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check the WWDG handle allocation */
+  47              		.loc 1 173 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              	.LVL1:
+ 175:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   {
+  52              		.loc 1 175 0
+  53 0000 88B1     		cbz	r0, .L4
+ 173:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check the WWDG handle allocation */
+  54              		.loc 1 173 0
+  55 0002 10B5     		push	{r4, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 4, -8
+  59              		.cfi_offset 14, -4
+  60 0004 0446     		mov	r4, r0
+ 188:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  61              		.loc 1 188 0
+  62 0006 FFF7FEFF 		bl	HAL_WWDG_MspInit
+  63              	.LVL2:
+ 191:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  64              		.loc 1 191 0
+  65 000a 2268     		ldr	r2, [r4]
+  66 000c E368     		ldr	r3, [r4, #12]
+  67 000e 43F08003 		orr	r3, r3, #128
+  68 0012 1360     		str	r3, [r2]
+ 194:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+  69              		.loc 1 194 0
+  70 0014 2168     		ldr	r1, [r4]
+  71 0016 2269     		ldr	r2, [r4, #16]
+ARM GAS  /tmp/cc0qbK0M.s 			page 6
+
+
+  72 0018 6368     		ldr	r3, [r4, #4]
+  73 001a 1A43     		orrs	r2, r2, r3
+  74 001c A368     		ldr	r3, [r4, #8]
+  75 001e 1343     		orrs	r3, r3, r2
+  76 0020 4B60     		str	r3, [r1, #4]
+ 197:HALLIB/Src/stm32f7xx_hal_wwdg.c **** }
+  77              		.loc 1 197 0
+  78 0022 0020     		movs	r0, #0
+  79 0024 10BD     		pop	{r4, pc}
+  80              	.LVL3:
+  81              	.L4:
+  82              	.LCFI1:
+  83              		.cfi_def_cfa_offset 0
+  84              		.cfi_restore 4
+  85              		.cfi_restore 14
+ 177:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   }
+  86              		.loc 1 177 0
+  87 0026 0120     		movs	r0, #1
+  88              	.LVL4:
+  89 0028 7047     		bx	lr
+  90              		.cfi_endproc
+  91              	.LFE136:
+  93 002a 00BF     		.section	.text.HAL_WWDG_Refresh,"ax",%progbits
+  94              		.align	2
+  95              		.global	HAL_WWDG_Refresh
+  96              		.thumb
+  97              		.thumb_func
+  99              	HAL_WWDG_Refresh:
+ 100              	.LFB138:
+ 212:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Prevent unused argument(s) compilation warning */
+ 213:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   UNUSED(hwwdg);
+ 214:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 215:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* NOTE: This function should not be modified, when the callback is needed,
+ 216:HALLIB/Src/stm32f7xx_hal_wwdg.c ****            the HAL_WWDG_MspInit could be implemented in the user file
+ 217:HALLIB/Src/stm32f7xx_hal_wwdg.c ****    */
+ 218:HALLIB/Src/stm32f7xx_hal_wwdg.c **** }
+ 219:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 220:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ 221:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @}
+ 222:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 223:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 224:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /** @defgroup WWDG_Exported_Functions_Group2 IO operation functions
+ 225:HALLIB/Src/stm32f7xx_hal_wwdg.c ****  *  @brief    IO operation functions 
+ 226:HALLIB/Src/stm32f7xx_hal_wwdg.c ****  *
+ 227:HALLIB/Src/stm32f7xx_hal_wwdg.c **** @verbatim
+ 228:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================
+ 229:HALLIB/Src/stm32f7xx_hal_wwdg.c ****                       ##### IO operation functions #####
+ 230:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   ==============================================================================  
+ 231:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   [..]
+ 232:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     This section provides functions allowing to:
+ 233:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Refresh the WWDG.
+ 234:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     (+) Handle WWDG interrupt request and associated function callback.
+ 235:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 236:HALLIB/Src/stm32f7xx_hal_wwdg.c **** @endverbatim
+ 237:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @{
+ 238:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 239:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ARM GAS  /tmp/cc0qbK0M.s 			page 7
+
+
+ 240:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ 241:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief  Refresh the WWDG.
+ 242:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @param  hwwdg  pointer to a WWDG_HandleTypeDef structure that contains
+ 243:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *                the configuration information for the specified WWDG module.
+ 244:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @retval HAL status
+ 245:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 246:HALLIB/Src/stm32f7xx_hal_wwdg.c **** HAL_StatusTypeDef HAL_WWDG_Refresh(WWDG_HandleTypeDef *hwwdg)
+ 247:HALLIB/Src/stm32f7xx_hal_wwdg.c **** {
+ 101              		.loc 1 247 0
+ 102              		.cfi_startproc
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 105              		@ link register save eliminated.
+ 106              	.LVL5:
+ 248:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Write to WWDG CR the WWDG Counter value to refresh with */
+ 249:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   WRITE_REG(hwwdg->Instance->CR, (hwwdg->Init.Counter));
+ 107              		.loc 1 249 0
+ 108 0000 0368     		ldr	r3, [r0]
+ 109 0002 C268     		ldr	r2, [r0, #12]
+ 110 0004 1A60     		str	r2, [r3]
+ 250:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 251:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Return function status */
+ 252:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   return HAL_OK;
+ 253:HALLIB/Src/stm32f7xx_hal_wwdg.c **** }
+ 111              		.loc 1 253 0
+ 112 0006 0020     		movs	r0, #0
+ 113              	.LVL6:
+ 114 0008 7047     		bx	lr
+ 115              		.cfi_endproc
+ 116              	.LFE138:
+ 118 000a 00BF     		.section	.text.HAL_WWDG_EarlyWakeupCallback,"ax",%progbits
+ 119              		.align	2
+ 120              		.weak	HAL_WWDG_EarlyWakeupCallback
+ 121              		.thumb
+ 122              		.thumb_func
+ 124              	HAL_WWDG_EarlyWakeupCallback:
+ 125              	.LFB140:
+ 254:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 255:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ 256:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief  Handle WWDG interrupt request.
+ 257:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @note   The Early Wakeup Interrupt (EWI) can be used if specific safety operations
+ 258:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         or data logging must be performed before the actual reset is generated.
+ 259:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         The EWI interrupt is enabled by calling HAL_WWDG_Init function with 
+ 260:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         EWIMode set to WWDG_EWI_ENABLE.
+ 261:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         When the downcounter reaches the value 0x40, and EWI interrupt is
+ 262:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         generated and the corresponding Interrupt Service Routine (ISR) can
+ 263:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         be used to trigger specific actions (such as communications or data
+ 264:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *         logging), before resetting the device.
+ 265:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @param  hwwdg  pointer to a WWDG_HandleTypeDef structure that contains
+ 266:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *                the configuration information for the specified WWDG module.
+ 267:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @retval None
+ 268:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 269:HALLIB/Src/stm32f7xx_hal_wwdg.c **** void HAL_WWDG_IRQHandler(WWDG_HandleTypeDef *hwwdg)
+ 270:HALLIB/Src/stm32f7xx_hal_wwdg.c **** {
+ 271:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check if Early Wakeup Interrupt is enable */
+ 272:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   if(__HAL_WWDG_GET_IT_SOURCE(hwwdg, WWDG_IT_EWI) != RESET)
+ 273:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   {
+ARM GAS  /tmp/cc0qbK0M.s 			page 8
+
+
+ 274:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     /* Check if WWDG Early Wakeup Interrupt occurred */
+ 275:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     if(__HAL_WWDG_GET_FLAG(hwwdg, WWDG_FLAG_EWIF) != RESET)
+ 276:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     {
+ 277:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       /* Clear the WWDG Early Wakeup flag */
+ 278:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       __HAL_WWDG_CLEAR_FLAG(hwwdg, WWDG_FLAG_EWIF);
+ 279:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 280:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       /* Early Wakeup callback */ 
+ 281:HALLIB/Src/stm32f7xx_hal_wwdg.c ****       HAL_WWDG_EarlyWakeupCallback(hwwdg);
+ 282:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     }
+ 283:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   }
+ 284:HALLIB/Src/stm32f7xx_hal_wwdg.c **** }
+ 285:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 286:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 287:HALLIB/Src/stm32f7xx_hal_wwdg.c **** /**
+ 288:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @brief  WWDG Early Wakeup callback.
+ 289:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @param  hwwdg  pointer to a WWDG_HandleTypeDef structure that contains
+ 290:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   *                the configuration information for the specified WWDG module.
+ 291:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   * @retval None
+ 292:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   */
+ 293:HALLIB/Src/stm32f7xx_hal_wwdg.c **** __weak void HAL_WWDG_EarlyWakeupCallback(WWDG_HandleTypeDef* hwwdg)
+ 294:HALLIB/Src/stm32f7xx_hal_wwdg.c **** {
+ 126              		.loc 1 294 0
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130              		@ link register save eliminated.
+ 131              	.LVL7:
+ 132 0000 7047     		bx	lr
+ 133              		.cfi_endproc
+ 134              	.LFE140:
+ 136 0002 00BF     		.section	.text.HAL_WWDG_IRQHandler,"ax",%progbits
+ 137              		.align	2
+ 138              		.global	HAL_WWDG_IRQHandler
+ 139              		.thumb
+ 140              		.thumb_func
+ 142              	HAL_WWDG_IRQHandler:
+ 143              	.LFB139:
+ 270:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check if Early Wakeup Interrupt is enable */
+ 144              		.loc 1 270 0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              	.LVL8:
+ 270:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   /* Check if Early Wakeup Interrupt is enable */
+ 149              		.loc 1 270 0
+ 150 0000 08B5     		push	{r3, lr}
+ 151              	.LCFI2:
+ 152              		.cfi_def_cfa_offset 8
+ 153              		.cfi_offset 3, -8
+ 154              		.cfi_offset 14, -4
+ 272:HALLIB/Src/stm32f7xx_hal_wwdg.c ****   {
+ 155              		.loc 1 272 0
+ 156 0002 0368     		ldr	r3, [r0]
+ 157 0004 5A68     		ldr	r2, [r3, #4]
+ 158 0006 12F4007F 		tst	r2, #512
+ 159 000a 08D0     		beq	.L9
+ 275:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     {
+ARM GAS  /tmp/cc0qbK0M.s 			page 9
+
+
+ 160              		.loc 1 275 0
+ 161 000c 9A68     		ldr	r2, [r3, #8]
+ 162 000e 12F0010F 		tst	r2, #1
+ 163 0012 04D0     		beq	.L9
+ 278:HALLIB/Src/stm32f7xx_hal_wwdg.c **** 
+ 164              		.loc 1 278 0
+ 165 0014 6FF00102 		mvn	r2, #1
+ 166 0018 9A60     		str	r2, [r3, #8]
+ 281:HALLIB/Src/stm32f7xx_hal_wwdg.c ****     }
+ 167              		.loc 1 281 0
+ 168 001a FFF7FEFF 		bl	HAL_WWDG_EarlyWakeupCallback
+ 169              	.LVL9:
+ 170              	.L9:
+ 171 001e 08BD     		pop	{r3, pc}
+ 172              		.cfi_endproc
+ 173              	.LFE139:
+ 175              		.text
+ 176              	.Letext0:
+ 177              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 178              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 179              		.file 4 "Inc/stm32f767xx.h"
+ 180              		.file 5 "Inc/stm32f7xx.h"
+ 181              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 182              		.file 7 "HALLIB/Inc/stm32f7xx_hal_wwdg.h"
+ 183              		.file 8 "CORE/core_cm7.h"
+ARM GAS  /tmp/cc0qbK0M.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_wwdg.c
+     /tmp/cc0qbK0M.s:21     .text.HAL_WWDG_MspInit:00000000 $t
+     /tmp/cc0qbK0M.s:26     .text.HAL_WWDG_MspInit:00000000 HAL_WWDG_MspInit
+     /tmp/cc0qbK0M.s:40     .text.HAL_WWDG_Init:00000000 $t
+     /tmp/cc0qbK0M.s:45     .text.HAL_WWDG_Init:00000000 HAL_WWDG_Init
+     /tmp/cc0qbK0M.s:94     .text.HAL_WWDG_Refresh:00000000 $t
+     /tmp/cc0qbK0M.s:99     .text.HAL_WWDG_Refresh:00000000 HAL_WWDG_Refresh
+     /tmp/cc0qbK0M.s:119    .text.HAL_WWDG_EarlyWakeupCallback:00000000 $t
+     /tmp/cc0qbK0M.s:124    .text.HAL_WWDG_EarlyWakeupCallback:00000000 HAL_WWDG_EarlyWakeupCallback
+     /tmp/cc0qbK0M.s:137    .text.HAL_WWDG_IRQHandler:00000000 $t
+     /tmp/cc0qbK0M.s:142    .text.HAL_WWDG_IRQHandler:00000000 HAL_WWDG_IRQHandler
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

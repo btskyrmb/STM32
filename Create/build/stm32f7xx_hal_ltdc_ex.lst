@@ -1,0 +1,33 @@
+ARM GAS  /tmp/ccBSRSse.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_ltdc_ex.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              	.Letext0:
+  21              		.file 1 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+  22              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+  23              		.file 3 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccBSRSse.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_ltdc_ex.c
+
+NO UNDEFINED SYMBOLS

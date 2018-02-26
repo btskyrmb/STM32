@@ -1,0 +1,1618 @@
+ARM GAS  /tmp/cc25729C.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_cec.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_CEC_SetDeviceAddress,"ax",%progbits
+  21              		.align	2
+  22              		.global	HAL_CEC_SetDeviceAddress
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_CEC_SetDeviceAddress:
+  27              	.LFB138:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_cec.c"
+   1:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_cec.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @file    stm32f7xx_hal_cec.c
+   4:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief   CEC HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_cec.c ****   *          This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_cec.c ****   *          functionalities of the High Definition Multimedia Interface 
+   8:HALLIB/Src/stm32f7xx_hal_cec.c ****   *          Consumer Electronics Control Peripheral (CEC).
+   9:HALLIB/Src/stm32f7xx_hal_cec.c ****   *           + Initialization and de-initialization function
+  10:HALLIB/Src/stm32f7xx_hal_cec.c ****   *           + IO operation function
+  11:HALLIB/Src/stm32f7xx_hal_cec.c ****   *           + Peripheral Control function
+  12:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+  13:HALLIB/Src/stm32f7xx_hal_cec.c ****   *           
+  14:HALLIB/Src/stm32f7xx_hal_cec.c ****   @verbatim       
+  15:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================
+  16:HALLIB/Src/stm32f7xx_hal_cec.c ****                         ##### How to use this driver #####
+  17:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================
+  18:HALLIB/Src/stm32f7xx_hal_cec.c ****     [..]
+  19:HALLIB/Src/stm32f7xx_hal_cec.c ****     The CEC HAL driver can be used as follow:
+  20:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+  21:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) Declare a CEC_HandleTypeDef handle structure.
+  22:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) Initialize the CEC low level resources by implementing the HAL_CEC_MspInit ()API:
+  23:HALLIB/Src/stm32f7xx_hal_cec.c ****         (##) Enable the CEC interface clock.
+  24:HALLIB/Src/stm32f7xx_hal_cec.c ****         (##) CEC pins configuration:
+  25:HALLIB/Src/stm32f7xx_hal_cec.c ****             (+++) Enable the clock for the CEC GPIOs.
+  26:HALLIB/Src/stm32f7xx_hal_cec.c ****             (+++) Configure these CEC pins as alternate function pull-up.
+  27:HALLIB/Src/stm32f7xx_hal_cec.c ****         (##) NVIC configuration if you need to use interrupt process (HAL_CEC_Transmit_IT()
+  28:HALLIB/Src/stm32f7xx_hal_cec.c ****              and HAL_CEC_Receive_IT() APIs):
+  29:HALLIB/Src/stm32f7xx_hal_cec.c ****             (+++) Configure the CEC interrupt priority.
+  30:HALLIB/Src/stm32f7xx_hal_cec.c ****             (+++) Enable the NVIC CEC IRQ handle.
+ARM GAS  /tmp/cc25729C.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_cec.c ****             (+++) The specific CEC interrupts (Transmission complete interrupt, 
+  32:HALLIB/Src/stm32f7xx_hal_cec.c ****                   RXNE interrupt and Error Interrupts) will be managed using the macros
+  33:HALLIB/Src/stm32f7xx_hal_cec.c ****                   __HAL_CEC_ENABLE_IT() and __HAL_CEC_DISABLE_IT() inside the transmit 
+  34:HALLIB/Src/stm32f7xx_hal_cec.c ****                   and receive process.
+  35:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  36:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) Program the Signal Free Time (SFT) and SFT option, Tolerance, reception stop in
+  37:HALLIB/Src/stm32f7xx_hal_cec.c ****         in case of Bit Rising Error, Error-Bit generation conditions, device logical
+  38:HALLIB/Src/stm32f7xx_hal_cec.c ****         address and Listen mode in the hcec Init structure.
+  39:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  40:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) Initialize the CEC registers by calling the HAL_CEC_Init() API.
+  41:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  42:HALLIB/Src/stm32f7xx_hal_cec.c ****   [..]        
+  43:HALLIB/Src/stm32f7xx_hal_cec.c ****     (@) This API (HAL_CEC_Init()) configures also the low level Hardware (GPIO, CLOCK, CORTEX...etc
+  44:HALLIB/Src/stm32f7xx_hal_cec.c ****         by calling the customed HAL_CEC_MspInit() API.
+  45:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  46:HALLIB/Src/stm32f7xx_hal_cec.c ****   @endverbatim
+  47:HALLIB/Src/stm32f7xx_hal_cec.c ****   ******************************************************************************
+  48:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @attention
+  49:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+  50:HALLIB/Src/stm32f7xx_hal_cec.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  51:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+  52:HALLIB/Src/stm32f7xx_hal_cec.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  53:HALLIB/Src/stm32f7xx_hal_cec.c ****   * are permitted provided that the following conditions are met:
+  54:HALLIB/Src/stm32f7xx_hal_cec.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  55:HALLIB/Src/stm32f7xx_hal_cec.c ****   *      this list of conditions and the following disclaimer.
+  56:HALLIB/Src/stm32f7xx_hal_cec.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  57:HALLIB/Src/stm32f7xx_hal_cec.c ****   *      this list of conditions and the following disclaimer in the documentation
+  58:HALLIB/Src/stm32f7xx_hal_cec.c ****   *      and/or other materials provided with the distribution.
+  59:HALLIB/Src/stm32f7xx_hal_cec.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  60:HALLIB/Src/stm32f7xx_hal_cec.c ****   *      may be used to endorse or promote products derived from this software
+  61:HALLIB/Src/stm32f7xx_hal_cec.c ****   *      without specific prior written permission.
+  62:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+  63:HALLIB/Src/stm32f7xx_hal_cec.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  64:HALLIB/Src/stm32f7xx_hal_cec.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  65:HALLIB/Src/stm32f7xx_hal_cec.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  66:HALLIB/Src/stm32f7xx_hal_cec.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  67:HALLIB/Src/stm32f7xx_hal_cec.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  68:HALLIB/Src/stm32f7xx_hal_cec.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  69:HALLIB/Src/stm32f7xx_hal_cec.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  70:HALLIB/Src/stm32f7xx_hal_cec.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  71:HALLIB/Src/stm32f7xx_hal_cec.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  72:HALLIB/Src/stm32f7xx_hal_cec.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  73:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+  74:HALLIB/Src/stm32f7xx_hal_cec.c ****   ******************************************************************************  
+  75:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+  76:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  77:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Includes ------------------------------------------------------------------*/
+  78:HALLIB/Src/stm32f7xx_hal_cec.c **** #include "stm32f7xx_hal.h"
+  79:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  80:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  81:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+  82:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+  83:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  84:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC CEC 
+  85:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief HAL CEC module driver
+  86:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+  87:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ARM GAS  /tmp/cc25729C.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_cec.c **** #ifdef HAL_CEC_MODULE_ENABLED
+  89:HALLIB/Src/stm32f7xx_hal_cec.c **** #if defined (CEC)
+  90:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+  91:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Private typedef -----------------------------------------------------------*/
+  92:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Private define ------------------------------------------------------------*/
+  93:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Private_Constants CEC Private Constants
+  94:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+  95:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+  96:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+  97:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @}
+  98:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+  99:HALLIB/Src/stm32f7xx_hal_cec.c ****  
+ 100:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Private macro -------------------------------------------------------------*/
+ 101:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Private variables ---------------------------------------------------------*/
+ 102:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Private function prototypes -----------------------------------------------*/
+ 103:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Private_Functions CEC Private Functions
+ 104:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+ 105:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 106:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 107:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @}
+ 108:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 109:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 110:HALLIB/Src/stm32f7xx_hal_cec.c **** /* Exported functions ---------------------------------------------------------*/
+ 111:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 112:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Exported_Functions CEC Exported Functions
+ 113:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+ 114:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 115:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 116:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Exported_Functions_Group1 Initialization and de-initialization functions
+ 117:HALLIB/Src/stm32f7xx_hal_cec.c ****   *  @brief    Initialization and Configuration functions 
+ 118:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+ 119:HALLIB/Src/stm32f7xx_hal_cec.c **** @verbatim                                                
+ 120:HALLIB/Src/stm32f7xx_hal_cec.c **** ===============================================================================
+ 121:HALLIB/Src/stm32f7xx_hal_cec.c ****             ##### Initialization and Configuration functions #####
+ 122:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================  
+ 123:HALLIB/Src/stm32f7xx_hal_cec.c ****     [..]
+ 124:HALLIB/Src/stm32f7xx_hal_cec.c ****     This subsection provides a set of functions allowing to initialize the CEC
+ 125:HALLIB/Src/stm32f7xx_hal_cec.c ****       (+) The following parameters need to be configured: 
+ 126:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) SignalFreeTime
+ 127:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) Tolerance 
+ 128:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) BRERxStop                 (RX stopped or not upon Bit Rising Error)
+ 129:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) BREErrorBitGen            (Error-Bit generation in case of Bit Rising Error)
+ 130:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) LBPEErrorBitGen           (Error-Bit generation in case of Long Bit Period Error)
+ 131:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) BroadcastMsgNoErrorBitGen (Error-bit generation in case of broadcast message error)
+ 132:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) SignalFreeTimeOption      (SFT Timer start definition)
+ 133:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) OwnAddress                (CEC device address)
+ 134:HALLIB/Src/stm32f7xx_hal_cec.c ****         (++) ListenMode
+ 135:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 136:HALLIB/Src/stm32f7xx_hal_cec.c **** @endverbatim
+ 137:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+ 138:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 139:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 140:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 141:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Initializes the CEC mode according to the specified
+ 142:HALLIB/Src/stm32f7xx_hal_cec.c ****   *         parameters in the CEC_InitTypeDef and creates the associated handle .
+ 143:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 144:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval HAL status
+ARM GAS  /tmp/cc25729C.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 146:HALLIB/Src/stm32f7xx_hal_cec.c **** HAL_StatusTypeDef HAL_CEC_Init(CEC_HandleTypeDef *hcec)
+ 147:HALLIB/Src/stm32f7xx_hal_cec.c **** {  
+ 148:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 149:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((hcec == NULL) ||(hcec->Init.RxBuffer == NULL))
+ 150:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 151:HALLIB/Src/stm32f7xx_hal_cec.c ****     return HAL_ERROR;
+ 152:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 153:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 154:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the parameters */ 
+ 155:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_ALL_INSTANCE(hcec->Instance));
+ 156:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_SIGNALFREETIME(hcec->Init.SignalFreeTime));
+ 157:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_TOLERANCE(hcec->Init.Tolerance));  
+ 158:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_BRERXSTOP(hcec->Init.BRERxStop));
+ 159:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_BREERRORBITGEN(hcec->Init.BREErrorBitGen));
+ 160:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_LBPEERRORBITGEN(hcec->Init.LBPEErrorBitGen));
+ 161:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION(hcec->Init.BroadcastMsgNoErrorBitGen));
+ 162:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_SFTOP(hcec->Init.SignalFreeTimeOption)); 
+ 163:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_LISTENING_MODE(hcec->Init.ListenMode));
+ 164:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_OWN_ADDRESS(hcec->Init.OwnAddress));  
+ 165:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 166:HALLIB/Src/stm32f7xx_hal_cec.c ****   if(hcec->gState == HAL_CEC_STATE_RESET)
+ 167:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 168:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Allocate lock resource and initialize it */
+ 169:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->Lock = HAL_UNLOCKED;   
+ 170:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Init the low level hardware : GPIO, CLOCK */
+ 171:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_MspInit(hcec);
+ 172:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 173:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_BUSY;
+ 174:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 175:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Disable the Peripheral */
+ 176:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_CEC_DISABLE(hcec);
+ 177:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 178:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Write to CEC Control Register */
+ 179:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->Instance->CFGR = hcec->Init.SignalFreeTime | hcec->Init.Tolerance | hcec->Init.BRERxStop|\
+ 180:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.BREErrorBitGen | hcec->Init.LBPEErrorBitGen | hcec->Init.Broadc
+ 181:HALLIB/Src/stm32f7xx_hal_cec.c **** 			 hcec->Init.SignalFreeTimeOption |((uint32_t)(hcec->Init.OwnAddress)<<16U) |\
+ 182:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.ListenMode;
+ 183:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 184:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Enable the following CEC Transmission/Reception interrupts as
+ 185:HALLIB/Src/stm32f7xx_hal_cec.c ****    * well as the following CEC Transmission/Reception Errors interrupts 
+ 186:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx Byte Received IT 
+ 187:HALLIB/Src/stm32f7xx_hal_cec.c ****    * End of Reception IT 
+ 188:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx overrun
+ 189:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx bit rising error
+ 190:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx short bit period error
+ 191:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx long bit period error
+ 192:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx missing acknowledge
+ 193:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx Byte Request IT 
+ 194:HALLIB/Src/stm32f7xx_hal_cec.c ****    * End of Transmission IT
+ 195:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx Missing Acknowledge IT
+ 196:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx-Error IT
+ 197:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx-Buffer Underrun IT 
+ 198:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx arbitration lost   */
+ 199:HALLIB/Src/stm32f7xx_hal_cec.c ****  __HAL_CEC_ENABLE_IT(hcec, CEC_IT_RXBR|CEC_IT_RXEND|CEC_IER_RX_ALL_ERR|CEC_IT_TXBR|CEC_IT_TXEND|CEC
+ 200:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 201:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Enable the CEC Peripheral */
+ARM GAS  /tmp/cc25729C.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_CEC_ENABLE(hcec);
+ 203:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 204:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 205:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_READY;
+ 206:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->RxState = HAL_CEC_STATE_READY;
+ 207:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 208:HALLIB/Src/stm32f7xx_hal_cec.c ****   return HAL_OK;
+ 209:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 210:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 211:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 212:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief DeInitializes the CEC peripheral 
+ 213:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 214:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval HAL status
+ 215:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 216:HALLIB/Src/stm32f7xx_hal_cec.c **** HAL_StatusTypeDef HAL_CEC_DeInit(CEC_HandleTypeDef *hcec)
+ 217:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 218:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 219:HALLIB/Src/stm32f7xx_hal_cec.c ****   if(hcec == NULL)
+ 220:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 221:HALLIB/Src/stm32f7xx_hal_cec.c ****     return HAL_ERROR;
+ 222:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 223:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 224:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the parameters */
+ 225:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_ALL_INSTANCE(hcec->Instance));
+ 226:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 227:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_BUSY;
+ 228:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 229:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* DeInit the low level hardware */
+ 230:HALLIB/Src/stm32f7xx_hal_cec.c ****   HAL_CEC_MspDeInit(hcec);
+ 231:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 232:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Disable the Peripheral */
+ 233:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_CEC_DISABLE(hcec);
+ 234:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 235:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Clear Flags */
+ 236:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_CEC_CLEAR_FLAG(hcec,CEC_FLAG_TXEND|CEC_FLAG_TXBR|CEC_FLAG_RXBR|CEC_FLAG_RXEND|CEC_ISR_ALL_E
+ 237:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 238:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Disable the following CEC Transmission/Reception interrupts as
+ 239:HALLIB/Src/stm32f7xx_hal_cec.c ****    * well as the following CEC Transmission/Reception Errors interrupts 
+ 240:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx Byte Received IT 
+ 241:HALLIB/Src/stm32f7xx_hal_cec.c ****    * End of Reception IT 
+ 242:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx overrun
+ 243:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx bit rising error
+ 244:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx short bit period error
+ 245:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx long bit period error
+ 246:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Rx missing acknowledge
+ 247:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx Byte Request IT 
+ 248:HALLIB/Src/stm32f7xx_hal_cec.c ****    * End of Transmission IT
+ 249:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx Missing Acknowledge IT
+ 250:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx-Error IT
+ 251:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx-Buffer Underrun IT 
+ 252:HALLIB/Src/stm32f7xx_hal_cec.c ****    * Tx arbitration lost   */
+ 253:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_CEC_DISABLE_IT(hcec, CEC_IT_RXBR|CEC_IT_RXEND|CEC_IER_RX_ALL_ERR|CEC_IT_TXBR|CEC_IT_TXEND|C
+ 254:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 255:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 256:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_RESET;
+ 257:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->RxState = HAL_CEC_STATE_RESET;
+ 258:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ARM GAS  /tmp/cc25729C.s 			page 6
+
+
+ 259:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Process Unlock */
+ 260:HALLIB/Src/stm32f7xx_hal_cec.c ****   __HAL_UNLOCK(hcec);
+ 261:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 262:HALLIB/Src/stm32f7xx_hal_cec.c ****   return HAL_OK;
+ 263:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 264:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 265:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 266:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Initializes the Own Address of the CEC device
+ 267:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 268:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param  CEC_OwnAddress The CEC own address.  
+ 269:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval HAL status
+ 270:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 271:HALLIB/Src/stm32f7xx_hal_cec.c **** HAL_StatusTypeDef HAL_CEC_SetDeviceAddress(CEC_HandleTypeDef *hcec, uint16_t CEC_OwnAddress)
+ 272:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+  29              		.loc 1 272 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+ 273:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the parameters */
+ 274:HALLIB/Src/stm32f7xx_hal_cec.c ****   assert_param(IS_CEC_OWN_ADDRESS(CEC_OwnAddress));
+ 275:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 276:HALLIB/Src/stm32f7xx_hal_cec.c ****   if ((hcec->gState == HAL_CEC_STATE_READY) && (hcec->RxState == HAL_CEC_STATE_READY))
+  35              		.loc 1 276 0
+  36 0000 426B     		ldr	r2, [r0, #52]
+  37 0002 194B     		ldr	r3, .L7
+  38 0004 1340     		ands	r3, r3, r2
+  39 0006 194A     		ldr	r2, .L7+4
+  40 0008 9342     		cmp	r3, r2
+  41 000a 28D1     		bne	.L5
+ 277:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 278:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Process Locked */
+ 279:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_LOCK(hcec); 
+  42              		.loc 1 279 0
+  43 000c 90F83430 		ldrb	r3, [r0, #52]	@ zero_extendqisi2
+  44 0010 012B     		cmp	r3, #1
+  45 0012 26D0     		beq	.L6
+  46              		.loc 1 279 0 is_stmt 0 discriminator 2
+  47 0014 0123     		movs	r3, #1
+  48 0016 80F83430 		strb	r3, [r0, #52]
+ 280:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 281:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->gState = HAL_CEC_STATE_BUSY;
+  49              		.loc 1 281 0 is_stmt 1 discriminator 2
+  50 001a 2423     		movs	r3, #36
+  51 001c 80F83530 		strb	r3, [r0, #53]
+ 282:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 283:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Disable the Peripheral */
+ 284:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_DISABLE(hcec);
+  52              		.loc 1 284 0 discriminator 2
+  53 0020 0268     		ldr	r2, [r0]
+  54 0022 1368     		ldr	r3, [r2]
+  55 0024 23F00103 		bic	r3, r3, #1
+  56 0028 1360     		str	r3, [r2]
+ 285:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 286:HALLIB/Src/stm32f7xx_hal_cec.c ****     if(CEC_OwnAddress != CEC_OWN_ADDRESS_NONE)
+  57              		.loc 1 286 0 discriminator 2
+ARM GAS  /tmp/cc25729C.s 			page 7
+
+
+  58 002a 29B1     		cbz	r1, .L3
+ 287:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 288:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Instance->CFGR |= ((uint32_t)CEC_OwnAddress<<16);
+  59              		.loc 1 288 0
+  60 002c 0268     		ldr	r2, [r0]
+  61 002e 5368     		ldr	r3, [r2, #4]
+  62 0030 43EA0141 		orr	r1, r3, r1, lsl #16
+  63              	.LVL1:
+  64 0034 5160     		str	r1, [r2, #4]
+  65 0036 04E0     		b	.L4
+  66              	.LVL2:
+  67              	.L3:
+ 289:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 290:HALLIB/Src/stm32f7xx_hal_cec.c ****     else
+ 291:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 292:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Instance->CFGR &= ~(CEC_CFGR_OAR);
+  68              		.loc 1 292 0
+  69 0038 0268     		ldr	r2, [r0]
+  70 003a 5168     		ldr	r1, [r2, #4]
+  71              	.LVL3:
+  72 003c 0C4B     		ldr	r3, .L7+8
+  73 003e 0B40     		ands	r3, r3, r1
+  74 0040 5360     		str	r3, [r2, #4]
+  75              	.L4:
+ 293:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 294:HALLIB/Src/stm32f7xx_hal_cec.c ****         
+ 295:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->gState = HAL_CEC_STATE_READY;
+  76              		.loc 1 295 0
+  77 0042 2023     		movs	r3, #32
+  78 0044 80F83530 		strb	r3, [r0, #53]
+ 296:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+  79              		.loc 1 296 0
+  80 0048 0023     		movs	r3, #0
+  81 004a 8363     		str	r3, [r0, #56]
+ 297:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 298:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Process Unlocked */
+ 299:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_UNLOCK(hcec); 
+  82              		.loc 1 299 0
+  83 004c 80F83430 		strb	r3, [r0, #52]
+ 300:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 301:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Enable the Peripheral */
+ 302:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_ENABLE(hcec);
+  84              		.loc 1 302 0
+  85 0050 0168     		ldr	r1, [r0]
+  86 0052 0A68     		ldr	r2, [r1]
+  87 0054 42F00102 		orr	r2, r2, #1
+  88 0058 0A60     		str	r2, [r1]
+ 303:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 304:HALLIB/Src/stm32f7xx_hal_cec.c ****     return  HAL_OK; 
+  89              		.loc 1 304 0
+  90 005a 1846     		mov	r0, r3
+  91              	.LVL4:
+  92 005c 7047     		bx	lr
+  93              	.LVL5:
+  94              	.L5:
+ 305:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 306:HALLIB/Src/stm32f7xx_hal_cec.c ****   else
+ARM GAS  /tmp/cc25729C.s 			page 8
+
+
+ 307:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 308:HALLIB/Src/stm32f7xx_hal_cec.c ****     return HAL_BUSY;
+  95              		.loc 1 308 0
+  96 005e 0220     		movs	r0, #2
+  97              	.LVL6:
+  98 0060 7047     		bx	lr
+  99              	.LVL7:
+ 100              	.L6:
+ 279:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 101              		.loc 1 279 0
+ 102 0062 0220     		movs	r0, #2
+ 103              	.LVL8:
+ 309:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 310:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 104              		.loc 1 310 0
+ 105 0064 7047     		bx	lr
+ 106              	.L8:
+ 107 0066 00BF     		.align	2
+ 108              	.L7:
+ 109 0068 00FFFF00 		.word	16776960
+ 110 006c 00202000 		.word	2105344
+ 111 0070 FFFF0080 		.word	-2147418113
+ 112              		.cfi_endproc
+ 113              	.LFE138:
+ 115              		.section	.text.HAL_CEC_MspInit,"ax",%progbits
+ 116              		.align	2
+ 117              		.weak	HAL_CEC_MspInit
+ 118              		.thumb
+ 119              		.thumb_func
+ 121              	HAL_CEC_MspInit:
+ 122              	.LFB139:
+ 311:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 312:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 313:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief CEC MSP Init
+ 314:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 315:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 316:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 317:HALLIB/Src/stm32f7xx_hal_cec.c ****  __weak void HAL_CEC_MspInit(CEC_HandleTypeDef *hcec)
+ 318:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 123              		.loc 1 318 0
+ 124              		.cfi_startproc
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127              		@ link register save eliminated.
+ 128              	.LVL9:
+ 129 0000 7047     		bx	lr
+ 130              		.cfi_endproc
+ 131              	.LFE139:
+ 133 0002 00BF     		.section	.text.HAL_CEC_Init,"ax",%progbits
+ 134              		.align	2
+ 135              		.global	HAL_CEC_Init
+ 136              		.thumb
+ 137              		.thumb_func
+ 139              	HAL_CEC_Init:
+ 140              	.LFB136:
+ 147:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 141              		.loc 1 147 0
+ARM GAS  /tmp/cc25729C.s 			page 9
+
+
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              	.LVL10:
+ 149:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 146              		.loc 1 149 0
+ 147 0000 0028     		cmp	r0, #0
+ 148 0002 3AD0     		beq	.L13
+ 147:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 149              		.loc 1 147 0 discriminator 1
+ 150 0004 10B5     		push	{r4, lr}
+ 151              	.LCFI0:
+ 152              		.cfi_def_cfa_offset 8
+ 153              		.cfi_offset 4, -8
+ 154              		.cfi_offset 14, -4
+ 155 0006 0446     		mov	r4, r0
+ 149:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 156              		.loc 1 149 0 discriminator 1
+ 157 0008 836A     		ldr	r3, [r0, #40]
+ 158 000a 002B     		cmp	r3, #0
+ 159 000c 37D0     		beq	.L14
+ 166:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 160              		.loc 1 166 0
+ 161 000e 90F83530 		ldrb	r3, [r0, #53]	@ zero_extendqisi2
+ 162 0012 1BB9     		cbnz	r3, .L12
+ 169:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Init the low level hardware : GPIO, CLOCK */
+ 163              		.loc 1 169 0
+ 164 0014 80F83430 		strb	r3, [r0, #52]
+ 171:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 165              		.loc 1 171 0
+ 166 0018 FFF7FEFF 		bl	HAL_CEC_MspInit
+ 167              	.LVL11:
+ 168              	.L12:
+ 173:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 169              		.loc 1 173 0
+ 170 001c 2423     		movs	r3, #36
+ 171 001e 84F83530 		strb	r3, [r4, #53]
+ 176:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 172              		.loc 1 176 0
+ 173 0022 2268     		ldr	r2, [r4]
+ 174 0024 1368     		ldr	r3, [r2]
+ 175 0026 23F00103 		bic	r3, r3, #1
+ 176 002a 1360     		str	r3, [r2]
+ 179:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.BREErrorBitGen | hcec->Init.LBPEErrorBitGen | hcec->Init.Broadc
+ 177              		.loc 1 179 0
+ 178 002c 2168     		ldr	r1, [r4]
+ 179 002e 6268     		ldr	r2, [r4, #4]
+ 180 0030 A368     		ldr	r3, [r4, #8]
+ 181 0032 1A43     		orrs	r2, r2, r3
+ 182 0034 E368     		ldr	r3, [r4, #12]
+ 183 0036 1A43     		orrs	r2, r2, r3
+ 180:HALLIB/Src/stm32f7xx_hal_cec.c **** 			 hcec->Init.SignalFreeTimeOption |((uint32_t)(hcec->Init.OwnAddress)<<16U) |\
+ 184              		.loc 1 180 0
+ 185 0038 2369     		ldr	r3, [r4, #16]
+ 179:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.BREErrorBitGen | hcec->Init.LBPEErrorBitGen | hcec->Init.Broadc
+ 186              		.loc 1 179 0
+ 187 003a 1A43     		orrs	r2, r2, r3
+ARM GAS  /tmp/cc25729C.s 			page 10
+
+
+ 180:HALLIB/Src/stm32f7xx_hal_cec.c **** 			 hcec->Init.SignalFreeTimeOption |((uint32_t)(hcec->Init.OwnAddress)<<16U) |\
+ 188              		.loc 1 180 0
+ 189 003c 6369     		ldr	r3, [r4, #20]
+ 190 003e 1A43     		orrs	r2, r2, r3
+ 191 0040 A369     		ldr	r3, [r4, #24]
+ 192 0042 1A43     		orrs	r2, r2, r3
+ 181:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.ListenMode;
+ 193              		.loc 1 181 0
+ 194 0044 E369     		ldr	r3, [r4, #28]
+ 180:HALLIB/Src/stm32f7xx_hal_cec.c **** 			 hcec->Init.SignalFreeTimeOption |((uint32_t)(hcec->Init.OwnAddress)<<16U) |\
+ 195              		.loc 1 180 0
+ 196 0046 1343     		orrs	r3, r3, r2
+ 181:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.ListenMode;
+ 197              		.loc 1 181 0
+ 198 0048 A28C     		ldrh	r2, [r4, #36]
+ 199 004a 43EA0243 		orr	r3, r3, r2, lsl #16
+ 182:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 200              		.loc 1 182 0
+ 201 004e 226A     		ldr	r2, [r4, #32]
+ 181:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.ListenMode;
+ 202              		.loc 1 181 0
+ 203 0050 1343     		orrs	r3, r3, r2
+ 179:HALLIB/Src/stm32f7xx_hal_cec.c ****                          hcec->Init.BREErrorBitGen | hcec->Init.LBPEErrorBitGen | hcec->Init.Broadc
+ 204              		.loc 1 179 0
+ 205 0052 4B60     		str	r3, [r1, #4]
+ 199:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 206              		.loc 1 199 0
+ 207 0054 2268     		ldr	r2, [r4]
+ 208 0056 5169     		ldr	r1, [r2, #20]
+ 209 0058 41F6FF73 		movw	r3, #8191
+ 210 005c 0B43     		orrs	r3, r3, r1
+ 211 005e 5361     		str	r3, [r2, #20]
+ 202:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 212              		.loc 1 202 0
+ 213 0060 2268     		ldr	r2, [r4]
+ 214 0062 1368     		ldr	r3, [r2]
+ 215 0064 43F00103 		orr	r3, r3, #1
+ 216 0068 1360     		str	r3, [r2]
+ 204:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_READY;
+ 217              		.loc 1 204 0
+ 218 006a 0020     		movs	r0, #0
+ 219 006c A063     		str	r0, [r4, #56]
+ 205:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->RxState = HAL_CEC_STATE_READY;
+ 220              		.loc 1 205 0
+ 221 006e 2023     		movs	r3, #32
+ 222 0070 84F83530 		strb	r3, [r4, #53]
+ 206:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 223              		.loc 1 206 0
+ 224 0074 84F83630 		strb	r3, [r4, #54]
+ 208:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 225              		.loc 1 208 0
+ 226 0078 10BD     		pop	{r4, pc}
+ 227              	.LVL12:
+ 228              	.L13:
+ 229              	.LCFI1:
+ 230              		.cfi_def_cfa_offset 0
+ 231              		.cfi_restore 4
+ARM GAS  /tmp/cc25729C.s 			page 11
+
+
+ 232              		.cfi_restore 14
+ 151:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 233              		.loc 1 151 0
+ 234 007a 0120     		movs	r0, #1
+ 235              	.LVL13:
+ 209:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 236              		.loc 1 209 0
+ 237 007c 7047     		bx	lr
+ 238              	.LVL14:
+ 239              	.L14:
+ 240              	.LCFI2:
+ 241              		.cfi_def_cfa_offset 8
+ 242              		.cfi_offset 4, -8
+ 243              		.cfi_offset 14, -4
+ 151:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 244              		.loc 1 151 0
+ 245 007e 0120     		movs	r0, #1
+ 246              	.LVL15:
+ 209:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 247              		.loc 1 209 0
+ 248 0080 10BD     		pop	{r4, pc}
+ 249              		.cfi_endproc
+ 250              	.LFE136:
+ 252 0082 00BF     		.section	.text.HAL_CEC_MspDeInit,"ax",%progbits
+ 253              		.align	2
+ 254              		.weak	HAL_CEC_MspDeInit
+ 255              		.thumb
+ 256              		.thumb_func
+ 258              	HAL_CEC_MspDeInit:
+ 259              	.LFB140:
+ 319:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Prevent unused argument(s) compilation warning */
+ 320:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(hcec);
+ 321:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 322:HALLIB/Src/stm32f7xx_hal_cec.c ****             the HAL_CEC_MspInit can be implemented in the user file
+ 323:HALLIB/Src/stm32f7xx_hal_cec.c ****    */ 
+ 324:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 325:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 326:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 327:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief CEC MSP DeInit
+ 328:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 329:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 330:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 331:HALLIB/Src/stm32f7xx_hal_cec.c ****  __weak void HAL_CEC_MspDeInit(CEC_HandleTypeDef *hcec)
+ 332:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 260              		.loc 1 332 0
+ 261              		.cfi_startproc
+ 262              		@ args = 0, pretend = 0, frame = 0
+ 263              		@ frame_needed = 0, uses_anonymous_args = 0
+ 264              		@ link register save eliminated.
+ 265              	.LVL16:
+ 266 0000 7047     		bx	lr
+ 267              		.cfi_endproc
+ 268              	.LFE140:
+ 270 0002 00BF     		.section	.text.HAL_CEC_DeInit,"ax",%progbits
+ 271              		.align	2
+ 272              		.global	HAL_CEC_DeInit
+ 273              		.thumb
+ARM GAS  /tmp/cc25729C.s 			page 12
+
+
+ 274              		.thumb_func
+ 276              	HAL_CEC_DeInit:
+ 277              	.LFB137:
+ 217:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 278              		.loc 1 217 0
+ 279              		.cfi_startproc
+ 280              		@ args = 0, pretend = 0, frame = 0
+ 281              		@ frame_needed = 0, uses_anonymous_args = 0
+ 282              	.LVL17:
+ 219:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 283              		.loc 1 219 0
+ 284 0000 F8B1     		cbz	r0, .L19
+ 217:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Check the CEC handle allocation */
+ 285              		.loc 1 217 0
+ 286 0002 10B5     		push	{r4, lr}
+ 287              	.LCFI3:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 4, -8
+ 290              		.cfi_offset 14, -4
+ 291 0004 0446     		mov	r4, r0
+ 227:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 292              		.loc 1 227 0
+ 293 0006 2423     		movs	r3, #36
+ 294 0008 80F83530 		strb	r3, [r0, #53]
+ 230:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 295              		.loc 1 230 0
+ 296 000c FFF7FEFF 		bl	HAL_CEC_MspDeInit
+ 297              	.LVL18:
+ 233:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 298              		.loc 1 233 0
+ 299 0010 2268     		ldr	r2, [r4]
+ 300 0012 1368     		ldr	r3, [r2]
+ 301 0014 23F00103 		bic	r3, r3, #1
+ 302 0018 1360     		str	r3, [r2]
+ 236:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 303              		.loc 1 236 0
+ 304 001a 2268     		ldr	r2, [r4]
+ 305 001c 1169     		ldr	r1, [r2, #16]
+ 306 001e 41F6FF73 		movw	r3, #8191
+ 307 0022 0B43     		orrs	r3, r3, r1
+ 308 0024 1361     		str	r3, [r2, #16]
+ 253:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 309              		.loc 1 253 0
+ 310 0026 2268     		ldr	r2, [r4]
+ 311 0028 5169     		ldr	r1, [r2, #20]
+ 312 002a 074B     		ldr	r3, .L22
+ 313 002c 0B40     		ands	r3, r3, r1
+ 314 002e 5361     		str	r3, [r2, #20]
+ 255:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->gState = HAL_CEC_STATE_RESET;
+ 315              		.loc 1 255 0
+ 316 0030 0020     		movs	r0, #0
+ 317 0032 A063     		str	r0, [r4, #56]
+ 256:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->RxState = HAL_CEC_STATE_RESET;
+ 318              		.loc 1 256 0
+ 319 0034 84F83500 		strb	r0, [r4, #53]
+ 257:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 320              		.loc 1 257 0
+ARM GAS  /tmp/cc25729C.s 			page 13
+
+
+ 321 0038 84F83600 		strb	r0, [r4, #54]
+ 260:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 322              		.loc 1 260 0
+ 323 003c 84F83400 		strb	r0, [r4, #52]
+ 262:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 324              		.loc 1 262 0
+ 325 0040 10BD     		pop	{r4, pc}
+ 326              	.LVL19:
+ 327              	.L19:
+ 328              	.LCFI4:
+ 329              		.cfi_def_cfa_offset 0
+ 330              		.cfi_restore 4
+ 331              		.cfi_restore 14
+ 221:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 332              		.loc 1 221 0
+ 333 0042 0120     		movs	r0, #1
+ 334              	.LVL20:
+ 335 0044 7047     		bx	lr
+ 336              	.L23:
+ 337 0046 00BF     		.align	2
+ 338              	.L22:
+ 339 0048 00E0FFFF 		.word	-8192
+ 340              		.cfi_endproc
+ 341              	.LFE137:
+ 343              		.section	.text.HAL_CEC_Transmit_IT,"ax",%progbits
+ 344              		.align	2
+ 345              		.global	HAL_CEC_Transmit_IT
+ 346              		.thumb
+ 347              		.thumb_func
+ 349              	HAL_CEC_Transmit_IT:
+ 350              	.LFB141:
+ 333:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Prevent unused argument(s) compilation warning */
+ 334:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(hcec);
+ 335:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 336:HALLIB/Src/stm32f7xx_hal_cec.c ****             the HAL_CEC_MspDeInit can be implemented in the user file
+ 337:HALLIB/Src/stm32f7xx_hal_cec.c ****    */ 
+ 338:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 339:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 340:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 341:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @}
+ 342:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 343:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 344:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Exported_Functions_Group2 Input and Output operation functions 
+ 345:HALLIB/Src/stm32f7xx_hal_cec.c ****   *  @brief CEC Transmit/Receive functions 
+ 346:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+ 347:HALLIB/Src/stm32f7xx_hal_cec.c **** @verbatim     
+ 348:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================
+ 349:HALLIB/Src/stm32f7xx_hal_cec.c ****                       ##### IO operation functions ##### 
+ 350:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================  
+ 351:HALLIB/Src/stm32f7xx_hal_cec.c ****     This subsection provides a set of functions allowing to manage the CEC data transfers.
+ 352:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 353:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) The CEC handle must contain the initiator (TX side) and the destination (RX side)
+ 354:HALLIB/Src/stm32f7xx_hal_cec.c ****         logical addresses (4-bit long addresses, 0xF for broadcast messages destination)
+ 355:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 356:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) The communication is performed using Interrupts. 
+ 357:HALLIB/Src/stm32f7xx_hal_cec.c ****            These API's return the HAL status.
+ 358:HALLIB/Src/stm32f7xx_hal_cec.c ****            The end of the data processing will be indicated through the 
+ARM GAS  /tmp/cc25729C.s 			page 14
+
+
+ 359:HALLIB/Src/stm32f7xx_hal_cec.c ****            dedicated CEC IRQ when using Interrupt mode.
+ 360:HALLIB/Src/stm32f7xx_hal_cec.c ****            The HAL_CEC_TxCpltCallback(), HAL_CEC_RxCpltCallback() user callbacks 
+ 361:HALLIB/Src/stm32f7xx_hal_cec.c ****            will be executed respectively at the end of the transmit or Receive process
+ 362:HALLIB/Src/stm32f7xx_hal_cec.c ****            The HAL_CEC_ErrorCallback() user callback will be executed when a communication 
+ 363:HALLIB/Src/stm32f7xx_hal_cec.c ****            error is detected
+ 364:HALLIB/Src/stm32f7xx_hal_cec.c ****         
+ 365:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) API's with Interrupt are :
+ 366:HALLIB/Src/stm32f7xx_hal_cec.c ****          (+) HAL_CEC_Transmit_IT()
+ 367:HALLIB/Src/stm32f7xx_hal_cec.c ****          (+) HAL_CEC_IRQHandler()
+ 368:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 369:HALLIB/Src/stm32f7xx_hal_cec.c ****     (#) A set of User Callbacks are provided:
+ 370:HALLIB/Src/stm32f7xx_hal_cec.c ****          (+) HAL_CEC_TxCpltCallback()
+ 371:HALLIB/Src/stm32f7xx_hal_cec.c ****          (+) HAL_CEC_RxCpltCallback()
+ 372:HALLIB/Src/stm32f7xx_hal_cec.c ****          (+) HAL_CEC_ErrorCallback()
+ 373:HALLIB/Src/stm32f7xx_hal_cec.c ****       
+ 374:HALLIB/Src/stm32f7xx_hal_cec.c **** @endverbatim
+ 375:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+ 376:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 377:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 378:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 379:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Send data in interrupt mode 
+ 380:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle 
+ 381:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param InitiatorAddress Initiator address
+ 382:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param DestinationAddress destination logical address      
+ 383:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param pData pointer to input byte data buffer
+ 384:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param Size amount of data to be sent in bytes (without counting the header).
+ 385:HALLIB/Src/stm32f7xx_hal_cec.c ****   *              0 means only the header is sent (ping operation).
+ 386:HALLIB/Src/stm32f7xx_hal_cec.c ****   *              Maximum TX size is 15 bytes (1 opcode and up to 14 operands).    
+ 387:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval HAL status
+ 388:HALLIB/Src/stm32f7xx_hal_cec.c ****   */  
+ 389:HALLIB/Src/stm32f7xx_hal_cec.c **** HAL_StatusTypeDef HAL_CEC_Transmit_IT(CEC_HandleTypeDef *hcec, uint8_t InitiatorAddress,uint8_t Des
+ 390:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 351              		.loc 1 390 0
+ 352              		.cfi_startproc
+ 353              		@ args = 4, pretend = 0, frame = 0
+ 354              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355              	.LVL21:
+ 356 0000 10B5     		push	{r4, lr}
+ 357              	.LCFI5:
+ 358              		.cfi_def_cfa_offset 8
+ 359              		.cfi_offset 4, -8
+ 360              		.cfi_offset 14, -4
+ 391:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* if the IP isn't already busy and if there is no previous transmission
+ 392:HALLIB/Src/stm32f7xx_hal_cec.c ****      already pending due to arbitration lost */
+ 393:HALLIB/Src/stm32f7xx_hal_cec.c ****   if (hcec->gState == HAL_CEC_STATE_READY) 
+ 361              		.loc 1 393 0
+ 362 0002 90F83540 		ldrb	r4, [r0, #53]	@ zero_extendqisi2
+ 363 0006 202C     		cmp	r4, #32
+ 364 0008 2FD1     		bne	.L27
+ 394:HALLIB/Src/stm32f7xx_hal_cec.c ****   {    
+ 395:HALLIB/Src/stm32f7xx_hal_cec.c ****     if((pData == NULL ) && (Size > 0)) 
+ 365              		.loc 1 395 0
+ 366 000a 029C     		ldr	r4, [sp, #8]
+ 367 000c A646     		mov	lr, r4
+ 368 000e B3FA83F4 		clz	r4, r3
+ 369 0012 6409     		lsrs	r4, r4, #5
+ 370 0014 BEF1000F 		cmp	lr, #0
+ARM GAS  /tmp/cc25729C.s 			page 15
+
+
+ 371 0018 08BF     		it	eq
+ 372 001a 0024     		moveq	r4, #0
+ 373 001c 3CBB     		cbnz	r4, .L28
+ 396:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 397:HALLIB/Src/stm32f7xx_hal_cec.c ****       return  HAL_ERROR;                                    
+ 398:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 399:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 400:HALLIB/Src/stm32f7xx_hal_cec.c ****     assert_param(IS_CEC_ADDRESS(DestinationAddress)); 
+ 401:HALLIB/Src/stm32f7xx_hal_cec.c ****     assert_param(IS_CEC_ADDRESS(InitiatorAddress)); 
+ 402:HALLIB/Src/stm32f7xx_hal_cec.c ****     assert_param(IS_CEC_MSGSIZE(Size));
+ 403:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 404:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Process Locked */
+ 405:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_LOCK(hcec);
+ 374              		.loc 1 405 0
+ 375 001e 90F83440 		ldrb	r4, [r0, #52]	@ zero_extendqisi2
+ 376 0022 012C     		cmp	r4, #1
+ 377 0024 25D0     		beq	.L29
+ 378              		.loc 1 405 0 is_stmt 0 discriminator 2
+ 379 0026 0124     		movs	r4, #1
+ 380 0028 80F83440 		strb	r4, [r0, #52]
+ 406:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->pTxBuffPtr = pData;
+ 381              		.loc 1 406 0 is_stmt 1 discriminator 2
+ 382 002c C362     		str	r3, [r0, #44]
+ 407:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->gState = HAL_CEC_STATE_BUSY_TX;
+ 383              		.loc 1 407 0 discriminator 2
+ 384 002e 2123     		movs	r3, #33
+ 385              	.LVL22:
+ 386 0030 80F83530 		strb	r3, [r0, #53]
+ 408:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 387              		.loc 1 408 0 discriminator 2
+ 388 0034 0023     		movs	r3, #0
+ 389 0036 8363     		str	r3, [r0, #56]
+ 409:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 410:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* initialize the number of bytes to send,
+ 411:HALLIB/Src/stm32f7xx_hal_cec.c ****      * 0 means only one header is sent (ping operation) */
+ 412:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->TxXferCount = Size;
+ 390              		.loc 1 412 0 discriminator 2
+ 391 0038 BDF80830 		ldrh	r3, [sp, #8]
+ 392 003c 0386     		strh	r3, [r0, #48]	@ movhi
+ 413:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 414:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* in case of no payload (Size = 0), sender is only pinging the system;
+ 415:HALLIB/Src/stm32f7xx_hal_cec.c ****        Set TX End of Message (TXEOM) bit, must be set before writing data to TXDR */
+ 416:HALLIB/Src/stm32f7xx_hal_cec.c ****     if (Size == 0)
+ 393              		.loc 1 416 0 discriminator 2
+ 394 003e 7346     		mov	r3, lr
+ 395 0040 23B9     		cbnz	r3, .L26
+ 417:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 418:HALLIB/Src/stm32f7xx_hal_cec.c ****       __HAL_CEC_LAST_BYTE_TX_SET(hcec);
+ 396              		.loc 1 418 0
+ 397 0042 0468     		ldr	r4, [r0]
+ 398 0044 2368     		ldr	r3, [r4]
+ 399 0046 43F00403 		orr	r3, r3, #4
+ 400 004a 2360     		str	r3, [r4]
+ 401              	.LVL23:
+ 402              	.L26:
+ 419:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 420:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* send header block */
+ARM GAS  /tmp/cc25729C.s 			page 16
+
+
+ 421:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->Instance->TXDR = ((uint8_t)(InitiatorAddress << CEC_INITIATOR_LSB_POS) |(uint8_t) Destina
+ 403              		.loc 1 421 0
+ 404 004c 0368     		ldr	r3, [r0]
+ 405 004e 0901     		lsls	r1, r1, #4
+ 406              	.LVL24:
+ 407 0050 C9B2     		uxtb	r1, r1
+ 408 0052 1143     		orrs	r1, r1, r2
+ 409 0054 9960     		str	r1, [r3, #8]
+ 422:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Set TX Start of Message  (TXSOM) bit */
+ 423:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_FIRST_BYTE_TX_SET(hcec);
+ 410              		.loc 1 423 0
+ 411 0056 0268     		ldr	r2, [r0]
+ 412              	.LVL25:
+ 413 0058 1368     		ldr	r3, [r2]
+ 414 005a 43F00203 		orr	r3, r3, #2
+ 415 005e 1360     		str	r3, [r2]
+ 424:HALLIB/Src/stm32f7xx_hal_cec.c **** 	    
+ 425:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Process Unlocked */
+ 426:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_UNLOCK(hcec); 
+ 416              		.loc 1 426 0
+ 417 0060 0023     		movs	r3, #0
+ 418 0062 80F83430 		strb	r3, [r0, #52]
+ 427:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 428:HALLIB/Src/stm32f7xx_hal_cec.c ****     return HAL_OK;
+ 419              		.loc 1 428 0
+ 420 0066 1846     		mov	r0, r3
+ 421              	.LVL26:
+ 422 0068 10BD     		pop	{r4, pc}
+ 423              	.LVL27:
+ 424              	.L27:
+ 429:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 430:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 431:HALLIB/Src/stm32f7xx_hal_cec.c ****   else
+ 432:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 433:HALLIB/Src/stm32f7xx_hal_cec.c ****     return HAL_BUSY;   
+ 425              		.loc 1 433 0
+ 426 006a 0220     		movs	r0, #2
+ 427              	.LVL28:
+ 428 006c 10BD     		pop	{r4, pc}
+ 429              	.LVL29:
+ 430              	.L28:
+ 397:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 431              		.loc 1 397 0
+ 432 006e 0120     		movs	r0, #1
+ 433              	.LVL30:
+ 434 0070 10BD     		pop	{r4, pc}
+ 435              	.LVL31:
+ 436              	.L29:
+ 405:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->pTxBuffPtr = pData;
+ 437              		.loc 1 405 0
+ 438 0072 0220     		movs	r0, #2
+ 439              	.LVL32:
+ 434:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 435:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 440              		.loc 1 435 0
+ 441 0074 10BD     		pop	{r4, pc}
+ 442              		.cfi_endproc
+ARM GAS  /tmp/cc25729C.s 			page 17
+
+
+ 443              	.LFE141:
+ 445 0076 00BF     		.section	.text.HAL_CEC_GetLastReceivedFrameSize,"ax",%progbits
+ 446              		.align	2
+ 447              		.global	HAL_CEC_GetLastReceivedFrameSize
+ 448              		.thumb
+ 449              		.thumb_func
+ 451              	HAL_CEC_GetLastReceivedFrameSize:
+ 452              	.LFB142:
+ 436:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 437:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 438:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Get size of the received frame.
+ 439:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 440:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval Frame size
+ 441:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 442:HALLIB/Src/stm32f7xx_hal_cec.c **** uint32_t HAL_CEC_GetLastReceivedFrameSize(CEC_HandleTypeDef *hcec)
+ 443:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 453              		.loc 1 443 0
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 0
+ 456              		@ frame_needed = 0, uses_anonymous_args = 0
+ 457              		@ link register save eliminated.
+ 458              	.LVL33:
+ 444:HALLIB/Src/stm32f7xx_hal_cec.c ****   return hcec->RxXferSize;
+ 445:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 459              		.loc 1 445 0
+ 460 0000 408E     		ldrh	r0, [r0, #50]
+ 461              	.LVL34:
+ 462 0002 7047     		bx	lr
+ 463              		.cfi_endproc
+ 464              	.LFE142:
+ 466              		.section	.text.HAL_CEC_ChangeRxBuffer,"ax",%progbits
+ 467              		.align	2
+ 468              		.global	HAL_CEC_ChangeRxBuffer
+ 469              		.thumb
+ 470              		.thumb_func
+ 472              	HAL_CEC_ChangeRxBuffer:
+ 473              	.LFB143:
+ 446:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 447:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 448:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Change Rx Buffer.
+ 449:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 450:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param Rxbuffer Rx Buffer
+ 451:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @note  This function can be called only inside the HAL_CEC_RxCpltCallback() 
+ 452:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval Frame size
+ 453:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 454:HALLIB/Src/stm32f7xx_hal_cec.c **** void HAL_CEC_ChangeRxBuffer(CEC_HandleTypeDef *hcec, uint8_t* Rxbuffer)
+ 455:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 474              		.loc 1 455 0
+ 475              		.cfi_startproc
+ 476              		@ args = 0, pretend = 0, frame = 0
+ 477              		@ frame_needed = 0, uses_anonymous_args = 0
+ 478              		@ link register save eliminated.
+ 479              	.LVL35:
+ 456:HALLIB/Src/stm32f7xx_hal_cec.c ****   hcec->Init.RxBuffer = Rxbuffer; 
+ 480              		.loc 1 456 0
+ 481 0000 8162     		str	r1, [r0, #40]
+ 482 0002 7047     		bx	lr
+ARM GAS  /tmp/cc25729C.s 			page 18
+
+
+ 483              		.cfi_endproc
+ 484              	.LFE143:
+ 486              		.section	.text.HAL_CEC_TxCpltCallback,"ax",%progbits
+ 487              		.align	2
+ 488              		.weak	HAL_CEC_TxCpltCallback
+ 489              		.thumb
+ 490              		.thumb_func
+ 492              	HAL_CEC_TxCpltCallback:
+ 493              	.LFB145:
+ 457:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 458:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 459:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 460:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief This function handles CEC interrupt requests.
+ 461:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 462:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 463:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 464:HALLIB/Src/stm32f7xx_hal_cec.c **** void HAL_CEC_IRQHandler(CEC_HandleTypeDef *hcec)
+ 465:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 466:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 467:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* save interrupts register for further error or interrupts handling purposes */
+ 468:HALLIB/Src/stm32f7xx_hal_cec.c ****   uint32_t reg = 0;
+ 469:HALLIB/Src/stm32f7xx_hal_cec.c ****   reg = hcec->Instance->ISR;
+ 470:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 471:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 472:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* ----------------------------Arbitration Lost Management----------------------------------*/   
+ 473:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* CEC TX arbitration error interrupt occurred --------------------------------------*/
+ 474:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((reg & CEC_FLAG_ARBLST) != RESET) 
+ 475:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 476:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_ARBLST;
+ 477:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_ARBLST);
+ 478:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 479:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 480:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* ----------------------------Rx Management----------------------------------*/ 
+ 481:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* CEC RX byte received interrupt  ---------------------------------------------------*/
+ 482:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((reg & CEC_FLAG_RXBR) != RESET) 
+ 483:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 484:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* reception is starting */ 
+ 485:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxState = HAL_CEC_STATE_BUSY_RX;
+ 486:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxXferSize++;
+ 487:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* read received byte */
+ 488:HALLIB/Src/stm32f7xx_hal_cec.c ****     *hcec->Init.RxBuffer++ = hcec->Instance->RXDR;
+ 489:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_RXBR);  
+ 490:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 491:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 492:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* CEC RX end received interrupt  ---------------------------------------------------*/
+ 493:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((reg & CEC_FLAG_RXEND) != RESET) 
+ 494:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 495:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* clear IT */
+ 496:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_RXEND);
+ 497:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 498:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Rx process is completed, restore hcec->RxState to Ready */
+ 499:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxState = HAL_CEC_STATE_READY; 
+ 500:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 501:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->Init.RxBuffer-=hcec->RxXferSize;
+ 502:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_RxCpltCallback(hcec, hcec->RxXferSize); 
+ 503:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxXferSize = 0; 
+ 504:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ARM GAS  /tmp/cc25729C.s 			page 19
+
+
+ 505:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 506:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* ----------------------------Tx Management----------------------------------*/  
+ 507:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* CEC TX byte request interrupt ------------------------------------------------*/
+ 508:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((reg & CEC_FLAG_TXBR) != RESET) 
+ 509:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 510:HALLIB/Src/stm32f7xx_hal_cec.c ****     if (hcec->TxXferCount == 0)
+ 511:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 512:HALLIB/Src/stm32f7xx_hal_cec.c ****       /* if this is the last byte transmission, set TX End of Message (TXEOM) bit */
+ 513:HALLIB/Src/stm32f7xx_hal_cec.c ****       __HAL_CEC_LAST_BYTE_TX_SET(hcec);
+ 514:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Instance->TXDR = *hcec->pTxBuffPtr++;
+ 515:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 516:HALLIB/Src/stm32f7xx_hal_cec.c ****     else
+ 517:HALLIB/Src/stm32f7xx_hal_cec.c ****     {	
+ 518:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Instance->TXDR = *hcec->pTxBuffPtr++;
+ 519:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->TxXferCount--;
+ 520:HALLIB/Src/stm32f7xx_hal_cec.c ****     }  
+ 521:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* clear Tx-Byte request flag */
+ 522:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec,CEC_FLAG_TXBR); 
+ 523:HALLIB/Src/stm32f7xx_hal_cec.c ****   } 
+ 524:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 525:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* CEC TX end interrupt ------------------------------------------------*/
+ 526:HALLIB/Src/stm32f7xx_hal_cec.c ****   if((reg & CEC_FLAG_TXEND) != RESET) 
+ 527:HALLIB/Src/stm32f7xx_hal_cec.c ****   {	
+ 528:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_TXEND);
+ 529:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 530:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Tx process is ended, restore hcec->gState to Ready */     
+ 531:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->gState = HAL_CEC_STATE_READY;
+ 532:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Call the Process Unlocked before calling the Tx call back API to give the possibility to
+ 533:HALLIB/Src/stm32f7xx_hal_cec.c ****     start again the Transmission under the Tx call back API */
+ 534:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_UNLOCK(hcec);
+ 535:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 536:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_TxCpltCallback(hcec);
+ 537:HALLIB/Src/stm32f7xx_hal_cec.c ****   } 
+ 538:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 539:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* ----------------------------Rx/Tx Error Management----------------------------------*/   
+ 540:HALLIB/Src/stm32f7xx_hal_cec.c ****   if ((reg & (CEC_ISR_RXOVR|CEC_ISR_BRE|CEC_ISR_SBPE|CEC_ISR_LBPE|CEC_ISR_RXACKE|CEC_ISR_TXUDR|CEC_
+ 541:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 542:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = reg;
+ 543:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, HAL_CEC_ERROR_RXOVR|HAL_CEC_ERROR_BRE|CEC_FLAG_LBPE|CEC_FLAG_SBPE|HA
+ 544:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 545:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 546:HALLIB/Src/stm32f7xx_hal_cec.c ****     if((reg & (CEC_ISR_RXOVR|CEC_ISR_BRE|CEC_ISR_SBPE|CEC_ISR_LBPE|CEC_ISR_RXACKE)) != RESET)
+ 547:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 548:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Init.RxBuffer-=hcec->RxXferSize;	
+ 549:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->RxXferSize = 0; 
+ 550:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->RxState = HAL_CEC_STATE_READY;
+ 551:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 552:HALLIB/Src/stm32f7xx_hal_cec.c ****     else if (((reg & (CEC_ISR_TXUDR|CEC_ISR_TXERR|CEC_ISR_TXACKE)) != RESET) && ((reg & CEC_ISR_ARB
+ 553:HALLIB/Src/stm32f7xx_hal_cec.c ****     {	
+ 554:HALLIB/Src/stm32f7xx_hal_cec.c ****       /* Set the CEC state ready to be able to start again the process */
+ 555:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->gState = HAL_CEC_STATE_READY;
+ 556:HALLIB/Src/stm32f7xx_hal_cec.c ****     }	
+ 557:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 558:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Error  Call Back */    
+ 559:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_ErrorCallback(hcec);
+ 560:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 561:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ARM GAS  /tmp/cc25729C.s 			page 20
+
+
+ 562:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 563:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 564:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 565:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Tx Transfer completed callback
+ 566:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 567:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 568:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 569:HALLIB/Src/stm32f7xx_hal_cec.c ****  __weak void HAL_CEC_TxCpltCallback(CEC_HandleTypeDef *hcec)
+ 570:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 494              		.loc 1 570 0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+ 498              		@ link register save eliminated.
+ 499              	.LVL36:
+ 500 0000 7047     		bx	lr
+ 501              		.cfi_endproc
+ 502              	.LFE145:
+ 504 0002 00BF     		.section	.text.HAL_CEC_RxCpltCallback,"ax",%progbits
+ 505              		.align	2
+ 506              		.weak	HAL_CEC_RxCpltCallback
+ 507              		.thumb
+ 508              		.thumb_func
+ 510              	HAL_CEC_RxCpltCallback:
+ 511              	.LFB146:
+ 571:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Prevent unused argument(s) compilation warning */
+ 572:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(hcec);  
+ 573:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 574:HALLIB/Src/stm32f7xx_hal_cec.c ****             the HAL_CEC_TxCpltCallback can be implemented in the user file
+ 575:HALLIB/Src/stm32f7xx_hal_cec.c ****    */ 
+ 576:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 577:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 578:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 579:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief Rx Transfer completed callback
+ 580:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 581:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param RxFrameSize Size of frame
+ 582:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 583:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 584:HALLIB/Src/stm32f7xx_hal_cec.c **** __weak void HAL_CEC_RxCpltCallback(CEC_HandleTypeDef *hcec, uint32_t RxFrameSize)
+ 585:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 512              		.loc 1 585 0
+ 513              		.cfi_startproc
+ 514              		@ args = 0, pretend = 0, frame = 0
+ 515              		@ frame_needed = 0, uses_anonymous_args = 0
+ 516              		@ link register save eliminated.
+ 517              	.LVL37:
+ 518 0000 7047     		bx	lr
+ 519              		.cfi_endproc
+ 520              	.LFE146:
+ 522 0002 00BF     		.section	.text.HAL_CEC_ErrorCallback,"ax",%progbits
+ 523              		.align	2
+ 524              		.weak	HAL_CEC_ErrorCallback
+ 525              		.thumb
+ 526              		.thumb_func
+ 528              	HAL_CEC_ErrorCallback:
+ 529              	.LFB147:
+ 586:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Prevent unused argument(s) compilation warning */
+ARM GAS  /tmp/cc25729C.s 			page 21
+
+
+ 587:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(hcec);
+ 588:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(RxFrameSize);
+ 589:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 590:HALLIB/Src/stm32f7xx_hal_cec.c ****             the HAL_CEC_RxCpltCallback can be implemented in the user file
+ 591:HALLIB/Src/stm32f7xx_hal_cec.c ****    */
+ 592:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 593:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 594:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 595:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief CEC error callbacks
+ 596:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec CEC handle
+ 597:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval None
+ 598:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 599:HALLIB/Src/stm32f7xx_hal_cec.c ****  __weak void HAL_CEC_ErrorCallback(CEC_HandleTypeDef *hcec)
+ 600:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 530              		.loc 1 600 0
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 0
+ 533              		@ frame_needed = 0, uses_anonymous_args = 0
+ 534              		@ link register save eliminated.
+ 535              	.LVL38:
+ 536 0000 7047     		bx	lr
+ 537              		.cfi_endproc
+ 538              	.LFE147:
+ 540 0002 00BF     		.section	.text.HAL_CEC_IRQHandler,"ax",%progbits
+ 541              		.align	2
+ 542              		.global	HAL_CEC_IRQHandler
+ 543              		.thumb
+ 544              		.thumb_func
+ 546              	HAL_CEC_IRQHandler:
+ 547              	.LFB144:
+ 465:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 548              		.loc 1 465 0
+ 549              		.cfi_startproc
+ 550              		@ args = 0, pretend = 0, frame = 0
+ 551              		@ frame_needed = 0, uses_anonymous_args = 0
+ 552              	.LVL39:
+ 465:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 553              		.loc 1 465 0
+ 554 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 555              	.LCFI6:
+ 556              		.cfi_def_cfa_offset 24
+ 557              		.cfi_offset 3, -24
+ 558              		.cfi_offset 4, -20
+ 559              		.cfi_offset 5, -16
+ 560              		.cfi_offset 6, -12
+ 561              		.cfi_offset 7, -8
+ 562              		.cfi_offset 14, -4
+ 563 0002 0446     		mov	r4, r0
+ 564              	.LVL40:
+ 469:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 565              		.loc 1 469 0
+ 566 0004 0368     		ldr	r3, [r0]
+ 567 0006 1D69     		ldr	r5, [r3, #16]
+ 568              	.LVL41:
+ 474:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 569              		.loc 1 474 0
+ 570 0008 15F08006 		ands	r6, r5, #128
+ARM GAS  /tmp/cc25729C.s 			page 22
+
+
+ 571 000c 05D0     		beq	.L37
+ 476:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_ARBLST);
+ 572              		.loc 1 476 0
+ 573 000e 8022     		movs	r2, #128
+ 574 0010 8263     		str	r2, [r0, #56]
+ 477:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 575              		.loc 1 477 0
+ 576 0012 1A69     		ldr	r2, [r3, #16]
+ 577 0014 42F08002 		orr	r2, r2, #128
+ 578 0018 1A61     		str	r2, [r3, #16]
+ 579              	.L37:
+ 482:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 580              		.loc 1 482 0
+ 581 001a 15F0010F 		tst	r5, #1
+ 582 001e 10D0     		beq	.L38
+ 485:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxXferSize++;
+ 583              		.loc 1 485 0
+ 584 0020 2223     		movs	r3, #34
+ 585 0022 84F83630 		strb	r3, [r4, #54]
+ 486:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* read received byte */
+ 586              		.loc 1 486 0
+ 587 0026 638E     		ldrh	r3, [r4, #50]
+ 588 0028 0133     		adds	r3, r3, #1
+ 589 002a 6386     		strh	r3, [r4, #50]	@ movhi
+ 488:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, CEC_FLAG_RXBR);  
+ 590              		.loc 1 488 0
+ 591 002c A36A     		ldr	r3, [r4, #40]
+ 592 002e 5A1C     		adds	r2, r3, #1
+ 593 0030 A262     		str	r2, [r4, #40]
+ 594 0032 2268     		ldr	r2, [r4]
+ 595 0034 D268     		ldr	r2, [r2, #12]
+ 596 0036 1A70     		strb	r2, [r3]
+ 489:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 597              		.loc 1 489 0
+ 598 0038 2268     		ldr	r2, [r4]
+ 599 003a 1369     		ldr	r3, [r2, #16]
+ 600 003c 43F00103 		orr	r3, r3, #1
+ 601 0040 1361     		str	r3, [r2, #16]
+ 602              	.L38:
+ 493:HALLIB/Src/stm32f7xx_hal_cec.c ****   { 
+ 603              		.loc 1 493 0
+ 604 0042 15F0020F 		tst	r5, #2
+ 605 0046 11D0     		beq	.L39
+ 496:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 606              		.loc 1 496 0
+ 607 0048 2268     		ldr	r2, [r4]
+ 608 004a 1369     		ldr	r3, [r2, #16]
+ 609 004c 43F00203 		orr	r3, r3, #2
+ 610 0050 1361     		str	r3, [r2, #16]
+ 499:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 611              		.loc 1 499 0
+ 612 0052 2023     		movs	r3, #32
+ 613 0054 84F83630 		strb	r3, [r4, #54]
+ 500:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->Init.RxBuffer-=hcec->RxXferSize;
+ 614              		.loc 1 500 0
+ 615 0058 0027     		movs	r7, #0
+ 616 005a A763     		str	r7, [r4, #56]
+ARM GAS  /tmp/cc25729C.s 			page 23
+
+
+ 501:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_RxCpltCallback(hcec, hcec->RxXferSize); 
+ 617              		.loc 1 501 0
+ 618 005c 618E     		ldrh	r1, [r4, #50]
+ 619 005e A36A     		ldr	r3, [r4, #40]
+ 620 0060 5B1A     		subs	r3, r3, r1
+ 621 0062 A362     		str	r3, [r4, #40]
+ 502:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->RxXferSize = 0; 
+ 622              		.loc 1 502 0
+ 623 0064 2046     		mov	r0, r4
+ 624              	.LVL42:
+ 625 0066 FFF7FEFF 		bl	HAL_CEC_RxCpltCallback
+ 626              	.LVL43:
+ 503:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 627              		.loc 1 503 0
+ 628 006a 6786     		strh	r7, [r4, #50]	@ movhi
+ 629              	.L39:
+ 508:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 630              		.loc 1 508 0
+ 631 006c 15F4807F 		tst	r5, #256
+ 632 0070 1BD0     		beq	.L40
+ 510:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 633              		.loc 1 510 0
+ 634 0072 238E     		ldrh	r3, [r4, #48]
+ 635 0074 5BB9     		cbnz	r3, .L41
+ 513:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->Instance->TXDR = *hcec->pTxBuffPtr++;
+ 636              		.loc 1 513 0
+ 637 0076 2268     		ldr	r2, [r4]
+ 638 0078 1368     		ldr	r3, [r2]
+ 639 007a 43F00403 		orr	r3, r3, #4
+ 640 007e 1360     		str	r3, [r2]
+ 514:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 641              		.loc 1 514 0
+ 642 0080 2268     		ldr	r2, [r4]
+ 643 0082 E36A     		ldr	r3, [r4, #44]
+ 644 0084 591C     		adds	r1, r3, #1
+ 645 0086 E162     		str	r1, [r4, #44]
+ 646 0088 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 647 008a 9360     		str	r3, [r2, #8]
+ 648 008c 08E0     		b	.L42
+ 649              	.L41:
+ 518:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->TxXferCount--;
+ 650              		.loc 1 518 0
+ 651 008e 2268     		ldr	r2, [r4]
+ 652 0090 E36A     		ldr	r3, [r4, #44]
+ 653 0092 591C     		adds	r1, r3, #1
+ 654 0094 E162     		str	r1, [r4, #44]
+ 655 0096 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 656 0098 9360     		str	r3, [r2, #8]
+ 519:HALLIB/Src/stm32f7xx_hal_cec.c ****     }  
+ 657              		.loc 1 519 0
+ 658 009a 238E     		ldrh	r3, [r4, #48]
+ 659 009c 013B     		subs	r3, r3, #1
+ 660 009e 2386     		strh	r3, [r4, #48]	@ movhi
+ 661              	.L42:
+ 522:HALLIB/Src/stm32f7xx_hal_cec.c ****   } 
+ 662              		.loc 1 522 0
+ 663 00a0 2268     		ldr	r2, [r4]
+ARM GAS  /tmp/cc25729C.s 			page 24
+
+
+ 664 00a2 1369     		ldr	r3, [r2, #16]
+ 665 00a4 43F48073 		orr	r3, r3, #256
+ 666 00a8 1361     		str	r3, [r2, #16]
+ 667              	.L40:
+ 526:HALLIB/Src/stm32f7xx_hal_cec.c ****   {	
+ 668              		.loc 1 526 0
+ 669 00aa 15F4007F 		tst	r5, #512
+ 670 00ae 0ED0     		beq	.L43
+ 528:HALLIB/Src/stm32f7xx_hal_cec.c ****     
+ 671              		.loc 1 528 0
+ 672 00b0 2268     		ldr	r2, [r4]
+ 673 00b2 1369     		ldr	r3, [r2, #16]
+ 674 00b4 43F40073 		orr	r3, r3, #512
+ 675 00b8 1361     		str	r3, [r2, #16]
+ 531:HALLIB/Src/stm32f7xx_hal_cec.c ****     /* Call the Process Unlocked before calling the Tx call back API to give the possibility to
+ 676              		.loc 1 531 0
+ 677 00ba 2023     		movs	r3, #32
+ 678 00bc 84F83530 		strb	r3, [r4, #53]
+ 534:HALLIB/Src/stm32f7xx_hal_cec.c ****     hcec->ErrorCode = HAL_CEC_ERROR_NONE;
+ 679              		.loc 1 534 0
+ 680 00c0 0023     		movs	r3, #0
+ 681 00c2 84F83430 		strb	r3, [r4, #52]
+ 535:HALLIB/Src/stm32f7xx_hal_cec.c ****     HAL_CEC_TxCpltCallback(hcec);
+ 682              		.loc 1 535 0
+ 683 00c6 A363     		str	r3, [r4, #56]
+ 536:HALLIB/Src/stm32f7xx_hal_cec.c ****   } 
+ 684              		.loc 1 536 0
+ 685 00c8 2046     		mov	r0, r4
+ 686 00ca FFF7FEFF 		bl	HAL_CEC_TxCpltCallback
+ 687              	.LVL44:
+ 688              	.L43:
+ 540:HALLIB/Src/stm32f7xx_hal_cec.c ****   {
+ 689              		.loc 1 540 0
+ 690 00ce 41F67C43 		movw	r3, #7292
+ 691 00d2 1D42     		tst	r5, r3
+ 692 00d4 1BD0     		beq	.L36
+ 542:HALLIB/Src/stm32f7xx_hal_cec.c ****     __HAL_CEC_CLEAR_FLAG(hcec, HAL_CEC_ERROR_RXOVR|HAL_CEC_ERROR_BRE|CEC_FLAG_LBPE|CEC_FLAG_SBPE|HA
+ 693              		.loc 1 542 0
+ 694 00d6 A563     		str	r5, [r4, #56]
+ 543:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 695              		.loc 1 543 0
+ 696 00d8 2268     		ldr	r2, [r4]
+ 697 00da 1169     		ldr	r1, [r2, #16]
+ 698 00dc 0B43     		orrs	r3, r3, r1
+ 699 00de 1361     		str	r3, [r2, #16]
+ 546:HALLIB/Src/stm32f7xx_hal_cec.c ****     {
+ 700              		.loc 1 546 0
+ 701 00e0 15F07C0F 		tst	r5, #124
+ 702 00e4 09D0     		beq	.L45
+ 548:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->RxXferSize = 0; 
+ 703              		.loc 1 548 0
+ 704 00e6 628E     		ldrh	r2, [r4, #50]
+ 705 00e8 A36A     		ldr	r3, [r4, #40]
+ 706 00ea 9B1A     		subs	r3, r3, r2
+ 707 00ec A362     		str	r3, [r4, #40]
+ 549:HALLIB/Src/stm32f7xx_hal_cec.c ****       hcec->RxState = HAL_CEC_STATE_READY;
+ 708              		.loc 1 549 0
+ARM GAS  /tmp/cc25729C.s 			page 25
+
+
+ 709 00ee 0023     		movs	r3, #0
+ 710 00f0 6386     		strh	r3, [r4, #50]	@ movhi
+ 550:HALLIB/Src/stm32f7xx_hal_cec.c ****     }
+ 711              		.loc 1 550 0
+ 712 00f2 2023     		movs	r3, #32
+ 713 00f4 84F83630 		strb	r3, [r4, #54]
+ 714 00f8 06E0     		b	.L46
+ 715              	.L45:
+ 552:HALLIB/Src/stm32f7xx_hal_cec.c ****     {	
+ 716              		.loc 1 552 0
+ 717 00fa 15F4E05F 		tst	r5, #7168
+ 718 00fe 03D0     		beq	.L46
+ 552:HALLIB/Src/stm32f7xx_hal_cec.c ****     {	
+ 719              		.loc 1 552 0 is_stmt 0 discriminator 1
+ 720 0100 16B9     		cbnz	r6, .L46
+ 555:HALLIB/Src/stm32f7xx_hal_cec.c ****     }	
+ 721              		.loc 1 555 0 is_stmt 1
+ 722 0102 2023     		movs	r3, #32
+ 723 0104 84F83530 		strb	r3, [r4, #53]
+ 724              	.L46:
+ 559:HALLIB/Src/stm32f7xx_hal_cec.c ****   }
+ 725              		.loc 1 559 0
+ 726 0108 2046     		mov	r0, r4
+ 727 010a FFF7FEFF 		bl	HAL_CEC_ErrorCallback
+ 728              	.LVL45:
+ 729              	.L36:
+ 730 010e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 731              		.cfi_endproc
+ 732              	.LFE144:
+ 734              		.section	.text.HAL_CEC_GetState,"ax",%progbits
+ 735              		.align	2
+ 736              		.global	HAL_CEC_GetState
+ 737              		.thumb
+ 738              		.thumb_func
+ 740              	HAL_CEC_GetState:
+ 741              	.LFB148:
+ 601:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* Prevent unused argument(s) compilation warning */
+ 602:HALLIB/Src/stm32f7xx_hal_cec.c ****   UNUSED(hcec);
+ 603:HALLIB/Src/stm32f7xx_hal_cec.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 604:HALLIB/Src/stm32f7xx_hal_cec.c ****             the HAL_CEC_ErrorCallback can be implemented in the user file
+ 605:HALLIB/Src/stm32f7xx_hal_cec.c ****    */ 
+ 606:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 607:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 608:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @}
+ 609:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 610:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 611:HALLIB/Src/stm32f7xx_hal_cec.c **** /** @defgroup CEC_Exported_Functions_Group3 Peripheral Control function 
+ 612:HALLIB/Src/stm32f7xx_hal_cec.c ****   *  @brief   CEC control functions 
+ 613:HALLIB/Src/stm32f7xx_hal_cec.c ****   *
+ 614:HALLIB/Src/stm32f7xx_hal_cec.c **** @verbatim   
+ 615:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================
+ 616:HALLIB/Src/stm32f7xx_hal_cec.c ****                       ##### Peripheral Control function #####
+ 617:HALLIB/Src/stm32f7xx_hal_cec.c ****  ===============================================================================  
+ 618:HALLIB/Src/stm32f7xx_hal_cec.c ****     [..]
+ 619:HALLIB/Src/stm32f7xx_hal_cec.c ****     This subsection provides a set of functions allowing to control the CEC.
+ 620:HALLIB/Src/stm32f7xx_hal_cec.c ****      (+) HAL_CEC_GetState() API can be helpful to check in run-time the state of the CEC peripheral
+ 621:HALLIB/Src/stm32f7xx_hal_cec.c **** 	 (+) HAL_CEC_GetError() API can be helpful to check in run-time the error of the CEC peripheral. 
+ARM GAS  /tmp/cc25729C.s 			page 26
+
+
+ 622:HALLIB/Src/stm32f7xx_hal_cec.c **** @endverbatim
+ 623:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @{
+ 624:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 625:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 626:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @brief return the CEC state
+ 627:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @param hcec pointer to a CEC_HandleTypeDef structure that contains
+ 628:HALLIB/Src/stm32f7xx_hal_cec.c ****   *              the configuration information for the specified CEC module.
+ 629:HALLIB/Src/stm32f7xx_hal_cec.c ****   * @retval HAL state
+ 630:HALLIB/Src/stm32f7xx_hal_cec.c ****   */
+ 631:HALLIB/Src/stm32f7xx_hal_cec.c **** HAL_CEC_StateTypeDef HAL_CEC_GetState(CEC_HandleTypeDef *hcec)
+ 632:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 742              		.loc 1 632 0
+ 743              		.cfi_startproc
+ 744              		@ args = 0, pretend = 0, frame = 0
+ 745              		@ frame_needed = 0, uses_anonymous_args = 0
+ 746              		@ link register save eliminated.
+ 747              	.LVL46:
+ 633:HALLIB/Src/stm32f7xx_hal_cec.c ****   uint32_t temp1= 0x00U, temp2 = 0x00U;
+ 634:HALLIB/Src/stm32f7xx_hal_cec.c ****   temp1 = hcec->gState;
+ 748              		.loc 1 634 0
+ 749 0000 90F83520 		ldrb	r2, [r0, #53]	@ zero_extendqisi2
+ 750              	.LVL47:
+ 635:HALLIB/Src/stm32f7xx_hal_cec.c ****   temp2 = hcec->RxState;
+ 751              		.loc 1 635 0
+ 752 0004 90F83600 		ldrb	r0, [r0, #54]	@ zero_extendqisi2
+ 753              	.LVL48:
+ 636:HALLIB/Src/stm32f7xx_hal_cec.c ****   
+ 637:HALLIB/Src/stm32f7xx_hal_cec.c ****   return (HAL_CEC_StateTypeDef)(temp1 | temp2);
+ 638:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 754              		.loc 1 638 0
+ 755 0008 1043     		orrs	r0, r0, r2
+ 756              	.LVL49:
+ 757 000a 7047     		bx	lr
+ 758              		.cfi_endproc
+ 759              	.LFE148:
+ 761              		.section	.text.HAL_CEC_GetError,"ax",%progbits
+ 762              		.align	2
+ 763              		.global	HAL_CEC_GetError
+ 764              		.thumb
+ 765              		.thumb_func
+ 767              	HAL_CEC_GetError:
+ 768              	.LFB149:
+ 639:HALLIB/Src/stm32f7xx_hal_cec.c **** 
+ 640:HALLIB/Src/stm32f7xx_hal_cec.c **** /**
+ 641:HALLIB/Src/stm32f7xx_hal_cec.c **** * @brief  Return the CEC error code
+ 642:HALLIB/Src/stm32f7xx_hal_cec.c **** * @param  hcec  pointer to a CEC_HandleTypeDef structure that contains
+ 643:HALLIB/Src/stm32f7xx_hal_cec.c ****   *              the configuration information for the specified CEC.
+ 644:HALLIB/Src/stm32f7xx_hal_cec.c **** * @retval CEC Error Code
+ 645:HALLIB/Src/stm32f7xx_hal_cec.c **** */
+ 646:HALLIB/Src/stm32f7xx_hal_cec.c **** uint32_t HAL_CEC_GetError(CEC_HandleTypeDef *hcec)
+ 647:HALLIB/Src/stm32f7xx_hal_cec.c **** {
+ 769              		.loc 1 647 0
+ 770              		.cfi_startproc
+ 771              		@ args = 0, pretend = 0, frame = 0
+ 772              		@ frame_needed = 0, uses_anonymous_args = 0
+ 773              		@ link register save eliminated.
+ 774              	.LVL50:
+ARM GAS  /tmp/cc25729C.s 			page 27
+
+
+ 648:HALLIB/Src/stm32f7xx_hal_cec.c ****   return hcec->ErrorCode;
+ 649:HALLIB/Src/stm32f7xx_hal_cec.c **** }
+ 775              		.loc 1 649 0
+ 776 0000 806B     		ldr	r0, [r0, #56]
+ 777              	.LVL51:
+ 778 0002 7047     		bx	lr
+ 779              		.cfi_endproc
+ 780              	.LFE149:
+ 782              		.text
+ 783              	.Letext0:
+ 784              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 785              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 786              		.file 4 "Inc/stm32f767xx.h"
+ 787              		.file 5 "Inc/stm32f7xx.h"
+ 788              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 789              		.file 7 "HALLIB/Inc/stm32f7xx_hal_cec.h"
+ 790              		.file 8 "CORE/core_cm7.h"
+ARM GAS  /tmp/cc25729C.s 			page 28
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_cec.c
+     /tmp/cc25729C.s:21     .text.HAL_CEC_SetDeviceAddress:00000000 $t
+     /tmp/cc25729C.s:26     .text.HAL_CEC_SetDeviceAddress:00000000 HAL_CEC_SetDeviceAddress
+     /tmp/cc25729C.s:109    .text.HAL_CEC_SetDeviceAddress:00000068 $d
+     /tmp/cc25729C.s:116    .text.HAL_CEC_MspInit:00000000 $t
+     /tmp/cc25729C.s:121    .text.HAL_CEC_MspInit:00000000 HAL_CEC_MspInit
+     /tmp/cc25729C.s:134    .text.HAL_CEC_Init:00000000 $t
+     /tmp/cc25729C.s:139    .text.HAL_CEC_Init:00000000 HAL_CEC_Init
+     /tmp/cc25729C.s:253    .text.HAL_CEC_MspDeInit:00000000 $t
+     /tmp/cc25729C.s:258    .text.HAL_CEC_MspDeInit:00000000 HAL_CEC_MspDeInit
+     /tmp/cc25729C.s:271    .text.HAL_CEC_DeInit:00000000 $t
+     /tmp/cc25729C.s:276    .text.HAL_CEC_DeInit:00000000 HAL_CEC_DeInit
+     /tmp/cc25729C.s:339    .text.HAL_CEC_DeInit:00000048 $d
+     /tmp/cc25729C.s:344    .text.HAL_CEC_Transmit_IT:00000000 $t
+     /tmp/cc25729C.s:349    .text.HAL_CEC_Transmit_IT:00000000 HAL_CEC_Transmit_IT
+     /tmp/cc25729C.s:446    .text.HAL_CEC_GetLastReceivedFrameSize:00000000 $t
+     /tmp/cc25729C.s:451    .text.HAL_CEC_GetLastReceivedFrameSize:00000000 HAL_CEC_GetLastReceivedFrameSize
+     /tmp/cc25729C.s:467    .text.HAL_CEC_ChangeRxBuffer:00000000 $t
+     /tmp/cc25729C.s:472    .text.HAL_CEC_ChangeRxBuffer:00000000 HAL_CEC_ChangeRxBuffer
+     /tmp/cc25729C.s:487    .text.HAL_CEC_TxCpltCallback:00000000 $t
+     /tmp/cc25729C.s:492    .text.HAL_CEC_TxCpltCallback:00000000 HAL_CEC_TxCpltCallback
+     /tmp/cc25729C.s:505    .text.HAL_CEC_RxCpltCallback:00000000 $t
+     /tmp/cc25729C.s:510    .text.HAL_CEC_RxCpltCallback:00000000 HAL_CEC_RxCpltCallback
+     /tmp/cc25729C.s:523    .text.HAL_CEC_ErrorCallback:00000000 $t
+     /tmp/cc25729C.s:528    .text.HAL_CEC_ErrorCallback:00000000 HAL_CEC_ErrorCallback
+     /tmp/cc25729C.s:541    .text.HAL_CEC_IRQHandler:00000000 $t
+     /tmp/cc25729C.s:546    .text.HAL_CEC_IRQHandler:00000000 HAL_CEC_IRQHandler
+     /tmp/cc25729C.s:735    .text.HAL_CEC_GetState:00000000 $t
+     /tmp/cc25729C.s:740    .text.HAL_CEC_GetState:00000000 HAL_CEC_GetState
+     /tmp/cc25729C.s:762    .text.HAL_CEC_GetError:00000000 $t
+     /tmp/cc25729C.s:767    .text.HAL_CEC_GetError:00000000 HAL_CEC_GetError
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

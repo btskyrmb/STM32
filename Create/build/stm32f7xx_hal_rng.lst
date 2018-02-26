@@ -1,0 +1,1182 @@
+ARM GAS  /tmp/cc6RRCqi.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_rng.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_RNG_MspInit,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_RNG_MspInit
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_RNG_MspInit:
+  27              	.LFB138:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_rng.c"
+   1:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_rng.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @file    stm32f7xx_hal_rng.c
+   4:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief   RNG HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_rng.c ****   *          This file provides firmware functions to manage the following 
+   7:HALLIB/Src/stm32f7xx_hal_rng.c ****   *          functionalities of the Random Number Generator (RNG) peripheral:
+   8:HALLIB/Src/stm32f7xx_hal_rng.c ****   *           + Initialization/de-initialization functions
+   9:HALLIB/Src/stm32f7xx_hal_rng.c ****   *           + Peripheral Control functions 
+  10:HALLIB/Src/stm32f7xx_hal_rng.c ****   *           + Peripheral State functions
+  11:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         
+  12:HALLIB/Src/stm32f7xx_hal_rng.c ****   @verbatim
+  13:HALLIB/Src/stm32f7xx_hal_rng.c ****   ==============================================================================
+  14:HALLIB/Src/stm32f7xx_hal_rng.c ****                      ##### How to use this driver #####
+  15:HALLIB/Src/stm32f7xx_hal_rng.c ****   ==============================================================================
+  16:HALLIB/Src/stm32f7xx_hal_rng.c ****   [..]
+  17:HALLIB/Src/stm32f7xx_hal_rng.c ****       The RNG HAL driver can be used as follows:
+  18:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  19:HALLIB/Src/stm32f7xx_hal_rng.c ****       (#) Enable the RNG controller clock using __HAL_RCC_RNG_CLK_ENABLE() macro 
+  20:HALLIB/Src/stm32f7xx_hal_rng.c ****           in HAL_RNG_MspInit().
+  21:HALLIB/Src/stm32f7xx_hal_rng.c ****       (#) Activate the RNG peripheral using HAL_RNG_Init() function.
+  22:HALLIB/Src/stm32f7xx_hal_rng.c ****       (#) Wait until the 32 bit Random Number Generator contains a valid 
+  23:HALLIB/Src/stm32f7xx_hal_rng.c ****           random data using (polling/interrupt) mode.   
+  24:HALLIB/Src/stm32f7xx_hal_rng.c ****       (#) Get the 32 bit random number using HAL_RNG_GenerateRandomNumber() function.
+  25:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+  26:HALLIB/Src/stm32f7xx_hal_rng.c ****   @endverbatim
+  27:HALLIB/Src/stm32f7xx_hal_rng.c ****   ******************************************************************************
+  28:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @attention
+  29:HALLIB/Src/stm32f7xx_hal_rng.c ****   *
+  30:HALLIB/Src/stm32f7xx_hal_rng.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+ARM GAS  /tmp/cc6RRCqi.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_rng.c ****   *
+  32:HALLIB/Src/stm32f7xx_hal_rng.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  33:HALLIB/Src/stm32f7xx_hal_rng.c ****   * are permitted provided that the following conditions are met:
+  34:HALLIB/Src/stm32f7xx_hal_rng.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  35:HALLIB/Src/stm32f7xx_hal_rng.c ****   *      this list of conditions and the following disclaimer.
+  36:HALLIB/Src/stm32f7xx_hal_rng.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  37:HALLIB/Src/stm32f7xx_hal_rng.c ****   *      this list of conditions and the following disclaimer in the documentation
+  38:HALLIB/Src/stm32f7xx_hal_rng.c ****   *      and/or other materials provided with the distribution.
+  39:HALLIB/Src/stm32f7xx_hal_rng.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  40:HALLIB/Src/stm32f7xx_hal_rng.c ****   *      may be used to endorse or promote products derived from this software
+  41:HALLIB/Src/stm32f7xx_hal_rng.c ****   *      without specific prior written permission.
+  42:HALLIB/Src/stm32f7xx_hal_rng.c ****   *
+  43:HALLIB/Src/stm32f7xx_hal_rng.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  44:HALLIB/Src/stm32f7xx_hal_rng.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  45:HALLIB/Src/stm32f7xx_hal_rng.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  46:HALLIB/Src/stm32f7xx_hal_rng.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  47:HALLIB/Src/stm32f7xx_hal_rng.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  48:HALLIB/Src/stm32f7xx_hal_rng.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  49:HALLIB/Src/stm32f7xx_hal_rng.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  50:HALLIB/Src/stm32f7xx_hal_rng.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  51:HALLIB/Src/stm32f7xx_hal_rng.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  52:HALLIB/Src/stm32f7xx_hal_rng.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  53:HALLIB/Src/stm32f7xx_hal_rng.c ****   *
+  54:HALLIB/Src/stm32f7xx_hal_rng.c ****   ******************************************************************************
+  55:HALLIB/Src/stm32f7xx_hal_rng.c ****   */ 
+  56:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  57:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Includes ------------------------------------------------------------------*/
+  58:HALLIB/Src/stm32f7xx_hal_rng.c **** #include "stm32f7xx_hal.h"
+  59:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  60:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  61:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+  62:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+  63:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  64:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG 
+  65:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+  66:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+  67:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  68:HALLIB/Src/stm32f7xx_hal_rng.c **** #ifdef HAL_RNG_MODULE_ENABLED
+  69:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  70:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private types -------------------------------------------------------------*/
+  71:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private defines -----------------------------------------------------------*/
+  72:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private variables ---------------------------------------------------------*/
+  73:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private constants ---------------------------------------------------------*/
+  74:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG_Private_Constants
+  75:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+  76:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+  77:HALLIB/Src/stm32f7xx_hal_rng.c **** #define RNG_TIMEOUT_VALUE     2U
+  78:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+  79:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @}
+  80:HALLIB/Src/stm32f7xx_hal_rng.c ****   */ 
+  81:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private macros ------------------------------------------------------------*/
+  82:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private functions prototypes ----------------------------------------------*/
+  83:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Private functions ---------------------------------------------------------*/
+  84:HALLIB/Src/stm32f7xx_hal_rng.c **** /* Exported functions --------------------------------------------------------*/
+  85:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  86:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions
+  87:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+ARM GAS  /tmp/cc6RRCqi.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+  89:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  90:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group1
+  91:HALLIB/Src/stm32f7xx_hal_rng.c ****  *  @brief   Initialization and de-initialization functions
+  92:HALLIB/Src/stm32f7xx_hal_rng.c ****  *
+  93:HALLIB/Src/stm32f7xx_hal_rng.c **** @verbatim
+  94:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================
+  95:HALLIB/Src/stm32f7xx_hal_rng.c ****           ##### Initialization and de-initialization functions #####
+  96:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================
+  97:HALLIB/Src/stm32f7xx_hal_rng.c ****     [..]  This section provides functions allowing to:
+  98:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) Initialize the RNG according to the specified parameters 
+  99:HALLIB/Src/stm32f7xx_hal_rng.c ****           in the RNG_InitTypeDef and create the associated handle
+ 100:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) DeInitialize the RNG peripheral
+ 101:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) Initialize the RNG MSP
+ 102:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) DeInitialize RNG MSP 
+ 103:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 104:HALLIB/Src/stm32f7xx_hal_rng.c **** @endverbatim
+ 105:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+ 106:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 107:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 108:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 109:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Initializes the RNG peripheral and creates the associated handle.
+ 110:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 111:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 112:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval HAL status
+ 113:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 114:HALLIB/Src/stm32f7xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_Init(RNG_HandleTypeDef *hrng)
+ 115:HALLIB/Src/stm32f7xx_hal_rng.c **** { 
+ 116:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 117:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(hrng == NULL)
+ 118:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 119:HALLIB/Src/stm32f7xx_hal_rng.c ****     return HAL_ERROR;
+ 120:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 121:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 122:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_RESET)
+ 123:HALLIB/Src/stm32f7xx_hal_rng.c ****   {  
+ 124:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Allocate lock resource and initialize it */
+ 125:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->Lock = HAL_UNLOCKED;
+ 126:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Init the low level hardware */
+ 127:HALLIB/Src/stm32f7xx_hal_rng.c ****     HAL_RNG_MspInit(hrng);
+ 128:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 129:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 130:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Change RNG peripheral state */
+ 131:HALLIB/Src/stm32f7xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_BUSY;
+ 132:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 133:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Enable the RNG Peripheral */
+ 134:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_RNG_ENABLE(hrng);
+ 135:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 136:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Initialize the RNG state */
+ 137:HALLIB/Src/stm32f7xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_READY;
+ 138:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 139:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Return function status */
+ 140:HALLIB/Src/stm32f7xx_hal_rng.c ****   return HAL_OK;
+ 141:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 142:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 143:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 144:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  DeInitializes the RNG peripheral. 
+ARM GAS  /tmp/cc6RRCqi.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 146:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 147:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval HAL status
+ 148:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 149:HALLIB/Src/stm32f7xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_DeInit(RNG_HandleTypeDef *hrng)
+ 150:HALLIB/Src/stm32f7xx_hal_rng.c **** { 
+ 151:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 152:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(hrng == NULL)
+ 153:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 154:HALLIB/Src/stm32f7xx_hal_rng.c ****     return HAL_ERROR;
+ 155:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 156:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Disable the RNG Peripheral */
+ 157:HALLIB/Src/stm32f7xx_hal_rng.c ****   CLEAR_BIT(hrng->Instance->CR, RNG_CR_IE | RNG_CR_RNGEN);
+ 158:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 159:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Clear RNG interrupt status flags */
+ 160:HALLIB/Src/stm32f7xx_hal_rng.c ****   CLEAR_BIT(hrng->Instance->SR, RNG_SR_CEIS | RNG_SR_SEIS);
+ 161:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 162:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* DeInit the low level hardware */
+ 163:HALLIB/Src/stm32f7xx_hal_rng.c ****   HAL_RNG_MspDeInit(hrng);
+ 164:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 165:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Update the RNG state */
+ 166:HALLIB/Src/stm32f7xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_RESET; 
+ 167:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 168:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Release Lock */
+ 169:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_UNLOCK(hrng);
+ 170:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 171:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Return the function status */
+ 172:HALLIB/Src/stm32f7xx_hal_rng.c ****   return HAL_OK;
+ 173:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 174:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 175:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 176:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Initializes the RNG MSP.
+ 177:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 178:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 179:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval None
+ 180:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 181:HALLIB/Src/stm32f7xx_hal_rng.c **** __weak void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
+ 182:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+  29              		.loc 1 182 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE138:
+  39 0002 00BF     		.section	.text.HAL_RNG_Init,"ax",%progbits
+  40              		.align	2
+  41              		.global	HAL_RNG_Init
+  42              		.thumb
+  43              		.thumb_func
+  45              	HAL_RNG_Init:
+  46              	.LFB136:
+ 115:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+  47              		.loc 1 115 0
+  48              		.cfi_startproc
+ARM GAS  /tmp/cc6RRCqi.s 			page 5
+
+
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              	.LVL1:
+ 117:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+  52              		.loc 1 117 0
+  53 0000 A0B1     		cbz	r0, .L5
+ 115:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+  54              		.loc 1 115 0
+  55 0002 10B5     		push	{r4, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 4, -8
+  59              		.cfi_offset 14, -4
+  60 0004 0446     		mov	r4, r0
+ 122:HALLIB/Src/stm32f7xx_hal_rng.c ****   {  
+  61              		.loc 1 122 0
+  62 0006 437A     		ldrb	r3, [r0, #9]	@ zero_extendqisi2
+  63 0008 13F0FF0F 		tst	r3, #255
+  64 000c 03D1     		bne	.L4
+ 125:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Init the low level hardware */
+  65              		.loc 1 125 0
+  66 000e 0023     		movs	r3, #0
+  67 0010 0372     		strb	r3, [r0, #8]
+ 127:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+  68              		.loc 1 127 0
+  69 0012 FFF7FEFF 		bl	HAL_RNG_MspInit
+  70              	.LVL2:
+  71              	.L4:
+ 131:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  72              		.loc 1 131 0
+  73 0016 0223     		movs	r3, #2
+  74 0018 6372     		strb	r3, [r4, #9]
+ 134:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  75              		.loc 1 134 0
+  76 001a 2268     		ldr	r2, [r4]
+  77 001c 1368     		ldr	r3, [r2]
+  78 001e 43F00403 		orr	r3, r3, #4
+  79 0022 1360     		str	r3, [r2]
+ 137:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+  80              		.loc 1 137 0
+  81 0024 0123     		movs	r3, #1
+  82 0026 6372     		strb	r3, [r4, #9]
+ 140:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+  83              		.loc 1 140 0
+  84 0028 0020     		movs	r0, #0
+  85 002a 10BD     		pop	{r4, pc}
+  86              	.LVL3:
+  87              	.L5:
+  88              	.LCFI1:
+  89              		.cfi_def_cfa_offset 0
+  90              		.cfi_restore 4
+  91              		.cfi_restore 14
+ 119:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+  92              		.loc 1 119 0
+  93 002c 0120     		movs	r0, #1
+  94              	.LVL4:
+  95 002e 7047     		bx	lr
+ARM GAS  /tmp/cc6RRCqi.s 			page 6
+
+
+  96              		.cfi_endproc
+  97              	.LFE136:
+  99              		.section	.text.HAL_RNG_MspDeInit,"ax",%progbits
+ 100              		.align	2
+ 101              		.weak	HAL_RNG_MspDeInit
+ 102              		.thumb
+ 103              		.thumb_func
+ 105              	HAL_RNG_MspDeInit:
+ 106              	.LFB139:
+ 183:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 184:HALLIB/Src/stm32f7xx_hal_rng.c ****   UNUSED(hrng);
+ 185:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 186:HALLIB/Src/stm32f7xx_hal_rng.c ****             function HAL_RNG_MspInit must be implemented in the user file.
+ 187:HALLIB/Src/stm32f7xx_hal_rng.c ****    */
+ 188:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 189:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 190:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 191:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  DeInitializes the RNG MSP.
+ 192:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 193:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 194:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval None
+ 195:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 196:HALLIB/Src/stm32f7xx_hal_rng.c **** __weak void HAL_RNG_MspDeInit(RNG_HandleTypeDef *hrng)
+ 197:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 107              		.loc 1 197 0
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 0
+ 110              		@ frame_needed = 0, uses_anonymous_args = 0
+ 111              		@ link register save eliminated.
+ 112              	.LVL5:
+ 113 0000 7047     		bx	lr
+ 114              		.cfi_endproc
+ 115              	.LFE139:
+ 117 0002 00BF     		.section	.text.HAL_RNG_DeInit,"ax",%progbits
+ 118              		.align	2
+ 119              		.global	HAL_RNG_DeInit
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	HAL_RNG_DeInit:
+ 124              	.LFB137:
+ 150:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 125              		.loc 1 150 0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129              	.LVL6:
+ 152:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 130              		.loc 1 152 0
+ 131 0000 88B1     		cbz	r0, .L11
+ 150:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 132              		.loc 1 150 0
+ 133 0002 10B5     		push	{r4, lr}
+ 134              	.LCFI2:
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 4, -8
+ 137              		.cfi_offset 14, -4
+ 138 0004 0446     		mov	r4, r0
+ARM GAS  /tmp/cc6RRCqi.s 			page 7
+
+
+ 157:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 139              		.loc 1 157 0
+ 140 0006 0268     		ldr	r2, [r0]
+ 141 0008 1368     		ldr	r3, [r2]
+ 142 000a 23F00C03 		bic	r3, r3, #12
+ 143 000e 1360     		str	r3, [r2]
+ 160:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 144              		.loc 1 160 0
+ 145 0010 0268     		ldr	r2, [r0]
+ 146 0012 5368     		ldr	r3, [r2, #4]
+ 147 0014 23F06003 		bic	r3, r3, #96
+ 148 0018 5360     		str	r3, [r2, #4]
+ 163:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 149              		.loc 1 163 0
+ 150 001a FFF7FEFF 		bl	HAL_RNG_MspDeInit
+ 151              	.LVL7:
+ 166:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 152              		.loc 1 166 0
+ 153 001e 0020     		movs	r0, #0
+ 154 0020 6072     		strb	r0, [r4, #9]
+ 169:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 155              		.loc 1 169 0
+ 156 0022 2072     		strb	r0, [r4, #8]
+ 172:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 157              		.loc 1 172 0
+ 158 0024 10BD     		pop	{r4, pc}
+ 159              	.LVL8:
+ 160              	.L11:
+ 161              	.LCFI3:
+ 162              		.cfi_def_cfa_offset 0
+ 163              		.cfi_restore 4
+ 164              		.cfi_restore 14
+ 154:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 165              		.loc 1 154 0
+ 166 0026 0120     		movs	r0, #1
+ 167              	.LVL9:
+ 168 0028 7047     		bx	lr
+ 169              		.cfi_endproc
+ 170              	.LFE137:
+ 172 002a 00BF     		.section	.text.HAL_RNG_GenerateRandomNumber,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	HAL_RNG_GenerateRandomNumber
+ 175              		.thumb
+ 176              		.thumb_func
+ 178              	HAL_RNG_GenerateRandomNumber:
+ 179              	.LFB140:
+ 198:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 199:HALLIB/Src/stm32f7xx_hal_rng.c ****   UNUSED(hrng);
+ 200:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 201:HALLIB/Src/stm32f7xx_hal_rng.c ****             function HAL_RNG_MspDeInit must be implemented in the user file.
+ 202:HALLIB/Src/stm32f7xx_hal_rng.c ****    */
+ 203:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 204:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 205:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 206:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @}
+ 207:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 208:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ARM GAS  /tmp/cc6RRCqi.s 			page 8
+
+
+ 209:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group2
+ 210:HALLIB/Src/stm32f7xx_hal_rng.c ****  *  @brief   Peripheral Control functions 
+ 211:HALLIB/Src/stm32f7xx_hal_rng.c ****  *
+ 212:HALLIB/Src/stm32f7xx_hal_rng.c **** @verbatim   
+ 213:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================
+ 214:HALLIB/Src/stm32f7xx_hal_rng.c ****                       ##### Peripheral Control functions #####
+ 215:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================  
+ 216:HALLIB/Src/stm32f7xx_hal_rng.c ****     [..]  This section provides functions allowing to:
+ 217:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) Get the 32 bit Random number
+ 218:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) Get the 32 bit Random number with interrupt enabled
+ 219:HALLIB/Src/stm32f7xx_hal_rng.c ****       (+) Handle RNG interrupt request 
+ 220:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 221:HALLIB/Src/stm32f7xx_hal_rng.c **** @endverbatim
+ 222:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+ 223:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 224:HALLIB/Src/stm32f7xx_hal_rng.c ****    
+ 225:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 226:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Generates a 32-bit random number.
+ 227:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @note   Each time the random number data is read the RNG_FLAG_DRDY flag 
+ 228:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         is automatically cleared.
+ 229:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 230:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 231:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  random32bit pointer to generated random number variable if successful.
+ 232:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval HAL status
+ 233:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 234:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 235:HALLIB/Src/stm32f7xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber(RNG_HandleTypeDef *hrng, uint32_t *random32bit)
+ 236:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 180              		.loc 1 236 0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              	.LVL10:
+ 237:HALLIB/Src/stm32f7xx_hal_rng.c ****   uint32_t tickstart = 0U;    
+ 238:HALLIB/Src/stm32f7xx_hal_rng.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 239:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 240:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Process Locked */
+ 241:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_LOCK(hrng); 
+ 185              		.loc 1 241 0
+ 186 0000 037A     		ldrb	r3, [r0, #8]	@ zero_extendqisi2
+ 187 0002 012B     		cmp	r3, #1
+ 188 0004 29D0     		beq	.L19
+ 236:HALLIB/Src/stm32f7xx_hal_rng.c ****   uint32_t tickstart = 0U;    
+ 189              		.loc 1 236 0 discriminator 2
+ 190 0006 70B5     		push	{r4, r5, r6, lr}
+ 191              	.LCFI4:
+ 192              		.cfi_def_cfa_offset 16
+ 193              		.cfi_offset 4, -16
+ 194              		.cfi_offset 5, -12
+ 195              		.cfi_offset 6, -8
+ 196              		.cfi_offset 14, -4
+ 197 0008 0D46     		mov	r5, r1
+ 198 000a 0446     		mov	r4, r0
+ 199              		.loc 1 241 0 discriminator 2
+ 200 000c 0123     		movs	r3, #1
+ 201 000e 0372     		strb	r3, [r0, #8]
+ 242:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ARM GAS  /tmp/cc6RRCqi.s 			page 9
+
+
+ 243:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check RNG peripheral state */
+ 244:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_READY)
+ 202              		.loc 1 244 0 discriminator 2
+ 203 0010 437A     		ldrb	r3, [r0, #9]	@ zero_extendqisi2
+ 204 0012 DBB2     		uxtb	r3, r3
+ 205 0014 012B     		cmp	r3, #1
+ 206 0016 1CD1     		bne	.L20
+ 245:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 246:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Change RNG peripheral state */  
+ 247:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_BUSY;  
+ 207              		.loc 1 247 0
+ 208 0018 0223     		movs	r3, #2
+ 209 001a 4372     		strb	r3, [r0, #9]
+ 248:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 249:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Get tick */
+ 250:HALLIB/Src/stm32f7xx_hal_rng.c ****     tickstart = HAL_GetTick();
+ 210              		.loc 1 250 0
+ 211 001c FFF7FEFF 		bl	HAL_GetTick
+ 212              	.LVL11:
+ 213 0020 0646     		mov	r6, r0
+ 214              	.LVL12:
+ 251:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 252:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Check if data register contains valid random data */
+ 253:HALLIB/Src/stm32f7xx_hal_rng.c ****     while(__HAL_RNG_GET_FLAG(hrng, RNG_FLAG_DRDY) == RESET)
+ 215              		.loc 1 253 0
+ 216 0022 0AE0     		b	.L17
+ 217              	.LVL13:
+ 218              	.L18:
+ 254:HALLIB/Src/stm32f7xx_hal_rng.c ****     {
+ 255:HALLIB/Src/stm32f7xx_hal_rng.c ****       if((HAL_GetTick() - tickstart ) > RNG_TIMEOUT_VALUE)
+ 219              		.loc 1 255 0
+ 220 0024 FFF7FEFF 		bl	HAL_GetTick
+ 221              	.LVL14:
+ 222 0028 801B     		subs	r0, r0, r6
+ 223 002a 0228     		cmp	r0, #2
+ 224 002c 05D9     		bls	.L17
+ 256:HALLIB/Src/stm32f7xx_hal_rng.c ****       {    
+ 257:HALLIB/Src/stm32f7xx_hal_rng.c ****         hrng->State = HAL_RNG_STATE_ERROR;
+ 225              		.loc 1 257 0
+ 226 002e 0423     		movs	r3, #4
+ 227 0030 6372     		strb	r3, [r4, #9]
+ 258:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 259:HALLIB/Src/stm32f7xx_hal_rng.c ****         /* Process Unlocked */
+ 260:HALLIB/Src/stm32f7xx_hal_rng.c ****         __HAL_UNLOCK(hrng);
+ 228              		.loc 1 260 0
+ 229 0032 0023     		movs	r3, #0
+ 230 0034 2372     		strb	r3, [r4, #8]
+ 261:HALLIB/Src/stm32f7xx_hal_rng.c ****       
+ 262:HALLIB/Src/stm32f7xx_hal_rng.c ****         return HAL_TIMEOUT;
+ 231              		.loc 1 262 0
+ 232 0036 0320     		movs	r0, #3
+ 233 0038 70BD     		pop	{r4, r5, r6, pc}
+ 234              	.LVL15:
+ 235              	.L17:
+ 253:HALLIB/Src/stm32f7xx_hal_rng.c ****     {
+ 236              		.loc 1 253 0
+ 237 003a 2368     		ldr	r3, [r4]
+ARM GAS  /tmp/cc6RRCqi.s 			page 10
+
+
+ 238 003c 5A68     		ldr	r2, [r3, #4]
+ 239 003e 12F0010F 		tst	r2, #1
+ 240 0042 EFD0     		beq	.L18
+ 263:HALLIB/Src/stm32f7xx_hal_rng.c ****       } 
+ 264:HALLIB/Src/stm32f7xx_hal_rng.c ****     }
+ 265:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 266:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Get a 32bit Random number */
+ 267:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->RandomNumber = hrng->Instance->DR;
+ 241              		.loc 1 267 0
+ 242 0044 9B68     		ldr	r3, [r3, #8]
+ 243 0046 6360     		str	r3, [r4, #4]
+ 268:HALLIB/Src/stm32f7xx_hal_rng.c ****     *random32bit = hrng->RandomNumber;
+ 244              		.loc 1 268 0
+ 245 0048 2B60     		str	r3, [r5]
+ 269:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 270:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_READY;
+ 246              		.loc 1 270 0
+ 247 004a 0123     		movs	r3, #1
+ 248 004c 6372     		strb	r3, [r4, #9]
+ 238:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 249              		.loc 1 238 0
+ 250 004e 0020     		movs	r0, #0
+ 251 0050 00E0     		b	.L16
+ 252              	.LVL16:
+ 253              	.L20:
+ 271:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 272:HALLIB/Src/stm32f7xx_hal_rng.c ****   else
+ 273:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 274:HALLIB/Src/stm32f7xx_hal_rng.c ****     status = HAL_ERROR;
+ 254              		.loc 1 274 0
+ 255 0052 0120     		movs	r0, #1
+ 256              	.LVL17:
+ 257              	.L16:
+ 275:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 276:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 277:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Process Unlocked */
+ 278:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_UNLOCK(hrng);
+ 258              		.loc 1 278 0
+ 259 0054 0023     		movs	r3, #0
+ 260 0056 2372     		strb	r3, [r4, #8]
+ 279:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 280:HALLIB/Src/stm32f7xx_hal_rng.c ****   return status;
+ 261              		.loc 1 280 0
+ 262 0058 70BD     		pop	{r4, r5, r6, pc}
+ 263              	.LVL18:
+ 264              	.L19:
+ 265              	.LCFI5:
+ 266              		.cfi_def_cfa_offset 0
+ 267              		.cfi_restore 4
+ 268              		.cfi_restore 5
+ 269              		.cfi_restore 6
+ 270              		.cfi_restore 14
+ 241:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 271              		.loc 1 241 0
+ 272 005a 0220     		movs	r0, #2
+ 273              	.LVL19:
+ 274 005c 7047     		bx	lr
+ARM GAS  /tmp/cc6RRCqi.s 			page 11
+
+
+ 275              		.cfi_endproc
+ 276              	.LFE140:
+ 278 005e 00BF     		.section	.text.HAL_RNG_GenerateRandomNumber_IT,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	HAL_RNG_GenerateRandomNumber_IT
+ 281              		.thumb
+ 282              		.thumb_func
+ 284              	HAL_RNG_GenerateRandomNumber_IT:
+ 285              	.LFB141:
+ 281:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 282:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 283:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 284:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Generates a 32-bit random number in interrupt mode.
+ 285:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 286:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 287:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval HAL status
+ 288:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 289:HALLIB/Src/stm32f7xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber_IT(RNG_HandleTypeDef *hrng)
+ 290:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 286              		.loc 1 290 0
+ 287              		.cfi_startproc
+ 288              		@ args = 0, pretend = 0, frame = 0
+ 289              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290              		@ link register save eliminated.
+ 291              	.LVL20:
+ 291:HALLIB/Src/stm32f7xx_hal_rng.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 292:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 293:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Process Locked */
+ 294:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_LOCK(hrng);
+ 292              		.loc 1 294 0
+ 293 0000 037A     		ldrb	r3, [r0, #8]	@ zero_extendqisi2
+ 294 0002 012B     		cmp	r3, #1
+ 295 0004 14D0     		beq	.L26
+ 296              		.loc 1 294 0 is_stmt 0 discriminator 2
+ 297 0006 0123     		movs	r3, #1
+ 298 0008 0372     		strb	r3, [r0, #8]
+ 295:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 296:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check RNG peripheral state */
+ 297:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_READY)
+ 299              		.loc 1 297 0 is_stmt 1 discriminator 2
+ 300 000a 437A     		ldrb	r3, [r0, #9]	@ zero_extendqisi2
+ 301 000c DBB2     		uxtb	r3, r3
+ 302 000e 012B     		cmp	r3, #1
+ 303 0010 0AD1     		bne	.L25
+ 298:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 299:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Change RNG peripheral state */  
+ 300:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_BUSY;  
+ 304              		.loc 1 300 0
+ 305 0012 0223     		movs	r3, #2
+ 306 0014 4372     		strb	r3, [r0, #9]
+ 301:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 302:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Process Unlocked */
+ 303:HALLIB/Src/stm32f7xx_hal_rng.c ****     __HAL_UNLOCK(hrng);
+ 307              		.loc 1 303 0
+ 308 0016 0023     		movs	r3, #0
+ 309 0018 0372     		strb	r3, [r0, #8]
+ 304:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ARM GAS  /tmp/cc6RRCqi.s 			page 12
+
+
+ 305:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Enable the RNG Interrupts: Data Ready, Clock error, Seed error */ 
+ 306:HALLIB/Src/stm32f7xx_hal_rng.c ****     __HAL_RNG_ENABLE_IT(hrng);
+ 310              		.loc 1 306 0
+ 311 001a 0168     		ldr	r1, [r0]
+ 312 001c 0A68     		ldr	r2, [r1]
+ 313 001e 42F00802 		orr	r2, r2, #8
+ 314 0022 0A60     		str	r2, [r1]
+ 291:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 315              		.loc 1 291 0
+ 316 0024 1846     		mov	r0, r3
+ 317              	.LVL21:
+ 318 0026 7047     		bx	lr
+ 319              	.LVL22:
+ 320              	.L25:
+ 307:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 308:HALLIB/Src/stm32f7xx_hal_rng.c ****   else
+ 309:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 310:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Process Unlocked */
+ 311:HALLIB/Src/stm32f7xx_hal_rng.c ****     __HAL_UNLOCK(hrng);
+ 321              		.loc 1 311 0
+ 322 0028 0023     		movs	r3, #0
+ 323 002a 0372     		strb	r3, [r0, #8]
+ 324              	.LVL23:
+ 312:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 313:HALLIB/Src/stm32f7xx_hal_rng.c ****     status = HAL_ERROR;
+ 325              		.loc 1 313 0
+ 326 002c 0120     		movs	r0, #1
+ 327              	.LVL24:
+ 328 002e 7047     		bx	lr
+ 329              	.LVL25:
+ 330              	.L26:
+ 294:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 331              		.loc 1 294 0
+ 332 0030 0220     		movs	r0, #2
+ 333              	.LVL26:
+ 314:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 315:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 316:HALLIB/Src/stm32f7xx_hal_rng.c ****   return status;
+ 317:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 334              		.loc 1 317 0
+ 335 0032 7047     		bx	lr
+ 336              		.cfi_endproc
+ 337              	.LFE141:
+ 339              		.section	.text.HAL_RNG_GetRandomNumber,"ax",%progbits
+ 340              		.align	2
+ 341              		.global	HAL_RNG_GetRandomNumber
+ 342              		.thumb
+ 343              		.thumb_func
+ 345              	HAL_RNG_GetRandomNumber:
+ 346              	.LFB143:
+ 318:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 319:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 320:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Handles RNG interrupt request.
+ 321:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @note   In the case of a clock error, the RNG is no more able to generate 
+ 322:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         random numbers because the PLL48CLK clock is not correct. User has 
+ 323:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         to check that the clock controller is correctly configured to provide
+ 324:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         the RNG clock and clear the CEIS bit using __HAL_RNG_CLEAR_IT(). 
+ARM GAS  /tmp/cc6RRCqi.s 			page 13
+
+
+ 325:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         The clock error has no impact on the previously generated 
+ 326:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         random numbers, and the RNG_DR register contents can be used.
+ 327:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @note   In the case of a seed error, the generation of random numbers is 
+ 328:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         interrupted as long as the SECS bit is '1'. If a number is 
+ 329:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         available in the RNG_DR register, it must not be used because it may 
+ 330:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         not have enough entropy. In this case, it is recommended to clear the 
+ 331:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         SEIS bit using __HAL_RNG_CLEAR_IT(), then disable and enable 
+ 332:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         the RNG peripheral to reinitialize and restart the RNG.
+ 333:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @note   User-written HAL_RNG_ErrorCallback() API is called once whether SEIS
+ 334:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         or CEIS are set.  
+ 335:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 336:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 337:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval None
+ 338:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 339:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 340:HALLIB/Src/stm32f7xx_hal_rng.c **** void HAL_RNG_IRQHandler(RNG_HandleTypeDef *hrng)
+ 341:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 342:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* RNG clock error interrupt occurred */
+ 343:HALLIB/Src/stm32f7xx_hal_rng.c ****   if((__HAL_RNG_GET_IT(hrng, RNG_IT_CEI) != RESET) ||  (__HAL_RNG_GET_IT(hrng, RNG_IT_SEI) != RESET
+ 344:HALLIB/Src/stm32f7xx_hal_rng.c ****   { 
+ 345:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Change RNG peripheral state */
+ 346:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_ERROR;
+ 347:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 348:HALLIB/Src/stm32f7xx_hal_rng.c ****     HAL_RNG_ErrorCallback(hrng);
+ 349:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 350:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Clear the clock error flag */
+ 351:HALLIB/Src/stm32f7xx_hal_rng.c ****     __HAL_RNG_CLEAR_IT(hrng, RNG_IT_CEI|RNG_IT_SEI);
+ 352:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 353:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 354:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 355:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Check RNG data ready interrupt occurred */    
+ 356:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(__HAL_RNG_GET_IT(hrng, RNG_IT_DRDY) != RESET)
+ 357:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 358:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Generate random number once, so disable the IT */
+ 359:HALLIB/Src/stm32f7xx_hal_rng.c ****     __HAL_RNG_DISABLE_IT(hrng);
+ 360:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 361:HALLIB/Src/stm32f7xx_hal_rng.c ****     /* Get the 32bit Random number (DRDY flag automatically cleared) */ 
+ 362:HALLIB/Src/stm32f7xx_hal_rng.c ****     hrng->RandomNumber = hrng->Instance->DR;
+ 363:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 364:HALLIB/Src/stm32f7xx_hal_rng.c ****     if(hrng->State != HAL_RNG_STATE_ERROR)
+ 365:HALLIB/Src/stm32f7xx_hal_rng.c ****     {
+ 366:HALLIB/Src/stm32f7xx_hal_rng.c ****       /* Change RNG peripheral state */
+ 367:HALLIB/Src/stm32f7xx_hal_rng.c ****       hrng->State = HAL_RNG_STATE_READY; 
+ 368:HALLIB/Src/stm32f7xx_hal_rng.c ****       
+ 369:HALLIB/Src/stm32f7xx_hal_rng.c ****       /* Data Ready callback */ 
+ 370:HALLIB/Src/stm32f7xx_hal_rng.c ****       HAL_RNG_ReadyDataCallback(hrng, hrng->RandomNumber);
+ 371:HALLIB/Src/stm32f7xx_hal_rng.c ****     } 
+ 372:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 373:HALLIB/Src/stm32f7xx_hal_rng.c **** } 
+ 374:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 375:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 376:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Returns generated random number in polling mode (Obsolete)
+ 377:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         Use HAL_RNG_GenerateRandomNumber() API instead.
+ 378:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 379:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 380:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval Random value
+ 381:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ARM GAS  /tmp/cc6RRCqi.s 			page 14
+
+
+ 382:HALLIB/Src/stm32f7xx_hal_rng.c **** uint32_t HAL_RNG_GetRandomNumber(RNG_HandleTypeDef *hrng)
+ 383:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 347              		.loc 1 383 0
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 0
+ 350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351              	.LVL27:
+ 352 0000 10B5     		push	{r4, lr}
+ 353              	.LCFI6:
+ 354              		.cfi_def_cfa_offset 8
+ 355              		.cfi_offset 4, -8
+ 356              		.cfi_offset 14, -4
+ 357 0002 0446     		mov	r4, r0
+ 384:HALLIB/Src/stm32f7xx_hal_rng.c ****   if(HAL_RNG_GenerateRandomNumber(hrng, &(hrng->RandomNumber)) == HAL_OK)
+ 358              		.loc 1 384 0
+ 359 0004 011D     		adds	r1, r0, #4
+ 360 0006 FFF7FEFF 		bl	HAL_RNG_GenerateRandomNumber
+ 361              	.LVL28:
+ 362 000a 08B9     		cbnz	r0, .L29
+ 385:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 386:HALLIB/Src/stm32f7xx_hal_rng.c ****     return hrng->RandomNumber; 
+ 363              		.loc 1 386 0
+ 364 000c 6068     		ldr	r0, [r4, #4]
+ 365 000e 10BD     		pop	{r4, pc}
+ 366              	.LVL29:
+ 367              	.L29:
+ 387:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 388:HALLIB/Src/stm32f7xx_hal_rng.c ****   else
+ 389:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 390:HALLIB/Src/stm32f7xx_hal_rng.c ****     return 0U;
+ 368              		.loc 1 390 0
+ 369 0010 0020     		movs	r0, #0
+ 391:HALLIB/Src/stm32f7xx_hal_rng.c ****   }
+ 392:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 370              		.loc 1 392 0
+ 371 0012 10BD     		pop	{r4, pc}
+ 372              		.cfi_endproc
+ 373              	.LFE143:
+ 375              		.section	.text.HAL_RNG_GetRandomNumber_IT,"ax",%progbits
+ 376              		.align	2
+ 377              		.global	HAL_RNG_GetRandomNumber_IT
+ 378              		.thumb
+ 379              		.thumb_func
+ 381              	HAL_RNG_GetRandomNumber_IT:
+ 382              	.LFB144:
+ 393:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 394:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 395:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Returns a 32-bit random number with interrupt enabled (Obsolete),
+ 396:HALLIB/Src/stm32f7xx_hal_rng.c ****   *         Use HAL_RNG_GenerateRandomNumber_IT() API instead.
+ 397:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 398:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 399:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval 32-bit random number
+ 400:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 401:HALLIB/Src/stm32f7xx_hal_rng.c **** uint32_t HAL_RNG_GetRandomNumber_IT(RNG_HandleTypeDef *hrng)
+ 402:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 383              		.loc 1 402 0
+ 384              		.cfi_startproc
+ARM GAS  /tmp/cc6RRCqi.s 			page 15
+
+
+ 385              		@ args = 0, pretend = 0, frame = 0
+ 386              		@ frame_needed = 0, uses_anonymous_args = 0
+ 387              		@ link register save eliminated.
+ 388              	.LVL30:
+ 403:HALLIB/Src/stm32f7xx_hal_rng.c ****   uint32_t random32bit = 0U;
+ 404:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 405:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Process locked */
+ 406:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_LOCK(hrng);
+ 389              		.loc 1 406 0
+ 390 0000 037A     		ldrb	r3, [r0, #8]	@ zero_extendqisi2
+ 391 0002 012B     		cmp	r3, #1
+ 392 0004 0AD0     		beq	.L33
+ 393              		.loc 1 406 0 is_stmt 0 discriminator 2
+ 394 0006 0123     		movs	r3, #1
+ 395 0008 0372     		strb	r3, [r0, #8]
+ 407:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 408:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Change RNG peripheral state */  
+ 409:HALLIB/Src/stm32f7xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_BUSY;  
+ 396              		.loc 1 409 0 is_stmt 1 discriminator 2
+ 397 000a 0223     		movs	r3, #2
+ 398 000c 4372     		strb	r3, [r0, #9]
+ 410:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 411:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Get a 32bit Random number */ 
+ 412:HALLIB/Src/stm32f7xx_hal_rng.c ****   random32bit = hrng->Instance->DR;
+ 399              		.loc 1 412 0 discriminator 2
+ 400 000e 0368     		ldr	r3, [r0]
+ 401 0010 9868     		ldr	r0, [r3, #8]
+ 402              	.LVL31:
+ 413:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 414:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Enable the RNG Interrupts: Data Ready, Clock error, Seed error */ 
+ 415:HALLIB/Src/stm32f7xx_hal_rng.c ****   __HAL_RNG_ENABLE_IT(hrng); 
+ 403              		.loc 1 415 0 discriminator 2
+ 404 0012 1A68     		ldr	r2, [r3]
+ 405 0014 42F00802 		orr	r2, r2, #8
+ 406 0018 1A60     		str	r2, [r3]
+ 416:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 417:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Return the 32 bit random number */   
+ 418:HALLIB/Src/stm32f7xx_hal_rng.c ****   return random32bit;
+ 407              		.loc 1 418 0 discriminator 2
+ 408 001a 7047     		bx	lr
+ 409              	.LVL32:
+ 410              	.L33:
+ 406:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 411              		.loc 1 406 0
+ 412 001c 0220     		movs	r0, #2
+ 413              	.LVL33:
+ 419:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 414              		.loc 1 419 0
+ 415 001e 7047     		bx	lr
+ 416              		.cfi_endproc
+ 417              	.LFE144:
+ 419              		.section	.text.HAL_RNG_ReadLastRandomNumber,"ax",%progbits
+ 420              		.align	2
+ 421              		.global	HAL_RNG_ReadLastRandomNumber
+ 422              		.thumb
+ 423              		.thumb_func
+ 425              	HAL_RNG_ReadLastRandomNumber:
+ARM GAS  /tmp/cc6RRCqi.s 			page 16
+
+
+ 426              	.LFB145:
+ 420:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 421:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 422:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Read latest generated random number. 
+ 423:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 424:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 425:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval random value
+ 426:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 427:HALLIB/Src/stm32f7xx_hal_rng.c **** uint32_t HAL_RNG_ReadLastRandomNumber(RNG_HandleTypeDef *hrng)
+ 428:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 427              		.loc 1 428 0
+ 428              		.cfi_startproc
+ 429              		@ args = 0, pretend = 0, frame = 0
+ 430              		@ frame_needed = 0, uses_anonymous_args = 0
+ 431              		@ link register save eliminated.
+ 432              	.LVL34:
+ 429:HALLIB/Src/stm32f7xx_hal_rng.c ****   return(hrng->RandomNumber);
+ 430:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 433              		.loc 1 430 0
+ 434 0000 4068     		ldr	r0, [r0, #4]
+ 435              	.LVL35:
+ 436 0002 7047     		bx	lr
+ 437              		.cfi_endproc
+ 438              	.LFE145:
+ 440              		.section	.text.HAL_RNG_ReadyDataCallback,"ax",%progbits
+ 441              		.align	2
+ 442              		.weak	HAL_RNG_ReadyDataCallback
+ 443              		.thumb
+ 444              		.thumb_func
+ 446              	HAL_RNG_ReadyDataCallback:
+ 447              	.LFB146:
+ 431:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 432:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 433:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Data Ready callback in non-blocking mode. 
+ 434:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 435:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 436:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  random32bit generated random number.
+ 437:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval None
+ 438:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 439:HALLIB/Src/stm32f7xx_hal_rng.c **** __weak void HAL_RNG_ReadyDataCallback(RNG_HandleTypeDef *hrng, uint32_t random32bit)
+ 440:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 448              		.loc 1 440 0
+ 449              		.cfi_startproc
+ 450              		@ args = 0, pretend = 0, frame = 0
+ 451              		@ frame_needed = 0, uses_anonymous_args = 0
+ 452              		@ link register save eliminated.
+ 453              	.LVL36:
+ 454 0000 7047     		bx	lr
+ 455              		.cfi_endproc
+ 456              	.LFE146:
+ 458 0002 00BF     		.section	.text.HAL_RNG_ErrorCallback,"ax",%progbits
+ 459              		.align	2
+ 460              		.weak	HAL_RNG_ErrorCallback
+ 461              		.thumb
+ 462              		.thumb_func
+ 464              	HAL_RNG_ErrorCallback:
+ 465              	.LFB147:
+ARM GAS  /tmp/cc6RRCqi.s 			page 17
+
+
+ 441:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 442:HALLIB/Src/stm32f7xx_hal_rng.c ****   UNUSED(hrng);
+ 443:HALLIB/Src/stm32f7xx_hal_rng.c ****   UNUSED(random32bit);
+ 444:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 445:HALLIB/Src/stm32f7xx_hal_rng.c ****             function HAL_RNG_ReadyDataCallback must be implemented in the user file.
+ 446:HALLIB/Src/stm32f7xx_hal_rng.c ****    */
+ 447:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 448:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 449:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 450:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  RNG error callbacks.
+ 451:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 452:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 453:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval None
+ 454:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 455:HALLIB/Src/stm32f7xx_hal_rng.c **** __weak void HAL_RNG_ErrorCallback(RNG_HandleTypeDef *hrng)
+ 456:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 466              		.loc 1 456 0
+ 467              		.cfi_startproc
+ 468              		@ args = 0, pretend = 0, frame = 0
+ 469              		@ frame_needed = 0, uses_anonymous_args = 0
+ 470              		@ link register save eliminated.
+ 471              	.LVL37:
+ 472 0000 7047     		bx	lr
+ 473              		.cfi_endproc
+ 474              	.LFE147:
+ 476 0002 00BF     		.section	.text.HAL_RNG_IRQHandler,"ax",%progbits
+ 477              		.align	2
+ 478              		.global	HAL_RNG_IRQHandler
+ 479              		.thumb
+ 480              		.thumb_func
+ 482              	HAL_RNG_IRQHandler:
+ 483              	.LFB142:
+ 341:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* RNG clock error interrupt occurred */
+ 484              		.loc 1 341 0
+ 485              		.cfi_startproc
+ 486              		@ args = 0, pretend = 0, frame = 0
+ 487              		@ frame_needed = 0, uses_anonymous_args = 0
+ 488              	.LVL38:
+ 341:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* RNG clock error interrupt occurred */
+ 489              		.loc 1 341 0
+ 490 0000 10B5     		push	{r4, lr}
+ 491              	.LCFI7:
+ 492              		.cfi_def_cfa_offset 8
+ 493              		.cfi_offset 4, -8
+ 494              		.cfi_offset 14, -4
+ 495 0002 0446     		mov	r4, r0
+ 343:HALLIB/Src/stm32f7xx_hal_rng.c ****   { 
+ 496              		.loc 1 343 0
+ 497 0004 0368     		ldr	r3, [r0]
+ 498 0006 5A68     		ldr	r2, [r3, #4]
+ 499 0008 12F0200F 		tst	r2, #32
+ 500 000c 03D1     		bne	.L38
+ 343:HALLIB/Src/stm32f7xx_hal_rng.c ****   { 
+ 501              		.loc 1 343 0 is_stmt 0 discriminator 1
+ 502 000e 5B68     		ldr	r3, [r3, #4]
+ 503 0010 13F0400F 		tst	r3, #64
+ 504 0014 08D0     		beq	.L39
+ARM GAS  /tmp/cc6RRCqi.s 			page 18
+
+
+ 505              	.L38:
+ 346:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 506              		.loc 1 346 0 is_stmt 1
+ 507 0016 0423     		movs	r3, #4
+ 508 0018 6372     		strb	r3, [r4, #9]
+ 348:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 509              		.loc 1 348 0
+ 510 001a 2046     		mov	r0, r4
+ 511              	.LVL39:
+ 512 001c FFF7FEFF 		bl	HAL_RNG_ErrorCallback
+ 513              	.LVL40:
+ 351:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 514              		.loc 1 351 0
+ 515 0020 2368     		ldr	r3, [r4]
+ 516 0022 6FF06002 		mvn	r2, #96
+ 517 0026 5A60     		str	r2, [r3, #4]
+ 518              	.L39:
+ 356:HALLIB/Src/stm32f7xx_hal_rng.c ****   {
+ 519              		.loc 1 356 0
+ 520 0028 2368     		ldr	r3, [r4]
+ 521 002a 5A68     		ldr	r2, [r3, #4]
+ 522 002c 12F0010F 		tst	r2, #1
+ 523 0030 0FD0     		beq	.L37
+ 359:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 524              		.loc 1 359 0
+ 525 0032 1A68     		ldr	r2, [r3]
+ 526 0034 22F00802 		bic	r2, r2, #8
+ 527 0038 1A60     		str	r2, [r3]
+ 362:HALLIB/Src/stm32f7xx_hal_rng.c ****     
+ 528              		.loc 1 362 0
+ 529 003a 2368     		ldr	r3, [r4]
+ 530 003c 9968     		ldr	r1, [r3, #8]
+ 531 003e 6160     		str	r1, [r4, #4]
+ 364:HALLIB/Src/stm32f7xx_hal_rng.c ****     {
+ 532              		.loc 1 364 0
+ 533 0040 637A     		ldrb	r3, [r4, #9]	@ zero_extendqisi2
+ 534 0042 DBB2     		uxtb	r3, r3
+ 535 0044 042B     		cmp	r3, #4
+ 536 0046 04D0     		beq	.L37
+ 367:HALLIB/Src/stm32f7xx_hal_rng.c ****       
+ 537              		.loc 1 367 0
+ 538 0048 0123     		movs	r3, #1
+ 539 004a 6372     		strb	r3, [r4, #9]
+ 370:HALLIB/Src/stm32f7xx_hal_rng.c ****     } 
+ 540              		.loc 1 370 0
+ 541 004c 2046     		mov	r0, r4
+ 542 004e FFF7FEFF 		bl	HAL_RNG_ReadyDataCallback
+ 543              	.LVL41:
+ 544              	.L37:
+ 545 0052 10BD     		pop	{r4, pc}
+ 546              		.cfi_endproc
+ 547              	.LFE142:
+ 549              		.section	.text.HAL_RNG_GetState,"ax",%progbits
+ 550              		.align	2
+ 551              		.global	HAL_RNG_GetState
+ 552              		.thumb
+ 553              		.thumb_func
+ARM GAS  /tmp/cc6RRCqi.s 			page 19
+
+
+ 555              	HAL_RNG_GetState:
+ 556              	.LFB148:
+ 457:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 458:HALLIB/Src/stm32f7xx_hal_rng.c ****   UNUSED(hrng);
+ 459:HALLIB/Src/stm32f7xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 460:HALLIB/Src/stm32f7xx_hal_rng.c ****             function HAL_RNG_ErrorCallback must be implemented in the user file.
+ 461:HALLIB/Src/stm32f7xx_hal_rng.c ****    */
+ 462:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 463:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 464:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @}
+ 465:HALLIB/Src/stm32f7xx_hal_rng.c ****   */ 
+ 466:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 467:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 468:HALLIB/Src/stm32f7xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group3
+ 469:HALLIB/Src/stm32f7xx_hal_rng.c ****  *  @brief   Peripheral State functions 
+ 470:HALLIB/Src/stm32f7xx_hal_rng.c ****  *
+ 471:HALLIB/Src/stm32f7xx_hal_rng.c **** @verbatim   
+ 472:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================
+ 473:HALLIB/Src/stm32f7xx_hal_rng.c ****                       ##### Peripheral State functions #####
+ 474:HALLIB/Src/stm32f7xx_hal_rng.c ****  ===============================================================================  
+ 475:HALLIB/Src/stm32f7xx_hal_rng.c ****     [..]
+ 476:HALLIB/Src/stm32f7xx_hal_rng.c ****     This subsection permits to get in run-time the status of the peripheral 
+ 477:HALLIB/Src/stm32f7xx_hal_rng.c ****     and the data flow.
+ 478:HALLIB/Src/stm32f7xx_hal_rng.c **** 
+ 479:HALLIB/Src/stm32f7xx_hal_rng.c **** @endverbatim
+ 480:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @{
+ 481:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 482:HALLIB/Src/stm32f7xx_hal_rng.c ****   
+ 483:HALLIB/Src/stm32f7xx_hal_rng.c **** /**
+ 484:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @brief  Returns the RNG state.
+ 485:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
+ 486:HALLIB/Src/stm32f7xx_hal_rng.c ****   *                the configuration information for RNG.
+ 487:HALLIB/Src/stm32f7xx_hal_rng.c ****   * @retval HAL state
+ 488:HALLIB/Src/stm32f7xx_hal_rng.c ****   */
+ 489:HALLIB/Src/stm32f7xx_hal_rng.c **** HAL_RNG_StateTypeDef HAL_RNG_GetState(RNG_HandleTypeDef *hrng)
+ 490:HALLIB/Src/stm32f7xx_hal_rng.c **** {
+ 557              		.loc 1 490 0
+ 558              		.cfi_startproc
+ 559              		@ args = 0, pretend = 0, frame = 0
+ 560              		@ frame_needed = 0, uses_anonymous_args = 0
+ 561              		@ link register save eliminated.
+ 562              	.LVL42:
+ 491:HALLIB/Src/stm32f7xx_hal_rng.c ****   return hrng->State;
+ 563              		.loc 1 491 0
+ 564 0000 407A     		ldrb	r0, [r0, #9]	@ zero_extendqisi2
+ 565              	.LVL43:
+ 492:HALLIB/Src/stm32f7xx_hal_rng.c **** }
+ 566              		.loc 1 492 0
+ 567 0002 7047     		bx	lr
+ 568              		.cfi_endproc
+ 569              	.LFE148:
+ 571              		.text
+ 572              	.Letext0:
+ 573              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 574              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 575              		.file 4 "Inc/stm32f767xx.h"
+ 576              		.file 5 "Inc/stm32f7xx.h"
+ARM GAS  /tmp/cc6RRCqi.s 			page 20
+
+
+ 577              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 578              		.file 7 "HALLIB/Inc/stm32f7xx_hal_rng.h"
+ 579              		.file 8 "CORE/core_cm7.h"
+ 580              		.file 9 "HALLIB/Inc/stm32f7xx_hal.h"
+ARM GAS  /tmp/cc6RRCqi.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_rng.c
+     /tmp/cc6RRCqi.s:21     .text.HAL_RNG_MspInit:00000000 $t
+     /tmp/cc6RRCqi.s:26     .text.HAL_RNG_MspInit:00000000 HAL_RNG_MspInit
+     /tmp/cc6RRCqi.s:40     .text.HAL_RNG_Init:00000000 $t
+     /tmp/cc6RRCqi.s:45     .text.HAL_RNG_Init:00000000 HAL_RNG_Init
+     /tmp/cc6RRCqi.s:100    .text.HAL_RNG_MspDeInit:00000000 $t
+     /tmp/cc6RRCqi.s:105    .text.HAL_RNG_MspDeInit:00000000 HAL_RNG_MspDeInit
+     /tmp/cc6RRCqi.s:118    .text.HAL_RNG_DeInit:00000000 $t
+     /tmp/cc6RRCqi.s:123    .text.HAL_RNG_DeInit:00000000 HAL_RNG_DeInit
+     /tmp/cc6RRCqi.s:173    .text.HAL_RNG_GenerateRandomNumber:00000000 $t
+     /tmp/cc6RRCqi.s:178    .text.HAL_RNG_GenerateRandomNumber:00000000 HAL_RNG_GenerateRandomNumber
+     /tmp/cc6RRCqi.s:279    .text.HAL_RNG_GenerateRandomNumber_IT:00000000 $t
+     /tmp/cc6RRCqi.s:284    .text.HAL_RNG_GenerateRandomNumber_IT:00000000 HAL_RNG_GenerateRandomNumber_IT
+     /tmp/cc6RRCqi.s:340    .text.HAL_RNG_GetRandomNumber:00000000 $t
+     /tmp/cc6RRCqi.s:345    .text.HAL_RNG_GetRandomNumber:00000000 HAL_RNG_GetRandomNumber
+     /tmp/cc6RRCqi.s:376    .text.HAL_RNG_GetRandomNumber_IT:00000000 $t
+     /tmp/cc6RRCqi.s:381    .text.HAL_RNG_GetRandomNumber_IT:00000000 HAL_RNG_GetRandomNumber_IT
+     /tmp/cc6RRCqi.s:420    .text.HAL_RNG_ReadLastRandomNumber:00000000 $t
+     /tmp/cc6RRCqi.s:425    .text.HAL_RNG_ReadLastRandomNumber:00000000 HAL_RNG_ReadLastRandomNumber
+     /tmp/cc6RRCqi.s:441    .text.HAL_RNG_ReadyDataCallback:00000000 $t
+     /tmp/cc6RRCqi.s:446    .text.HAL_RNG_ReadyDataCallback:00000000 HAL_RNG_ReadyDataCallback
+     /tmp/cc6RRCqi.s:459    .text.HAL_RNG_ErrorCallback:00000000 $t
+     /tmp/cc6RRCqi.s:464    .text.HAL_RNG_ErrorCallback:00000000 HAL_RNG_ErrorCallback
+     /tmp/cc6RRCqi.s:477    .text.HAL_RNG_IRQHandler:00000000 $t
+     /tmp/cc6RRCqi.s:482    .text.HAL_RNG_IRQHandler:00000000 HAL_RNG_IRQHandler
+     /tmp/cc6RRCqi.s:550    .text.HAL_RNG_GetState:00000000 $t
+     /tmp/cc6RRCqi.s:555    .text.HAL_RNG_GetState:00000000 HAL_RNG_GetState
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GetTick

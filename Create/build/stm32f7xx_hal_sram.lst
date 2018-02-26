@@ -1,0 +1,1775 @@
+ARM GAS  /tmp/ccjLDUK5.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_sram.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_SRAM_DMA_XferCpltCallback,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_SRAM_DMA_XferCpltCallback
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_SRAM_DMA_XferCpltCallback:
+  27              	.LFB140:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_sram.c"
+   1:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_sram.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @file    stm32f7xx_hal_sram.c
+   4:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief   SRAM HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_sram.c ****   *          This file provides a generic firmware to drive SRAM memories  
+   7:HALLIB/Src/stm32f7xx_hal_sram.c ****   *          mounted as external device.
+   8:HALLIB/Src/stm32f7xx_hal_sram.c ****   *         
+   9:HALLIB/Src/stm32f7xx_hal_sram.c ****   @verbatim
+  10:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+  11:HALLIB/Src/stm32f7xx_hal_sram.c ****                           ##### How to use this driver #####
+  12:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================  
+  13:HALLIB/Src/stm32f7xx_hal_sram.c ****   [..]
+  14:HALLIB/Src/stm32f7xx_hal_sram.c ****     This driver is a generic layered driver which contains a set of APIs used to 
+  15:HALLIB/Src/stm32f7xx_hal_sram.c ****     control SRAM memories. It uses the FMC layer functions to interface 
+  16:HALLIB/Src/stm32f7xx_hal_sram.c ****     with SRAM devices.  
+  17:HALLIB/Src/stm32f7xx_hal_sram.c ****     The following sequence should be followed to configure the FMC to interface
+  18:HALLIB/Src/stm32f7xx_hal_sram.c ****     with SRAM/PSRAM memories: 
+  19:HALLIB/Src/stm32f7xx_hal_sram.c ****       
+  20:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) Declare a SRAM_HandleTypeDef handle structure, for example:
+  21:HALLIB/Src/stm32f7xx_hal_sram.c ****           SRAM_HandleTypeDef  hsram; and: 
+  22:HALLIB/Src/stm32f7xx_hal_sram.c ****           
+  23:HALLIB/Src/stm32f7xx_hal_sram.c ****        (++) Fill the SRAM_HandleTypeDef handle "Init" field with the allowed 
+  24:HALLIB/Src/stm32f7xx_hal_sram.c ****             values of the structure member.
+  25:HALLIB/Src/stm32f7xx_hal_sram.c ****             
+  26:HALLIB/Src/stm32f7xx_hal_sram.c ****        (++) Fill the SRAM_HandleTypeDef handle "Instance" field with a predefined 
+  27:HALLIB/Src/stm32f7xx_hal_sram.c ****             base register instance for NOR or SRAM device 
+  28:HALLIB/Src/stm32f7xx_hal_sram.c ****                          
+  29:HALLIB/Src/stm32f7xx_hal_sram.c ****        (++) Fill the SRAM_HandleTypeDef handle "Extended" field with a predefined
+  30:HALLIB/Src/stm32f7xx_hal_sram.c ****             base register instance for NOR or SRAM extended mode 
+ARM GAS  /tmp/ccjLDUK5.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_sram.c ****              
+  32:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) Declare two FMC_NORSRAM_TimingTypeDef structures, for both normal and extended 
+  33:HALLIB/Src/stm32f7xx_hal_sram.c ****        mode timings; for example:
+  34:HALLIB/Src/stm32f7xx_hal_sram.c ****           FMC_NORSRAM_TimingTypeDef  Timing and FMC_NORSRAM_TimingTypeDef  ExTiming;
+  35:HALLIB/Src/stm32f7xx_hal_sram.c ****       and fill its fields with the allowed values of the structure member.
+  36:HALLIB/Src/stm32f7xx_hal_sram.c ****       
+  37:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) Initialize the SRAM Controller by calling the function HAL_SRAM_Init(). This function
+  38:HALLIB/Src/stm32f7xx_hal_sram.c ****        performs the following sequence:
+  39:HALLIB/Src/stm32f7xx_hal_sram.c ****           
+  40:HALLIB/Src/stm32f7xx_hal_sram.c ****        (##) MSP hardware layer configuration using the function HAL_SRAM_MspInit()
+  41:HALLIB/Src/stm32f7xx_hal_sram.c ****        (##) Control register configuration using the FMC NORSRAM interface function 
+  42:HALLIB/Src/stm32f7xx_hal_sram.c ****             FMC_NORSRAM_Init()
+  43:HALLIB/Src/stm32f7xx_hal_sram.c ****        (##) Timing register configuration using the FMC NORSRAM interface function 
+  44:HALLIB/Src/stm32f7xx_hal_sram.c ****             FMC_NORSRAM_Timing_Init()
+  45:HALLIB/Src/stm32f7xx_hal_sram.c ****        (##) Extended mode Timing register configuration using the FMC NORSRAM interface function 
+  46:HALLIB/Src/stm32f7xx_hal_sram.c ****             FMC_NORSRAM_Extended_Timing_Init()
+  47:HALLIB/Src/stm32f7xx_hal_sram.c ****        (##) Enable the SRAM device using the macro __FMC_NORSRAM_ENABLE()    
+  48:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+  49:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) At this stage you can perform read/write accesses from/to the memory connected 
+  50:HALLIB/Src/stm32f7xx_hal_sram.c ****        to the NOR/SRAM Bank. You can perform either polling or DMA transfer using the
+  51:HALLIB/Src/stm32f7xx_hal_sram.c ****        following APIs:
+  52:HALLIB/Src/stm32f7xx_hal_sram.c ****        (++) HAL_SRAM_Read()/HAL_SRAM_Write() for polling read/write access
+  53:HALLIB/Src/stm32f7xx_hal_sram.c ****        (++) HAL_SRAM_Read_DMA()/HAL_SRAM_Write_DMA() for DMA read/write transfer
+  54:HALLIB/Src/stm32f7xx_hal_sram.c ****        
+  55:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) You can also control the SRAM device by calling the control APIs HAL_SRAM_WriteOperation_Ena
+  56:HALLIB/Src/stm32f7xx_hal_sram.c ****        HAL_SRAM_WriteOperation_Disable() to respectively enable/disable the SRAM write operation  
+  57:HALLIB/Src/stm32f7xx_hal_sram.c ****        
+  58:HALLIB/Src/stm32f7xx_hal_sram.c ****    (#) You can continuously monitor the SRAM device HAL state by calling the function
+  59:HALLIB/Src/stm32f7xx_hal_sram.c ****        HAL_SRAM_GetState()              
+  60:HALLIB/Src/stm32f7xx_hal_sram.c ****                              
+  61:HALLIB/Src/stm32f7xx_hal_sram.c ****   @endverbatim
+  62:HALLIB/Src/stm32f7xx_hal_sram.c ****   ******************************************************************************
+  63:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @attention
+  64:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+  65:HALLIB/Src/stm32f7xx_hal_sram.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  66:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+  67:HALLIB/Src/stm32f7xx_hal_sram.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  68:HALLIB/Src/stm32f7xx_hal_sram.c ****   * are permitted provided that the following conditions are met:
+  69:HALLIB/Src/stm32f7xx_hal_sram.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  70:HALLIB/Src/stm32f7xx_hal_sram.c ****   *      this list of conditions and the following disclaimer.
+  71:HALLIB/Src/stm32f7xx_hal_sram.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  72:HALLIB/Src/stm32f7xx_hal_sram.c ****   *      this list of conditions and the following disclaimer in the documentation
+  73:HALLIB/Src/stm32f7xx_hal_sram.c ****   *      and/or other materials provided with the distribution.
+  74:HALLIB/Src/stm32f7xx_hal_sram.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  75:HALLIB/Src/stm32f7xx_hal_sram.c ****   *      may be used to endorse or promote products derived from this software
+  76:HALLIB/Src/stm32f7xx_hal_sram.c ****   *      without specific prior written permission.
+  77:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+  78:HALLIB/Src/stm32f7xx_hal_sram.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  79:HALLIB/Src/stm32f7xx_hal_sram.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  80:HALLIB/Src/stm32f7xx_hal_sram.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  81:HALLIB/Src/stm32f7xx_hal_sram.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  82:HALLIB/Src/stm32f7xx_hal_sram.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  83:HALLIB/Src/stm32f7xx_hal_sram.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  84:HALLIB/Src/stm32f7xx_hal_sram.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  85:HALLIB/Src/stm32f7xx_hal_sram.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  86:HALLIB/Src/stm32f7xx_hal_sram.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  87:HALLIB/Src/stm32f7xx_hal_sram.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ARM GAS  /tmp/ccjLDUK5.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+  89:HALLIB/Src/stm32f7xx_hal_sram.c ****   ******************************************************************************
+  90:HALLIB/Src/stm32f7xx_hal_sram.c ****   */ 
+  91:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+  92:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Includes ------------------------------------------------------------------*/
+  93:HALLIB/Src/stm32f7xx_hal_sram.c **** #include "stm32f7xx_hal.h"
+  94:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+  95:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  96:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+  97:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+  98:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+  99:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM SRAM 
+ 100:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief SRAM driver modules
+ 101:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 102:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 103:HALLIB/Src/stm32f7xx_hal_sram.c **** #ifdef HAL_SRAM_MODULE_ENABLED
+ 104:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Private typedef -----------------------------------------------------------*/
+ 105:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Private define ------------------------------------------------------------*/
+ 106:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Private macro -------------------------------------------------------------*/    
+ 107:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Private variables ---------------------------------------------------------*/
+ 108:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Private function prototypes -----------------------------------------------*/
+ 109:HALLIB/Src/stm32f7xx_hal_sram.c **** /* Exported functions --------------------------------------------------------*/
+ 110:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 111:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM_Exported_Functions SRAM Exported Functions
+ 112:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 113:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 114:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 115:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM_Exported_Functions_Group1 Initialization and de-initialization functions
+ 116:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief    Initialization and Configuration functions.
+ 117:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+ 118:HALLIB/Src/stm32f7xx_hal_sram.c ****   @verbatim    
+ 119:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 120:HALLIB/Src/stm32f7xx_hal_sram.c ****            ##### SRAM Initialization and de_initialization functions #####
+ 121:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 122:HALLIB/Src/stm32f7xx_hal_sram.c ****     [..]  This section provides functions allowing to initialize/de-initialize
+ 123:HALLIB/Src/stm32f7xx_hal_sram.c ****           the SRAM memory
+ 124:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 125:HALLIB/Src/stm32f7xx_hal_sram.c **** @endverbatim
+ 126:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 127:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 128:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 129:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 130:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Performs the SRAM device initialization sequence
+ 131:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 132:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 133:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  Timing Pointer to SRAM control timing structure 
+ 134:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  ExtTiming Pointer to SRAM extended mode timing structure  
+ 135:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 136:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 137:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Init(SRAM_HandleTypeDef *hsram, FMC_NORSRAM_TimingTypeDef *Timing, FMC_N
+ 138:HALLIB/Src/stm32f7xx_hal_sram.c **** { 
+ 139:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM handle parameter */
+ 140:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram == NULL)
+ 141:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 142:HALLIB/Src/stm32f7xx_hal_sram.c ****      return HAL_ERROR;
+ 143:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 144:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ARM GAS  /tmp/ccjLDUK5.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram->State == HAL_SRAM_STATE_RESET)
+ 146:HALLIB/Src/stm32f7xx_hal_sram.c ****   {  
+ 147:HALLIB/Src/stm32f7xx_hal_sram.c ****     /* Allocate lock resource and initialize it */
+ 148:HALLIB/Src/stm32f7xx_hal_sram.c ****     hsram->Lock = HAL_UNLOCKED;
+ 149:HALLIB/Src/stm32f7xx_hal_sram.c ****     /* Initialize the low level hardware (MSP) */
+ 150:HALLIB/Src/stm32f7xx_hal_sram.c ****     HAL_SRAM_MspInit(hsram);
+ 151:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 152:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 153:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Initialize SRAM control Interface */
+ 154:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_Init(hsram->Instance, &(hsram->Init));
+ 155:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 156:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Initialize SRAM timing Interface */
+ 157:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_Timing_Init(hsram->Instance, Timing, hsram->Init.NSBank); 
+ 158:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 159:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Initialize SRAM extended mode timing Interface */
+ 160:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_Extended_Timing_Init(hsram->Extended, ExtTiming, hsram->Init.NSBank,  hsram->Init.Ext
+ 161:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 162:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Enable the NORSRAM device */
+ 163:HALLIB/Src/stm32f7xx_hal_sram.c ****   __FMC_NORSRAM_ENABLE(hsram->Instance, hsram->Init.NSBank); 
+ 164:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 165:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;
+ 166:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 167:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 168:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 169:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Performs the SRAM device De-initialization sequence.
+ 170:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 171:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 172:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 173:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 174:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef  HAL_SRAM_DeInit(SRAM_HandleTypeDef *hsram)
+ 175:HALLIB/Src/stm32f7xx_hal_sram.c **** { 
+ 176:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* De-Initialize the low level hardware (MSP) */
+ 177:HALLIB/Src/stm32f7xx_hal_sram.c ****   HAL_SRAM_MspDeInit(hsram);
+ 178:HALLIB/Src/stm32f7xx_hal_sram.c ****    
+ 179:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Configure the SRAM registers with their reset values */
+ 180:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_DeInit(hsram->Instance, hsram->Extended, hsram->Init.NSBank);
+ 181:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 182:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_RESET;
+ 183:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 184:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Release Lock */
+ 185:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);
+ 186:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 187:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;
+ 188:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 189:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 190:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 191:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  SRAM MSP Init.
+ 192:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 193:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 194:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval None
+ 195:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 196:HALLIB/Src/stm32f7xx_hal_sram.c **** __weak void HAL_SRAM_MspInit(SRAM_HandleTypeDef *hsram)
+ 197:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 198:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+ 199:HALLIB/Src/stm32f7xx_hal_sram.c ****   UNUSED(hsram);
+ 200:HALLIB/Src/stm32f7xx_hal_sram.c ****  
+ 201:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ARM GAS  /tmp/ccjLDUK5.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_sram.c ****             the HAL_SRAM_MspInit could be implemented in the user file
+ 203:HALLIB/Src/stm32f7xx_hal_sram.c ****    */ 
+ 204:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 205:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 206:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 207:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  SRAM MSP DeInit.
+ 208:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 209:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 210:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval None
+ 211:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 212:HALLIB/Src/stm32f7xx_hal_sram.c **** __weak void HAL_SRAM_MspDeInit(SRAM_HandleTypeDef *hsram)
+ 213:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 214:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+ 215:HALLIB/Src/stm32f7xx_hal_sram.c ****   UNUSED(hsram);
+ 216:HALLIB/Src/stm32f7xx_hal_sram.c ****  
+ 217:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 218:HALLIB/Src/stm32f7xx_hal_sram.c ****             the HAL_SRAM_MspDeInit could be implemented in the user file
+ 219:HALLIB/Src/stm32f7xx_hal_sram.c ****    */ 
+ 220:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 221:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 222:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 223:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  DMA transfer complete callback.
+ 224:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hdma pointer to a SRAM_HandleTypeDef structure that contains
+ 225:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 226:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval None
+ 227:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 228:HALLIB/Src/stm32f7xx_hal_sram.c **** __weak void HAL_SRAM_DMA_XferCpltCallback(DMA_HandleTypeDef *hdma)
+ 229:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+  29              		.loc 1 229 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE140:
+  39 0002 00BF     		.section	.text.HAL_SRAM_DMA_XferErrorCallback,"ax",%progbits
+  40              		.align	2
+  41              		.weak	HAL_SRAM_DMA_XferErrorCallback
+  42              		.thumb
+  43              		.thumb_func
+  45              	HAL_SRAM_DMA_XferErrorCallback:
+  46              	.LFB141:
+ 230:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+ 231:HALLIB/Src/stm32f7xx_hal_sram.c ****   UNUSED(hdma);
+ 232:HALLIB/Src/stm32f7xx_hal_sram.c ****  
+ 233:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 234:HALLIB/Src/stm32f7xx_hal_sram.c ****             the HAL_SRAM_DMA_XferCpltCallback could be implemented in the user file
+ 235:HALLIB/Src/stm32f7xx_hal_sram.c ****    */ 
+ 236:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 237:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 238:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 239:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  DMA transfer complete error callback.
+ 240:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hdma pointer to a SRAM_HandleTypeDef structure that contains
+ 241:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 242:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval None
+ARM GAS  /tmp/ccjLDUK5.s 			page 6
+
+
+ 243:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 244:HALLIB/Src/stm32f7xx_hal_sram.c **** __weak void HAL_SRAM_DMA_XferErrorCallback(DMA_HandleTypeDef *hdma)
+ 245:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+  47              		.loc 1 245 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              		@ link register save eliminated.
+  52              	.LVL1:
+  53 0000 7047     		bx	lr
+  54              		.cfi_endproc
+  55              	.LFE141:
+  57 0002 00BF     		.section	.text.HAL_SRAM_MspInit,"ax",%progbits
+  58              		.align	2
+  59              		.weak	HAL_SRAM_MspInit
+  60              		.thumb
+  61              		.thumb_func
+  63              	HAL_SRAM_MspInit:
+  64              	.LFB138:
+ 197:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+  65              		.loc 1 197 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              		@ link register save eliminated.
+  70              	.LVL2:
+  71 0000 7047     		bx	lr
+  72              		.cfi_endproc
+  73              	.LFE138:
+  75 0002 00BF     		.section	.text.HAL_SRAM_Init,"ax",%progbits
+  76              		.align	2
+  77              		.global	HAL_SRAM_Init
+  78              		.thumb
+  79              		.thumb_func
+  81              	HAL_SRAM_Init:
+  82              	.LFB136:
+ 138:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM handle parameter */
+  83              		.loc 1 138 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  87              	.LVL3:
+ 140:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+  88              		.loc 1 140 0
+  89 0000 38B3     		cbz	r0, .L7
+ 138:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM handle parameter */
+  90              		.loc 1 138 0
+  91 0002 70B5     		push	{r4, r5, r6, lr}
+  92              	.LCFI0:
+  93              		.cfi_def_cfa_offset 16
+  94              		.cfi_offset 4, -16
+  95              		.cfi_offset 5, -12
+  96              		.cfi_offset 6, -8
+  97              		.cfi_offset 14, -4
+  98 0004 0446     		mov	r4, r0
+  99 0006 1546     		mov	r5, r2
+ 100 0008 0E46     		mov	r6, r1
+ARM GAS  /tmp/ccjLDUK5.s 			page 7
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_sram.c ****   {  
+ 101              		.loc 1 145 0
+ 102 000a 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 103 000e 13F0FF0F 		tst	r3, #255
+ 104 0012 04D1     		bne	.L6
+ 148:HALLIB/Src/stm32f7xx_hal_sram.c ****     /* Initialize the low level hardware (MSP) */
+ 105              		.loc 1 148 0
+ 106 0014 0023     		movs	r3, #0
+ 107 0016 80F84430 		strb	r3, [r0, #68]
+ 150:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 108              		.loc 1 150 0
+ 109 001a FFF7FEFF 		bl	HAL_SRAM_MspInit
+ 110              	.LVL4:
+ 111              	.L6:
+ 154:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 112              		.loc 1 154 0
+ 113 001e 04F10801 		add	r1, r4, #8
+ 114 0022 2068     		ldr	r0, [r4]
+ 115 0024 FFF7FEFF 		bl	FMC_NORSRAM_Init
+ 116              	.LVL5:
+ 157:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 117              		.loc 1 157 0
+ 118 0028 A268     		ldr	r2, [r4, #8]
+ 119 002a 3146     		mov	r1, r6
+ 120 002c 2068     		ldr	r0, [r4]
+ 121 002e FFF7FEFF 		bl	FMC_NORSRAM_Timing_Init
+ 122              	.LVL6:
+ 160:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 123              		.loc 1 160 0
+ 124 0032 E36A     		ldr	r3, [r4, #44]
+ 125 0034 A268     		ldr	r2, [r4, #8]
+ 126 0036 2946     		mov	r1, r5
+ 127 0038 6068     		ldr	r0, [r4, #4]
+ 128 003a FFF7FEFF 		bl	FMC_NORSRAM_Extended_Timing_Init
+ 129              	.LVL7:
+ 163:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 130              		.loc 1 163 0
+ 131 003e 2268     		ldr	r2, [r4]
+ 132 0040 A168     		ldr	r1, [r4, #8]
+ 133 0042 52F82130 		ldr	r3, [r2, r1, lsl #2]
+ 134 0046 43F00103 		orr	r3, r3, #1
+ 135 004a 42F82130 		str	r3, [r2, r1, lsl #2]
+ 165:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 136              		.loc 1 165 0
+ 137 004e 0020     		movs	r0, #0
+ 138 0050 70BD     		pop	{r4, r5, r6, pc}
+ 139              	.LVL8:
+ 140              	.L7:
+ 141              	.LCFI1:
+ 142              		.cfi_def_cfa_offset 0
+ 143              		.cfi_restore 4
+ 144              		.cfi_restore 5
+ 145              		.cfi_restore 6
+ 146              		.cfi_restore 14
+ 142:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 147              		.loc 1 142 0
+ 148 0052 0120     		movs	r0, #1
+ARM GAS  /tmp/ccjLDUK5.s 			page 8
+
+
+ 149              	.LVL9:
+ 150 0054 7047     		bx	lr
+ 151              		.cfi_endproc
+ 152              	.LFE136:
+ 154 0056 00BF     		.section	.text.HAL_SRAM_MspDeInit,"ax",%progbits
+ 155              		.align	2
+ 156              		.weak	HAL_SRAM_MspDeInit
+ 157              		.thumb
+ 158              		.thumb_func
+ 160              	HAL_SRAM_MspDeInit:
+ 161              	.LFB139:
+ 213:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+ 162              		.loc 1 213 0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 0
+ 165              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166              		@ link register save eliminated.
+ 167              	.LVL10:
+ 168 0000 7047     		bx	lr
+ 169              		.cfi_endproc
+ 170              	.LFE139:
+ 172 0002 00BF     		.section	.text.HAL_SRAM_DeInit,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	HAL_SRAM_DeInit
+ 175              		.thumb
+ 176              		.thumb_func
+ 178              	HAL_SRAM_DeInit:
+ 179              	.LFB137:
+ 175:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* De-Initialize the low level hardware (MSP) */
+ 180              		.loc 1 175 0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              	.LVL11:
+ 175:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* De-Initialize the low level hardware (MSP) */
+ 185              		.loc 1 175 0
+ 186 0000 10B5     		push	{r4, lr}
+ 187              	.LCFI2:
+ 188              		.cfi_def_cfa_offset 8
+ 189              		.cfi_offset 4, -8
+ 190              		.cfi_offset 14, -4
+ 191 0002 0446     		mov	r4, r0
+ 177:HALLIB/Src/stm32f7xx_hal_sram.c ****    
+ 192              		.loc 1 177 0
+ 193 0004 FFF7FEFF 		bl	HAL_SRAM_MspDeInit
+ 194              	.LVL12:
+ 180:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 195              		.loc 1 180 0
+ 196 0008 A268     		ldr	r2, [r4, #8]
+ 197 000a 6168     		ldr	r1, [r4, #4]
+ 198 000c 2068     		ldr	r0, [r4]
+ 199 000e FFF7FEFF 		bl	FMC_NORSRAM_DeInit
+ 200              	.LVL13:
+ 182:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 201              		.loc 1 182 0
+ 202 0012 0020     		movs	r0, #0
+ 203 0014 84F84500 		strb	r0, [r4, #69]
+ARM GAS  /tmp/ccjLDUK5.s 			page 9
+
+
+ 185:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 204              		.loc 1 185 0
+ 205 0018 84F84400 		strb	r0, [r4, #68]
+ 188:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 206              		.loc 1 188 0
+ 207 001c 10BD     		pop	{r4, pc}
+ 208              		.cfi_endproc
+ 209              	.LFE137:
+ 211 001e 00BF     		.section	.text.HAL_SRAM_Read_8b,"ax",%progbits
+ 212              		.align	2
+ 213              		.global	HAL_SRAM_Read_8b
+ 214              		.thumb
+ 215              		.thumb_func
+ 217              	HAL_SRAM_Read_8b:
+ 218              	.LFB142:
+ 246:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Prevent unused argument(s) compilation warning */
+ 247:HALLIB/Src/stm32f7xx_hal_sram.c ****   UNUSED(hdma);
+ 248:HALLIB/Src/stm32f7xx_hal_sram.c ****  
+ 249:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 250:HALLIB/Src/stm32f7xx_hal_sram.c ****             the HAL_SRAM_DMA_XferErrorCallback could be implemented in the user file
+ 251:HALLIB/Src/stm32f7xx_hal_sram.c ****    */ 
+ 252:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 253:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 254:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 255:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @}
+ 256:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 257:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 258:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM_Exported_Functions_Group2 Input Output and memory control functions 
+ 259:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief    Input Output and memory control functions 
+ 260:HALLIB/Src/stm32f7xx_hal_sram.c ****   *
+ 261:HALLIB/Src/stm32f7xx_hal_sram.c ****   @verbatim    
+ 262:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 263:HALLIB/Src/stm32f7xx_hal_sram.c ****                   ##### SRAM Input and Output functions #####
+ 264:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 265:HALLIB/Src/stm32f7xx_hal_sram.c ****   [..]  
+ 266:HALLIB/Src/stm32f7xx_hal_sram.c ****     This section provides functions allowing to use and control the SRAM memory
+ 267:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 268:HALLIB/Src/stm32f7xx_hal_sram.c **** @endverbatim
+ 269:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 270:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 271:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 272:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 273:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Reads 8-bit buffer from SRAM memory. 
+ 274:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 275:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 276:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to read start address
+ 277:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pDstBuffer Pointer to destination buffer  
+ 278:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to read from memory
+ 279:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 280:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 281:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Read_8b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint8_t *pDstBuff
+ 282:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 219              		.loc 1 282 0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223              		@ link register save eliminated.
+ARM GAS  /tmp/ccjLDUK5.s 			page 10
+
+
+ 224              	.LVL14:
+ 225 0000 10B4     		push	{r4}
+ 226              	.LCFI3:
+ 227              		.cfi_def_cfa_offset 4
+ 228              		.cfi_offset 4, -4
+ 229              	.LVL15:
+ 283:HALLIB/Src/stm32f7xx_hal_sram.c ****   __IO uint8_t * psramaddress = (uint8_t *)pAddress;
+ 284:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 285:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 286:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 230              		.loc 1 286 0
+ 231 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 232 0006 012C     		cmp	r4, #1
+ 233 0008 15D0     		beq	.L17
+ 234              		.loc 1 286 0 is_stmt 0 discriminator 2
+ 235 000a 0124     		movs	r4, #1
+ 236 000c 80F84440 		strb	r4, [r0, #68]
+ 287:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 288:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 289:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY;  
+ 237              		.loc 1 289 0 is_stmt 1 discriminator 2
+ 238 0010 0224     		movs	r4, #2
+ 239 0012 80F84540 		strb	r4, [r0, #69]
+ 290:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 291:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Read data from memory */
+ 292:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 240              		.loc 1 292 0 discriminator 2
+ 241 0016 04E0     		b	.L15
+ 242              	.LVL16:
+ 243              	.L16:
+ 293:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 294:HALLIB/Src/stm32f7xx_hal_sram.c ****     *pDstBuffer = *(__IO uint8_t *)psramaddress;
+ 244              		.loc 1 294 0 discriminator 2
+ 245 0018 11F8014B 		ldrb	r4, [r1], #1	@ zero_extendqisi2
+ 246              	.LVL17:
+ 247 001c 02F8014B 		strb	r4, [r2], #1
+ 248              	.LVL18:
+ 292:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 249              		.loc 1 292 0 discriminator 2
+ 250 0020 013B     		subs	r3, r3, #1
+ 251              	.LVL19:
+ 252              	.L15:
+ 292:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 253              		.loc 1 292 0 is_stmt 0 discriminator 1
+ 254 0022 002B     		cmp	r3, #0
+ 255 0024 F8D1     		bne	.L16
+ 295:HALLIB/Src/stm32f7xx_hal_sram.c ****     pDstBuffer++;
+ 296:HALLIB/Src/stm32f7xx_hal_sram.c ****     psramaddress++;
+ 297:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 298:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 299:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 300:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY;    
+ 256              		.loc 1 300 0 is_stmt 1
+ 257 0026 0123     		movs	r3, #1
+ 258              	.LVL20:
+ 259 0028 80F84530 		strb	r3, [r0, #69]
+ 301:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ARM GAS  /tmp/ccjLDUK5.s 			page 11
+
+
+ 302:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 303:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram); 
+ 260              		.loc 1 303 0
+ 261 002c 0023     		movs	r3, #0
+ 262 002e 80F84430 		strb	r3, [r0, #68]
+ 304:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 305:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;   
+ 263              		.loc 1 305 0
+ 264 0032 1846     		mov	r0, r3
+ 265              	.LVL21:
+ 266 0034 00E0     		b	.L14
+ 267              	.LVL22:
+ 268              	.L17:
+ 286:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 269              		.loc 1 286 0
+ 270 0036 0220     		movs	r0, #2
+ 271              	.LVL23:
+ 272              	.L14:
+ 306:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 273              		.loc 1 306 0
+ 274 0038 5DF8044B 		ldr	r4, [sp], #4
+ 275              	.LCFI4:
+ 276              		.cfi_restore 4
+ 277              		.cfi_def_cfa_offset 0
+ 278 003c 7047     		bx	lr
+ 279              		.cfi_endproc
+ 280              	.LFE142:
+ 282 003e 00BF     		.section	.text.HAL_SRAM_Write_8b,"ax",%progbits
+ 283              		.align	2
+ 284              		.global	HAL_SRAM_Write_8b
+ 285              		.thumb
+ 286              		.thumb_func
+ 288              	HAL_SRAM_Write_8b:
+ 289              	.LFB143:
+ 307:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 308:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 309:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Writes 8-bit buffer to SRAM memory. 
+ 310:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 311:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 312:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to write start address
+ 313:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pSrcBuffer Pointer to source buffer to write  
+ 314:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to write to memory
+ 315:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 316:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 317:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Write_8b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint8_t *pSrcBuf
+ 318:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 290              		.loc 1 318 0
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 0
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294              		@ link register save eliminated.
+ 295              	.LVL24:
+ 296 0000 10B4     		push	{r4}
+ 297              	.LCFI5:
+ 298              		.cfi_def_cfa_offset 4
+ 299              		.cfi_offset 4, -4
+ 300              	.LVL25:
+ARM GAS  /tmp/ccjLDUK5.s 			page 12
+
+
+ 319:HALLIB/Src/stm32f7xx_hal_sram.c ****   __IO uint8_t * psramaddress = (uint8_t *)pAddress;
+ 320:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 321:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM controller state */
+ 322:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram->State == HAL_SRAM_STATE_PROTECTED)
+ 301              		.loc 1 322 0
+ 302 0002 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 303 0006 E4B2     		uxtb	r4, r4
+ 304 0008 042C     		cmp	r4, #4
+ 305 000a 19D0     		beq	.L23
+ 323:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 324:HALLIB/Src/stm32f7xx_hal_sram.c ****     return  HAL_ERROR; 
+ 325:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 326:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 327:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 328:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 306              		.loc 1 328 0
+ 307 000c 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 308 0010 012C     		cmp	r4, #1
+ 309 0012 17D0     		beq	.L24
+ 310              		.loc 1 328 0 is_stmt 0 discriminator 2
+ 311 0014 0124     		movs	r4, #1
+ 312 0016 80F84440 		strb	r4, [r0, #68]
+ 329:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 330:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 331:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY; 
+ 313              		.loc 1 331 0 is_stmt 1 discriminator 2
+ 314 001a 0224     		movs	r4, #2
+ 315 001c 80F84540 		strb	r4, [r0, #69]
+ 332:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 333:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Write data to memory */
+ 334:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 316              		.loc 1 334 0 discriminator 2
+ 317 0020 04E0     		b	.L21
+ 318              	.LVL26:
+ 319              	.L22:
+ 335:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 336:HALLIB/Src/stm32f7xx_hal_sram.c ****     *(__IO uint8_t *)psramaddress = *pSrcBuffer; 
+ 320              		.loc 1 336 0 discriminator 2
+ 321 0022 12F8014B 		ldrb	r4, [r2], #1	@ zero_extendqisi2
+ 322              	.LVL27:
+ 323 0026 01F8014B 		strb	r4, [r1], #1
+ 324              	.LVL28:
+ 334:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 325              		.loc 1 334 0 discriminator 2
+ 326 002a 013B     		subs	r3, r3, #1
+ 327              	.LVL29:
+ 328              	.L21:
+ 334:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 329              		.loc 1 334 0 is_stmt 0 discriminator 1
+ 330 002c 002B     		cmp	r3, #0
+ 331 002e F8D1     		bne	.L22
+ 337:HALLIB/Src/stm32f7xx_hal_sram.c ****     pSrcBuffer++;
+ 338:HALLIB/Src/stm32f7xx_hal_sram.c ****     psramaddress++;    
+ 339:HALLIB/Src/stm32f7xx_hal_sram.c ****   }    
+ 340:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 341:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 342:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY; 
+ARM GAS  /tmp/ccjLDUK5.s 			page 13
+
+
+ 332              		.loc 1 342 0 is_stmt 1
+ 333 0030 0123     		movs	r3, #1
+ 334              	.LVL30:
+ 335 0032 80F84530 		strb	r3, [r0, #69]
+ 343:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 344:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 345:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);
+ 336              		.loc 1 345 0
+ 337 0036 0023     		movs	r3, #0
+ 338 0038 80F84430 		strb	r3, [r0, #68]
+ 346:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 347:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;   
+ 339              		.loc 1 347 0
+ 340 003c 1846     		mov	r0, r3
+ 341              	.LVL31:
+ 342 003e 02E0     		b	.L20
+ 343              	.LVL32:
+ 344              	.L23:
+ 324:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 345              		.loc 1 324 0
+ 346 0040 0120     		movs	r0, #1
+ 347              	.LVL33:
+ 348 0042 00E0     		b	.L20
+ 349              	.LVL34:
+ 350              	.L24:
+ 328:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 351              		.loc 1 328 0
+ 352 0044 0220     		movs	r0, #2
+ 353              	.LVL35:
+ 354              	.L20:
+ 348:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 355              		.loc 1 348 0
+ 356 0046 5DF8044B 		ldr	r4, [sp], #4
+ 357              	.LCFI6:
+ 358              		.cfi_restore 4
+ 359              		.cfi_def_cfa_offset 0
+ 360 004a 7047     		bx	lr
+ 361              		.cfi_endproc
+ 362              	.LFE143:
+ 364              		.section	.text.HAL_SRAM_Read_16b,"ax",%progbits
+ 365              		.align	2
+ 366              		.global	HAL_SRAM_Read_16b
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	HAL_SRAM_Read_16b:
+ 371              	.LFB144:
+ 349:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 350:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 351:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Reads 16-bit buffer from SRAM memory. 
+ 352:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 353:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 354:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to read start address
+ 355:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pDstBuffer Pointer to destination buffer  
+ 356:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to read from memory
+ 357:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 358:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 359:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Read_16b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint16_t *pDstBu
+ARM GAS  /tmp/ccjLDUK5.s 			page 14
+
+
+ 360:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 372              		.loc 1 360 0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+ 377              	.LVL36:
+ 378 0000 10B4     		push	{r4}
+ 379              	.LCFI7:
+ 380              		.cfi_def_cfa_offset 4
+ 381              		.cfi_offset 4, -4
+ 382              	.LVL37:
+ 361:HALLIB/Src/stm32f7xx_hal_sram.c ****   __IO uint16_t * psramaddress = (uint16_t *)pAddress;
+ 362:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 363:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 364:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 383              		.loc 1 364 0
+ 384 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 385 0006 012C     		cmp	r4, #1
+ 386 0008 15D0     		beq	.L30
+ 387              		.loc 1 364 0 is_stmt 0 discriminator 2
+ 388 000a 0124     		movs	r4, #1
+ 389 000c 80F84440 		strb	r4, [r0, #68]
+ 365:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 366:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 367:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY;  
+ 390              		.loc 1 367 0 is_stmt 1 discriminator 2
+ 391 0010 0224     		movs	r4, #2
+ 392 0012 80F84540 		strb	r4, [r0, #69]
+ 368:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 369:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Read data from memory */
+ 370:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 393              		.loc 1 370 0 discriminator 2
+ 394 0016 04E0     		b	.L28
+ 395              	.LVL38:
+ 396              	.L29:
+ 371:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 372:HALLIB/Src/stm32f7xx_hal_sram.c ****     *pDstBuffer = *(__IO uint16_t *)psramaddress;
+ 397              		.loc 1 372 0 discriminator 2
+ 398 0018 31F8024B 		ldrh	r4, [r1], #2
+ 399              	.LVL39:
+ 400 001c 22F8024B 		strh	r4, [r2], #2	@ movhi
+ 401              	.LVL40:
+ 370:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 402              		.loc 1 370 0 discriminator 2
+ 403 0020 013B     		subs	r3, r3, #1
+ 404              	.LVL41:
+ 405              	.L28:
+ 370:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 406              		.loc 1 370 0 is_stmt 0 discriminator 1
+ 407 0022 002B     		cmp	r3, #0
+ 408 0024 F8D1     		bne	.L29
+ 373:HALLIB/Src/stm32f7xx_hal_sram.c ****     pDstBuffer++;
+ 374:HALLIB/Src/stm32f7xx_hal_sram.c ****     psramaddress++;
+ 375:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 376:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 377:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ARM GAS  /tmp/ccjLDUK5.s 			page 15
+
+
+ 378:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY;    
+ 409              		.loc 1 378 0 is_stmt 1
+ 410 0026 0123     		movs	r3, #1
+ 411              	.LVL42:
+ 412 0028 80F84530 		strb	r3, [r0, #69]
+ 379:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 380:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 381:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram); 
+ 413              		.loc 1 381 0
+ 414 002c 0023     		movs	r3, #0
+ 415 002e 80F84430 		strb	r3, [r0, #68]
+ 382:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 383:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;  
+ 416              		.loc 1 383 0
+ 417 0032 1846     		mov	r0, r3
+ 418              	.LVL43:
+ 419 0034 00E0     		b	.L27
+ 420              	.LVL44:
+ 421              	.L30:
+ 364:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 422              		.loc 1 364 0
+ 423 0036 0220     		movs	r0, #2
+ 424              	.LVL45:
+ 425              	.L27:
+ 384:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 426              		.loc 1 384 0
+ 427 0038 5DF8044B 		ldr	r4, [sp], #4
+ 428              	.LCFI8:
+ 429              		.cfi_restore 4
+ 430              		.cfi_def_cfa_offset 0
+ 431 003c 7047     		bx	lr
+ 432              		.cfi_endproc
+ 433              	.LFE144:
+ 435 003e 00BF     		.section	.text.HAL_SRAM_Write_16b,"ax",%progbits
+ 436              		.align	2
+ 437              		.global	HAL_SRAM_Write_16b
+ 438              		.thumb
+ 439              		.thumb_func
+ 441              	HAL_SRAM_Write_16b:
+ 442              	.LFB145:
+ 385:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 386:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 387:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Writes 16-bit buffer to SRAM memory. 
+ 388:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 389:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 390:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to write start address
+ 391:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pSrcBuffer Pointer to source buffer to write  
+ 392:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to write to memory
+ 393:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 394:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 395:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Write_16b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint16_t *pSrcB
+ 396:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 443              		.loc 1 396 0
+ 444              		.cfi_startproc
+ 445              		@ args = 0, pretend = 0, frame = 0
+ 446              		@ frame_needed = 0, uses_anonymous_args = 0
+ 447              		@ link register save eliminated.
+ARM GAS  /tmp/ccjLDUK5.s 			page 16
+
+
+ 448              	.LVL46:
+ 449 0000 10B4     		push	{r4}
+ 450              	.LCFI9:
+ 451              		.cfi_def_cfa_offset 4
+ 452              		.cfi_offset 4, -4
+ 453              	.LVL47:
+ 397:HALLIB/Src/stm32f7xx_hal_sram.c ****   __IO uint16_t * psramaddress = (uint16_t *)pAddress; 
+ 398:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 399:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM controller state */
+ 400:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram->State == HAL_SRAM_STATE_PROTECTED)
+ 454              		.loc 1 400 0
+ 455 0002 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 456 0006 E4B2     		uxtb	r4, r4
+ 457 0008 042C     		cmp	r4, #4
+ 458 000a 19D0     		beq	.L36
+ 401:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 402:HALLIB/Src/stm32f7xx_hal_sram.c ****     return  HAL_ERROR; 
+ 403:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 404:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 405:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 406:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 459              		.loc 1 406 0
+ 460 000c 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 461 0010 012C     		cmp	r4, #1
+ 462 0012 17D0     		beq	.L37
+ 463              		.loc 1 406 0 is_stmt 0 discriminator 2
+ 464 0014 0124     		movs	r4, #1
+ 465 0016 80F84440 		strb	r4, [r0, #68]
+ 407:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 408:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 409:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY; 
+ 466              		.loc 1 409 0 is_stmt 1 discriminator 2
+ 467 001a 0224     		movs	r4, #2
+ 468 001c 80F84540 		strb	r4, [r0, #69]
+ 410:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 411:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Write data to memory */
+ 412:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 469              		.loc 1 412 0 discriminator 2
+ 470 0020 04E0     		b	.L34
+ 471              	.LVL48:
+ 472              	.L35:
+ 413:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 414:HALLIB/Src/stm32f7xx_hal_sram.c ****     *(__IO uint16_t *)psramaddress = *pSrcBuffer; 
+ 473              		.loc 1 414 0 discriminator 2
+ 474 0022 32F8024B 		ldrh	r4, [r2], #2
+ 475              	.LVL49:
+ 476 0026 21F8024B 		strh	r4, [r1], #2	@ movhi
+ 477              	.LVL50:
+ 412:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 478              		.loc 1 412 0 discriminator 2
+ 479 002a 013B     		subs	r3, r3, #1
+ 480              	.LVL51:
+ 481              	.L34:
+ 412:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 482              		.loc 1 412 0 is_stmt 0 discriminator 1
+ 483 002c 002B     		cmp	r3, #0
+ 484 002e F8D1     		bne	.L35
+ARM GAS  /tmp/ccjLDUK5.s 			page 17
+
+
+ 415:HALLIB/Src/stm32f7xx_hal_sram.c ****     pSrcBuffer++;
+ 416:HALLIB/Src/stm32f7xx_hal_sram.c ****     psramaddress++;    
+ 417:HALLIB/Src/stm32f7xx_hal_sram.c ****   }    
+ 418:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 419:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 420:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY; 
+ 485              		.loc 1 420 0 is_stmt 1
+ 486 0030 0123     		movs	r3, #1
+ 487              	.LVL52:
+ 488 0032 80F84530 		strb	r3, [r0, #69]
+ 421:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 422:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 423:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);
+ 489              		.loc 1 423 0
+ 490 0036 0023     		movs	r3, #0
+ 491 0038 80F84430 		strb	r3, [r0, #68]
+ 424:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 425:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;  
+ 492              		.loc 1 425 0
+ 493 003c 1846     		mov	r0, r3
+ 494              	.LVL53:
+ 495 003e 02E0     		b	.L33
+ 496              	.LVL54:
+ 497              	.L36:
+ 402:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 498              		.loc 1 402 0
+ 499 0040 0120     		movs	r0, #1
+ 500              	.LVL55:
+ 501 0042 00E0     		b	.L33
+ 502              	.LVL56:
+ 503              	.L37:
+ 406:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 504              		.loc 1 406 0
+ 505 0044 0220     		movs	r0, #2
+ 506              	.LVL57:
+ 507              	.L33:
+ 426:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 508              		.loc 1 426 0
+ 509 0046 5DF8044B 		ldr	r4, [sp], #4
+ 510              	.LCFI10:
+ 511              		.cfi_restore 4
+ 512              		.cfi_def_cfa_offset 0
+ 513 004a 7047     		bx	lr
+ 514              		.cfi_endproc
+ 515              	.LFE145:
+ 517              		.section	.text.HAL_SRAM_Read_32b,"ax",%progbits
+ 518              		.align	2
+ 519              		.global	HAL_SRAM_Read_32b
+ 520              		.thumb
+ 521              		.thumb_func
+ 523              	HAL_SRAM_Read_32b:
+ 524              	.LFB146:
+ 427:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 428:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 429:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Reads 32-bit buffer from SRAM memory. 
+ 430:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 431:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ARM GAS  /tmp/ccjLDUK5.s 			page 18
+
+
+ 432:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to read start address
+ 433:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pDstBuffer Pointer to destination buffer  
+ 434:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to read from memory
+ 435:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 436:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 437:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Read_32b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint32_t *pDstBu
+ 438:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 525              		.loc 1 438 0
+ 526              		.cfi_startproc
+ 527              		@ args = 0, pretend = 0, frame = 0
+ 528              		@ frame_needed = 0, uses_anonymous_args = 0
+ 529              		@ link register save eliminated.
+ 530              	.LVL58:
+ 531 0000 10B4     		push	{r4}
+ 532              	.LCFI11:
+ 533              		.cfi_def_cfa_offset 4
+ 534              		.cfi_offset 4, -4
+ 439:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 440:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 535              		.loc 1 440 0
+ 536 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 537 0006 012C     		cmp	r4, #1
+ 538 0008 15D0     		beq	.L43
+ 539              		.loc 1 440 0 is_stmt 0 discriminator 2
+ 540 000a 0124     		movs	r4, #1
+ 541 000c 80F84440 		strb	r4, [r0, #68]
+ 441:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 442:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 443:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY;  
+ 542              		.loc 1 443 0 is_stmt 1 discriminator 2
+ 543 0010 0224     		movs	r4, #2
+ 544 0012 80F84540 		strb	r4, [r0, #69]
+ 444:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 445:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Read data from memory */
+ 446:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 545              		.loc 1 446 0 discriminator 2
+ 546 0016 04E0     		b	.L41
+ 547              	.L42:
+ 447:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 448:HALLIB/Src/stm32f7xx_hal_sram.c ****     *pDstBuffer = *(__IO uint32_t *)pAddress;
+ 548              		.loc 1 448 0 discriminator 2
+ 549 0018 51F8044B 		ldr	r4, [r1], #4
+ 550              	.LVL59:
+ 551 001c 42F8044B 		str	r4, [r2], #4
+ 552              	.LVL60:
+ 446:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 553              		.loc 1 446 0 discriminator 2
+ 554 0020 013B     		subs	r3, r3, #1
+ 555              	.LVL61:
+ 556              	.L41:
+ 446:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 557              		.loc 1 446 0 is_stmt 0 discriminator 1
+ 558 0022 002B     		cmp	r3, #0
+ 559 0024 F8D1     		bne	.L42
+ 449:HALLIB/Src/stm32f7xx_hal_sram.c ****     pDstBuffer++;
+ 450:HALLIB/Src/stm32f7xx_hal_sram.c ****     pAddress++;
+ 451:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ARM GAS  /tmp/ccjLDUK5.s 			page 19
+
+
+ 452:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 453:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 454:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY;    
+ 560              		.loc 1 454 0 is_stmt 1
+ 561 0026 0123     		movs	r3, #1
+ 562              	.LVL62:
+ 563 0028 80F84530 		strb	r3, [r0, #69]
+ 455:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 456:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 457:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram); 
+ 564              		.loc 1 457 0
+ 565 002c 0023     		movs	r3, #0
+ 566 002e 80F84430 		strb	r3, [r0, #68]
+ 458:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 459:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;  
+ 567              		.loc 1 459 0
+ 568 0032 1846     		mov	r0, r3
+ 569              	.LVL63:
+ 570 0034 00E0     		b	.L40
+ 571              	.LVL64:
+ 572              	.L43:
+ 440:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 573              		.loc 1 440 0
+ 574 0036 0220     		movs	r0, #2
+ 575              	.LVL65:
+ 576              	.L40:
+ 460:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 577              		.loc 1 460 0
+ 578 0038 5DF8044B 		ldr	r4, [sp], #4
+ 579              	.LCFI12:
+ 580              		.cfi_restore 4
+ 581              		.cfi_def_cfa_offset 0
+ 582 003c 7047     		bx	lr
+ 583              		.cfi_endproc
+ 584              	.LFE146:
+ 586 003e 00BF     		.section	.text.HAL_SRAM_Write_32b,"ax",%progbits
+ 587              		.align	2
+ 588              		.global	HAL_SRAM_Write_32b
+ 589              		.thumb
+ 590              		.thumb_func
+ 592              	HAL_SRAM_Write_32b:
+ 593              	.LFB147:
+ 461:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 462:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 463:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Writes 32-bit buffer to SRAM memory. 
+ 464:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 465:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 466:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to write start address
+ 467:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pSrcBuffer Pointer to source buffer to write  
+ 468:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to write to memory
+ 469:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 470:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 471:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Write_32b(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint32_t *pSrcB
+ 472:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 594              		.loc 1 472 0
+ 595              		.cfi_startproc
+ 596              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccjLDUK5.s 			page 20
+
+
+ 597              		@ frame_needed = 0, uses_anonymous_args = 0
+ 598              		@ link register save eliminated.
+ 599              	.LVL66:
+ 600 0000 10B4     		push	{r4}
+ 601              	.LCFI13:
+ 602              		.cfi_def_cfa_offset 4
+ 603              		.cfi_offset 4, -4
+ 473:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM controller state */
+ 474:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram->State == HAL_SRAM_STATE_PROTECTED)
+ 604              		.loc 1 474 0
+ 605 0002 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 606 0006 E4B2     		uxtb	r4, r4
+ 607 0008 042C     		cmp	r4, #4
+ 608 000a 19D0     		beq	.L49
+ 475:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 476:HALLIB/Src/stm32f7xx_hal_sram.c ****     return  HAL_ERROR; 
+ 477:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 478:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 479:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 480:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 609              		.loc 1 480 0
+ 610 000c 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 611 0010 012C     		cmp	r4, #1
+ 612 0012 17D0     		beq	.L50
+ 613              		.loc 1 480 0 is_stmt 0 discriminator 2
+ 614 0014 0124     		movs	r4, #1
+ 615 0016 80F84440 		strb	r4, [r0, #68]
+ 481:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 482:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 483:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY; 
+ 616              		.loc 1 483 0 is_stmt 1 discriminator 2
+ 617 001a 0224     		movs	r4, #2
+ 618 001c 80F84540 		strb	r4, [r0, #69]
+ 484:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 485:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Write data to memory */
+ 486:HALLIB/Src/stm32f7xx_hal_sram.c ****   for(; BufferSize != 0; BufferSize--)
+ 619              		.loc 1 486 0 discriminator 2
+ 620 0020 04E0     		b	.L47
+ 621              	.L48:
+ 487:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 488:HALLIB/Src/stm32f7xx_hal_sram.c ****     *(__IO uint32_t *)pAddress = *pSrcBuffer; 
+ 622              		.loc 1 488 0 discriminator 2
+ 623 0022 52F8044B 		ldr	r4, [r2], #4
+ 624              	.LVL67:
+ 625 0026 41F8044B 		str	r4, [r1], #4
+ 626              	.LVL68:
+ 486:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 627              		.loc 1 486 0 discriminator 2
+ 628 002a 013B     		subs	r3, r3, #1
+ 629              	.LVL69:
+ 630              	.L47:
+ 486:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 631              		.loc 1 486 0 is_stmt 0 discriminator 1
+ 632 002c 002B     		cmp	r3, #0
+ 633 002e F8D1     		bne	.L48
+ 489:HALLIB/Src/stm32f7xx_hal_sram.c ****     pSrcBuffer++;
+ 490:HALLIB/Src/stm32f7xx_hal_sram.c ****     pAddress++;    
+ARM GAS  /tmp/ccjLDUK5.s 			page 21
+
+
+ 491:HALLIB/Src/stm32f7xx_hal_sram.c ****   }    
+ 492:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 493:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 494:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY; 
+ 634              		.loc 1 494 0 is_stmt 1
+ 635 0030 0123     		movs	r3, #1
+ 636              	.LVL70:
+ 637 0032 80F84530 		strb	r3, [r0, #69]
+ 495:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 496:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 497:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);
+ 638              		.loc 1 497 0
+ 639 0036 0023     		movs	r3, #0
+ 640 0038 80F84430 		strb	r3, [r0, #68]
+ 498:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 499:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;   
+ 641              		.loc 1 499 0
+ 642 003c 1846     		mov	r0, r3
+ 643              	.LVL71:
+ 644 003e 02E0     		b	.L46
+ 645              	.LVL72:
+ 646              	.L49:
+ 476:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 647              		.loc 1 476 0
+ 648 0040 0120     		movs	r0, #1
+ 649              	.LVL73:
+ 650 0042 00E0     		b	.L46
+ 651              	.LVL74:
+ 652              	.L50:
+ 480:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 653              		.loc 1 480 0
+ 654 0044 0220     		movs	r0, #2
+ 655              	.LVL75:
+ 656              	.L46:
+ 500:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 657              		.loc 1 500 0
+ 658 0046 5DF8044B 		ldr	r4, [sp], #4
+ 659              	.LCFI14:
+ 660              		.cfi_restore 4
+ 661              		.cfi_def_cfa_offset 0
+ 662 004a 7047     		bx	lr
+ 663              		.cfi_endproc
+ 664              	.LFE147:
+ 666              		.section	.text.HAL_SRAM_Read_DMA,"ax",%progbits
+ 667              		.align	2
+ 668              		.global	HAL_SRAM_Read_DMA
+ 669              		.thumb
+ 670              		.thumb_func
+ 672              	HAL_SRAM_Read_DMA:
+ 673              	.LFB148:
+ 501:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 502:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 503:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Reads a Words data from the SRAM memory using DMA transfer.
+ 504:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 505:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 506:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to read start address
+ 507:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pDstBuffer Pointer to destination buffer  
+ARM GAS  /tmp/ccjLDUK5.s 			page 22
+
+
+ 508:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to read from memory
+ 509:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 510:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 511:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Read_DMA(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint32_t *pDstBu
+ 512:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 674              		.loc 1 512 0
+ 675              		.cfi_startproc
+ 676              		@ args = 0, pretend = 0, frame = 0
+ 677              		@ frame_needed = 0, uses_anonymous_args = 0
+ 678              	.LVL76:
+ 679 0000 70B5     		push	{r4, r5, r6, lr}
+ 680              	.LCFI15:
+ 681              		.cfi_def_cfa_offset 16
+ 682              		.cfi_offset 4, -16
+ 683              		.cfi_offset 5, -12
+ 684              		.cfi_offset 6, -8
+ 685              		.cfi_offset 14, -4
+ 513:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 514:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);  
+ 686              		.loc 1 514 0
+ 687 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 688 0006 012C     		cmp	r4, #1
+ 689 0008 15D0     		beq	.L54
+ 690 000a 0446     		mov	r4, r0
+ 691              		.loc 1 514 0 is_stmt 0 discriminator 2
+ 692 000c 0125     		movs	r5, #1
+ 693 000e 80F84450 		strb	r5, [r0, #68]
+ 515:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 516:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 517:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY;   
+ 694              		.loc 1 517 0 is_stmt 1 discriminator 2
+ 695 0012 0220     		movs	r0, #2
+ 696              	.LVL77:
+ 697 0014 84F84500 		strb	r0, [r4, #69]
+ 518:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 519:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Configure DMA user callbacks */
+ 520:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->hdma->XferCpltCallback  = HAL_SRAM_DMA_XferCpltCallback;
+ 698              		.loc 1 520 0 discriminator 2
+ 699 0018 A06C     		ldr	r0, [r4, #72]
+ 700 001a 084E     		ldr	r6, .L56
+ 701 001c C663     		str	r6, [r0, #60]
+ 521:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->hdma->XferErrorCallback = HAL_SRAM_DMA_XferErrorCallback;
+ 702              		.loc 1 521 0 discriminator 2
+ 703 001e A06C     		ldr	r0, [r4, #72]
+ 704 0020 074E     		ldr	r6, .L56+4
+ 705 0022 C664     		str	r6, [r0, #76]
+ 522:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 523:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Enable the DMA Stream */
+ 524:HALLIB/Src/stm32f7xx_hal_sram.c ****   HAL_DMA_Start_IT(hsram->hdma, (uint32_t)pAddress, (uint32_t)pDstBuffer, (uint32_t)BufferSize);
+ 706              		.loc 1 524 0 discriminator 2
+ 707 0024 A06C     		ldr	r0, [r4, #72]
+ 708 0026 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 709              	.LVL78:
+ 525:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 526:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 527:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY; 
+ 710              		.loc 1 527 0 discriminator 2
+ARM GAS  /tmp/ccjLDUK5.s 			page 23
+
+
+ 711 002a 84F84550 		strb	r5, [r4, #69]
+ 528:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 529:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 530:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);  
+ 712              		.loc 1 530 0 discriminator 2
+ 713 002e 0020     		movs	r0, #0
+ 714 0030 84F84400 		strb	r0, [r4, #68]
+ 531:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 532:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK; 
+ 715              		.loc 1 532 0 discriminator 2
+ 716 0034 70BD     		pop	{r4, r5, r6, pc}
+ 717              	.LVL79:
+ 718              	.L54:
+ 514:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 719              		.loc 1 514 0
+ 720 0036 0220     		movs	r0, #2
+ 721              	.LVL80:
+ 533:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 722              		.loc 1 533 0
+ 723 0038 70BD     		pop	{r4, r5, r6, pc}
+ 724              	.L57:
+ 725 003a 00BF     		.align	2
+ 726              	.L56:
+ 727 003c 00000000 		.word	HAL_SRAM_DMA_XferCpltCallback
+ 728 0040 00000000 		.word	HAL_SRAM_DMA_XferErrorCallback
+ 729              		.cfi_endproc
+ 730              	.LFE148:
+ 732              		.section	.text.HAL_SRAM_Write_DMA,"ax",%progbits
+ 733              		.align	2
+ 734              		.global	HAL_SRAM_Write_DMA
+ 735              		.thumb
+ 736              		.thumb_func
+ 738              	HAL_SRAM_Write_DMA:
+ 739              	.LFB149:
+ 534:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 535:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 536:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Writes a Words data buffer to SRAM memory using DMA transfer.
+ 537:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 538:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 539:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pAddress Pointer to write start address
+ 540:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  pSrcBuffer Pointer to source buffer to write  
+ 541:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  BufferSize Size of the buffer to write to memory
+ 542:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 543:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 544:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_Write_DMA(SRAM_HandleTypeDef *hsram, uint32_t *pAddress, uint32_t *pSrcB
+ 545:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 740              		.loc 1 545 0
+ 741              		.cfi_startproc
+ 742              		@ args = 0, pretend = 0, frame = 0
+ 743              		@ frame_needed = 0, uses_anonymous_args = 0
+ 744              	.LVL81:
+ 745 0000 70B5     		push	{r4, r5, r6, lr}
+ 746              	.LCFI16:
+ 747              		.cfi_def_cfa_offset 16
+ 748              		.cfi_offset 4, -16
+ 749              		.cfi_offset 5, -12
+ 750              		.cfi_offset 6, -8
+ARM GAS  /tmp/ccjLDUK5.s 			page 24
+
+
+ 751              		.cfi_offset 14, -4
+ 546:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Check the SRAM controller state */
+ 547:HALLIB/Src/stm32f7xx_hal_sram.c ****   if(hsram->State == HAL_SRAM_STATE_PROTECTED)
+ 752              		.loc 1 547 0
+ 753 0002 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 754 0006 E4B2     		uxtb	r4, r4
+ 755 0008 042C     		cmp	r4, #4
+ 756 000a 1CD0     		beq	.L60
+ 548:HALLIB/Src/stm32f7xx_hal_sram.c ****   {
+ 549:HALLIB/Src/stm32f7xx_hal_sram.c ****     return  HAL_ERROR; 
+ 550:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 551:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 552:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 553:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 757              		.loc 1 553 0
+ 758 000c 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 759 0010 012C     		cmp	r4, #1
+ 760 0012 1AD0     		beq	.L61
+ 761 0014 1546     		mov	r5, r2
+ 762 0016 0A46     		mov	r2, r1
+ 763              	.LVL82:
+ 764 0018 0446     		mov	r4, r0
+ 765              		.loc 1 553 0 is_stmt 0 discriminator 2
+ 766 001a 0126     		movs	r6, #1
+ 767 001c 80F84460 		strb	r6, [r0, #68]
+ 554:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 555:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 556:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY; 
+ 768              		.loc 1 556 0 is_stmt 1 discriminator 2
+ 769 0020 0221     		movs	r1, #2
+ 770              	.LVL83:
+ 771 0022 80F84510 		strb	r1, [r0, #69]
+ 557:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 558:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Configure DMA user callbacks */
+ 559:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->hdma->XferCpltCallback  = HAL_SRAM_DMA_XferCpltCallback;
+ 772              		.loc 1 559 0 discriminator 2
+ 773 0026 816C     		ldr	r1, [r0, #72]
+ 774 0028 0948     		ldr	r0, .L63
+ 775              	.LVL84:
+ 776 002a C863     		str	r0, [r1, #60]
+ 560:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->hdma->XferErrorCallback = HAL_SRAM_DMA_XferErrorCallback;
+ 777              		.loc 1 560 0 discriminator 2
+ 778 002c A16C     		ldr	r1, [r4, #72]
+ 779 002e 0948     		ldr	r0, .L63+4
+ 780 0030 C864     		str	r0, [r1, #76]
+ 561:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 562:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Enable the DMA Stream */
+ 563:HALLIB/Src/stm32f7xx_hal_sram.c ****   HAL_DMA_Start_IT(hsram->hdma, (uint32_t)pSrcBuffer, (uint32_t)pAddress, (uint32_t)BufferSize);
+ 781              		.loc 1 563 0 discriminator 2
+ 782 0032 2946     		mov	r1, r5
+ 783 0034 A06C     		ldr	r0, [r4, #72]
+ 784 0036 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 785              	.LVL85:
+ 564:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 565:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 566:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY;  
+ 786              		.loc 1 566 0 discriminator 2
+ARM GAS  /tmp/ccjLDUK5.s 			page 25
+
+
+ 787 003a 84F84560 		strb	r6, [r4, #69]
+ 567:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 568:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 569:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram);  
+ 788              		.loc 1 569 0 discriminator 2
+ 789 003e 0020     		movs	r0, #0
+ 790 0040 84F84400 		strb	r0, [r4, #68]
+ 570:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 571:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;
+ 791              		.loc 1 571 0 discriminator 2
+ 792 0044 70BD     		pop	{r4, r5, r6, pc}
+ 793              	.LVL86:
+ 794              	.L60:
+ 549:HALLIB/Src/stm32f7xx_hal_sram.c ****   }
+ 795              		.loc 1 549 0
+ 796 0046 0120     		movs	r0, #1
+ 797              	.LVL87:
+ 798 0048 70BD     		pop	{r4, r5, r6, pc}
+ 799              	.LVL88:
+ 800              	.L61:
+ 553:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 801              		.loc 1 553 0
+ 802 004a 0220     		movs	r0, #2
+ 803              	.LVL89:
+ 572:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 804              		.loc 1 572 0
+ 805 004c 70BD     		pop	{r4, r5, r6, pc}
+ 806              	.L64:
+ 807 004e 00BF     		.align	2
+ 808              	.L63:
+ 809 0050 00000000 		.word	HAL_SRAM_DMA_XferCpltCallback
+ 810 0054 00000000 		.word	HAL_SRAM_DMA_XferErrorCallback
+ 811              		.cfi_endproc
+ 812              	.LFE149:
+ 814              		.section	.text.HAL_SRAM_WriteOperation_Enable,"ax",%progbits
+ 815              		.align	2
+ 816              		.global	HAL_SRAM_WriteOperation_Enable
+ 817              		.thumb
+ 818              		.thumb_func
+ 820              	HAL_SRAM_WriteOperation_Enable:
+ 821              	.LFB150:
+ 573:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 574:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 575:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @}
+ 576:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 577:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 578:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM_Exported_Functions_Group3 Control functions 
+ 579:HALLIB/Src/stm32f7xx_hal_sram.c ****  *  @brief   Control functions 
+ 580:HALLIB/Src/stm32f7xx_hal_sram.c ****  *
+ 581:HALLIB/Src/stm32f7xx_hal_sram.c **** @verbatim   
+ 582:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 583:HALLIB/Src/stm32f7xx_hal_sram.c ****                         ##### SRAM Control functions #####
+ 584:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================  
+ 585:HALLIB/Src/stm32f7xx_hal_sram.c ****   [..]
+ 586:HALLIB/Src/stm32f7xx_hal_sram.c ****     This subsection provides a set of functions allowing to control dynamically
+ 587:HALLIB/Src/stm32f7xx_hal_sram.c ****     the SRAM interface.
+ 588:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ARM GAS  /tmp/ccjLDUK5.s 			page 26
+
+
+ 589:HALLIB/Src/stm32f7xx_hal_sram.c **** @endverbatim
+ 590:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 591:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 592:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ 593:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 594:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Enables dynamically SRAM write operation.
+ 595:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 596:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 597:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 598:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 599:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_WriteOperation_Enable(SRAM_HandleTypeDef *hsram)
+ 600:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 822              		.loc 1 600 0
+ 823              		.cfi_startproc
+ 824              		@ args = 0, pretend = 0, frame = 0
+ 825              		@ frame_needed = 0, uses_anonymous_args = 0
+ 826              	.LVL90:
+ 827 0000 38B5     		push	{r3, r4, r5, lr}
+ 828              	.LCFI17:
+ 829              		.cfi_def_cfa_offset 16
+ 830              		.cfi_offset 3, -16
+ 831              		.cfi_offset 4, -12
+ 832              		.cfi_offset 5, -8
+ 833              		.cfi_offset 14, -4
+ 601:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 602:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 834              		.loc 1 602 0
+ 835 0002 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 836 0006 012B     		cmp	r3, #1
+ 837 0008 0DD0     		beq	.L67
+ 838 000a 0446     		mov	r4, r0
+ 839              		.loc 1 602 0 is_stmt 0 discriminator 2
+ 840 000c 0125     		movs	r5, #1
+ 841 000e 80F84450 		strb	r5, [r0, #68]
+ 603:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 604:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Enable write operation */
+ 605:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_WriteOperation_Enable(hsram->Instance, hsram->Init.NSBank); 
+ 842              		.loc 1 605 0 is_stmt 1 discriminator 2
+ 843 0012 8168     		ldr	r1, [r0, #8]
+ 844 0014 0068     		ldr	r0, [r0]
+ 845              	.LVL91:
+ 846 0016 FFF7FEFF 		bl	FMC_NORSRAM_WriteOperation_Enable
+ 847              	.LVL92:
+ 606:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 607:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 608:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_READY;
+ 848              		.loc 1 608 0 discriminator 2
+ 849 001a 84F84550 		strb	r5, [r4, #69]
+ 609:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 610:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 611:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram); 
+ 850              		.loc 1 611 0 discriminator 2
+ 851 001e 0020     		movs	r0, #0
+ 852 0020 84F84400 		strb	r0, [r4, #68]
+ 612:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 613:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;  
+ 853              		.loc 1 613 0 discriminator 2
+ARM GAS  /tmp/ccjLDUK5.s 			page 27
+
+
+ 854 0024 38BD     		pop	{r3, r4, r5, pc}
+ 855              	.LVL93:
+ 856              	.L67:
+ 602:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 857              		.loc 1 602 0
+ 858 0026 0220     		movs	r0, #2
+ 859              	.LVL94:
+ 614:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 860              		.loc 1 614 0
+ 861 0028 38BD     		pop	{r3, r4, r5, pc}
+ 862              		.cfi_endproc
+ 863              	.LFE150:
+ 865 002a 00BF     		.section	.text.HAL_SRAM_WriteOperation_Disable,"ax",%progbits
+ 866              		.align	2
+ 867              		.global	HAL_SRAM_WriteOperation_Disable
+ 868              		.thumb
+ 869              		.thumb_func
+ 871              	HAL_SRAM_WriteOperation_Disable:
+ 872              	.LFB151:
+ 615:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 616:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 617:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Disables dynamically SRAM write operation.
+ 618:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 619:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 620:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL status
+ 621:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 622:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_StatusTypeDef HAL_SRAM_WriteOperation_Disable(SRAM_HandleTypeDef *hsram)
+ 623:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 873              		.loc 1 623 0
+ 874              		.cfi_startproc
+ 875              		@ args = 0, pretend = 0, frame = 0
+ 876              		@ frame_needed = 0, uses_anonymous_args = 0
+ 877              	.LVL95:
+ 624:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 625:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_LOCK(hsram);
+ 878              		.loc 1 625 0
+ 879 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 880 0004 012B     		cmp	r3, #1
+ 881 0006 12D0     		beq	.L71
+ 623:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process Locked */
+ 882              		.loc 1 623 0 discriminator 2
+ 883 0008 10B5     		push	{r4, lr}
+ 884              	.LCFI18:
+ 885              		.cfi_def_cfa_offset 8
+ 886              		.cfi_offset 4, -8
+ 887              		.cfi_offset 14, -4
+ 888 000a 0446     		mov	r4, r0
+ 889              		.loc 1 625 0 discriminator 2
+ 890 000c 0123     		movs	r3, #1
+ 891 000e 80F84430 		strb	r3, [r0, #68]
+ 626:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 627:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 628:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_BUSY;
+ 892              		.loc 1 628 0 discriminator 2
+ 893 0012 0223     		movs	r3, #2
+ 894 0014 80F84530 		strb	r3, [r0, #69]
+ 629:HALLIB/Src/stm32f7xx_hal_sram.c ****     
+ARM GAS  /tmp/ccjLDUK5.s 			page 28
+
+
+ 630:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Disable write operation */
+ 631:HALLIB/Src/stm32f7xx_hal_sram.c ****   FMC_NORSRAM_WriteOperation_Disable(hsram->Instance, hsram->Init.NSBank); 
+ 895              		.loc 1 631 0 discriminator 2
+ 896 0018 8168     		ldr	r1, [r0, #8]
+ 897 001a 0068     		ldr	r0, [r0]
+ 898              	.LVL96:
+ 899 001c FFF7FEFF 		bl	FMC_NORSRAM_WriteOperation_Disable
+ 900              	.LVL97:
+ 632:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 633:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Update the SRAM controller state */
+ 634:HALLIB/Src/stm32f7xx_hal_sram.c ****   hsram->State = HAL_SRAM_STATE_PROTECTED;
+ 901              		.loc 1 634 0 discriminator 2
+ 902 0020 0423     		movs	r3, #4
+ 903 0022 84F84530 		strb	r3, [r4, #69]
+ 635:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 636:HALLIB/Src/stm32f7xx_hal_sram.c ****   /* Process unlocked */
+ 637:HALLIB/Src/stm32f7xx_hal_sram.c ****   __HAL_UNLOCK(hsram); 
+ 904              		.loc 1 637 0 discriminator 2
+ 905 0026 0020     		movs	r0, #0
+ 906 0028 84F84400 		strb	r0, [r4, #68]
+ 638:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 639:HALLIB/Src/stm32f7xx_hal_sram.c ****   return HAL_OK;  
+ 907              		.loc 1 639 0 discriminator 2
+ 908 002c 10BD     		pop	{r4, pc}
+ 909              	.LVL98:
+ 910              	.L71:
+ 911              	.LCFI19:
+ 912              		.cfi_def_cfa_offset 0
+ 913              		.cfi_restore 4
+ 914              		.cfi_restore 14
+ 625:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 915              		.loc 1 625 0
+ 916 002e 0220     		movs	r0, #2
+ 917              	.LVL99:
+ 918 0030 7047     		bx	lr
+ 919              		.cfi_endproc
+ 920              	.LFE151:
+ 922 0032 00BF     		.section	.text.HAL_SRAM_GetState,"ax",%progbits
+ 923              		.align	2
+ 924              		.global	HAL_SRAM_GetState
+ 925              		.thumb
+ 926              		.thumb_func
+ 928              	HAL_SRAM_GetState:
+ 929              	.LFB152:
+ 640:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 641:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 642:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 643:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @}
+ 644:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 645:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 646:HALLIB/Src/stm32f7xx_hal_sram.c **** /** @defgroup SRAM_Exported_Functions_Group4 Peripheral State functions 
+ 647:HALLIB/Src/stm32f7xx_hal_sram.c ****  *  @brief   Peripheral State functions 
+ 648:HALLIB/Src/stm32f7xx_hal_sram.c ****  *
+ 649:HALLIB/Src/stm32f7xx_hal_sram.c **** @verbatim   
+ 650:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================
+ 651:HALLIB/Src/stm32f7xx_hal_sram.c ****                       ##### SRAM State functions #####
+ 652:HALLIB/Src/stm32f7xx_hal_sram.c ****   ==============================================================================  
+ARM GAS  /tmp/ccjLDUK5.s 			page 29
+
+
+ 653:HALLIB/Src/stm32f7xx_hal_sram.c ****   [..]
+ 654:HALLIB/Src/stm32f7xx_hal_sram.c ****     This subsection permits to get in run-time the status of the SRAM controller 
+ 655:HALLIB/Src/stm32f7xx_hal_sram.c ****     and the data flow.
+ 656:HALLIB/Src/stm32f7xx_hal_sram.c **** 
+ 657:HALLIB/Src/stm32f7xx_hal_sram.c **** @endverbatim
+ 658:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @{
+ 659:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 660:HALLIB/Src/stm32f7xx_hal_sram.c ****   
+ 661:HALLIB/Src/stm32f7xx_hal_sram.c **** /**
+ 662:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @brief  Returns the SRAM controller state
+ 663:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @param  hsram pointer to a SRAM_HandleTypeDef structure that contains
+ 664:HALLIB/Src/stm32f7xx_hal_sram.c ****   *                the configuration information for SRAM module.
+ 665:HALLIB/Src/stm32f7xx_hal_sram.c ****   * @retval HAL state
+ 666:HALLIB/Src/stm32f7xx_hal_sram.c ****   */
+ 667:HALLIB/Src/stm32f7xx_hal_sram.c **** HAL_SRAM_StateTypeDef HAL_SRAM_GetState(SRAM_HandleTypeDef *hsram)
+ 668:HALLIB/Src/stm32f7xx_hal_sram.c **** {
+ 930              		.loc 1 668 0
+ 931              		.cfi_startproc
+ 932              		@ args = 0, pretend = 0, frame = 0
+ 933              		@ frame_needed = 0, uses_anonymous_args = 0
+ 934              		@ link register save eliminated.
+ 935              	.LVL100:
+ 669:HALLIB/Src/stm32f7xx_hal_sram.c ****   return hsram->State;
+ 936              		.loc 1 669 0
+ 937 0000 90F84500 		ldrb	r0, [r0, #69]	@ zero_extendqisi2
+ 938              	.LVL101:
+ 670:HALLIB/Src/stm32f7xx_hal_sram.c **** }
+ 939              		.loc 1 670 0
+ 940 0004 7047     		bx	lr
+ 941              		.cfi_endproc
+ 942              	.LFE152:
+ 944 0006 00BF     		.text
+ 945              	.Letext0:
+ 946              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 947              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 948              		.file 4 "Inc/stm32f767xx.h"
+ 949              		.file 5 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 950              		.file 6 "HALLIB/Inc/stm32f7xx_hal_dma.h"
+ 951              		.file 7 "HALLIB/Inc/stm32f7xx_ll_fmc.h"
+ 952              		.file 8 "HALLIB/Inc/stm32f7xx_hal_sram.h"
+ 953              		.file 9 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccjLDUK5.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_sram.c
+     /tmp/ccjLDUK5.s:21     .text.HAL_SRAM_DMA_XferCpltCallback:00000000 $t
+     /tmp/ccjLDUK5.s:26     .text.HAL_SRAM_DMA_XferCpltCallback:00000000 HAL_SRAM_DMA_XferCpltCallback
+     /tmp/ccjLDUK5.s:40     .text.HAL_SRAM_DMA_XferErrorCallback:00000000 $t
+     /tmp/ccjLDUK5.s:45     .text.HAL_SRAM_DMA_XferErrorCallback:00000000 HAL_SRAM_DMA_XferErrorCallback
+     /tmp/ccjLDUK5.s:58     .text.HAL_SRAM_MspInit:00000000 $t
+     /tmp/ccjLDUK5.s:63     .text.HAL_SRAM_MspInit:00000000 HAL_SRAM_MspInit
+     /tmp/ccjLDUK5.s:76     .text.HAL_SRAM_Init:00000000 $t
+     /tmp/ccjLDUK5.s:81     .text.HAL_SRAM_Init:00000000 HAL_SRAM_Init
+     /tmp/ccjLDUK5.s:155    .text.HAL_SRAM_MspDeInit:00000000 $t
+     /tmp/ccjLDUK5.s:160    .text.HAL_SRAM_MspDeInit:00000000 HAL_SRAM_MspDeInit
+     /tmp/ccjLDUK5.s:173    .text.HAL_SRAM_DeInit:00000000 $t
+     /tmp/ccjLDUK5.s:178    .text.HAL_SRAM_DeInit:00000000 HAL_SRAM_DeInit
+     /tmp/ccjLDUK5.s:212    .text.HAL_SRAM_Read_8b:00000000 $t
+     /tmp/ccjLDUK5.s:217    .text.HAL_SRAM_Read_8b:00000000 HAL_SRAM_Read_8b
+     /tmp/ccjLDUK5.s:283    .text.HAL_SRAM_Write_8b:00000000 $t
+     /tmp/ccjLDUK5.s:288    .text.HAL_SRAM_Write_8b:00000000 HAL_SRAM_Write_8b
+     /tmp/ccjLDUK5.s:365    .text.HAL_SRAM_Read_16b:00000000 $t
+     /tmp/ccjLDUK5.s:370    .text.HAL_SRAM_Read_16b:00000000 HAL_SRAM_Read_16b
+     /tmp/ccjLDUK5.s:436    .text.HAL_SRAM_Write_16b:00000000 $t
+     /tmp/ccjLDUK5.s:441    .text.HAL_SRAM_Write_16b:00000000 HAL_SRAM_Write_16b
+     /tmp/ccjLDUK5.s:518    .text.HAL_SRAM_Read_32b:00000000 $t
+     /tmp/ccjLDUK5.s:523    .text.HAL_SRAM_Read_32b:00000000 HAL_SRAM_Read_32b
+     /tmp/ccjLDUK5.s:587    .text.HAL_SRAM_Write_32b:00000000 $t
+     /tmp/ccjLDUK5.s:592    .text.HAL_SRAM_Write_32b:00000000 HAL_SRAM_Write_32b
+     /tmp/ccjLDUK5.s:667    .text.HAL_SRAM_Read_DMA:00000000 $t
+     /tmp/ccjLDUK5.s:672    .text.HAL_SRAM_Read_DMA:00000000 HAL_SRAM_Read_DMA
+     /tmp/ccjLDUK5.s:727    .text.HAL_SRAM_Read_DMA:0000003c $d
+     /tmp/ccjLDUK5.s:733    .text.HAL_SRAM_Write_DMA:00000000 $t
+     /tmp/ccjLDUK5.s:738    .text.HAL_SRAM_Write_DMA:00000000 HAL_SRAM_Write_DMA
+     /tmp/ccjLDUK5.s:809    .text.HAL_SRAM_Write_DMA:00000050 $d
+     /tmp/ccjLDUK5.s:815    .text.HAL_SRAM_WriteOperation_Enable:00000000 $t
+     /tmp/ccjLDUK5.s:820    .text.HAL_SRAM_WriteOperation_Enable:00000000 HAL_SRAM_WriteOperation_Enable
+     /tmp/ccjLDUK5.s:866    .text.HAL_SRAM_WriteOperation_Disable:00000000 $t
+     /tmp/ccjLDUK5.s:871    .text.HAL_SRAM_WriteOperation_Disable:00000000 HAL_SRAM_WriteOperation_Disable
+     /tmp/ccjLDUK5.s:923    .text.HAL_SRAM_GetState:00000000 $t
+     /tmp/ccjLDUK5.s:928    .text.HAL_SRAM_GetState:00000000 HAL_SRAM_GetState
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+FMC_NORSRAM_Init
+FMC_NORSRAM_Timing_Init
+FMC_NORSRAM_Extended_Timing_Init
+FMC_NORSRAM_DeInit
+HAL_DMA_Start_IT
+FMC_NORSRAM_WriteOperation_Enable
+FMC_NORSRAM_WriteOperation_Disable

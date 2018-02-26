@@ -1,0 +1,4079 @@
+ARM GAS  /tmp/ccVRC0kl.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_hcd.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HCD_RXQLVL_IRQHandler,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	HCD_RXQLVL_IRQHandler:
+  26              	.LFB159:
+  27              		.file 1 "HALLIB/Src/stm32f7xx_hal_hcd.c"
+   1:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_hcd.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @file    stm32f7xx_hal_hcd.c
+   4:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief   HCD HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This file provides firmware functions to manage the following
+   7:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          functionalities of the USB Peripheral Controller:
+   8:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           + Initialization and de-initialization functions
+   9:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           + IO operation functions
+  10:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           + Peripheral Control functions
+  11:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           + Peripheral State functions
+  12:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+  13:HALLIB/Src/stm32f7xx_hal_hcd.c ****   @verbatim
+  14:HALLIB/Src/stm32f7xx_hal_hcd.c ****   ==============================================================================
+  15:HALLIB/Src/stm32f7xx_hal_hcd.c ****                     ##### How to use this driver #####
+  16:HALLIB/Src/stm32f7xx_hal_hcd.c ****   ==============================================================================
+  17:HALLIB/Src/stm32f7xx_hal_hcd.c ****   [..]
+  18:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Declare a HCD_HandleTypeDef handle structure, for example:
+  19:HALLIB/Src/stm32f7xx_hal_hcd.c ****        HCD_HandleTypeDef  hhcd;
+  20:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  21:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Fill parameters of Init structure in HCD handle
+  22:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  23:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Call HAL_HCD_Init() API to initialize the HCD peripheral (Core, Host core, ...)
+  24:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  25:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Initialize the HCD low level resources through the HAL_HCD_MspInit() API:
+  26:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) Enable the HCD/USB Low Level interface clock using the following macros
+  27:HALLIB/Src/stm32f7xx_hal_hcd.c ****              (+++) __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+  28:HALLIB/Src/stm32f7xx_hal_hcd.c ****              (+++) __HAL_RCC_USB_OTG_HS_CLK_ENABLE(); (For High Speed Mode)
+  29:HALLIB/Src/stm32f7xx_hal_hcd.c ****              (+++) __HAL_RCC_USB_OTG_HS_ULPI_CLK_ENABLE(); (For High Speed Mode)
+  30:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  31:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) Initialize the related GPIO clocks
+ARM GAS  /tmp/ccVRC0kl.s 			page 2
+
+
+  32:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) Configure HCD pin-out
+  33:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) Configure HCD NVIC interrupt
+  34:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  35:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Associate the Upper USB Host stack to the HAL HCD Driver:
+  36:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) hhcd.pData = phost;
+  37:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  38:HALLIB/Src/stm32f7xx_hal_hcd.c ****     (#)Enable HCD transmission and reception:
+  39:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (##) HAL_HCD_Start();
+  40:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  41:HALLIB/Src/stm32f7xx_hal_hcd.c ****   @endverbatim
+  42:HALLIB/Src/stm32f7xx_hal_hcd.c ****   ******************************************************************************
+  43:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @attention
+  44:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+  45:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  46:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+  47:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  48:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * are permitted provided that the following conditions are met:
+  49:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  50:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *      this list of conditions and the following disclaimer.
+  51:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  52:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *      this list of conditions and the following disclaimer in the documentation
+  53:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *      and/or other materials provided with the distribution.
+  54:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  55:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *      may be used to endorse or promote products derived from this software
+  56:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *      without specific prior written permission.
+  57:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+  58:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  59:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  60:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  61:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  62:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  63:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  64:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  65:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  66:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  67:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  68:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+  69:HALLIB/Src/stm32f7xx_hal_hcd.c ****   ******************************************************************************
+  70:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+  71:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  72:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Includes ------------------------------------------------------------------*/
+  73:HALLIB/Src/stm32f7xx_hal_hcd.c **** #include "stm32f7xx_hal.h"
+  74:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  75:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  76:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+  77:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+  78:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  79:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD HCD
+  80:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief HCD HAL module driver
+  81:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+  82:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+  83:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  84:HALLIB/Src/stm32f7xx_hal_hcd.c **** #ifdef HAL_HCD_MODULE_ENABLED
+  85:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+  86:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Private typedef -----------------------------------------------------------*/
+  87:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Private define ------------------------------------------------------------*/
+  88:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Private macro -------------------------------------------------------------*/
+ARM GAS  /tmp/ccVRC0kl.s 			page 3
+
+
+  89:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Private variables ---------------------------------------------------------*/
+  90:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Private function ----------------------------------------------------------*/
+  91:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Private_Functions HCD Private Functions
+  92:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+  93:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+  94:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_HC_IN_IRQHandler(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+  95:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_HC_OUT_IRQHandler(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+  96:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_RXQLVL_IRQHandler(HCD_HandleTypeDef *hhcd);
+  97:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_Port_IRQHandler(HCD_HandleTypeDef *hhcd);
+  98:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+  99:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 100:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 101:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 102:HALLIB/Src/stm32f7xx_hal_hcd.c **** /* Exported functions --------------------------------------------------------*/
+ 103:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Exported_Functions HCD Exported Functions
+ 104:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 105:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 106:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 107:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Exported_Functions_Group1 Initialization and de-initialization functions
+ 108:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *  @brief    Initialization and Configuration functions
+ 109:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *
+ 110:HALLIB/Src/stm32f7xx_hal_hcd.c **** @verbatim
+ 111:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 112:HALLIB/Src/stm32f7xx_hal_hcd.c ****           ##### Initialization and de-initialization functions #####
+ 113:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 114:HALLIB/Src/stm32f7xx_hal_hcd.c ****     [..]  This section provides functions allowing to:
+ 115:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 116:HALLIB/Src/stm32f7xx_hal_hcd.c **** @endverbatim
+ 117:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 118:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 119:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 120:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 121:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Initialize the host driver.
+ 122:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 123:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 124:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 125:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_Init(HCD_HandleTypeDef *hhcd)
+ 126:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 127:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 128:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if(hhcd == NULL)
+ 129:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 130:HALLIB/Src/stm32f7xx_hal_hcd.c ****     return HAL_ERROR;
+ 131:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 132:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 133:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the parameters */
+ 134:HALLIB/Src/stm32f7xx_hal_hcd.c ****   assert_param(IS_HCD_ALL_INSTANCE(hhcd->Instance));
+ 135:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 136:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->State = HAL_HCD_STATE_BUSY;
+ 137:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 138:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Init the low level hardware : GPIO, CLOCK, NVIC... */
+ 139:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_HCD_MspInit(hhcd);
+ 140:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 141:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Disable the Interrupts */
+ 142:HALLIB/Src/stm32f7xx_hal_hcd.c ****  __HAL_HCD_DISABLE(hhcd);
+ 143:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 144:HALLIB/Src/stm32f7xx_hal_hcd.c ****  /*Init the Core (common init.) */
+ 145:HALLIB/Src/stm32f7xx_hal_hcd.c ****  USB_CoreInit(hhcd->Instance, hhcd->Init);
+ARM GAS  /tmp/ccVRC0kl.s 			page 4
+
+
+ 146:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 147:HALLIB/Src/stm32f7xx_hal_hcd.c ****  /* Force Host Mode*/
+ 148:HALLIB/Src/stm32f7xx_hal_hcd.c ****  USB_SetCurrentMode(hhcd->Instance , USB_OTG_HOST_MODE);
+ 149:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 150:HALLIB/Src/stm32f7xx_hal_hcd.c ****  /* Init Host */
+ 151:HALLIB/Src/stm32f7xx_hal_hcd.c ****  USB_HostInit(hhcd->Instance, hhcd->Init);
+ 152:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 153:HALLIB/Src/stm32f7xx_hal_hcd.c ****  hhcd->State= HAL_HCD_STATE_READY;
+ 154:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 155:HALLIB/Src/stm32f7xx_hal_hcd.c ****  return HAL_OK;
+ 156:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 157:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 158:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 159:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Initialize a host channel.
+ 160:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 161:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  ch_num Channel number.
+ 162:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 163:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  epnum Endpoint number.
+ 164:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be a value from 1 to 15
+ 165:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  dev_address  Current device address
+ 166:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be a value from 0 to 255
+ 167:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  speed Current device speed.
+ 168:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 169:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HCD_SPEED_HIGH: High speed mode,
+ 170:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HCD_SPEED_FULL: Full speed mode,
+ 171:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HCD_SPEED_LOW: Low speed mode
+ 172:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  ep_type Endpoint Type.
+ 173:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 174:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_CTRL: Control type,
+ 175:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_ISOC: Isochronous type,
+ 176:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_BULK: Bulk type,
+ 177:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_INTR: Interrupt type
+ 178:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  mps Max Packet Size.
+ 179:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be a value from 0 to32K
+ 180:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 181:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 182:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_HC_Init(HCD_HandleTypeDef *hhcd,
+ 183:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint8_t ch_num,
+ 184:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint8_t epnum,
+ 185:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint8_t dev_address,
+ 186:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint8_t speed,
+ 187:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint8_t ep_type,
+ 188:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                   uint16_t mps)
+ 189:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 190:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 191:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 192:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 193:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].do_ping = 0;
+ 194:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].dev_addr = dev_address;
+ 195:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].max_packet = mps;
+ 196:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ch_num = ch_num;
+ 197:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_type = ep_type;
+ 198:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_num = epnum & 0x7F;
+ 199:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_is_in = ((epnum & 0x80) == 0x80);
+ 200:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].speed = speed;
+ 201:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 202:HALLIB/Src/stm32f7xx_hal_hcd.c ****   status =  USB_HC_Init(hhcd->Instance,
+ARM GAS  /tmp/ccVRC0kl.s 			page 5
+
+
+ 203:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         ch_num,
+ 204:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         epnum,
+ 205:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         dev_address,
+ 206:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         speed,
+ 207:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         ep_type,
+ 208:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         mps);
+ 209:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 210:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 211:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return status;
+ 212:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 213:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 214:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 215:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Halt a host channel.
+ 216:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 217:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  ch_num Channel number.
+ 218:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 219:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 220:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 221:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_HC_Halt(HCD_HandleTypeDef *hhcd, uint8_t ch_num)
+ 222:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 223:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 224:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 225:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 226:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_HC_Halt(hhcd->Instance, ch_num);
+ 227:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 228:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 229:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return status;
+ 230:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 231:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 232:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 233:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  DeInitialize the host driver.
+ 234:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 235:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 236:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 237:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_DeInit(HCD_HandleTypeDef *hhcd)
+ 238:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 239:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 240:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if(hhcd == NULL)
+ 241:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 242:HALLIB/Src/stm32f7xx_hal_hcd.c ****     return HAL_ERROR;
+ 243:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 244:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 245:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->State = HAL_HCD_STATE_BUSY;
+ 246:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 247:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* DeInit the low level hardware */
+ 248:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_HCD_MspDeInit(hhcd);
+ 249:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 250:HALLIB/Src/stm32f7xx_hal_hcd.c ****    __HAL_HCD_DISABLE(hhcd);
+ 251:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 252:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->State = HAL_HCD_STATE_RESET;
+ 253:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 254:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return HAL_OK;
+ 255:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 256:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 257:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 258:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Initialize the HCD MSP.
+ 259:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ARM GAS  /tmp/ccVRC0kl.s 			page 6
+
+
+ 260:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 261:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 262:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void  HAL_HCD_MspInit(HCD_HandleTypeDef *hhcd)
+ 263:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 264:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 265:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 266:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 267:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 268:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_MspInit could be implemented in the user file
+ 269:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 270:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 271:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 272:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 273:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  DeInitialize the HCD MSP.
+ 274:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 275:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 276:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 277:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void  HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd)
+ 278:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 279:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 280:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 281:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 282:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 283:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_MspDeInit could be implemented in the user file
+ 284:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 285:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 286:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 287:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 288:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 289:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 290:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 291:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Exported_Functions_Group2 Input and Output operation functions
+ 292:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *  @brief   HCD IO operation functions
+ 293:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *
+ 294:HALLIB/Src/stm32f7xx_hal_hcd.c **** @verbatim
+ 295:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 296:HALLIB/Src/stm32f7xx_hal_hcd.c ****                       ##### IO operation functions #####
+ 297:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 298:HALLIB/Src/stm32f7xx_hal_hcd.c ****  [..] This subsection provides a set of functions allowing to manage the USB Host Data
+ 299:HALLIB/Src/stm32f7xx_hal_hcd.c ****     Transfer
+ 300:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 301:HALLIB/Src/stm32f7xx_hal_hcd.c **** @endverbatim
+ 302:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 303:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 304:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 305:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 306:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Submit a new URB for processing.
+ 307:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 308:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  ch_num Channel number.
+ 309:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 310:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  direction Channel number.
+ 311:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 312:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           0 : Output / 1 : Input
+ 313:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  ep_type Endpoint Type.
+ 314:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 315:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_CTRL: Control type/
+ 316:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_ISOC: Isochronous type/
+ARM GAS  /tmp/ccVRC0kl.s 			page 7
+
+
+ 317:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_BULK: Bulk type/
+ 318:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            EP_TYPE_INTR: Interrupt type/
+ 319:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  token Endpoint Type.
+ 320:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 321:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            0: HC_PID_SETUP / 1: HC_PID_DATA1
+ 322:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  pbuff pointer to URB data
+ 323:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  length Length of URB data
+ 324:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  do_ping activate do ping protocol (for high speed only).
+ 325:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 326:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *           0 : do ping inactive / 1 : do ping active
+ 327:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 328:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 329:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_HC_SubmitRequest(HCD_HandleTypeDef *hhcd,
+ 330:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t ch_num,
+ 331:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t direction ,
+ 332:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t ep_type,
+ 333:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t token,
+ 334:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t* pbuff,
+ 335:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint16_t length,
+ 336:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                             uint8_t do_ping)
+ 337:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 338:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_is_in = direction;
+ 339:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_type  = ep_type;
+ 340:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 341:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if(token == 0)
+ 342:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 343:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[ch_num].data_pid = HC_PID_SETUP;
+ 344:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 345:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else
+ 346:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 347:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[ch_num].data_pid = HC_PID_DATA1;
+ 348:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 349:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 350:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Manage Data Toggle */
+ 351:HALLIB/Src/stm32f7xx_hal_hcd.c ****   switch(ep_type)
+ 352:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 353:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case EP_TYPE_CTRL:
+ 354:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if((token == 1) && (direction == 0)) /*send data */
+ 355:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 356:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if ( length == 0 )
+ 357:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* For Status OUT stage, Length==0, Status Out PID = 1 */
+ 358:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].toggle_out = 1;
+ 359:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 360:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 361:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Set the Data Toggle bit as per the Flag */
+ 362:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if ( hhcd->hc[ch_num].toggle_out == 0)
+ 363:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 364:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 365:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 366:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 367:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 1 */
+ 368:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA1;
+ 369:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 370:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 371:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+ 372:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 373:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case EP_TYPE_BULK:
+ARM GAS  /tmp/ccVRC0kl.s 			page 8
+
+
+ 374:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(direction == 0)
+ 375:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 376:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Set the Data Toggle bit as per the Flag */
+ 377:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if ( hhcd->hc[ch_num].toggle_out == 0)
+ 378:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 379:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 380:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 381:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 382:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 1 */
+ 383:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA1;
+ 384:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 385:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 386:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else
+ 387:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 388:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if( hhcd->hc[ch_num].toggle_in == 0)
+ 389:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 390:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 391:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 392:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 393:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 394:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA1;
+ 395:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 396:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 397:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 398:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+ 399:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case EP_TYPE_INTR:
+ 400:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(direction == 0)
+ 401:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 402:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Set the Data Toggle bit as per the Flag */
+ 403:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if ( hhcd->hc[ch_num].toggle_out == 0)
+ 404:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 405:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 406:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 407:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 408:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 1 */
+ 409:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA1 ;
+ 410:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 411:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 412:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else
+ 413:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 414:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if( hhcd->hc[ch_num].toggle_in == 0)
+ 415:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 416:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 417:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 418:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 419:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 420:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[ch_num].data_pid = HC_PID_DATA1;
+ 421:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 422:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 423:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+ 424:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 425:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case EP_TYPE_ISOC:
+ 426:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[ch_num].data_pid = HC_PID_DATA0;
+ 427:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+ 428:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 429:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 430:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].xfer_buff = pbuff;
+ARM GAS  /tmp/ccVRC0kl.s 			page 9
+
+
+ 431:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].xfer_len  = length;
+ 432:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].urb_state =   URB_IDLE;
+ 433:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].xfer_count = 0 ;
+ 434:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ch_num = ch_num;
+ 435:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].state = HC_IDLE;
+ 436:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 437:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return USB_HC_StartXfer(hhcd->Instance, &(hhcd->hc[ch_num]), hhcd->Init.dma_enable);
+ 438:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 439:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 440:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 441:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Handle HCD interrupt request.
+ 442:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 443:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 444:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 445:HALLIB/Src/stm32f7xx_hal_hcd.c **** void HAL_HCD_IRQHandler(HCD_HandleTypeDef *hhcd)
+ 446:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 447:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 448:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t i = 0 , interrupt = 0;
+ 449:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 450:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* ensure that we are in device mode */
+ 451:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if (USB_GetMode(hhcd->Instance) == USB_OTG_MODE_HOST)
+ 452:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 453:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* avoid spurious interrupt */
+ 454:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_IS_INVALID_INTERRUPT(hhcd))
+ 455:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 456:HALLIB/Src/stm32f7xx_hal_hcd.c ****       return;
+ 457:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 458:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 459:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_PXFR_INCOMPISOOUT))
+ 460:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 461:HALLIB/Src/stm32f7xx_hal_hcd.c ****      /* incorrect mode, acknowledge the interrupt */
+ 462:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_PXFR_INCOMPISOOUT);
+ 463:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 464:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 465:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_IISOIXFR))
+ 466:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 467:HALLIB/Src/stm32f7xx_hal_hcd.c ****      /* incorrect mode, acknowledge the interrupt */
+ 468:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_IISOIXFR);
+ 469:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 470:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 471:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_PTXFE))
+ 472:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 473:HALLIB/Src/stm32f7xx_hal_hcd.c ****      /* incorrect mode, acknowledge the interrupt */
+ 474:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_PTXFE);
+ 475:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 476:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 477:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_MMIS))
+ 478:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 479:HALLIB/Src/stm32f7xx_hal_hcd.c ****      /* incorrect mode, acknowledge the interrupt */
+ 480:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_MMIS);
+ 481:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 482:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 483:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* Handle Host Disconnect Interrupts */
+ 484:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_DISCINT))
+ 485:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 486:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 487:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Cleanup HPRT */
+ARM GAS  /tmp/ccVRC0kl.s 			page 10
+
+
+ 488:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HPRT0 &= ~(USB_OTG_HPRT_PENA | USB_OTG_HPRT_PCDET |\
+ 489:HALLIB/Src/stm32f7xx_hal_hcd.c ****         USB_OTG_HPRT_PENCHNG | USB_OTG_HPRT_POCCHNG );
+ 490:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 491:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Handle Host Port Interrupts */
+ 492:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_Disconnect_Callback(hhcd);
+ 493:HALLIB/Src/stm32f7xx_hal_hcd.c ****        USB_InitFSLSPClkSel(hhcd->Instance ,HCFG_48_MHZ );
+ 494:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_DISCINT);
+ 495:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 496:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 497:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* Handle Host Port Interrupts */
+ 498:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_HPRTINT))
+ 499:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 500:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HCD_Port_IRQHandler (hhcd);
+ 501:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 502:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 503:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* Handle Host SOF Interrupts */
+ 504:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_SOF))
+ 505:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 506:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_SOF_Callback(hhcd);
+ 507:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_SOF);
+ 508:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 509:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 510:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* Handle Host channel Interrupts */
+ 511:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_HCINT))
+ 512:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 513:HALLIB/Src/stm32f7xx_hal_hcd.c ****       interrupt = USB_HC_ReadInterrupt(hhcd->Instance);
+ 514:HALLIB/Src/stm32f7xx_hal_hcd.c ****       for (i = 0; i < hhcd->Init.Host_channels ; i++)
+ 515:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 516:HALLIB/Src/stm32f7xx_hal_hcd.c ****         if (interrupt & (1 << i))
+ 517:HALLIB/Src/stm32f7xx_hal_hcd.c ****         {
+ 518:HALLIB/Src/stm32f7xx_hal_hcd.c ****           if ((USBx_HC(i)->HCCHAR) &  USB_OTG_HCCHAR_EPDIR)
+ 519:HALLIB/Src/stm32f7xx_hal_hcd.c ****           {
+ 520:HALLIB/Src/stm32f7xx_hal_hcd.c ****             HCD_HC_IN_IRQHandler (hhcd, i);
+ 521:HALLIB/Src/stm32f7xx_hal_hcd.c ****           }
+ 522:HALLIB/Src/stm32f7xx_hal_hcd.c ****           else
+ 523:HALLIB/Src/stm32f7xx_hal_hcd.c ****           {
+ 524:HALLIB/Src/stm32f7xx_hal_hcd.c ****             HCD_HC_OUT_IRQHandler (hhcd, i);
+ 525:HALLIB/Src/stm32f7xx_hal_hcd.c ****           }
+ 526:HALLIB/Src/stm32f7xx_hal_hcd.c ****         }
+ 527:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 528:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_HCINT);
+ 529:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 530:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 531:HALLIB/Src/stm32f7xx_hal_hcd.c ****         /* Handle Rx Queue Level Interrupts */
+ 532:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(__HAL_HCD_GET_FLAG(hhcd, USB_OTG_GINTSTS_RXFLVL))
+ 533:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 534:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_MASK_INTERRUPT(hhcd->Instance, USB_OTG_GINTSTS_RXFLVL);
+ 535:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 536:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HCD_RXQLVL_IRQHandler (hhcd);
+ 537:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 538:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_UNMASK_INTERRUPT(hhcd->Instance, USB_OTG_GINTSTS_RXFLVL);
+ 539:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 540:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 541:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 542:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 543:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 544:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  SOF callback.
+ARM GAS  /tmp/ccVRC0kl.s 			page 11
+
+
+ 545:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 546:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 547:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 548:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void HAL_HCD_SOF_Callback(HCD_HandleTypeDef *hhcd)
+ 549:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 550:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 551:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 552:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 553:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 554:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_SOF_Callback could be implemented in the user file
+ 555:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 556:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 557:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 558:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 559:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief Connection Event callback.
+ 560:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 561:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 562:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 563:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void HAL_HCD_Connect_Callback(HCD_HandleTypeDef *hhcd)
+ 564:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 565:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 566:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 567:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 568:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 569:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_Connect_Callback could be implemented in the user file
+ 570:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 571:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 572:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 573:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 574:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Disconnection Event callback.
+ 575:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 576:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ 577:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 578:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void HAL_HCD_Disconnect_Callback(HCD_HandleTypeDef *hhcd)
+ 579:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 580:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 581:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 582:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 583:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 584:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_Disconnect_Callback could be implemented in the user file
+ 585:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 586:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 587:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 588:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 589:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Notify URB state change callback.
+ 590:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 591:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ 592:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 593:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  urb_state:
+ 594:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 595:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_IDLE/
+ 596:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_DONE/
+ 597:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_NOTREADY/
+ 598:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_NYET/
+ 599:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_ERROR/
+ 600:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_STALL/
+ 601:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+ARM GAS  /tmp/ccVRC0kl.s 			page 12
+
+
+ 602:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 603:HALLIB/Src/stm32f7xx_hal_hcd.c **** __weak void HAL_HCD_HC_NotifyURBChange_Callback(HCD_HandleTypeDef *hhcd, uint8_t chnum, HCD_URBStat
+ 604:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 605:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 606:HALLIB/Src/stm32f7xx_hal_hcd.c ****   UNUSED(hhcd);
+ 607:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 608:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 609:HALLIB/Src/stm32f7xx_hal_hcd.c ****             the HAL_HCD_HC_NotifyURBChange_Callback could be implemented in the user file
+ 610:HALLIB/Src/stm32f7xx_hal_hcd.c ****    */
+ 611:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 612:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 613:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 614:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 615:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 616:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 617:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Exported_Functions_Group3 Peripheral Control functions
+ 618:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *  @brief   Management functions
+ 619:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *
+ 620:HALLIB/Src/stm32f7xx_hal_hcd.c **** @verbatim
+ 621:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 622:HALLIB/Src/stm32f7xx_hal_hcd.c ****                       ##### Peripheral Control functions #####
+ 623:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 624:HALLIB/Src/stm32f7xx_hal_hcd.c ****     [..]
+ 625:HALLIB/Src/stm32f7xx_hal_hcd.c ****     This subsection provides a set of functions allowing to control the HCD data
+ 626:HALLIB/Src/stm32f7xx_hal_hcd.c ****     transfers.
+ 627:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 628:HALLIB/Src/stm32f7xx_hal_hcd.c **** @endverbatim
+ 629:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 630:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 631:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 632:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 633:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Start the host driver.
+ 634:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 635:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 636:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 637:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_Start(HCD_HandleTypeDef *hhcd)
+ 638:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 639:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 640:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_HCD_ENABLE(hhcd);
+ 641:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_DriveVbus(hhcd->Instance, 1);
+ 642:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 643:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return HAL_OK;
+ 644:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 645:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 646:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 647:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Stop the host driver.
+ 648:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 649:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 650:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 651:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 652:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_Stop(HCD_HandleTypeDef *hhcd)
+ 653:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 654:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 655:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_StopHost(hhcd->Instance);
+ 656:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 657:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return HAL_OK;
+ 658:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ARM GAS  /tmp/ccVRC0kl.s 			page 13
+
+
+ 659:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 660:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 661:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Reset the host port.
+ 662:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 663:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL status
+ 664:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 665:HALLIB/Src/stm32f7xx_hal_hcd.c **** HAL_StatusTypeDef HAL_HCD_ResetPort(HCD_HandleTypeDef *hhcd)
+ 666:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 667:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_ResetPort(hhcd->Instance));
+ 668:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 669:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 670:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 671:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 672:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 673:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 674:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @defgroup HCD_Exported_Functions_Group4 Peripheral State functions
+ 675:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *  @brief   Peripheral State functions
+ 676:HALLIB/Src/stm32f7xx_hal_hcd.c ****  *
+ 677:HALLIB/Src/stm32f7xx_hal_hcd.c **** @verbatim
+ 678:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 679:HALLIB/Src/stm32f7xx_hal_hcd.c ****                       ##### Peripheral State functions #####
+ 680:HALLIB/Src/stm32f7xx_hal_hcd.c ****  ===============================================================================
+ 681:HALLIB/Src/stm32f7xx_hal_hcd.c ****     [..]
+ 682:HALLIB/Src/stm32f7xx_hal_hcd.c ****     This subsection permits to get in run-time the status of the peripheral
+ 683:HALLIB/Src/stm32f7xx_hal_hcd.c ****     and the data flow.
+ 684:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 685:HALLIB/Src/stm32f7xx_hal_hcd.c **** @endverbatim
+ 686:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 687:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 688:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 689:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 690:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return the HCD handle state.
+ 691:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 692:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval HAL state
+ 693:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 694:HALLIB/Src/stm32f7xx_hal_hcd.c **** HCD_StateTypeDef HAL_HCD_GetState(HCD_HandleTypeDef *hhcd)
+ 695:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 696:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->State;
+ 697:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 698:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 699:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 700:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return  URB state for a channel.
+ 701:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 702:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ 703:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 704:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval URB state.
+ 705:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 706:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_IDLE/
+ 707:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_DONE/
+ 708:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_NOTREADY/
+ 709:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_NYET/
+ 710:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_ERROR/
+ 711:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            URB_STALL
+ 712:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 713:HALLIB/Src/stm32f7xx_hal_hcd.c **** HCD_URBStateTypeDef HAL_HCD_HC_GetURBState(HCD_HandleTypeDef *hhcd, uint8_t chnum)
+ 714:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 715:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].urb_state;
+ARM GAS  /tmp/ccVRC0kl.s 			page 14
+
+
+ 716:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 717:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 718:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 719:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 720:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return the last host transfer size.
+ 721:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 722:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ 723:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 724:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval last transfer size in byte
+ 725:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 726:HALLIB/Src/stm32f7xx_hal_hcd.c **** uint32_t HAL_HCD_HC_GetXferCount(HCD_HandleTypeDef *hhcd, uint8_t chnum)
+ 727:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 728:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].xfer_count;
+ 729:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 730:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 731:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 732:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return the Host Channel state.
+ 733:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 734:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ 735:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 736:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval Host channel state
+ 737:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *          This parameter can be one of these values:
+ 738:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_IDLE/
+ 739:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_XFRC/
+ 740:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_HALTED/
+ 741:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_NYET/
+ 742:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_NAK/
+ 743:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_STALL/
+ 744:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_XACTERR/
+ 745:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_BBLERR/
+ 746:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *            HC_DATATGLERR
+ 747:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 748:HALLIB/Src/stm32f7xx_hal_hcd.c **** HCD_HCStateTypeDef  HAL_HCD_HC_GetState(HCD_HandleTypeDef *hhcd, uint8_t chnum)
+ 749:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 750:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].state;
+ 751:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 752:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 753:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 754:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return the current Host frame number.
+ 755:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 756:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval Current Host frame number
+ 757:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 758:HALLIB/Src/stm32f7xx_hal_hcd.c **** uint32_t HAL_HCD_GetCurrentFrame(HCD_HandleTypeDef *hhcd)
+ 759:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 760:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_GetCurrentFrame(hhcd->Instance));
+ 761:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 762:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 763:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 764:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Return the Host enumeration speed.
+ 765:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 766:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval Enumeration speed
+ 767:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 768:HALLIB/Src/stm32f7xx_hal_hcd.c **** uint32_t HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd)
+ 769:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 770:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_GetHostSpeed(hhcd->Instance));
+ 771:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 772:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ARM GAS  /tmp/ccVRC0kl.s 			page 15
+
+
+ 773:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 774:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 775:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 776:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 777:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 778:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @}
+ 779:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 780:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 781:HALLIB/Src/stm32f7xx_hal_hcd.c **** /** @addtogroup HCD_Private_Functions
+ 782:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @{
+ 783:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 784:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 785:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Handle Host Channel IN interrupt requests.
+ 786:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 787:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ 788:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 789:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval none
+ 790:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 791:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_HC_IN_IRQHandler   (HCD_HandleTypeDef *hhcd, uint8_t chnum)
+ 792:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 793:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 794:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t tmpreg = 0;
+ 795:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 796:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_AHBERR)
+ 797:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 798:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_AHBERR);
+ 799:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 800:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 801:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_ACK)
+ 802:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 803:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_ACK);
+ 804:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 805:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 806:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_STALL)
+ 807:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 808:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 809:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_STALL;
+ 810:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 811:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_STALL);
+ 812:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 813:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 814:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_DTERR)
+ 815:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 816:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 817:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 818:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 819:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_DATATGLERR;
+ 820:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_DTERR);
+ 821:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 822:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 823:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_FRMOR)
+ 824:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 825:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 826:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 827:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_FRMOR);
+ 828:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 829:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ARM GAS  /tmp/ccVRC0kl.s 			page 16
+
+
+ 830:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_XFRC)
+ 831:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 832:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 833:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if (hhcd->Init.dma_enable)
+ 834:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 835:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].xfer_count = hhcd->hc[chnum].xfer_len - \
+ 836:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                (USBx_HC(chnum)->HCTSIZ & USB_OTG_HCTSIZ_XFRSIZ);
+ 837:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 838:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 839:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_XFRC;
+ 840:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].ErrCnt = 0;
+ 841:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_XFRC);
+ 842:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 843:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 844:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if ((hhcd->hc[chnum].ep_type == EP_TYPE_CTRL)||
+ 845:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (hhcd->hc[chnum].ep_type == EP_TYPE_BULK))
+ 846:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 847:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 848:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 849:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 850:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 851:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 852:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if(hhcd->hc[chnum].ep_type == EP_TYPE_INTR)
+ 853:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 854:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR |= USB_OTG_HCCHAR_ODDFRM;
+ 855:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state = URB_DONE;
+ 856:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+ 857:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 858:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].toggle_in ^= 1;
+ 859:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 860:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 861:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_CHH)
+ 862:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 863:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_MASK_HALT_HC_INT(chnum);
+ 864:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 865:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(hhcd->hc[chnum].state == HC_XFRC)
+ 866:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 867:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_DONE;
+ 868:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 869:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 870:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if (hhcd->hc[chnum].state == HC_STALL)
+ 871:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 872:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_STALL;
+ 873:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 874:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 875:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if((hhcd->hc[chnum].state == HC_XACTERR) ||
+ 876:HALLIB/Src/stm32f7xx_hal_hcd.c ****             (hhcd->hc[chnum].state == HC_DATATGLERR))
+ 877:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 878:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if(hhcd->hc[chnum].ErrCnt++ > 3)
+ 879:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 880:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].ErrCnt = 0;
+ 881:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_ERROR;
+ 882:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 883:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+ 884:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 885:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_NOTREADY;
+ 886:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ARM GAS  /tmp/ccVRC0kl.s 			page 17
+
+
+ 887:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 888:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* re-activate the channel  */
+ 889:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg = USBx_HC(chnum)->HCCHAR;
+ 890:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+ 891:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+ 892:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+ 893:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 894:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if (hhcd->hc[chnum].state == HC_NAK)
+ 895:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 896:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_NOTREADY;
+ 897:HALLIB/Src/stm32f7xx_hal_hcd.c ****        /* re-activate the channel  */
+ 898:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg = USBx_HC(chnum)->HCCHAR;
+ 899:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+ 900:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+ 901:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+ 902:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 903:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_CHH);
+ 904:HALLIB/Src/stm32f7xx_hal_hcd.c ****     HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+ 905:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 906:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 907:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_TXERR)
+ 908:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 909:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 910:HALLIB/Src/stm32f7xx_hal_hcd.c ****      hhcd->hc[chnum].ErrCnt++;
+ 911:HALLIB/Src/stm32f7xx_hal_hcd.c ****      hhcd->hc[chnum].state = HC_XACTERR;
+ 912:HALLIB/Src/stm32f7xx_hal_hcd.c ****      USB_HC_Halt(hhcd->Instance, chnum);
+ 913:HALLIB/Src/stm32f7xx_hal_hcd.c ****      __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_TXERR);
+ 914:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 915:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_NAK)
+ 916:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 917:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(hhcd->hc[chnum].ep_type == EP_TYPE_INTR)
+ 918:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 919:HALLIB/Src/stm32f7xx_hal_hcd.c ****        hhcd->hc[chnum].ErrCnt = 0;
+ 920:HALLIB/Src/stm32f7xx_hal_hcd.c ****        hhcd->hc[chnum].state = HC_NAK;
+ 921:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 922:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 923:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 924:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 925:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if ((hhcd->hc[chnum].ep_type == EP_TYPE_CTRL)||
+ 926:HALLIB/Src/stm32f7xx_hal_hcd.c ****              (hhcd->hc[chnum].ep_type == EP_TYPE_BULK))
+ 927:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 928:HALLIB/Src/stm32f7xx_hal_hcd.c ****        hhcd->hc[chnum].ErrCnt = 0;
+ 929:HALLIB/Src/stm32f7xx_hal_hcd.c ****        if (!hhcd->Init.dma_enable)
+ 930:HALLIB/Src/stm32f7xx_hal_hcd.c ****        {
+ 931:HALLIB/Src/stm32f7xx_hal_hcd.c ****          hhcd->hc[chnum].state = HC_NAK;
+ 932:HALLIB/Src/stm32f7xx_hal_hcd.c ****          __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 933:HALLIB/Src/stm32f7xx_hal_hcd.c ****          USB_HC_Halt(hhcd->Instance, chnum);
+ 934:HALLIB/Src/stm32f7xx_hal_hcd.c ****        }
+ 935:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 936:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 937:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 938:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 939:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 940:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+ 941:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Handle Host Channel OUT interrupt requests.
+ 942:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+ 943:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  chnum Channel number.
+ARM GAS  /tmp/ccVRC0kl.s 			page 18
+
+
+ 944:HALLIB/Src/stm32f7xx_hal_hcd.c ****   *         This parameter can be a value from 1 to 15
+ 945:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval none
+ 946:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+ 947:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_HC_OUT_IRQHandler  (HCD_HandleTypeDef *hhcd, uint8_t chnum)
+ 948:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 949:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 950:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t tmpreg = 0;
+ 951:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 952:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_AHBERR)
+ 953:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 954:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_AHBERR);
+ 955:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 956:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 957:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_ACK)
+ 958:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 959:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_ACK);
+ 960:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if( hhcd->hc[chnum].do_ping == 1)
+ 961:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 962:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].do_ping = 0;
+ 963:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_NOTREADY;
+ 964:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 965:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 966:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 967:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 968:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 969:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_NYET)
+ 970:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 971:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_NYET;
+ 972:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].do_ping = 1;
+ 973:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].ErrCnt= 0;
+ 974:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 975:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 976:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NYET);
+ 977:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 978:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 979:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_FRMOR)
+ 980:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 981:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 982:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 983:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_FRMOR);
+ 984:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 985:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 986:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_XFRC)
+ 987:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 988:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].ErrCnt = 0;
+ 989:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 990:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 991:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_XFRC);
+ 992:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_XFRC;
+ 993:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 994:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 995:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 996:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_STALL)
+ 997:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 998:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_STALL);
+ 999:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+1000:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ARM GAS  /tmp/ccVRC0kl.s 			page 19
+
+
+1001:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_STALL;
+1002:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1003:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1004:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_NAK)
+1005:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1006:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].ErrCnt = 0;
+1007:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_NAK;
+1008:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1009:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if ( hhcd->hc[chnum].do_ping == 0)
+1010:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1011:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if (hhcd->hc[chnum].speed == HCD_SPEED_HIGH)
+1012:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1013:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].do_ping = 1;
+1014:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1015:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1016:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1017:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+1018:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+1019:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+1020:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1021:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1022:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_TXERR)
+1023:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1024:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+1025:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+1026:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_XACTERR;
+1027:HALLIB/Src/stm32f7xx_hal_hcd.c ****      __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_TXERR);
+1028:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1029:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1030:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_DTERR)
+1031:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1032:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+1033:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+1034:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+1035:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_DTERR);
+1036:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_DATATGLERR;
+1037:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1038:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1039:HALLIB/Src/stm32f7xx_hal_hcd.c ****   else if ((USBx_HC(chnum)->HCINT) &  USB_OTG_HCINT_CHH)
+1040:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1041:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_MASK_HALT_HC_INT(chnum);
+1042:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1043:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if(hhcd->hc[chnum].state == HC_XFRC)
+1044:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1045:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_DONE;
+1046:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if (hhcd->hc[chnum].ep_type == EP_TYPE_BULK)
+1047:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1048:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].toggle_out ^= 1;
+1049:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1050:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1051:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if (hhcd->hc[chnum].state == HC_NAK)
+1052:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1053:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state = URB_NOTREADY;
+1054:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1055:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1056:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if (hhcd->hc[chnum].state == HC_NYET)
+1057:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ARM GAS  /tmp/ccVRC0kl.s 			page 20
+
+
+1058:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_NOTREADY;
+1059:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1060:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1061:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if (hhcd->hc[chnum].state == HC_STALL)
+1062:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1063:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_STALL;
+1064:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1065:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1066:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else if((hhcd->hc[chnum].state == HC_XACTERR) ||
+1067:HALLIB/Src/stm32f7xx_hal_hcd.c ****             (hhcd->hc[chnum].state == HC_DATATGLERR))
+1068:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1069:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if(hhcd->hc[chnum].ErrCnt++ > 3)
+1070:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1071:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].ErrCnt = 0;
+1072:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_ERROR;
+1073:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1074:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+1075:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1076:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_NOTREADY;
+1077:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1078:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1079:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* re-activate the channel  */
+1080:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg = USBx_HC(chnum)->HCCHAR;
+1081:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+1082:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+1083:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+1084:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1085:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1086:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_CHH);
+1087:HALLIB/Src/stm32f7xx_hal_hcd.c ****     HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+1088:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1089:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+1090:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1091:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+1092:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Handle Rx Queue Level interrupt requests.
+1093:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+1094:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval none
+1095:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+1096:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_RXQLVL_IRQHandler  (HCD_HandleTypeDef *hhcd)
+1097:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+  28              		.loc 1 1097 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 24
+  36              		.cfi_offset 3, -24
+  37              		.cfi_offset 4, -20
+  38              		.cfi_offset 5, -16
+  39              		.cfi_offset 6, -12
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+1098:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+  42              		.loc 1 1098 0
+  43 0002 0768     		ldr	r7, [r0]
+ARM GAS  /tmp/ccVRC0kl.s 			page 21
+
+
+  44              	.LVL1:
+1099:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint8_t                       channelnum =0;
+1100:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t                      pktsts;
+1101:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t                      pktcnt;
+1102:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t                      temp = 0;
+1103:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t tmpreg = 0;
+1104:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1105:HALLIB/Src/stm32f7xx_hal_hcd.c ****   temp = hhcd->Instance->GRXSTSP ;
+  45              		.loc 1 1105 0
+  46 0004 3A6A     		ldr	r2, [r7, #32]
+  47              	.LVL2:
+1106:HALLIB/Src/stm32f7xx_hal_hcd.c ****   channelnum = temp &  USB_OTG_GRXSTSP_EPNUM;
+1107:HALLIB/Src/stm32f7xx_hal_hcd.c ****   pktsts = (temp &  USB_OTG_GRXSTSP_PKTSTS) >> 17;
+  48              		.loc 1 1107 0
+  49 0006 C2F34343 		ubfx	r3, r2, #17, #4
+  50              	.LVL3:
+1108:HALLIB/Src/stm32f7xx_hal_hcd.c ****   pktcnt = (temp &  USB_OTG_GRXSTSP_BCNT) >> 4;
+  51              		.loc 1 1108 0
+  52 000a C2F30A14 		ubfx	r4, r2, #4, #11
+  53              	.LVL4:
+1109:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1110:HALLIB/Src/stm32f7xx_hal_hcd.c ****   switch (pktsts)
+  54              		.loc 1 1110 0
+  55 000e 022B     		cmp	r3, #2
+  56 0010 30D1     		bne	.L1
+  57 0012 02F00F05 		and	r5, r2, #15
+1111:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1112:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case GRXSTS_PKTSTS_IN:
+1113:HALLIB/Src/stm32f7xx_hal_hcd.c ****     /* Read the data into the host buffer. */
+1114:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if ((pktcnt > 0) && (hhcd->hc[channelnum].xfer_buff != (void  *)0))
+  58              		.loc 1 1114 0
+  59 0016 6CB3     		cbz	r4, .L1
+  60              		.loc 1 1114 0 is_stmt 0 discriminator 1
+  61 0018 05EB8502 		add	r2, r5, r5, lsl #2
+  62              	.LVL5:
+  63 001c D300     		lsls	r3, r2, #3
+  64              	.LVL6:
+  65 001e 0344     		add	r3, r3, r0
+  66 0020 596C     		ldr	r1, [r3, #68]
+  67 0022 39B3     		cbz	r1, .L1
+  68 0024 0646     		mov	r6, r0
+1115:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1116:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1117:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_ReadPacket(hhcd->Instance, hhcd->hc[channelnum].xfer_buff, pktcnt);
+  69              		.loc 1 1117 0 is_stmt 1
+  70 0026 2246     		mov	r2, r4
+  71 0028 3846     		mov	r0, r7
+  72              	.LVL7:
+  73 002a FFF7FEFF 		bl	USB_ReadPacket
+  74              	.LVL8:
+1118:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1119:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /*manage multiple Xfer */
+1120:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[channelnum].xfer_buff += pktcnt;
+  75              		.loc 1 1120 0
+  76 002e AA00     		lsls	r2, r5, #2
+  77 0030 2A44     		add	r2, r2, r5
+  78 0032 D300     		lsls	r3, r2, #3
+ARM GAS  /tmp/ccVRC0kl.s 			page 22
+
+
+  79 0034 3344     		add	r3, r3, r6
+  80 0036 5A6C     		ldr	r2, [r3, #68]
+  81 0038 2244     		add	r2, r2, r4
+  82 003a 5A64     		str	r2, [r3, #68]
+1121:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[channelnum].xfer_count  += pktcnt;
+  83              		.loc 1 1121 0
+  84 003c DA6C     		ldr	r2, [r3, #76]
+  85 003e 2244     		add	r2, r2, r4
+  86 0040 DA64     		str	r2, [r3, #76]
+1122:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1123:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if((USBx_HC(channelnum)->HCTSIZ & USB_OTG_HCTSIZ_PKTCNT) > 0)
+  87              		.loc 1 1123 0
+  88 0042 07EB4513 		add	r3, r7, r5, lsl #5
+  89 0046 D3F81015 		ldr	r1, [r3, #1296]
+  90 004a 0B4A     		ldr	r2, .L5
+  91 004c 0A40     		ands	r2, r2, r1
+  92 004e 8AB1     		cbz	r2, .L1
+1124:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1125:HALLIB/Src/stm32f7xx_hal_hcd.c ****         /* re-activate the channel when more packets are expected */
+1126:HALLIB/Src/stm32f7xx_hal_hcd.c ****         tmpreg = USBx_HC(channelnum)->HCCHAR;
+  93              		.loc 1 1126 0
+  94 0050 D3F80025 		ldr	r2, [r3, #1280]
+  95              	.LVL9:
+1127:HALLIB/Src/stm32f7xx_hal_hcd.c ****         tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+  96              		.loc 1 1127 0
+  97 0054 22F08042 		bic	r2, r2, #1073741824
+  98              	.LVL10:
+1128:HALLIB/Src/stm32f7xx_hal_hcd.c ****         tmpreg |= USB_OTG_HCCHAR_CHENA;
+  99              		.loc 1 1128 0
+ 100 0058 42F00042 		orr	r2, r2, #-2147483648
+ 101              	.LVL11:
+1129:HALLIB/Src/stm32f7xx_hal_hcd.c ****         USBx_HC(channelnum)->HCCHAR = tmpreg;
+ 102              		.loc 1 1129 0
+ 103 005c C3F80025 		str	r2, [r3, #1280]
+1130:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[channelnum].toggle_in ^= 1;
+ 104              		.loc 1 1130 0
+ 105 0060 AB00     		lsls	r3, r5, #2
+ 106 0062 5919     		adds	r1, r3, r5
+ 107 0064 CA00     		lsls	r2, r1, #3
+ 108              	.LVL12:
+ 109 0066 3244     		add	r2, r2, r6
+ 110 0068 92F85030 		ldrb	r3, [r2, #80]	@ zero_extendqisi2
+ 111 006c 83F00103 		eor	r3, r3, #1
+ 112 0070 82F85030 		strb	r3, [r2, #80]
+ 113              	.LVL13:
+ 114              	.L1:
+ 115 0074 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 116              	.LVL14:
+ 117              	.L6:
+ 118 0076 00BF     		.align	2
+ 119              	.L5:
+ 120 0078 0000F81F 		.word	536346624
+ 121              		.cfi_endproc
+ 122              	.LFE159:
+ 124              		.section	.text.HAL_HCD_HC_Init,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	HAL_HCD_HC_Init
+ARM GAS  /tmp/ccVRC0kl.s 			page 23
+
+
+ 127              		.thumb
+ 128              		.thumb_func
+ 130              	HAL_HCD_HC_Init:
+ 131              	.LFB137:
+ 189:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 132              		.loc 1 189 0
+ 133              		.cfi_startproc
+ 134              		@ args = 12, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              	.LVL15:
+ 137 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 138              	.LCFI1:
+ 139              		.cfi_def_cfa_offset 24
+ 140              		.cfi_offset 4, -24
+ 141              		.cfi_offset 5, -20
+ 142              		.cfi_offset 6, -16
+ 143              		.cfi_offset 7, -12
+ 144              		.cfi_offset 8, -8
+ 145              		.cfi_offset 14, -4
+ 146 0004 84B0     		sub	sp, sp, #16
+ 147              	.LCFI2:
+ 148              		.cfi_def_cfa_offset 40
+ 149 0006 9DF82870 		ldrb	r7, [sp, #40]	@ zero_extendqisi2
+ 150 000a 9DF82CE0 		ldrb	lr, [sp, #44]	@ zero_extendqisi2
+ 151 000e BDF830C0 		ldrh	ip, [sp, #48]
+ 152              	.LVL16:
+ 192:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].do_ping = 0;
+ 153              		.loc 1 192 0
+ 154 0012 90F89042 		ldrb	r4, [r0, #656]	@ zero_extendqisi2
+ 155 0016 012C     		cmp	r4, #1
+ 156 0018 2AD0     		beq	.L9
+ 157 001a 0546     		mov	r5, r0
+ 192:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].do_ping = 0;
+ 158              		.loc 1 192 0 is_stmt 0 discriminator 2
+ 159 001c 0120     		movs	r0, #1
+ 160              	.LVL17:
+ 161 001e 85F89002 		strb	r0, [r5, #656]
+ 193:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].dev_addr = dev_address;
+ 162              		.loc 1 193 0 is_stmt 1 discriminator 2
+ 163 0022 8800     		lsls	r0, r1, #2
+ 164 0024 4618     		adds	r6, r0, r1
+ 165 0026 F400     		lsls	r4, r6, #3
+ 166 0028 2C44     		add	r4, r4, r5
+ 167 002a 0026     		movs	r6, #0
+ 168 002c 84F83D60 		strb	r6, [r4, #61]
+ 194:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].max_packet = mps;
+ 169              		.loc 1 194 0 discriminator 2
+ 170 0030 84F83830 		strb	r3, [r4, #56]
+ 195:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ch_num = ch_num;
+ 171              		.loc 1 195 0 discriminator 2
+ 172 0034 A4F840C0 		strh	ip, [r4, #64]	@ movhi
+ 196:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_type = ep_type;
+ 173              		.loc 1 196 0 discriminator 2
+ 174 0038 84F83910 		strb	r1, [r4, #57]
+ 197:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_num = epnum & 0x7F;
+ 175              		.loc 1 197 0 discriminator 2
+ 176 003c 84F83FE0 		strb	lr, [r4, #63]
+ARM GAS  /tmp/ccVRC0kl.s 			page 24
+
+
+ 198:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_is_in = ((epnum & 0x80) == 0x80);
+ 177              		.loc 1 198 0 discriminator 2
+ 178 0040 02F07F08 		and	r8, r2, #127
+ 179 0044 84F83A80 		strb	r8, [r4, #58]
+ 199:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].speed = speed;
+ 180              		.loc 1 199 0 discriminator 2
+ 181 0048 4FEAD218 		lsr	r8, r2, #7
+ 182 004c 84F83B80 		strb	r8, [r4, #59]
+ 200:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 183              		.loc 1 200 0 discriminator 2
+ 184 0050 0844     		add	r0, r0, r1
+ 185 0052 C400     		lsls	r4, r0, #3
+ 186 0054 2C44     		add	r4, r4, r5
+ 187 0056 84F83C70 		strb	r7, [r4, #60]
+ 202:HALLIB/Src/stm32f7xx_hal_hcd.c ****                         ch_num,
+ 188              		.loc 1 202 0 discriminator 2
+ 189 005a CDF808C0 		str	ip, [sp, #8]
+ 190 005e CDF804E0 		str	lr, [sp, #4]
+ 191 0062 0097     		str	r7, [sp]
+ 192 0064 2868     		ldr	r0, [r5]
+ 193 0066 FFF7FEFF 		bl	USB_HC_Init
+ 194              	.LVL18:
+ 209:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 195              		.loc 1 209 0 discriminator 2
+ 196 006a 85F89062 		strb	r6, [r5, #656]
+ 211:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 197              		.loc 1 211 0 discriminator 2
+ 198 006e 00E0     		b	.L8
+ 199              	.LVL19:
+ 200              	.L9:
+ 192:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].do_ping = 0;
+ 201              		.loc 1 192 0
+ 202 0070 0220     		movs	r0, #2
+ 203              	.LVL20:
+ 204              	.L8:
+ 212:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 205              		.loc 1 212 0
+ 206 0072 04B0     		add	sp, sp, #16
+ 207              	.LCFI3:
+ 208              		.cfi_def_cfa_offset 24
+ 209              		@ sp needed
+ 210 0074 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 211              		.cfi_endproc
+ 212              	.LFE137:
+ 214              		.section	.text.HAL_HCD_HC_Halt,"ax",%progbits
+ 215              		.align	2
+ 216              		.global	HAL_HCD_HC_Halt
+ 217              		.thumb
+ 218              		.thumb_func
+ 220              	HAL_HCD_HC_Halt:
+ 221              	.LFB138:
+ 222:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 222              		.loc 1 222 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              	.LVL21:
+ARM GAS  /tmp/ccVRC0kl.s 			page 25
+
+
+ 225:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_HC_Halt(hhcd->Instance, ch_num);
+ 227              		.loc 1 225 0
+ 228 0000 90F89032 		ldrb	r3, [r0, #656]	@ zero_extendqisi2
+ 229 0004 012B     		cmp	r3, #1
+ 230 0006 0BD0     		beq	.L13
+ 222:HALLIB/Src/stm32f7xx_hal_hcd.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 231              		.loc 1 222 0 discriminator 2
+ 232 0008 10B5     		push	{r4, lr}
+ 233              	.LCFI4:
+ 234              		.cfi_def_cfa_offset 8
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+ 237 000a 0446     		mov	r4, r0
+ 225:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_HC_Halt(hhcd->Instance, ch_num);
+ 238              		.loc 1 225 0 discriminator 2
+ 239 000c 0123     		movs	r3, #1
+ 240 000e 80F89032 		strb	r3, [r0, #656]
+ 226:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 241              		.loc 1 226 0 discriminator 2
+ 242 0012 0068     		ldr	r0, [r0]
+ 243              	.LVL22:
+ 244 0014 FFF7FEFF 		bl	USB_HC_Halt
+ 245              	.LVL23:
+ 227:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 246              		.loc 1 227 0 discriminator 2
+ 247 0018 0020     		movs	r0, #0
+ 248 001a 84F89002 		strb	r0, [r4, #656]
+ 229:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 249              		.loc 1 229 0 discriminator 2
+ 250 001e 10BD     		pop	{r4, pc}
+ 251              	.LVL24:
+ 252              	.L13:
+ 253              	.LCFI5:
+ 254              		.cfi_def_cfa_offset 0
+ 255              		.cfi_restore 4
+ 256              		.cfi_restore 14
+ 225:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_HC_Halt(hhcd->Instance, ch_num);
+ 257              		.loc 1 225 0
+ 258 0020 0220     		movs	r0, #2
+ 259              	.LVL25:
+ 260 0022 7047     		bx	lr
+ 261              		.cfi_endproc
+ 262              	.LFE138:
+ 264              		.section	.text.HAL_HCD_MspInit,"ax",%progbits
+ 265              		.align	2
+ 266              		.weak	HAL_HCD_MspInit
+ 267              		.thumb
+ 268              		.thumb_func
+ 270              	HAL_HCD_MspInit:
+ 271              	.LFB140:
+ 263:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 272              		.loc 1 263 0
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 0
+ 275              		@ frame_needed = 0, uses_anonymous_args = 0
+ 276              		@ link register save eliminated.
+ 277              	.LVL26:
+ARM GAS  /tmp/ccVRC0kl.s 			page 26
+
+
+ 278 0000 7047     		bx	lr
+ 279              		.cfi_endproc
+ 280              	.LFE140:
+ 282 0002 00BF     		.section	.text.HAL_HCD_Init,"ax",%progbits
+ 283              		.align	2
+ 284              		.global	HAL_HCD_Init
+ 285              		.thumb
+ 286              		.thumb_func
+ 288              	HAL_HCD_Init:
+ 289              	.LFB136:
+ 126:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 290              		.loc 1 126 0
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 0
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294              	.LVL27:
+ 128:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 295              		.loc 1 128 0
+ 296 0000 0028     		cmp	r0, #0
+ 297 0002 36D0     		beq	.L19
+ 126:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 298              		.loc 1 126 0
+ 299 0004 F0B5     		push	{r4, r5, r6, r7, lr}
+ 300              	.LCFI6:
+ 301              		.cfi_def_cfa_offset 20
+ 302              		.cfi_offset 4, -20
+ 303              		.cfi_offset 5, -16
+ 304              		.cfi_offset 6, -12
+ 305              		.cfi_offset 7, -8
+ 306              		.cfi_offset 14, -4
+ 307 0006 8BB0     		sub	sp, sp, #44
+ 308              	.LCFI7:
+ 309              		.cfi_def_cfa_offset 64
+ 310 0008 0646     		mov	r6, r0
+ 136:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 311              		.loc 1 136 0
+ 312 000a 0323     		movs	r3, #3
+ 313 000c 80F89132 		strb	r3, [r0, #657]
+ 139:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 314              		.loc 1 139 0
+ 315 0010 FFF7FEFF 		bl	HAL_HCD_MspInit
+ 316              	.LVL28:
+ 142:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 317              		.loc 1 142 0
+ 318 0014 3068     		ldr	r0, [r6]
+ 319 0016 FFF7FEFF 		bl	USB_DisableGlobalInt
+ 320              	.LVL29:
+ 145:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 321              		.loc 1 145 0
+ 322 001a 3446     		mov	r4, r6
+ 323 001c 54F810EB 		ldr	lr, [r4], #16
+ 324 0020 6D46     		mov	r5, sp
+ 325 0022 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 326 0024 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 327 0026 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 328 0028 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 329 002a 94E80300 		ldmia	r4, {r0, r1}
+ARM GAS  /tmp/ccVRC0kl.s 			page 27
+
+
+ 330 002e 85E80300 		stmia	r5, {r0, r1}
+ 331 0032 371D     		adds	r7, r6, #4
+ 332 0034 97E80E00 		ldmia	r7, {r1, r2, r3}
+ 333 0038 7046     		mov	r0, lr
+ 334 003a FFF7FEFF 		bl	USB_CoreInit
+ 335              	.LVL30:
+ 148:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 336              		.loc 1 148 0
+ 337 003e 0121     		movs	r1, #1
+ 338 0040 3068     		ldr	r0, [r6]
+ 339 0042 FFF7FEFF 		bl	USB_SetCurrentMode
+ 340              	.LVL31:
+ 151:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 341              		.loc 1 151 0
+ 342 0046 3446     		mov	r4, r6
+ 343 0048 54F810EB 		ldr	lr, [r4], #16
+ 344 004c 6D46     		mov	r5, sp
+ 345 004e 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 346 0050 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 347 0052 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+ 348 0054 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 349 0056 94E80300 		ldmia	r4, {r0, r1}
+ 350 005a 85E80300 		stmia	r5, {r0, r1}
+ 351 005e 97E80E00 		ldmia	r7, {r1, r2, r3}
+ 352 0062 7046     		mov	r0, lr
+ 353 0064 FFF7FEFF 		bl	USB_HostInit
+ 354              	.LVL32:
+ 153:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 355              		.loc 1 153 0
+ 356 0068 0123     		movs	r3, #1
+ 357 006a 86F89132 		strb	r3, [r6, #657]
+ 155:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 358              		.loc 1 155 0
+ 359 006e 0020     		movs	r0, #0
+ 360 0070 01E0     		b	.L18
+ 361              	.LVL33:
+ 362              	.L19:
+ 363              	.LCFI8:
+ 364              		.cfi_def_cfa_offset 0
+ 365              		.cfi_restore 4
+ 366              		.cfi_restore 5
+ 367              		.cfi_restore 6
+ 368              		.cfi_restore 7
+ 369              		.cfi_restore 14
+ 130:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 370              		.loc 1 130 0
+ 371 0072 0120     		movs	r0, #1
+ 372              	.LVL34:
+ 373 0074 7047     		bx	lr
+ 374              	.LVL35:
+ 375              	.L18:
+ 376              	.LCFI9:
+ 377              		.cfi_def_cfa_offset 64
+ 378              		.cfi_offset 4, -20
+ 379              		.cfi_offset 5, -16
+ 380              		.cfi_offset 6, -12
+ 381              		.cfi_offset 7, -8
+ARM GAS  /tmp/ccVRC0kl.s 			page 28
+
+
+ 382              		.cfi_offset 14, -4
+ 156:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 383              		.loc 1 156 0
+ 384 0076 0BB0     		add	sp, sp, #44
+ 385              	.LCFI10:
+ 386              		.cfi_def_cfa_offset 20
+ 387              		@ sp needed
+ 388 0078 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 389              		.cfi_endproc
+ 390              	.LFE136:
+ 392 007a 00BF     		.section	.text.HAL_HCD_MspDeInit,"ax",%progbits
+ 393              		.align	2
+ 394              		.weak	HAL_HCD_MspDeInit
+ 395              		.thumb
+ 396              		.thumb_func
+ 398              	HAL_HCD_MspDeInit:
+ 399              	.LFB141:
+ 278:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 400              		.loc 1 278 0
+ 401              		.cfi_startproc
+ 402              		@ args = 0, pretend = 0, frame = 0
+ 403              		@ frame_needed = 0, uses_anonymous_args = 0
+ 404              		@ link register save eliminated.
+ 405              	.LVL36:
+ 406 0000 7047     		bx	lr
+ 407              		.cfi_endproc
+ 408              	.LFE141:
+ 410 0002 00BF     		.section	.text.HAL_HCD_DeInit,"ax",%progbits
+ 411              		.align	2
+ 412              		.global	HAL_HCD_DeInit
+ 413              		.thumb
+ 414              		.thumb_func
+ 416              	HAL_HCD_DeInit:
+ 417              	.LFB139:
+ 238:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 418              		.loc 1 238 0
+ 419              		.cfi_startproc
+ 420              		@ args = 0, pretend = 0, frame = 0
+ 421              		@ frame_needed = 0, uses_anonymous_args = 0
+ 422              	.LVL37:
+ 240:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 423              		.loc 1 240 0
+ 424 0000 68B1     		cbz	r0, .L25
+ 238:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check the HCD handle allocation */
+ 425              		.loc 1 238 0
+ 426 0002 10B5     		push	{r4, lr}
+ 427              	.LCFI11:
+ 428              		.cfi_def_cfa_offset 8
+ 429              		.cfi_offset 4, -8
+ 430              		.cfi_offset 14, -4
+ 431 0004 0446     		mov	r4, r0
+ 245:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 432              		.loc 1 245 0
+ 433 0006 0323     		movs	r3, #3
+ 434 0008 80F89132 		strb	r3, [r0, #657]
+ 248:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 435              		.loc 1 248 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 29
+
+
+ 436 000c FFF7FEFF 		bl	HAL_HCD_MspDeInit
+ 437              	.LVL38:
+ 250:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 438              		.loc 1 250 0
+ 439 0010 2068     		ldr	r0, [r4]
+ 440 0012 FFF7FEFF 		bl	USB_DisableGlobalInt
+ 441              	.LVL39:
+ 252:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 442              		.loc 1 252 0
+ 443 0016 0020     		movs	r0, #0
+ 444 0018 84F89102 		strb	r0, [r4, #657]
+ 254:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 445              		.loc 1 254 0
+ 446 001c 10BD     		pop	{r4, pc}
+ 447              	.LVL40:
+ 448              	.L25:
+ 449              	.LCFI12:
+ 450              		.cfi_def_cfa_offset 0
+ 451              		.cfi_restore 4
+ 452              		.cfi_restore 14
+ 242:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 453              		.loc 1 242 0
+ 454 001e 0120     		movs	r0, #1
+ 455              	.LVL41:
+ 456 0020 7047     		bx	lr
+ 457              		.cfi_endproc
+ 458              	.LFE139:
+ 460 0022 00BF     		.section	.text.HAL_HCD_HC_SubmitRequest,"ax",%progbits
+ 461              		.align	2
+ 462              		.global	HAL_HCD_HC_SubmitRequest
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	HAL_HCD_HC_SubmitRequest:
+ 467              	.LFB142:
+ 337:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_is_in = direction;
+ 468              		.loc 1 337 0
+ 469              		.cfi_startproc
+ 470              		@ args = 16, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472              	.LVL42:
+ 473 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 474              	.LCFI13:
+ 475              		.cfi_def_cfa_offset 24
+ 476              		.cfi_offset 3, -24
+ 477              		.cfi_offset 4, -20
+ 478              		.cfi_offset 5, -16
+ 479              		.cfi_offset 6, -12
+ 480              		.cfi_offset 7, -8
+ 481              		.cfi_offset 14, -4
+ 482 0002 9DF81870 		ldrb	r7, [sp, #24]	@ zero_extendqisi2
+ 483 0006 BDF82060 		ldrh	r6, [sp, #32]
+ 338:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ep_type  = ep_type;
+ 484              		.loc 1 338 0
+ 485 000a 8D00     		lsls	r5, r1, #2
+ 486 000c 0D44     		add	r5, r5, r1
+ 487 000e EC00     		lsls	r4, r5, #3
+ 488 0010 0444     		add	r4, r4, r0
+ARM GAS  /tmp/ccVRC0kl.s 			page 30
+
+
+ 489 0012 84F83B20 		strb	r2, [r4, #59]
+ 339:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 490              		.loc 1 339 0
+ 491 0016 84F83F30 		strb	r3, [r4, #63]
+ 341:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 492              		.loc 1 341 0
+ 493 001a 3FB9     		cbnz	r7, .L29
+ 343:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 494              		.loc 1 343 0
+ 495 001c 01EB8105 		add	r5, r1, r1, lsl #2
+ 496 0020 EC00     		lsls	r4, r5, #3
+ 497 0022 0444     		add	r4, r4, r0
+ 498 0024 0325     		movs	r5, #3
+ 499 0026 84F84250 		strb	r5, [r4, #66]
+ 500 002a 06E0     		b	.L30
+ 501              	.L29:
+ 347:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 502              		.loc 1 347 0
+ 503 002c 01EB8105 		add	r5, r1, r1, lsl #2
+ 504 0030 EC00     		lsls	r4, r5, #3
+ 505 0032 0444     		add	r4, r4, r0
+ 506 0034 0225     		movs	r5, #2
+ 507 0036 84F84250 		strb	r5, [r4, #66]
+ 508              	.L30:
+ 351:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 509              		.loc 1 351 0
+ 510 003a 032B     		cmp	r3, #3
+ 511 003c 00F28D80 		bhi	.L31
+ 512 0040 DFE803F0 		tbb	[pc, r3]
+ 513              	.L33:
+ 514 0044 02       		.byte	(.L32-.L33)/2
+ 515 0045 84       		.byte	(.L34-.L33)/2
+ 516 0046 26       		.byte	(.L35-.L33)/2
+ 517 0047 55       		.byte	(.L36-.L33)/2
+ 518              		.p2align 1
+ 519              	.L32:
+ 354:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 520              		.loc 1 354 0
+ 521 0048 012F     		cmp	r7, #1
+ 522 004a 08BF     		it	eq
+ 523 004c 002A     		cmpeq	r2, #0
+ 524 004e 40F08480 		bne	.L31
+ 356:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* For Status OUT stage, Length==0, Status Out PID = 1 */
+ 525              		.loc 1 356 0
+ 526 0052 36B9     		cbnz	r6, .L37
+ 358:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 527              		.loc 1 358 0
+ 528 0054 01EB8102 		add	r2, r1, r1, lsl #2
+ 529              	.LVL43:
+ 530 0058 D300     		lsls	r3, r2, #3
+ 531              	.LVL44:
+ 532 005a 0344     		add	r3, r3, r0
+ 533 005c 0122     		movs	r2, #1
+ 534 005e 83F85120 		strb	r2, [r3, #81]
+ 535              	.L37:
+ 362:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 536              		.loc 1 362 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 31
+
+
+ 537 0062 01EB8102 		add	r2, r1, r1, lsl #2
+ 538 0066 D300     		lsls	r3, r2, #3
+ 539 0068 0344     		add	r3, r3, r0
+ 540 006a 93F85130 		ldrb	r3, [r3, #81]	@ zero_extendqisi2
+ 541 006e 3BB9     		cbnz	r3, .L38
+ 364:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 542              		.loc 1 364 0
+ 543 0070 01EB8102 		add	r2, r1, r1, lsl #2
+ 544 0074 D300     		lsls	r3, r2, #3
+ 545 0076 0344     		add	r3, r3, r0
+ 546 0078 0022     		movs	r2, #0
+ 547 007a 83F84220 		strb	r2, [r3, #66]
+ 548 007e 6CE0     		b	.L31
+ 549              	.L38:
+ 368:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 550              		.loc 1 368 0
+ 551 0080 01EB8102 		add	r2, r1, r1, lsl #2
+ 552 0084 D300     		lsls	r3, r2, #3
+ 553 0086 0344     		add	r3, r3, r0
+ 554 0088 0222     		movs	r2, #2
+ 555 008a 83F84220 		strb	r2, [r3, #66]
+ 556 008e 64E0     		b	.L31
+ 557              	.LVL45:
+ 558              	.L35:
+ 374:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 559              		.loc 1 374 0
+ 560 0090 B2B9     		cbnz	r2, .L39
+ 377:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 561              		.loc 1 377 0
+ 562 0092 01EB8102 		add	r2, r1, r1, lsl #2
+ 563              	.LVL46:
+ 564 0096 D300     		lsls	r3, r2, #3
+ 565              	.LVL47:
+ 566 0098 0344     		add	r3, r3, r0
+ 567 009a 93F85130 		ldrb	r3, [r3, #81]	@ zero_extendqisi2
+ 568 009e 3BB9     		cbnz	r3, .L40
+ 379:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 569              		.loc 1 379 0
+ 570 00a0 01EB8102 		add	r2, r1, r1, lsl #2
+ 571 00a4 D300     		lsls	r3, r2, #3
+ 572 00a6 0344     		add	r3, r3, r0
+ 573 00a8 0022     		movs	r2, #0
+ 574 00aa 83F84220 		strb	r2, [r3, #66]
+ 575 00ae 54E0     		b	.L31
+ 576              	.L40:
+ 383:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 577              		.loc 1 383 0
+ 578 00b0 01EB8102 		add	r2, r1, r1, lsl #2
+ 579 00b4 D300     		lsls	r3, r2, #3
+ 580 00b6 0344     		add	r3, r3, r0
+ 581 00b8 0222     		movs	r2, #2
+ 582 00ba 83F84220 		strb	r2, [r3, #66]
+ 583 00be 4CE0     		b	.L31
+ 584              	.LVL48:
+ 585              	.L39:
+ 388:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 586              		.loc 1 388 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 32
+
+
+ 587 00c0 01EB8102 		add	r2, r1, r1, lsl #2
+ 588              	.LVL49:
+ 589 00c4 D300     		lsls	r3, r2, #3
+ 590              	.LVL50:
+ 591 00c6 0344     		add	r3, r3, r0
+ 592 00c8 93F85030 		ldrb	r3, [r3, #80]	@ zero_extendqisi2
+ 593 00cc 3BB9     		cbnz	r3, .L41
+ 390:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 594              		.loc 1 390 0
+ 595 00ce 01EB8102 		add	r2, r1, r1, lsl #2
+ 596 00d2 D300     		lsls	r3, r2, #3
+ 597 00d4 0344     		add	r3, r3, r0
+ 598 00d6 0022     		movs	r2, #0
+ 599 00d8 83F84220 		strb	r2, [r3, #66]
+ 600 00dc 3DE0     		b	.L31
+ 601              	.L41:
+ 394:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 602              		.loc 1 394 0
+ 603 00de 01EB8102 		add	r2, r1, r1, lsl #2
+ 604 00e2 D300     		lsls	r3, r2, #3
+ 605 00e4 0344     		add	r3, r3, r0
+ 606 00e6 0222     		movs	r2, #2
+ 607 00e8 83F84220 		strb	r2, [r3, #66]
+ 608 00ec 35E0     		b	.L31
+ 609              	.LVL51:
+ 610              	.L36:
+ 400:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 611              		.loc 1 400 0
+ 612 00ee B2B9     		cbnz	r2, .L42
+ 403:HALLIB/Src/stm32f7xx_hal_hcd.c ****       { /* Put the PID 0 */
+ 613              		.loc 1 403 0
+ 614 00f0 01EB8102 		add	r2, r1, r1, lsl #2
+ 615              	.LVL52:
+ 616 00f4 D300     		lsls	r3, r2, #3
+ 617              	.LVL53:
+ 618 00f6 0344     		add	r3, r3, r0
+ 619 00f8 93F85130 		ldrb	r3, [r3, #81]	@ zero_extendqisi2
+ 620 00fc 3BB9     		cbnz	r3, .L43
+ 405:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 621              		.loc 1 405 0
+ 622 00fe 01EB8102 		add	r2, r1, r1, lsl #2
+ 623 0102 D300     		lsls	r3, r2, #3
+ 624 0104 0344     		add	r3, r3, r0
+ 625 0106 0022     		movs	r2, #0
+ 626 0108 83F84220 		strb	r2, [r3, #66]
+ 627 010c 25E0     		b	.L31
+ 628              	.L43:
+ 409:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 629              		.loc 1 409 0
+ 630 010e 01EB8102 		add	r2, r1, r1, lsl #2
+ 631 0112 D300     		lsls	r3, r2, #3
+ 632 0114 0344     		add	r3, r3, r0
+ 633 0116 0222     		movs	r2, #2
+ 634 0118 83F84220 		strb	r2, [r3, #66]
+ 635 011c 1DE0     		b	.L31
+ 636              	.LVL54:
+ 637              	.L42:
+ARM GAS  /tmp/ccVRC0kl.s 			page 33
+
+
+ 414:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 638              		.loc 1 414 0
+ 639 011e 01EB8102 		add	r2, r1, r1, lsl #2
+ 640              	.LVL55:
+ 641 0122 D300     		lsls	r3, r2, #3
+ 642              	.LVL56:
+ 643 0124 0344     		add	r3, r3, r0
+ 644 0126 93F85030 		ldrb	r3, [r3, #80]	@ zero_extendqisi2
+ 645 012a 3BB9     		cbnz	r3, .L44
+ 416:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 646              		.loc 1 416 0
+ 647 012c 01EB8102 		add	r2, r1, r1, lsl #2
+ 648 0130 D300     		lsls	r3, r2, #3
+ 649 0132 0344     		add	r3, r3, r0
+ 650 0134 0022     		movs	r2, #0
+ 651 0136 83F84220 		strb	r2, [r3, #66]
+ 652 013a 0EE0     		b	.L31
+ 653              	.L44:
+ 420:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 654              		.loc 1 420 0
+ 655 013c 01EB8102 		add	r2, r1, r1, lsl #2
+ 656 0140 D300     		lsls	r3, r2, #3
+ 657 0142 0344     		add	r3, r3, r0
+ 658 0144 0222     		movs	r2, #2
+ 659 0146 83F84220 		strb	r2, [r3, #66]
+ 660 014a 06E0     		b	.L31
+ 661              	.LVL57:
+ 662              	.L34:
+ 426:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+ 663              		.loc 1 426 0
+ 664 014c 01EB8102 		add	r2, r1, r1, lsl #2
+ 665              	.LVL58:
+ 666 0150 D300     		lsls	r3, r2, #3
+ 667              	.LVL59:
+ 668 0152 0344     		add	r3, r3, r0
+ 669 0154 0022     		movs	r2, #0
+ 670 0156 83F84220 		strb	r2, [r3, #66]
+ 671              	.L31:
+ 430:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].xfer_len  = length;
+ 672              		.loc 1 430 0
+ 673 015a 8C00     		lsls	r4, r1, #2
+ 674 015c 6218     		adds	r2, r4, r1
+ 675 015e D300     		lsls	r3, r2, #3
+ 676 0160 0344     		add	r3, r3, r0
+ 677 0162 079A     		ldr	r2, [sp, #28]
+ 678 0164 5A64     		str	r2, [r3, #68]
+ 431:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].urb_state =   URB_IDLE;
+ 679              		.loc 1 431 0
+ 680 0166 9E64     		str	r6, [r3, #72]
+ 432:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].xfer_count = 0 ;
+ 681              		.loc 1 432 0
+ 682 0168 0022     		movs	r2, #0
+ 683 016a 83F85C20 		strb	r2, [r3, #92]
+ 433:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].ch_num = ch_num;
+ 684              		.loc 1 433 0
+ 685 016e DA64     		str	r2, [r3, #76]
+ 434:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hhcd->hc[ch_num].state = HC_IDLE;
+ARM GAS  /tmp/ccVRC0kl.s 			page 34
+
+
+ 686              		.loc 1 434 0
+ 687 0170 83F83910 		strb	r1, [r3, #57]
+ 435:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 688              		.loc 1 435 0
+ 689 0174 83F85D20 		strb	r2, [r3, #93]
+ 437:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 690              		.loc 1 437 0
+ 691 0178 2144     		add	r1, r1, r4
+ 692              	.LVL60:
+ 693 017a CB00     		lsls	r3, r1, #3
+ 694              	.LVL61:
+ 695 017c 03F13801 		add	r1, r3, #56
+ 696 0180 027C     		ldrb	r2, [r0, #16]	@ zero_extendqisi2
+ 697 0182 0144     		add	r1, r1, r0
+ 698 0184 0068     		ldr	r0, [r0]
+ 699              	.LVL62:
+ 700 0186 FFF7FEFF 		bl	USB_HC_StartXfer
+ 701              	.LVL63:
+ 438:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 702              		.loc 1 438 0
+ 703 018a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 704              		.cfi_endproc
+ 705              	.LFE142:
+ 707              		.section	.text.HAL_HCD_SOF_Callback,"ax",%progbits
+ 708              		.align	2
+ 709              		.weak	HAL_HCD_SOF_Callback
+ 710              		.thumb
+ 711              		.thumb_func
+ 713              	HAL_HCD_SOF_Callback:
+ 714              	.LFB144:
+ 549:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 715              		.loc 1 549 0
+ 716              		.cfi_startproc
+ 717              		@ args = 0, pretend = 0, frame = 0
+ 718              		@ frame_needed = 0, uses_anonymous_args = 0
+ 719              		@ link register save eliminated.
+ 720              	.LVL64:
+ 721 0000 7047     		bx	lr
+ 722              		.cfi_endproc
+ 723              	.LFE144:
+ 725 0002 00BF     		.section	.text.HAL_HCD_Connect_Callback,"ax",%progbits
+ 726              		.align	2
+ 727              		.weak	HAL_HCD_Connect_Callback
+ 728              		.thumb
+ 729              		.thumb_func
+ 731              	HAL_HCD_Connect_Callback:
+ 732              	.LFB145:
+ 564:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 733              		.loc 1 564 0
+ 734              		.cfi_startproc
+ 735              		@ args = 0, pretend = 0, frame = 0
+ 736              		@ frame_needed = 0, uses_anonymous_args = 0
+ 737              		@ link register save eliminated.
+ 738              	.LVL65:
+ 739 0000 7047     		bx	lr
+ 740              		.cfi_endproc
+ 741              	.LFE145:
+ARM GAS  /tmp/ccVRC0kl.s 			page 35
+
+
+ 743 0002 00BF     		.section	.text.HCD_Port_IRQHandler,"ax",%progbits
+ 744              		.align	2
+ 745              		.thumb
+ 746              		.thumb_func
+ 748              	HCD_Port_IRQHandler:
+ 749              	.LFB160:
+1131:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1132:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1133:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+1134:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1135:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case GRXSTS_PKTSTS_DATA_TOGGLE_ERR:
+1136:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+1137:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case GRXSTS_PKTSTS_IN_XFER_COMP:
+1138:HALLIB/Src/stm32f7xx_hal_hcd.c ****   case GRXSTS_PKTSTS_CH_HALTED:
+1139:HALLIB/Src/stm32f7xx_hal_hcd.c ****   default:
+1140:HALLIB/Src/stm32f7xx_hal_hcd.c ****     break;
+1141:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1142:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+1143:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1144:HALLIB/Src/stm32f7xx_hal_hcd.c **** /**
+1145:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @brief  Handle Host Port interrupt requests.
+1146:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @param  hhcd HCD handle
+1147:HALLIB/Src/stm32f7xx_hal_hcd.c ****   * @retval None
+1148:HALLIB/Src/stm32f7xx_hal_hcd.c ****   */
+1149:HALLIB/Src/stm32f7xx_hal_hcd.c **** static void HCD_Port_IRQHandler  (HCD_HandleTypeDef *hhcd)
+1150:HALLIB/Src/stm32f7xx_hal_hcd.c **** {
+ 750              		.loc 1 1150 0
+ 751              		.cfi_startproc
+ 752              		@ args = 0, pretend = 0, frame = 8
+ 753              		@ frame_needed = 0, uses_anonymous_args = 0
+ 754              	.LVL66:
+ 755              		.loc 1 1150 0
+ 756 0000 30B5     		push	{r4, r5, lr}
+ 757              	.LCFI14:
+ 758              		.cfi_def_cfa_offset 12
+ 759              		.cfi_offset 4, -12
+ 760              		.cfi_offset 5, -8
+ 761              		.cfi_offset 14, -4
+ 762 0002 83B0     		sub	sp, sp, #12
+ 763              	.LCFI15:
+ 764              		.cfi_def_cfa_offset 24
+ 765 0004 0546     		mov	r5, r0
+1151:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 766              		.loc 1 1151 0
+ 767 0006 0468     		ldr	r4, [r0]
+ 768              	.LVL67:
+1152:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __IO uint32_t hprt0, hprt0_dup;
+1153:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1154:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Handle Host Port Interrupts */
+1155:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hprt0 = USBx_HPRT0;
+ 769              		.loc 1 1155 0
+ 770 0008 D4F84034 		ldr	r3, [r4, #1088]
+ 771 000c 0193     		str	r3, [sp, #4]
+1156:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hprt0_dup = USBx_HPRT0;
+ 772              		.loc 1 1156 0
+ 773 000e D4F84034 		ldr	r3, [r4, #1088]
+ 774 0012 0093     		str	r3, [sp]
+ARM GAS  /tmp/ccVRC0kl.s 			page 36
+
+
+1157:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1158:HALLIB/Src/stm32f7xx_hal_hcd.c ****   hprt0_dup &= ~(USB_OTG_HPRT_PENA | USB_OTG_HPRT_PCDET |\
+ 775              		.loc 1 1158 0
+ 776 0014 009B     		ldr	r3, [sp]
+ 777 0016 23F02E03 		bic	r3, r3, #46
+ 778 001a 0093     		str	r3, [sp]
+1159:HALLIB/Src/stm32f7xx_hal_hcd.c ****                  USB_OTG_HPRT_PENCHNG | USB_OTG_HPRT_POCCHNG );
+1160:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1161:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check whether Port Connect detected */
+1162:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if((hprt0 & USB_OTG_HPRT_PCDET) == USB_OTG_HPRT_PCDET)
+ 779              		.loc 1 1162 0
+ 780 001c 019B     		ldr	r3, [sp, #4]
+ 781 001e 13F0020F 		tst	r3, #2
+ 782 0022 0DD0     		beq	.L49
+1163:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1164:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if((hprt0 & USB_OTG_HPRT_PCSTS) == USB_OTG_HPRT_PCSTS)
+ 783              		.loc 1 1164 0
+ 784 0024 019B     		ldr	r3, [sp, #4]
+ 785 0026 13F0010F 		tst	r3, #1
+ 786 002a 05D0     		beq	.L50
+1165:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1166:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_MASK_INTERRUPT(hhcd->Instance, USB_OTG_GINTSTS_DISCINT);
+ 787              		.loc 1 1166 0
+ 788 002c A369     		ldr	r3, [r4, #24]
+ 789 002e 23F00053 		bic	r3, r3, #536870912
+ 790 0032 A361     		str	r3, [r4, #24]
+1167:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_Connect_Callback(hhcd);
+ 791              		.loc 1 1167 0
+ 792 0034 FFF7FEFF 		bl	HAL_HCD_Connect_Callback
+ 793              	.LVL68:
+ 794              	.L50:
+1168:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1169:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hprt0_dup  |= USB_OTG_HPRT_PCDET;
+ 795              		.loc 1 1169 0
+ 796 0038 009B     		ldr	r3, [sp]
+ 797 003a 43F00203 		orr	r3, r3, #2
+ 798 003e 0093     		str	r3, [sp]
+ 799              	.L49:
+1170:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1171:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1172:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1173:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check whether Port Enable Changed */
+1174:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if((hprt0 & USB_OTG_HPRT_PENCHNG) == USB_OTG_HPRT_PENCHNG)
+ 800              		.loc 1 1174 0
+ 801 0040 019B     		ldr	r3, [sp, #4]
+ 802 0042 13F0080F 		tst	r3, #8
+ 803 0046 30D0     		beq	.L51
+1175:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1176:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hprt0_dup |= USB_OTG_HPRT_PENCHNG;
+ 804              		.loc 1 1176 0
+ 805 0048 009B     		ldr	r3, [sp]
+ 806 004a 43F00803 		orr	r3, r3, #8
+ 807 004e 0093     		str	r3, [sp]
+1177:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1178:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if((hprt0 & USB_OTG_HPRT_PENA) == USB_OTG_HPRT_PENA)
+ 808              		.loc 1 1178 0
+ 809 0050 019B     		ldr	r3, [sp, #4]
+ARM GAS  /tmp/ccVRC0kl.s 			page 37
+
+
+ 810 0052 13F0040F 		tst	r3, #4
+ 811 0056 1DD0     		beq	.L52
+1179:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1180:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if(hhcd->Init.phy_itface  == USB_OTG_EMBEDDED_PHY)
+ 812              		.loc 1 1180 0
+ 813 0058 AB69     		ldr	r3, [r5, #24]
+ 814 005a 022B     		cmp	r3, #2
+ 815 005c 0FD1     		bne	.L53
+1181:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1182:HALLIB/Src/stm32f7xx_hal_hcd.c ****         if ((hprt0 & USB_OTG_HPRT_PSPD) == (HPRT0_PRTSPD_LOW_SPEED << 17))
+ 816              		.loc 1 1182 0
+ 817 005e 019B     		ldr	r3, [sp, #4]
+ 818 0060 03F4C023 		and	r3, r3, #393216
+ 819 0064 B3F5802F 		cmp	r3, #262144
+ 820 0068 04D1     		bne	.L54
+1183:HALLIB/Src/stm32f7xx_hal_hcd.c ****         {
+1184:HALLIB/Src/stm32f7xx_hal_hcd.c ****           USB_InitFSLSPClkSel(hhcd->Instance ,HCFG_6_MHZ );
+ 821              		.loc 1 1184 0
+ 822 006a 0221     		movs	r1, #2
+ 823 006c 2868     		ldr	r0, [r5]
+ 824 006e FFF7FEFF 		bl	USB_InitFSLSPClkSel
+ 825              	.LVL69:
+ 826 0072 0BE0     		b	.L55
+ 827              	.L54:
+1185:HALLIB/Src/stm32f7xx_hal_hcd.c ****         }
+1186:HALLIB/Src/stm32f7xx_hal_hcd.c ****         else
+1187:HALLIB/Src/stm32f7xx_hal_hcd.c ****         {
+1188:HALLIB/Src/stm32f7xx_hal_hcd.c ****           USB_InitFSLSPClkSel(hhcd->Instance ,HCFG_48_MHZ );
+ 828              		.loc 1 1188 0
+ 829 0074 0121     		movs	r1, #1
+ 830 0076 2868     		ldr	r0, [r5]
+ 831 0078 FFF7FEFF 		bl	USB_InitFSLSPClkSel
+ 832              	.LVL70:
+ 833 007c 06E0     		b	.L55
+ 834              	.L53:
+1189:HALLIB/Src/stm32f7xx_hal_hcd.c ****         }
+1190:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1191:HALLIB/Src/stm32f7xx_hal_hcd.c ****       else
+1192:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+1193:HALLIB/Src/stm32f7xx_hal_hcd.c ****         if(hhcd->Init.speed == HCD_SPEED_FULL)
+ 835              		.loc 1 1193 0
+ 836 007e EB68     		ldr	r3, [r5, #12]
+ 837 0080 032B     		cmp	r3, #3
+ 838 0082 03D1     		bne	.L55
+1194:HALLIB/Src/stm32f7xx_hal_hcd.c ****         {
+1195:HALLIB/Src/stm32f7xx_hal_hcd.c ****           USBx_HOST->HFIR = (uint32_t)60000;
+ 839              		.loc 1 1195 0
+ 840 0084 4EF66022 		movw	r2, #60000
+ 841 0088 C4F80424 		str	r2, [r4, #1028]
+ 842              	.L55:
+1196:HALLIB/Src/stm32f7xx_hal_hcd.c ****         }
+1197:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+1198:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_Connect_Callback(hhcd);
+ 843              		.loc 1 1198 0
+ 844 008c 2846     		mov	r0, r5
+ 845 008e FFF7FEFF 		bl	HAL_HCD_Connect_Callback
+ 846              	.LVL71:
+ARM GAS  /tmp/ccVRC0kl.s 			page 38
+
+
+ 847 0092 0AE0     		b	.L51
+ 848              	.L52:
+1199:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1200:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1201:HALLIB/Src/stm32f7xx_hal_hcd.c ****     else
+1202:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+1203:HALLIB/Src/stm32f7xx_hal_hcd.c ****       /* Cleanup HPRT */
+1204:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HPRT0 &= ~(USB_OTG_HPRT_PENA | USB_OTG_HPRT_PCDET |\
+ 849              		.loc 1 1204 0
+ 850 0094 D4F84034 		ldr	r3, [r4, #1088]
+ 851 0098 23F02E03 		bic	r3, r3, #46
+ 852 009c C4F84034 		str	r3, [r4, #1088]
+1205:HALLIB/Src/stm32f7xx_hal_hcd.c ****         USB_OTG_HPRT_PENCHNG | USB_OTG_HPRT_POCCHNG );
+1206:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1207:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_UNMASK_INTERRUPT(hhcd->Instance, USB_OTG_GINTSTS_DISCINT);
+ 853              		.loc 1 1207 0
+ 854 00a0 2A68     		ldr	r2, [r5]
+ 855 00a2 9369     		ldr	r3, [r2, #24]
+ 856 00a4 43F00053 		orr	r3, r3, #536870912
+ 857 00a8 9361     		str	r3, [r2, #24]
+ 858              	.L51:
+1208:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+1209:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1210:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1211:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Check For an overcurrent */
+1212:HALLIB/Src/stm32f7xx_hal_hcd.c ****   if((hprt0 & USB_OTG_HPRT_POCCHNG) == USB_OTG_HPRT_POCCHNG)
+ 859              		.loc 1 1212 0
+ 860 00aa 019B     		ldr	r3, [sp, #4]
+ 861 00ac 13F0200F 		tst	r3, #32
+ 862 00b0 03D0     		beq	.L56
+1213:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+1214:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hprt0_dup |= USB_OTG_HPRT_POCCHNG;
+ 863              		.loc 1 1214 0
+ 864 00b2 009B     		ldr	r3, [sp]
+ 865 00b4 43F02003 		orr	r3, r3, #32
+ 866 00b8 0093     		str	r3, [sp]
+ 867              	.L56:
+1215:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+1216:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+1217:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Clear Port Interrupts */
+1218:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USBx_HPRT0 = hprt0_dup;
+ 868              		.loc 1 1218 0
+ 869 00ba 009B     		ldr	r3, [sp]
+ 870 00bc C4F84034 		str	r3, [r4, #1088]
+1219:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 871              		.loc 1 1219 0
+ 872 00c0 03B0     		add	sp, sp, #12
+ 873              	.LCFI16:
+ 874              		.cfi_def_cfa_offset 12
+ 875              		@ sp needed
+ 876 00c2 30BD     		pop	{r4, r5, pc}
+ 877              		.cfi_endproc
+ 878              	.LFE160:
+ 880              		.section	.text.HAL_HCD_Disconnect_Callback,"ax",%progbits
+ 881              		.align	2
+ 882              		.weak	HAL_HCD_Disconnect_Callback
+ 883              		.thumb
+ARM GAS  /tmp/ccVRC0kl.s 			page 39
+
+
+ 884              		.thumb_func
+ 886              	HAL_HCD_Disconnect_Callback:
+ 887              	.LFB146:
+ 579:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 888              		.loc 1 579 0
+ 889              		.cfi_startproc
+ 890              		@ args = 0, pretend = 0, frame = 0
+ 891              		@ frame_needed = 0, uses_anonymous_args = 0
+ 892              		@ link register save eliminated.
+ 893              	.LVL72:
+ 894 0000 7047     		bx	lr
+ 895              		.cfi_endproc
+ 896              	.LFE146:
+ 898 0002 00BF     		.section	.text.HAL_HCD_HC_NotifyURBChange_Callback,"ax",%progbits
+ 899              		.align	2
+ 900              		.weak	HAL_HCD_HC_NotifyURBChange_Callback
+ 901              		.thumb
+ 902              		.thumb_func
+ 904              	HAL_HCD_HC_NotifyURBChange_Callback:
+ 905              	.LFB147:
+ 604:HALLIB/Src/stm32f7xx_hal_hcd.c ****   /* Prevent unused argument(s) compilation warning */
+ 906              		.loc 1 604 0
+ 907              		.cfi_startproc
+ 908              		@ args = 0, pretend = 0, frame = 0
+ 909              		@ frame_needed = 0, uses_anonymous_args = 0
+ 910              		@ link register save eliminated.
+ 911              	.LVL73:
+ 912 0000 7047     		bx	lr
+ 913              		.cfi_endproc
+ 914              	.LFE147:
+ 916 0002 00BF     		.section	.text.HCD_HC_IN_IRQHandler,"ax",%progbits
+ 917              		.align	2
+ 918              		.thumb
+ 919              		.thumb_func
+ 921              	HCD_HC_IN_IRQHandler:
+ 922              	.LFB157:
+ 792:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 923              		.loc 1 792 0
+ 924              		.cfi_startproc
+ 925              		@ args = 0, pretend = 0, frame = 0
+ 926              		@ frame_needed = 0, uses_anonymous_args = 0
+ 927              	.LVL74:
+ 792:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 928              		.loc 1 792 0
+ 929 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 930              	.LCFI17:
+ 931              		.cfi_def_cfa_offset 24
+ 932              		.cfi_offset 3, -24
+ 933              		.cfi_offset 4, -20
+ 934              		.cfi_offset 5, -16
+ 935              		.cfi_offset 6, -12
+ 936              		.cfi_offset 7, -8
+ 937              		.cfi_offset 14, -4
+ 938 0002 0646     		mov	r6, r0
+ 939 0004 0D46     		mov	r5, r1
+ 793:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t tmpreg = 0;
+ 940              		.loc 1 793 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 40
+
+
+ 941 0006 0768     		ldr	r7, [r0]
+ 942              	.LVL75:
+ 796:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 943              		.loc 1 796 0
+ 944 0008 07EB4117 		add	r7, r7, r1, lsl #5
+ 945              	.LVL76:
+ 946 000c 07F5A064 		add	r4, r7, #1280
+ 947 0010 A368     		ldr	r3, [r4, #8]
+ 948 0012 13F0040F 		tst	r3, #4
+ 949 0016 06D0     		beq	.L61
+ 798:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 950              		.loc 1 798 0
+ 951 0018 0423     		movs	r3, #4
+ 952 001a A360     		str	r3, [r4, #8]
+ 953              	.LVL77:
+ 799:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 954              		.loc 1 799 0
+ 955 001c E368     		ldr	r3, [r4, #12]
+ 956 001e 43F00203 		orr	r3, r3, #2
+ 957 0022 E360     		str	r3, [r4, #12]
+ 958 0024 34E0     		b	.L62
+ 959              	.LVL78:
+ 960              	.L61:
+ 801:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 961              		.loc 1 801 0
+ 962 0026 A368     		ldr	r3, [r4, #8]
+ 963 0028 13F0200F 		tst	r3, #32
+ 964 002c 02D0     		beq	.L63
+ 803:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 965              		.loc 1 803 0
+ 966 002e 2023     		movs	r3, #32
+ 967 0030 A360     		str	r3, [r4, #8]
+ 968              	.LVL79:
+ 969 0032 2DE0     		b	.L62
+ 970              	.LVL80:
+ 971              	.L63:
+ 806:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 972              		.loc 1 806 0
+ 973 0034 A368     		ldr	r3, [r4, #8]
+ 974 0036 13F0080F 		tst	r3, #8
+ 975 003a 12D0     		beq	.L64
+ 808:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_STALL;
+ 976              		.loc 1 808 0
+ 977 003c E368     		ldr	r3, [r4, #12]
+ 978 003e 43F00203 		orr	r3, r3, #2
+ 979 0042 E360     		str	r3, [r4, #12]
+ 980              	.LVL81:
+ 809:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 981              		.loc 1 809 0
+ 982 0044 01EB8102 		add	r2, r1, r1, lsl #2
+ 983 0048 D300     		lsls	r3, r2, #3
+ 984 004a 0344     		add	r3, r3, r0
+ 985 004c 0522     		movs	r2, #5
+ 986 004e 83F85D20 		strb	r2, [r3, #93]
+ 810:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_STALL);
+ 987              		.loc 1 810 0
+ 988 0052 1023     		movs	r3, #16
+ARM GAS  /tmp/ccVRC0kl.s 			page 41
+
+
+ 989 0054 A360     		str	r3, [r4, #8]
+ 811:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 990              		.loc 1 811 0
+ 991 0056 0823     		movs	r3, #8
+ 992 0058 A360     		str	r3, [r4, #8]
+ 812:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 993              		.loc 1 812 0
+ 994 005a 0068     		ldr	r0, [r0]
+ 995              	.LVL82:
+ 996 005c FFF7FEFF 		bl	USB_HC_Halt
+ 997              	.LVL83:
+ 998 0060 16E0     		b	.L62
+ 999              	.LVL84:
+ 1000              	.L64:
+ 814:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1001              		.loc 1 814 0
+ 1002 0062 A368     		ldr	r3, [r4, #8]
+ 1003 0064 13F4806F 		tst	r3, #1024
+ 1004 0068 12D0     		beq	.L62
+ 816:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1005              		.loc 1 816 0
+ 1006 006a E368     		ldr	r3, [r4, #12]
+ 1007 006c 43F00203 		orr	r3, r3, #2
+ 1008 0070 E360     		str	r3, [r4, #12]
+ 1009              	.LVL85:
+ 817:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 1010              		.loc 1 817 0
+ 1011 0072 0068     		ldr	r0, [r0]
+ 1012              	.LVL86:
+ 1013 0074 FFF7FEFF 		bl	USB_HC_Halt
+ 1014              	.LVL87:
+ 818:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_DATATGLERR;
+ 1015              		.loc 1 818 0
+ 1016 0078 1023     		movs	r3, #16
+ 1017 007a A360     		str	r3, [r4, #8]
+ 819:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_DTERR);
+ 1018              		.loc 1 819 0
+ 1019 007c 05EB8502 		add	r2, r5, r5, lsl #2
+ 1020 0080 D300     		lsls	r3, r2, #3
+ 1021 0082 3344     		add	r3, r3, r6
+ 1022 0084 0822     		movs	r2, #8
+ 1023 0086 83F85D20 		strb	r2, [r3, #93]
+ 820:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1024              		.loc 1 820 0
+ 1025 008a 4FF48063 		mov	r3, #1024
+ 1026 008e A360     		str	r3, [r4, #8]
+ 1027              	.L62:
+ 823:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1028              		.loc 1 823 0
+ 1029 0090 A368     		ldr	r3, [r4, #8]
+ 1030 0092 13F4007F 		tst	r3, #512
+ 1031 0096 0BD0     		beq	.L65
+ 825:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1032              		.loc 1 825 0
+ 1033 0098 E368     		ldr	r3, [r4, #12]
+ 1034 009a 43F00203 		orr	r3, r3, #2
+ 1035 009e E360     		str	r3, [r4, #12]
+ARM GAS  /tmp/ccVRC0kl.s 			page 42
+
+
+ 826:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_FRMOR);
+ 1036              		.loc 1 826 0
+ 1037 00a0 2946     		mov	r1, r5
+ 1038 00a2 3068     		ldr	r0, [r6]
+ 1039 00a4 FFF7FEFF 		bl	USB_HC_Halt
+ 1040              	.LVL88:
+ 827:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1041              		.loc 1 827 0
+ 1042 00a8 4FF40073 		mov	r3, #512
+ 1043 00ac A360     		str	r3, [r4, #8]
+ 1044 00ae F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1045              	.LVL89:
+ 1046              	.L65:
+ 830:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1047              		.loc 1 830 0
+ 1048 00b0 A368     		ldr	r3, [r4, #8]
+ 1049 00b2 13F0010F 		tst	r3, #1
+ 1050 00b6 47D0     		beq	.L67
+ 833:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1051              		.loc 1 833 0
+ 1052 00b8 3369     		ldr	r3, [r6, #16]
+ 1053 00ba 63B1     		cbz	r3, .L68
+ 835:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                (USBx_HC(chnum)->HCTSIZ & USB_OTG_HCTSIZ_XFRSIZ);
+ 1054              		.loc 1 835 0
+ 1055 00bc AB00     		lsls	r3, r5, #2
+ 1056 00be 5919     		adds	r1, r3, r5
+ 1057 00c0 CA00     		lsls	r2, r1, #3
+ 1058 00c2 3244     		add	r2, r2, r6
+ 1059 00c4 926C     		ldr	r2, [r2, #72]
+ 836:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1060              		.loc 1 836 0
+ 1061 00c6 2169     		ldr	r1, [r4, #16]
+ 1062 00c8 C1F31201 		ubfx	r1, r1, #0, #19
+ 835:HALLIB/Src/stm32f7xx_hal_hcd.c ****                                (USBx_HC(chnum)->HCTSIZ & USB_OTG_HCTSIZ_XFRSIZ);
+ 1063              		.loc 1 835 0
+ 1064 00cc 511A     		subs	r1, r2, r1
+ 1065 00ce 2B44     		add	r3, r3, r5
+ 1066 00d0 DA00     		lsls	r2, r3, #3
+ 1067 00d2 3244     		add	r2, r2, r6
+ 1068 00d4 D164     		str	r1, [r2, #76]
+ 1069              	.L68:
+ 839:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].ErrCnt = 0;
+ 1070              		.loc 1 839 0
+ 1071 00d6 AA00     		lsls	r2, r5, #2
+ 1072 00d8 2A44     		add	r2, r2, r5
+ 1073 00da D300     		lsls	r3, r2, #3
+ 1074 00dc 3344     		add	r3, r3, r6
+ 1075 00de 0122     		movs	r2, #1
+ 1076 00e0 83F85D20 		strb	r2, [r3, #93]
+ 840:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_XFRC);
+ 1077              		.loc 1 840 0
+ 1078 00e4 0021     		movs	r1, #0
+ 1079 00e6 9965     		str	r1, [r3, #88]
+ 841:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1080              		.loc 1 841 0
+ 1081 00e8 A260     		str	r2, [r4, #8]
+ 844:HALLIB/Src/stm32f7xx_hal_hcd.c ****         (hhcd->hc[chnum].ep_type == EP_TYPE_BULK))
+ARM GAS  /tmp/ccVRC0kl.s 			page 43
+
+
+ 1082              		.loc 1 844 0
+ 1083 00ea 93F83F30 		ldrb	r3, [r3, #63]	@ zero_extendqisi2
+ 1084 00ee 022B     		cmp	r3, #2
+ 1085 00f0 18BF     		it	ne
+ 1086 00f2 8B42     		cmpne	r3, r1
+ 1087 00f4 0AD1     		bne	.L69
+ 847:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 1088              		.loc 1 847 0
+ 1089 00f6 E368     		ldr	r3, [r4, #12]
+ 1090 00f8 43F00203 		orr	r3, r3, #2
+ 1091 00fc E360     		str	r3, [r4, #12]
+ 848:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 1092              		.loc 1 848 0
+ 1093 00fe 2946     		mov	r1, r5
+ 1094 0100 3068     		ldr	r0, [r6]
+ 1095 0102 FFF7FEFF 		bl	USB_HC_Halt
+ 1096              	.LVL90:
+ 849:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1097              		.loc 1 849 0
+ 1098 0106 1023     		movs	r3, #16
+ 1099 0108 A360     		str	r3, [r4, #8]
+ 1100 010a 12E0     		b	.L70
+ 1101              	.L69:
+ 852:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1102              		.loc 1 852 0
+ 1103 010c 032B     		cmp	r3, #3
+ 1104 010e 10D1     		bne	.L70
+ 854:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state = URB_DONE;
+ 1105              		.loc 1 854 0
+ 1106 0110 D7F80035 		ldr	r3, [r7, #1280]
+ 1107 0114 43F00053 		orr	r3, r3, #536870912
+ 1108 0118 C7F80035 		str	r3, [r7, #1280]
+ 855:HALLIB/Src/stm32f7xx_hal_hcd.c ****       HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+ 1109              		.loc 1 855 0
+ 1110 011c 05EB8502 		add	r2, r5, r5, lsl #2
+ 1111 0120 D300     		lsls	r3, r2, #3
+ 1112 0122 3344     		add	r3, r3, r6
+ 1113 0124 0122     		movs	r2, #1
+ 1114 0126 83F85C20 		strb	r2, [r3, #92]
+ 856:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1115              		.loc 1 856 0
+ 1116 012a 2946     		mov	r1, r5
+ 1117 012c 3046     		mov	r0, r6
+ 1118 012e FFF7FEFF 		bl	HAL_HCD_HC_NotifyURBChange_Callback
+ 1119              	.LVL91:
+ 1120              	.L70:
+ 858:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1121              		.loc 1 858 0
+ 1122 0132 AB00     		lsls	r3, r5, #2
+ 1123 0134 5919     		adds	r1, r3, r5
+ 1124 0136 CA00     		lsls	r2, r1, #3
+ 1125 0138 3244     		add	r2, r2, r6
+ 1126 013a 92F85030 		ldrb	r3, [r2, #80]	@ zero_extendqisi2
+ 1127 013e 83F00103 		eor	r3, r3, #1
+ 1128 0142 82F85030 		strb	r3, [r2, #80]
+ 1129 0146 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1130              	.LVL92:
+ARM GAS  /tmp/ccVRC0kl.s 			page 44
+
+
+ 1131              	.L67:
+ 861:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1132              		.loc 1 861 0
+ 1133 0148 A368     		ldr	r3, [r4, #8]
+ 1134 014a 13F0020F 		tst	r3, #2
+ 1135 014e 62D0     		beq	.L71
+ 863:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1136              		.loc 1 863 0
+ 1137 0150 E368     		ldr	r3, [r4, #12]
+ 1138 0152 23F00203 		bic	r3, r3, #2
+ 1139 0156 E360     		str	r3, [r4, #12]
+ 865:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1140              		.loc 1 865 0
+ 1141 0158 05EB8502 		add	r2, r5, r5, lsl #2
+ 1142 015c D300     		lsls	r3, r2, #3
+ 1143 015e 3344     		add	r3, r3, r6
+ 1144 0160 93F85D30 		ldrb	r3, [r3, #93]	@ zero_extendqisi2
+ 1145 0164 012B     		cmp	r3, #1
+ 1146 0166 07D1     		bne	.L72
+ 867:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1147              		.loc 1 867 0
+ 1148 0168 05EB8502 		add	r2, r5, r5, lsl #2
+ 1149 016c D300     		lsls	r3, r2, #3
+ 1150 016e 3344     		add	r3, r3, r6
+ 1151 0170 0122     		movs	r2, #1
+ 1152 0172 83F85C20 		strb	r2, [r3, #92]
+ 1153 0176 41E0     		b	.L73
+ 1154              	.L72:
+ 870:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1155              		.loc 1 870 0
+ 1156 0178 052B     		cmp	r3, #5
+ 1157 017a 07D1     		bne	.L74
+ 872:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1158              		.loc 1 872 0
+ 1159 017c 05EB8502 		add	r2, r5, r5, lsl #2
+ 1160 0180 D300     		lsls	r3, r2, #3
+ 1161 0182 3344     		add	r3, r3, r6
+ 1162 0184 0522     		movs	r2, #5
+ 1163 0186 83F85C20 		strb	r2, [r3, #92]
+ 1164 018a 37E0     		b	.L73
+ 1165              	.L74:
+ 875:HALLIB/Src/stm32f7xx_hal_hcd.c ****             (hhcd->hc[chnum].state == HC_DATATGLERR))
+ 1166              		.loc 1 875 0
+ 1167 018c 082B     		cmp	r3, #8
+ 1168 018e 18BF     		it	ne
+ 1169 0190 062B     		cmpne	r3, #6
+ 1170 0192 22D1     		bne	.L75
+ 878:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1171              		.loc 1 878 0
+ 1172 0194 AA00     		lsls	r2, r5, #2
+ 1173 0196 2A44     		add	r2, r2, r5
+ 1174 0198 D300     		lsls	r3, r2, #3
+ 1175 019a 3344     		add	r3, r3, r6
+ 1176 019c 9A6D     		ldr	r2, [r3, #88]
+ 1177 019e 511C     		adds	r1, r2, #1
+ 1178 01a0 9965     		str	r1, [r3, #88]
+ 1179 01a2 032A     		cmp	r2, #3
+ARM GAS  /tmp/ccVRC0kl.s 			page 45
+
+
+ 1180 01a4 09D9     		bls	.L76
+ 880:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_ERROR;
+ 1181              		.loc 1 880 0
+ 1182 01a6 AA00     		lsls	r2, r5, #2
+ 1183 01a8 2A44     		add	r2, r2, r5
+ 1184 01aa D300     		lsls	r3, r2, #3
+ 1185 01ac 3344     		add	r3, r3, r6
+ 1186 01ae 0022     		movs	r2, #0
+ 1187 01b0 9A65     		str	r2, [r3, #88]
+ 881:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 1188              		.loc 1 881 0
+ 1189 01b2 0422     		movs	r2, #4
+ 1190 01b4 83F85C20 		strb	r2, [r3, #92]
+ 1191 01b8 06E0     		b	.L77
+ 1192              	.L76:
+ 885:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 1193              		.loc 1 885 0
+ 1194 01ba 05EB8502 		add	r2, r5, r5, lsl #2
+ 1195 01be D300     		lsls	r3, r2, #3
+ 1196 01c0 3344     		add	r3, r3, r6
+ 1197 01c2 0222     		movs	r2, #2
+ 1198 01c4 83F85C20 		strb	r2, [r3, #92]
+ 1199              	.L77:
+ 889:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+ 1200              		.loc 1 889 0
+ 1201 01c8 D7F80035 		ldr	r3, [r7, #1280]
+ 1202              	.LVL93:
+ 890:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+ 1203              		.loc 1 890 0
+ 1204 01cc 23F08043 		bic	r3, r3, #1073741824
+ 1205              	.LVL94:
+ 891:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+ 1206              		.loc 1 891 0
+ 1207 01d0 43F00043 		orr	r3, r3, #-2147483648
+ 1208              	.LVL95:
+ 892:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1209              		.loc 1 892 0
+ 1210 01d4 C7F80035 		str	r3, [r7, #1280]
+ 1211 01d8 10E0     		b	.L73
+ 1212              	.LVL96:
+ 1213              	.L75:
+ 894:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1214              		.loc 1 894 0
+ 1215 01da 032B     		cmp	r3, #3
+ 1216 01dc 0ED1     		bne	.L73
+ 896:HALLIB/Src/stm32f7xx_hal_hcd.c ****        /* re-activate the channel  */
+ 1217              		.loc 1 896 0
+ 1218 01de 05EB8502 		add	r2, r5, r5, lsl #2
+ 1219 01e2 D300     		lsls	r3, r2, #3
+ 1220 01e4 3344     		add	r3, r3, r6
+ 1221 01e6 0222     		movs	r2, #2
+ 1222 01e8 83F85C20 		strb	r2, [r3, #92]
+ 898:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+ 1223              		.loc 1 898 0
+ 1224 01ec D7F80035 		ldr	r3, [r7, #1280]
+ 1225              	.LVL97:
+ 899:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+ARM GAS  /tmp/ccVRC0kl.s 			page 46
+
+
+ 1226              		.loc 1 899 0
+ 1227 01f0 23F08043 		bic	r3, r3, #1073741824
+ 1228              	.LVL98:
+ 900:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+ 1229              		.loc 1 900 0
+ 1230 01f4 43F00043 		orr	r3, r3, #-2147483648
+ 1231              	.LVL99:
+ 901:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1232              		.loc 1 901 0
+ 1233 01f8 C7F80035 		str	r3, [r7, #1280]
+ 1234              	.LVL100:
+ 1235              	.L73:
+ 903:HALLIB/Src/stm32f7xx_hal_hcd.c ****     HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+ 1236              		.loc 1 903 0
+ 1237 01fc 0223     		movs	r3, #2
+ 1238 01fe A360     		str	r3, [r4, #8]
+ 904:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1239              		.loc 1 904 0
+ 1240 0200 05EB8502 		add	r2, r5, r5, lsl #2
+ 1241 0204 D300     		lsls	r3, r2, #3
+ 1242 0206 3344     		add	r3, r3, r6
+ 1243 0208 93F85C20 		ldrb	r2, [r3, #92]	@ zero_extendqisi2
+ 1244 020c 2946     		mov	r1, r5
+ 1245 020e 3046     		mov	r0, r6
+ 1246 0210 FFF7FEFF 		bl	HAL_HCD_HC_NotifyURBChange_Callback
+ 1247              	.LVL101:
+ 1248 0214 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1249              	.LVL102:
+ 1250              	.L71:
+ 907:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1251              		.loc 1 907 0
+ 1252 0216 A368     		ldr	r3, [r4, #8]
+ 1253 0218 13F0800F 		tst	r3, #128
+ 1254 021c 17D0     		beq	.L78
+ 909:HALLIB/Src/stm32f7xx_hal_hcd.c ****      hhcd->hc[chnum].ErrCnt++;
+ 1255              		.loc 1 909 0
+ 1256 021e E368     		ldr	r3, [r4, #12]
+ 1257 0220 43F00203 		orr	r3, r3, #2
+ 1258 0224 E360     		str	r3, [r4, #12]
+ 910:HALLIB/Src/stm32f7xx_hal_hcd.c ****      hhcd->hc[chnum].state = HC_XACTERR;
+ 1259              		.loc 1 910 0
+ 1260 0226 AB00     		lsls	r3, r5, #2
+ 1261 0228 5919     		adds	r1, r3, r5
+ 1262 022a CA00     		lsls	r2, r1, #3
+ 1263 022c 3244     		add	r2, r2, r6
+ 1264 022e 916D     		ldr	r1, [r2, #88]
+ 1265 0230 0131     		adds	r1, r1, #1
+ 1266 0232 9165     		str	r1, [r2, #88]
+ 911:HALLIB/Src/stm32f7xx_hal_hcd.c ****      USB_HC_Halt(hhcd->Instance, chnum);
+ 1267              		.loc 1 911 0
+ 1268 0234 2B44     		add	r3, r3, r5
+ 1269 0236 DA00     		lsls	r2, r3, #3
+ 1270 0238 3244     		add	r2, r2, r6
+ 1271 023a 0623     		movs	r3, #6
+ 1272 023c 82F85D30 		strb	r3, [r2, #93]
+ 912:HALLIB/Src/stm32f7xx_hal_hcd.c ****      __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_TXERR);
+ 1273              		.loc 1 912 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 47
+
+
+ 1274 0240 2946     		mov	r1, r5
+ 1275 0242 3068     		ldr	r0, [r6]
+ 1276 0244 FFF7FEFF 		bl	USB_HC_Halt
+ 1277              	.LVL103:
+ 913:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1278              		.loc 1 913 0
+ 1279 0248 8023     		movs	r3, #128
+ 1280 024a A360     		str	r3, [r4, #8]
+ 1281 024c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1282              	.LVL104:
+ 1283              	.L78:
+ 915:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1284              		.loc 1 915 0
+ 1285 024e A368     		ldr	r3, [r4, #8]
+ 1286 0250 13F0100F 		tst	r3, #16
+ 1287 0254 39D0     		beq	.L60
+ 917:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1288              		.loc 1 917 0
+ 1289 0256 05EB8502 		add	r2, r5, r5, lsl #2
+ 1290 025a D300     		lsls	r3, r2, #3
+ 1291 025c 3344     		add	r3, r3, r6
+ 1292 025e 93F83F30 		ldrb	r3, [r3, #63]	@ zero_extendqisi2
+ 1293 0262 032B     		cmp	r3, #3
+ 1294 0264 14D1     		bne	.L79
+ 919:HALLIB/Src/stm32f7xx_hal_hcd.c ****        hhcd->hc[chnum].state = HC_NAK;
+ 1295              		.loc 1 919 0
+ 1296 0266 AB00     		lsls	r3, r5, #2
+ 1297 0268 5919     		adds	r1, r3, r5
+ 1298 026a CA00     		lsls	r2, r1, #3
+ 1299 026c 3244     		add	r2, r2, r6
+ 1300 026e 0021     		movs	r1, #0
+ 1301 0270 9165     		str	r1, [r2, #88]
+ 920:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1302              		.loc 1 920 0
+ 1303 0272 2B44     		add	r3, r3, r5
+ 1304 0274 DA00     		lsls	r2, r3, #3
+ 1305 0276 3244     		add	r2, r2, r6
+ 1306 0278 0323     		movs	r3, #3
+ 1307 027a 82F85D30 		strb	r3, [r2, #93]
+ 921:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 1308              		.loc 1 921 0
+ 1309 027e E368     		ldr	r3, [r4, #12]
+ 1310 0280 43F00203 		orr	r3, r3, #2
+ 1311 0284 E360     		str	r3, [r4, #12]
+ 922:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1312              		.loc 1 922 0
+ 1313 0286 2946     		mov	r1, r5
+ 1314 0288 3068     		ldr	r0, [r6]
+ 1315 028a FFF7FEFF 		bl	USB_HC_Halt
+ 1316              	.LVL105:
+ 1317 028e 1AE0     		b	.L80
+ 1318              	.L79:
+ 925:HALLIB/Src/stm32f7xx_hal_hcd.c ****              (hhcd->hc[chnum].ep_type == EP_TYPE_BULK))
+ 1319              		.loc 1 925 0
+ 1320 0290 022B     		cmp	r3, #2
+ 1321 0292 18BF     		it	ne
+ 1322 0294 002B     		cmpne	r3, #0
+ARM GAS  /tmp/ccVRC0kl.s 			page 48
+
+
+ 1323 0296 16D1     		bne	.L80
+ 928:HALLIB/Src/stm32f7xx_hal_hcd.c ****        if (!hhcd->Init.dma_enable)
+ 1324              		.loc 1 928 0
+ 1325 0298 05EB8502 		add	r2, r5, r5, lsl #2
+ 1326 029c D300     		lsls	r3, r2, #3
+ 1327 029e 3344     		add	r3, r3, r6
+ 1328 02a0 0022     		movs	r2, #0
+ 1329 02a2 9A65     		str	r2, [r3, #88]
+ 929:HALLIB/Src/stm32f7xx_hal_hcd.c ****        {
+ 1330              		.loc 1 929 0
+ 1331 02a4 3369     		ldr	r3, [r6, #16]
+ 1332 02a6 73B9     		cbnz	r3, .L80
+ 931:HALLIB/Src/stm32f7xx_hal_hcd.c ****          __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1333              		.loc 1 931 0
+ 1334 02a8 05EB8502 		add	r2, r5, r5, lsl #2
+ 1335 02ac D300     		lsls	r3, r2, #3
+ 1336 02ae 3344     		add	r3, r3, r6
+ 1337 02b0 0322     		movs	r2, #3
+ 1338 02b2 83F85D20 		strb	r2, [r3, #93]
+ 932:HALLIB/Src/stm32f7xx_hal_hcd.c ****          USB_HC_Halt(hhcd->Instance, chnum);
+ 1339              		.loc 1 932 0
+ 1340 02b6 E368     		ldr	r3, [r4, #12]
+ 1341 02b8 43F00203 		orr	r3, r3, #2
+ 1342 02bc E360     		str	r3, [r4, #12]
+ 933:HALLIB/Src/stm32f7xx_hal_hcd.c ****        }
+ 1343              		.loc 1 933 0
+ 1344 02be 2946     		mov	r1, r5
+ 1345 02c0 3068     		ldr	r0, [r6]
+ 1346 02c2 FFF7FEFF 		bl	USB_HC_Halt
+ 1347              	.LVL106:
+ 1348              	.L80:
+ 936:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1349              		.loc 1 936 0
+ 1350 02c6 1023     		movs	r3, #16
+ 1351 02c8 A360     		str	r3, [r4, #8]
+ 1352              	.L60:
+ 1353 02ca F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1354              		.cfi_endproc
+ 1355              	.LFE157:
+ 1357              		.section	.text.HCD_HC_OUT_IRQHandler,"ax",%progbits
+ 1358              		.align	2
+ 1359              		.thumb
+ 1360              		.thumb_func
+ 1362              	HCD_HC_OUT_IRQHandler:
+ 1363              	.LFB158:
+ 948:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 1364              		.loc 1 948 0
+ 1365              		.cfi_startproc
+ 1366              		@ args = 0, pretend = 0, frame = 0
+ 1367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1368              	.LVL107:
+ 1369 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1370              	.LCFI18:
+ 1371              		.cfi_def_cfa_offset 24
+ 1372              		.cfi_offset 3, -24
+ 1373              		.cfi_offset 4, -20
+ 1374              		.cfi_offset 5, -16
+ARM GAS  /tmp/ccVRC0kl.s 			page 49
+
+
+ 1375              		.cfi_offset 6, -12
+ 1376              		.cfi_offset 7, -8
+ 1377              		.cfi_offset 14, -4
+ 949:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t tmpreg = 0;
+ 1378              		.loc 1 949 0
+ 1379 0002 0368     		ldr	r3, [r0]
+ 1380              	.LVL108:
+ 952:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1381              		.loc 1 952 0
+ 1382 0004 03EB4113 		add	r3, r3, r1, lsl #5
+ 1383              	.LVL109:
+ 1384 0008 03F5A064 		add	r4, r3, #1280
+ 1385 000c A268     		ldr	r2, [r4, #8]
+ 1386 000e 12F0040F 		tst	r2, #4
+ 1387 0012 06D0     		beq	.L83
+ 954:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1388              		.loc 1 954 0
+ 1389 0014 0423     		movs	r3, #4
+ 1390 0016 A360     		str	r3, [r4, #8]
+ 1391              	.LVL110:
+ 955:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1392              		.loc 1 955 0
+ 1393 0018 E368     		ldr	r3, [r4, #12]
+ 1394 001a 43F00203 		orr	r3, r3, #2
+ 1395 001e E360     		str	r3, [r4, #12]
+ 1396 0020 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1397              	.LVL111:
+ 1398              	.L83:
+ 1399 0022 0E46     		mov	r6, r1
+ 1400 0024 0546     		mov	r5, r0
+ 957:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1401              		.loc 1 957 0
+ 1402 0026 A268     		ldr	r2, [r4, #8]
+ 1403 0028 12F0200F 		tst	r2, #32
+ 1404 002c 20D0     		beq	.L85
+ 959:HALLIB/Src/stm32f7xx_hal_hcd.c ****     if( hhcd->hc[chnum].do_ping == 1)
+ 1405              		.loc 1 959 0
+ 1406 002e 2023     		movs	r3, #32
+ 1407 0030 A360     		str	r3, [r4, #8]
+ 1408              	.LVL112:
+ 960:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1409              		.loc 1 960 0
+ 1410 0032 01EB8102 		add	r2, r1, r1, lsl #2
+ 1411 0036 D300     		lsls	r3, r2, #3
+ 1412 0038 0344     		add	r3, r3, r0
+ 1413 003a 93F83D30 		ldrb	r3, [r3, #61]	@ zero_extendqisi2
+ 1414 003e 012B     		cmp	r3, #1
+ 1415 0040 40F03D81 		bne	.L82
+ 962:HALLIB/Src/stm32f7xx_hal_hcd.c ****       hhcd->hc[chnum].urb_state  = URB_NOTREADY;
+ 1416              		.loc 1 962 0
+ 1417 0044 8B00     		lsls	r3, r1, #2
+ 1418 0046 5918     		adds	r1, r3, r1
+ 1419              	.LVL113:
+ 1420 0048 CA00     		lsls	r2, r1, #3
+ 1421 004a 0244     		add	r2, r2, r0
+ 1422 004c 0021     		movs	r1, #0
+ 1423 004e 82F83D10 		strb	r1, [r2, #61]
+ARM GAS  /tmp/ccVRC0kl.s 			page 50
+
+
+ 963:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1424              		.loc 1 963 0
+ 1425 0052 3344     		add	r3, r3, r6
+ 1426 0054 DA00     		lsls	r2, r3, #3
+ 1427 0056 0244     		add	r2, r2, r0
+ 1428 0058 0223     		movs	r3, #2
+ 1429 005a 82F85C30 		strb	r3, [r2, #92]
+ 964:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USB_HC_Halt(hhcd->Instance, chnum);
+ 1430              		.loc 1 964 0
+ 1431 005e E368     		ldr	r3, [r4, #12]
+ 1432 0060 43F00203 		orr	r3, r3, #2
+ 1433 0064 E360     		str	r3, [r4, #12]
+ 965:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1434              		.loc 1 965 0
+ 1435 0066 3146     		mov	r1, r6
+ 1436 0068 0068     		ldr	r0, [r0]
+ 1437              	.LVL114:
+ 1438 006a FFF7FEFF 		bl	USB_HC_Halt
+ 1439              	.LVL115:
+ 1440 006e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1441              	.LVL116:
+ 1442              	.L85:
+ 969:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1443              		.loc 1 969 0
+ 1444 0070 A268     		ldr	r2, [r4, #8]
+ 1445 0072 12F0400F 		tst	r2, #64
+ 1446 0076 19D0     		beq	.L86
+ 971:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].do_ping = 1;
+ 1447              		.loc 1 971 0
+ 1448 0078 8B00     		lsls	r3, r1, #2
+ 1449 007a 5918     		adds	r1, r3, r1
+ 1450              	.LVL117:
+ 1451 007c CA00     		lsls	r2, r1, #3
+ 1452 007e 0244     		add	r2, r2, r0
+ 1453 0080 0421     		movs	r1, #4
+ 1454 0082 82F85D10 		strb	r1, [r2, #93]
+ 1455              	.LVL118:
+ 972:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].ErrCnt= 0;
+ 1456              		.loc 1 972 0
+ 1457 0086 0121     		movs	r1, #1
+ 1458 0088 82F83D10 		strb	r1, [r2, #61]
+ 973:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1459              		.loc 1 973 0
+ 1460 008c 3344     		add	r3, r3, r6
+ 1461 008e DA00     		lsls	r2, r3, #3
+ 1462 0090 0244     		add	r2, r2, r0
+ 1463 0092 0023     		movs	r3, #0
+ 1464 0094 9365     		str	r3, [r2, #88]
+ 974:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1465              		.loc 1 974 0
+ 1466 0096 E368     		ldr	r3, [r4, #12]
+ 1467 0098 43F00203 		orr	r3, r3, #2
+ 1468 009c E360     		str	r3, [r4, #12]
+ 975:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NYET);
+ 1469              		.loc 1 975 0
+ 1470 009e 3146     		mov	r1, r6
+ 1471 00a0 0068     		ldr	r0, [r0]
+ARM GAS  /tmp/ccVRC0kl.s 			page 51
+
+
+ 1472              	.LVL119:
+ 1473 00a2 FFF7FEFF 		bl	USB_HC_Halt
+ 1474              	.LVL120:
+ 976:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1475              		.loc 1 976 0
+ 1476 00a6 4023     		movs	r3, #64
+ 1477 00a8 A360     		str	r3, [r4, #8]
+ 1478 00aa F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1479              	.LVL121:
+ 1480              	.L86:
+ 979:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1481              		.loc 1 979 0
+ 1482 00ac A268     		ldr	r2, [r4, #8]
+ 1483 00ae 12F4007F 		tst	r2, #512
+ 1484 00b2 0AD0     		beq	.L87
+ 981:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1485              		.loc 1 981 0
+ 1486 00b4 E368     		ldr	r3, [r4, #12]
+ 1487 00b6 43F00203 		orr	r3, r3, #2
+ 1488 00ba E360     		str	r3, [r4, #12]
+ 1489              	.LVL122:
+ 982:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_FRMOR);
+ 1490              		.loc 1 982 0
+ 1491 00bc 0068     		ldr	r0, [r0]
+ 1492              	.LVL123:
+ 1493 00be FFF7FEFF 		bl	USB_HC_Halt
+ 1494              	.LVL124:
+ 983:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1495              		.loc 1 983 0
+ 1496 00c2 4FF40073 		mov	r3, #512
+ 1497 00c6 A360     		str	r3, [r4, #8]
+ 1498 00c8 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1499              	.LVL125:
+ 1500              	.L87:
+ 986:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1501              		.loc 1 986 0
+ 1502 00ca A268     		ldr	r2, [r4, #8]
+ 1503 00cc 12F0010F 		tst	r2, #1
+ 1504 00d0 14D0     		beq	.L88
+ 988:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1505              		.loc 1 988 0
+ 1506 00d2 8F00     		lsls	r7, r1, #2
+ 1507 00d4 7A18     		adds	r2, r7, r1
+ 1508 00d6 D300     		lsls	r3, r2, #3
+ 1509 00d8 0344     		add	r3, r3, r0
+ 1510 00da 0022     		movs	r2, #0
+ 1511 00dc 9A65     		str	r2, [r3, #88]
+ 1512              	.LVL126:
+ 989:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1513              		.loc 1 989 0
+ 1514 00de E368     		ldr	r3, [r4, #12]
+ 1515 00e0 43F00203 		orr	r3, r3, #2
+ 1516 00e4 E360     		str	r3, [r4, #12]
+ 990:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_XFRC);
+ 1517              		.loc 1 990 0
+ 1518 00e6 0068     		ldr	r0, [r0]
+ 1519              	.LVL127:
+ARM GAS  /tmp/ccVRC0kl.s 			page 52
+
+
+ 1520 00e8 FFF7FEFF 		bl	USB_HC_Halt
+ 1521              	.LVL128:
+ 991:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_XFRC;
+ 1522              		.loc 1 991 0
+ 1523 00ec 0123     		movs	r3, #1
+ 1524 00ee A360     		str	r3, [r4, #8]
+ 992:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1525              		.loc 1 992 0
+ 1526 00f0 B919     		adds	r1, r7, r6
+ 1527 00f2 C800     		lsls	r0, r1, #3
+ 1528 00f4 2844     		add	r0, r0, r5
+ 1529 00f6 80F85D30 		strb	r3, [r0, #93]
+ 1530 00fa F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1531              	.LVL129:
+ 1532              	.L88:
+ 996:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1533              		.loc 1 996 0
+ 1534 00fc A268     		ldr	r2, [r4, #8]
+ 1535 00fe 12F0080F 		tst	r2, #8
+ 1536 0102 10D0     		beq	.L89
+ 998:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_UNMASK_HALT_HC_INT(chnum);
+ 1537              		.loc 1 998 0
+ 1538 0104 0823     		movs	r3, #8
+ 1539 0106 A360     		str	r3, [r4, #8]
+ 1540              	.LVL130:
+ 999:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1541              		.loc 1 999 0
+ 1542 0108 E368     		ldr	r3, [r4, #12]
+ 1543 010a 43F00203 		orr	r3, r3, #2
+ 1544 010e E360     		str	r3, [r4, #12]
+1000:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_STALL;
+ 1545              		.loc 1 1000 0
+ 1546 0110 0068     		ldr	r0, [r0]
+ 1547              	.LVL131:
+ 1548 0112 FFF7FEFF 		bl	USB_HC_Halt
+ 1549              	.LVL132:
+1001:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1550              		.loc 1 1001 0
+ 1551 0116 06EB8601 		add	r1, r6, r6, lsl #2
+ 1552 011a C800     		lsls	r0, r1, #3
+ 1553 011c 2844     		add	r0, r0, r5
+ 1554 011e 0523     		movs	r3, #5
+ 1555 0120 80F85D30 		strb	r3, [r0, #93]
+ 1556 0124 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1557              	.LVL133:
+ 1558              	.L89:
+1004:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1559              		.loc 1 1004 0
+ 1560 0126 A268     		ldr	r2, [r4, #8]
+ 1561 0128 12F0100F 		tst	r2, #16
+ 1562 012c 24D0     		beq	.L90
+1006:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_NAK;
+ 1563              		.loc 1 1006 0
+ 1564 012e 8A00     		lsls	r2, r1, #2
+ 1565 0130 0A44     		add	r2, r2, r1
+ 1566 0132 D300     		lsls	r3, r2, #3
+ 1567 0134 0344     		add	r3, r3, r0
+ARM GAS  /tmp/ccVRC0kl.s 			page 53
+
+
+ 1568 0136 0022     		movs	r2, #0
+ 1569 0138 9A65     		str	r2, [r3, #88]
+ 1570              	.LVL134:
+1007:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1571              		.loc 1 1007 0
+ 1572 013a 0322     		movs	r2, #3
+ 1573 013c 83F85D20 		strb	r2, [r3, #93]
+1009:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1574              		.loc 1 1009 0
+ 1575 0140 93F83D30 		ldrb	r3, [r3, #61]	@ zero_extendqisi2
+ 1576 0144 6BB9     		cbnz	r3, .L91
+1011:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1577              		.loc 1 1011 0
+ 1578 0146 01EB8102 		add	r2, r1, r1, lsl #2
+ 1579 014a D300     		lsls	r3, r2, #3
+ 1580 014c 0344     		add	r3, r3, r0
+ 1581 014e 93F83C30 		ldrb	r3, [r3, #60]	@ zero_extendqisi2
+ 1582 0152 33B9     		cbnz	r3, .L91
+1013:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 1583              		.loc 1 1013 0
+ 1584 0154 01EB8102 		add	r2, r1, r1, lsl #2
+ 1585 0158 D300     		lsls	r3, r2, #3
+ 1586 015a 0344     		add	r3, r3, r0
+ 1587 015c 0122     		movs	r2, #1
+ 1588 015e 83F83D20 		strb	r2, [r3, #61]
+ 1589              	.L91:
+1017:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1590              		.loc 1 1017 0
+ 1591 0162 E368     		ldr	r3, [r4, #12]
+ 1592 0164 43F00203 		orr	r3, r3, #2
+ 1593 0168 E360     		str	r3, [r4, #12]
+1018:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 1594              		.loc 1 1018 0
+ 1595 016a 3146     		mov	r1, r6
+ 1596              	.LVL135:
+ 1597 016c 2868     		ldr	r0, [r5]
+ 1598              	.LVL136:
+ 1599 016e FFF7FEFF 		bl	USB_HC_Halt
+ 1600              	.LVL137:
+1019:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1601              		.loc 1 1019 0
+ 1602 0172 1023     		movs	r3, #16
+ 1603 0174 A360     		str	r3, [r4, #8]
+ 1604 0176 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1605              	.LVL138:
+ 1606              	.L90:
+1022:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1607              		.loc 1 1022 0
+ 1608 0178 A268     		ldr	r2, [r4, #8]
+ 1609 017a 12F0800F 		tst	r2, #128
+ 1610 017e 10D0     		beq	.L92
+1024:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1611              		.loc 1 1024 0
+ 1612 0180 E368     		ldr	r3, [r4, #12]
+ 1613 0182 43F00203 		orr	r3, r3, #2
+ 1614 0186 E360     		str	r3, [r4, #12]
+ 1615              	.LVL139:
+ARM GAS  /tmp/ccVRC0kl.s 			page 54
+
+
+1025:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_XACTERR;
+ 1616              		.loc 1 1025 0
+ 1617 0188 0068     		ldr	r0, [r0]
+ 1618              	.LVL140:
+ 1619 018a FFF7FEFF 		bl	USB_HC_Halt
+ 1620              	.LVL141:
+1026:HALLIB/Src/stm32f7xx_hal_hcd.c ****      __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_TXERR);
+ 1621              		.loc 1 1026 0
+ 1622 018e 06EB8601 		add	r1, r6, r6, lsl #2
+ 1623 0192 CB00     		lsls	r3, r1, #3
+ 1624 0194 2B44     		add	r3, r3, r5
+ 1625 0196 0622     		movs	r2, #6
+ 1626 0198 83F85D20 		strb	r2, [r3, #93]
+1027:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1627              		.loc 1 1027 0
+ 1628 019c 8023     		movs	r3, #128
+ 1629 019e A360     		str	r3, [r4, #8]
+ 1630 01a0 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1631              	.LVL142:
+ 1632              	.L92:
+1030:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1633              		.loc 1 1030 0
+ 1634 01a2 A268     		ldr	r2, [r4, #8]
+ 1635 01a4 12F4806F 		tst	r2, #1024
+ 1636 01a8 13D0     		beq	.L93
+1032:HALLIB/Src/stm32f7xx_hal_hcd.c ****     USB_HC_Halt(hhcd->Instance, chnum);
+ 1637              		.loc 1 1032 0
+ 1638 01aa E368     		ldr	r3, [r4, #12]
+ 1639 01ac 43F00203 		orr	r3, r3, #2
+ 1640 01b0 E360     		str	r3, [r4, #12]
+ 1641              	.LVL143:
+1033:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_NAK);
+ 1642              		.loc 1 1033 0
+ 1643 01b2 0068     		ldr	r0, [r0]
+ 1644              	.LVL144:
+ 1645 01b4 FFF7FEFF 		bl	USB_HC_Halt
+ 1646              	.LVL145:
+1034:HALLIB/Src/stm32f7xx_hal_hcd.c ****     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_DTERR);
+ 1647              		.loc 1 1034 0
+ 1648 01b8 1023     		movs	r3, #16
+ 1649 01ba A360     		str	r3, [r4, #8]
+1035:HALLIB/Src/stm32f7xx_hal_hcd.c ****     hhcd->hc[chnum].state = HC_DATATGLERR;
+ 1650              		.loc 1 1035 0
+ 1651 01bc 4FF48063 		mov	r3, #1024
+ 1652 01c0 A360     		str	r3, [r4, #8]
+1036:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1653              		.loc 1 1036 0
+ 1654 01c2 06EB8601 		add	r1, r6, r6, lsl #2
+ 1655 01c6 CB00     		lsls	r3, r1, #3
+ 1656 01c8 2B44     		add	r3, r3, r5
+ 1657 01ca 0822     		movs	r2, #8
+ 1658 01cc 83F85D20 		strb	r2, [r3, #93]
+ 1659 01d0 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1660              	.LVL146:
+ 1661              	.L93:
+1039:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1662              		.loc 1 1039 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 55
+
+
+ 1663 01d2 A268     		ldr	r2, [r4, #8]
+ 1664 01d4 12F0020F 		tst	r2, #2
+ 1665 01d8 71D0     		beq	.L82
+1041:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1666              		.loc 1 1041 0
+ 1667 01da E268     		ldr	r2, [r4, #12]
+ 1668 01dc 22F00202 		bic	r2, r2, #2
+ 1669 01e0 E260     		str	r2, [r4, #12]
+ 1670              	.LVL147:
+1043:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1671              		.loc 1 1043 0
+ 1672 01e2 01EB8101 		add	r1, r1, r1, lsl #2
+ 1673              	.LVL148:
+ 1674 01e6 CA00     		lsls	r2, r1, #3
+ 1675 01e8 0244     		add	r2, r2, r0
+ 1676 01ea 92F85D20 		ldrb	r2, [r2, #93]	@ zero_extendqisi2
+ 1677 01ee 012A     		cmp	r2, #1
+ 1678 01f0 15D1     		bne	.L94
+1045:HALLIB/Src/stm32f7xx_hal_hcd.c ****       if (hhcd->hc[chnum].ep_type == EP_TYPE_BULK)
+ 1679              		.loc 1 1045 0
+ 1680 01f2 B200     		lsls	r2, r6, #2
+ 1681 01f4 3244     		add	r2, r2, r6
+ 1682 01f6 D300     		lsls	r3, r2, #3
+ 1683 01f8 0344     		add	r3, r3, r0
+ 1684 01fa 0122     		movs	r2, #1
+ 1685 01fc 83F85C20 		strb	r2, [r3, #92]
+1046:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1686              		.loc 1 1046 0
+ 1687 0200 93F83F30 		ldrb	r3, [r3, #63]	@ zero_extendqisi2
+ 1688 0204 022B     		cmp	r3, #2
+ 1689 0206 4ED1     		bne	.L95
+1048:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 1690              		.loc 1 1048 0
+ 1691 0208 B200     		lsls	r2, r6, #2
+ 1692 020a 3244     		add	r2, r2, r6
+ 1693 020c D300     		lsls	r3, r2, #3
+ 1694 020e 0344     		add	r3, r3, r0
+ 1695 0210 93F85120 		ldrb	r2, [r3, #81]	@ zero_extendqisi2
+ 1696 0214 82F00102 		eor	r2, r2, #1
+ 1697 0218 83F85120 		strb	r2, [r3, #81]
+ 1698 021c 43E0     		b	.L95
+ 1699              	.L94:
+1051:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1700              		.loc 1 1051 0
+ 1701 021e 032A     		cmp	r2, #3
+ 1702 0220 07D1     		bne	.L96
+1053:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1703              		.loc 1 1053 0
+ 1704 0222 06EB8602 		add	r2, r6, r6, lsl #2
+ 1705 0226 D300     		lsls	r3, r2, #3
+ 1706 0228 0344     		add	r3, r3, r0
+ 1707 022a 0222     		movs	r2, #2
+ 1708 022c 83F85C20 		strb	r2, [r3, #92]
+ 1709 0230 39E0     		b	.L95
+ 1710              	.L96:
+1056:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1711              		.loc 1 1056 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 56
+
+
+ 1712 0232 042A     		cmp	r2, #4
+ 1713 0234 07D1     		bne	.L97
+1058:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1714              		.loc 1 1058 0
+ 1715 0236 06EB8602 		add	r2, r6, r6, lsl #2
+ 1716 023a D300     		lsls	r3, r2, #3
+ 1717 023c 0344     		add	r3, r3, r0
+ 1718 023e 0222     		movs	r2, #2
+ 1719 0240 83F85C20 		strb	r2, [r3, #92]
+ 1720 0244 2FE0     		b	.L95
+ 1721              	.L97:
+1061:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1722              		.loc 1 1061 0
+ 1723 0246 052A     		cmp	r2, #5
+ 1724 0248 07D1     		bne	.L98
+1063:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1725              		.loc 1 1063 0
+ 1726 024a 06EB8602 		add	r2, r6, r6, lsl #2
+ 1727 024e D300     		lsls	r3, r2, #3
+ 1728 0250 0344     		add	r3, r3, r0
+ 1729 0252 0522     		movs	r2, #5
+ 1730 0254 83F85C20 		strb	r2, [r3, #92]
+ 1731 0258 25E0     		b	.L95
+ 1732              	.L98:
+1066:HALLIB/Src/stm32f7xx_hal_hcd.c ****             (hhcd->hc[chnum].state == HC_DATATGLERR))
+ 1733              		.loc 1 1066 0
+ 1734 025a 082A     		cmp	r2, #8
+ 1735 025c 18BF     		it	ne
+ 1736 025e 062A     		cmpne	r2, #6
+ 1737 0260 21D1     		bne	.L95
+1069:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1738              		.loc 1 1069 0
+ 1739 0262 B100     		lsls	r1, r6, #2
+ 1740 0264 3144     		add	r1, r1, r6
+ 1741 0266 CA00     		lsls	r2, r1, #3
+ 1742 0268 0244     		add	r2, r2, r0
+ 1743 026a 916D     		ldr	r1, [r2, #88]
+ 1744 026c 481C     		adds	r0, r1, #1
+ 1745              	.LVL149:
+ 1746 026e 9065     		str	r0, [r2, #88]
+ 1747 0270 0329     		cmp	r1, #3
+ 1748 0272 09D9     		bls	.L99
+1071:HALLIB/Src/stm32f7xx_hal_hcd.c ****         hhcd->hc[chnum].urb_state = URB_ERROR;
+ 1749              		.loc 1 1071 0
+ 1750 0274 B100     		lsls	r1, r6, #2
+ 1751 0276 3144     		add	r1, r1, r6
+ 1752 0278 CA00     		lsls	r2, r1, #3
+ 1753 027a 2A44     		add	r2, r2, r5
+ 1754 027c 0021     		movs	r1, #0
+ 1755 027e 9165     		str	r1, [r2, #88]
+1072:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ 1756              		.loc 1 1072 0
+ 1757 0280 0421     		movs	r1, #4
+ 1758 0282 82F85C10 		strb	r1, [r2, #92]
+ 1759 0286 06E0     		b	.L100
+ 1760              	.L99:
+1076:HALLIB/Src/stm32f7xx_hal_hcd.c ****       }
+ARM GAS  /tmp/ccVRC0kl.s 			page 57
+
+
+ 1761              		.loc 1 1076 0
+ 1762 0288 06EB8601 		add	r1, r6, r6, lsl #2
+ 1763 028c CA00     		lsls	r2, r1, #3
+ 1764 028e 2A44     		add	r2, r2, r5
+ 1765 0290 0221     		movs	r1, #2
+ 1766 0292 82F85C10 		strb	r1, [r2, #92]
+ 1767              	.L100:
+1080:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
+ 1768              		.loc 1 1080 0
+ 1769 0296 D3F80025 		ldr	r2, [r3, #1280]
+ 1770              	.LVL150:
+1081:HALLIB/Src/stm32f7xx_hal_hcd.c ****       tmpreg |= USB_OTG_HCCHAR_CHENA;
+ 1771              		.loc 1 1081 0
+ 1772 029a 22F08042 		bic	r2, r2, #1073741824
+ 1773              	.LVL151:
+1082:HALLIB/Src/stm32f7xx_hal_hcd.c ****       USBx_HC(chnum)->HCCHAR = tmpreg;
+ 1774              		.loc 1 1082 0
+ 1775 029e 42F00042 		orr	r2, r2, #-2147483648
+ 1776              	.LVL152:
+1083:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1777              		.loc 1 1083 0
+ 1778 02a2 C3F80025 		str	r2, [r3, #1280]
+ 1779              	.LVL153:
+ 1780              	.L95:
+1086:HALLIB/Src/stm32f7xx_hal_hcd.c ****     HAL_HCD_HC_NotifyURBChange_Callback(hhcd, chnum, hhcd->hc[chnum].urb_state);
+ 1781              		.loc 1 1086 0
+ 1782 02a6 0223     		movs	r3, #2
+ 1783 02a8 A360     		str	r3, [r4, #8]
+1087:HALLIB/Src/stm32f7xx_hal_hcd.c ****   }
+ 1784              		.loc 1 1087 0
+ 1785 02aa 06EB8602 		add	r2, r6, r6, lsl #2
+ 1786 02ae D300     		lsls	r3, r2, #3
+ 1787 02b0 2B44     		add	r3, r3, r5
+ 1788 02b2 93F85C20 		ldrb	r2, [r3, #92]	@ zero_extendqisi2
+ 1789 02b6 3146     		mov	r1, r6
+ 1790 02b8 2846     		mov	r0, r5
+ 1791 02ba FFF7FEFF 		bl	HAL_HCD_HC_NotifyURBChange_Callback
+ 1792              	.LVL154:
+ 1793              	.L82:
+ 1794 02be F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1795              		.cfi_endproc
+ 1796              	.LFE158:
+ 1798              		.section	.text.HAL_HCD_IRQHandler,"ax",%progbits
+ 1799              		.align	2
+ 1800              		.global	HAL_HCD_IRQHandler
+ 1801              		.thumb
+ 1802              		.thumb_func
+ 1804              	HAL_HCD_IRQHandler:
+ 1805              	.LFB143:
+ 446:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_OTG_GlobalTypeDef *USBx = hhcd->Instance;
+ 1806              		.loc 1 446 0
+ 1807              		.cfi_startproc
+ 1808              		@ args = 0, pretend = 0, frame = 0
+ 1809              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1810              	.LVL155:
+ 1811 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1812              	.LCFI19:
+ARM GAS  /tmp/ccVRC0kl.s 			page 58
+
+
+ 1813              		.cfi_def_cfa_offset 24
+ 1814              		.cfi_offset 3, -24
+ 1815              		.cfi_offset 4, -20
+ 1816              		.cfi_offset 5, -16
+ 1817              		.cfi_offset 6, -12
+ 1818              		.cfi_offset 7, -8
+ 1819              		.cfi_offset 14, -4
+ 1820 0002 0446     		mov	r4, r0
+ 447:HALLIB/Src/stm32f7xx_hal_hcd.c ****   uint32_t i = 0 , interrupt = 0;
+ 1821              		.loc 1 447 0
+ 1822 0004 0568     		ldr	r5, [r0]
+ 1823              	.LVL156:
+ 451:HALLIB/Src/stm32f7xx_hal_hcd.c ****   {
+ 1824              		.loc 1 451 0
+ 1825 0006 2846     		mov	r0, r5
+ 1826              	.LVL157:
+ 1827 0008 FFF7FEFF 		bl	USB_GetMode
+ 1828              	.LVL158:
+ 1829 000c 0128     		cmp	r0, #1
+ 1830 000e 40F09480 		bne	.L102
+ 454:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1831              		.loc 1 454 0
+ 1832 0012 2068     		ldr	r0, [r4]
+ 1833 0014 FFF7FEFF 		bl	USB_ReadInterrupts
+ 1834              	.LVL159:
+ 1835 0018 0028     		cmp	r0, #0
+ 1836 001a 00F08E80 		beq	.L102
+ 459:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1837              		.loc 1 459 0
+ 1838 001e 2068     		ldr	r0, [r4]
+ 1839 0020 FFF7FEFF 		bl	USB_ReadInterrupts
+ 1840              	.LVL160:
+ 1841 0024 10F4001F 		tst	r0, #2097152
+ 1842 0028 03D0     		beq	.L104
+ 462:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1843              		.loc 1 462 0
+ 1844 002a 2368     		ldr	r3, [r4]
+ 1845 002c 4FF40012 		mov	r2, #2097152
+ 1846 0030 5A61     		str	r2, [r3, #20]
+ 1847              	.L104:
+ 465:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1848              		.loc 1 465 0
+ 1849 0032 2068     		ldr	r0, [r4]
+ 1850 0034 FFF7FEFF 		bl	USB_ReadInterrupts
+ 1851              	.LVL161:
+ 1852 0038 10F4801F 		tst	r0, #1048576
+ 1853 003c 03D0     		beq	.L105
+ 468:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1854              		.loc 1 468 0
+ 1855 003e 2368     		ldr	r3, [r4]
+ 1856 0040 4FF48012 		mov	r2, #1048576
+ 1857 0044 5A61     		str	r2, [r3, #20]
+ 1858              	.L105:
+ 471:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1859              		.loc 1 471 0
+ 1860 0046 2068     		ldr	r0, [r4]
+ 1861 0048 FFF7FEFF 		bl	USB_ReadInterrupts
+ARM GAS  /tmp/ccVRC0kl.s 			page 59
+
+
+ 1862              	.LVL162:
+ 1863 004c 10F0806F 		tst	r0, #67108864
+ 1864 0050 03D0     		beq	.L106
+ 474:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1865              		.loc 1 474 0
+ 1866 0052 2368     		ldr	r3, [r4]
+ 1867 0054 4FF08062 		mov	r2, #67108864
+ 1868 0058 5A61     		str	r2, [r3, #20]
+ 1869              	.L106:
+ 477:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1870              		.loc 1 477 0
+ 1871 005a 2068     		ldr	r0, [r4]
+ 1872 005c FFF7FEFF 		bl	USB_ReadInterrupts
+ 1873              	.LVL163:
+ 1874 0060 10F0020F 		tst	r0, #2
+ 1875 0064 02D0     		beq	.L107
+ 480:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1876              		.loc 1 480 0
+ 1877 0066 2368     		ldr	r3, [r4]
+ 1878 0068 0222     		movs	r2, #2
+ 1879 006a 5A61     		str	r2, [r3, #20]
+ 1880              	.L107:
+ 484:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1881              		.loc 1 484 0
+ 1882 006c 2068     		ldr	r0, [r4]
+ 1883 006e FFF7FEFF 		bl	USB_ReadInterrupts
+ 1884              	.LVL164:
+ 1885 0072 10F0005F 		tst	r0, #536870912
+ 1886 0076 10D0     		beq	.L108
+ 488:HALLIB/Src/stm32f7xx_hal_hcd.c ****         USB_OTG_HPRT_PENCHNG | USB_OTG_HPRT_POCCHNG );
+ 1887              		.loc 1 488 0
+ 1888 0078 D5F84034 		ldr	r3, [r5, #1088]
+ 1889 007c 23F02E03 		bic	r3, r3, #46
+ 1890 0080 C5F84034 		str	r3, [r5, #1088]
+ 492:HALLIB/Src/stm32f7xx_hal_hcd.c ****        USB_InitFSLSPClkSel(hhcd->Instance ,HCFG_48_MHZ );
+ 1891              		.loc 1 492 0
+ 1892 0084 2046     		mov	r0, r4
+ 1893 0086 FFF7FEFF 		bl	HAL_HCD_Disconnect_Callback
+ 1894              	.LVL165:
+ 493:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_DISCINT);
+ 1895              		.loc 1 493 0
+ 1896 008a 0121     		movs	r1, #1
+ 1897 008c 2068     		ldr	r0, [r4]
+ 1898 008e FFF7FEFF 		bl	USB_InitFSLSPClkSel
+ 1899              	.LVL166:
+ 494:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1900              		.loc 1 494 0
+ 1901 0092 2368     		ldr	r3, [r4]
+ 1902 0094 4FF00052 		mov	r2, #536870912
+ 1903 0098 5A61     		str	r2, [r3, #20]
+ 1904              	.L108:
+ 498:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1905              		.loc 1 498 0
+ 1906 009a 2068     		ldr	r0, [r4]
+ 1907 009c FFF7FEFF 		bl	USB_ReadInterrupts
+ 1908              	.LVL167:
+ 1909 00a0 10F0807F 		tst	r0, #16777216
+ARM GAS  /tmp/ccVRC0kl.s 			page 60
+
+
+ 1910 00a4 02D0     		beq	.L109
+ 500:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1911              		.loc 1 500 0
+ 1912 00a6 2046     		mov	r0, r4
+ 1913 00a8 FFF7FEFF 		bl	HCD_Port_IRQHandler
+ 1914              	.LVL168:
+ 1915              	.L109:
+ 504:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1916              		.loc 1 504 0
+ 1917 00ac 2068     		ldr	r0, [r4]
+ 1918 00ae FFF7FEFF 		bl	USB_ReadInterrupts
+ 1919              	.LVL169:
+ 1920 00b2 10F0080F 		tst	r0, #8
+ 1921 00b6 05D0     		beq	.L110
+ 506:HALLIB/Src/stm32f7xx_hal_hcd.c ****       __HAL_HCD_CLEAR_FLAG(hhcd, USB_OTG_GINTSTS_SOF);
+ 1922              		.loc 1 506 0
+ 1923 00b8 2046     		mov	r0, r4
+ 1924 00ba FFF7FEFF 		bl	HAL_HCD_SOF_Callback
+ 1925              	.LVL170:
+ 507:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1926              		.loc 1 507 0
+ 1927 00be 2368     		ldr	r3, [r4]
+ 1928 00c0 0822     		movs	r2, #8
+ 1929 00c2 5A61     		str	r2, [r3, #20]
+ 1930              	.L110:
+ 511:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1931              		.loc 1 511 0
+ 1932 00c4 2068     		ldr	r0, [r4]
+ 1933 00c6 FFF7FEFF 		bl	USB_ReadInterrupts
+ 1934              	.LVL171:
+ 1935 00ca 10F0007F 		tst	r0, #33554432
+ 1936 00ce 21D0     		beq	.L111
+ 513:HALLIB/Src/stm32f7xx_hal_hcd.c ****       for (i = 0; i < hhcd->Init.Host_channels ; i++)
+ 1937              		.loc 1 513 0
+ 1938 00d0 2068     		ldr	r0, [r4]
+ 1939 00d2 FFF7FEFF 		bl	USB_HC_ReadInterrupt
+ 1940              	.LVL172:
+ 1941 00d6 0746     		mov	r7, r0
+ 1942              	.LVL173:
+ 514:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1943              		.loc 1 514 0
+ 1944 00d8 0026     		movs	r6, #0
+ 1945 00da 14E0     		b	.L112
+ 1946              	.LVL174:
+ 1947              	.L115:
+ 516:HALLIB/Src/stm32f7xx_hal_hcd.c ****         {
+ 1948              		.loc 1 516 0
+ 1949 00dc 0123     		movs	r3, #1
+ 1950 00de B340     		lsls	r3, r3, r6
+ 1951 00e0 3B42     		tst	r3, r7
+ 1952 00e2 0FD0     		beq	.L113
+ 518:HALLIB/Src/stm32f7xx_hal_hcd.c ****           {
+ 1953              		.loc 1 518 0
+ 1954 00e4 05EB4613 		add	r3, r5, r6, lsl #5
+ 1955 00e8 D3F80035 		ldr	r3, [r3, #1280]
+ 1956 00ec 13F4004F 		tst	r3, #32768
+ 1957 00f0 04D0     		beq	.L114
+ARM GAS  /tmp/ccVRC0kl.s 			page 61
+
+
+ 520:HALLIB/Src/stm32f7xx_hal_hcd.c ****           }
+ 1958              		.loc 1 520 0
+ 1959 00f2 F1B2     		uxtb	r1, r6
+ 1960 00f4 2046     		mov	r0, r4
+ 1961 00f6 FFF7FEFF 		bl	HCD_HC_IN_IRQHandler
+ 1962              	.LVL175:
+ 1963 00fa 03E0     		b	.L113
+ 1964              	.L114:
+ 524:HALLIB/Src/stm32f7xx_hal_hcd.c ****           }
+ 1965              		.loc 1 524 0
+ 1966 00fc F1B2     		uxtb	r1, r6
+ 1967 00fe 2046     		mov	r0, r4
+ 1968 0100 FFF7FEFF 		bl	HCD_HC_OUT_IRQHandler
+ 1969              	.LVL176:
+ 1970              	.L113:
+ 514:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1971              		.loc 1 514 0 discriminator 2
+ 1972 0104 0136     		adds	r6, r6, #1
+ 1973              	.LVL177:
+ 1974              	.L112:
+ 514:HALLIB/Src/stm32f7xx_hal_hcd.c ****       {
+ 1975              		.loc 1 514 0 is_stmt 0 discriminator 1
+ 1976 0106 A368     		ldr	r3, [r4, #8]
+ 1977 0108 9E42     		cmp	r6, r3
+ 1978 010a E7D3     		bcc	.L115
+ 528:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 1979              		.loc 1 528 0 is_stmt 1
+ 1980 010c 2368     		ldr	r3, [r4]
+ 1981 010e 4FF00072 		mov	r2, #33554432
+ 1982 0112 5A61     		str	r2, [r3, #20]
+ 1983              	.LVL178:
+ 1984              	.L111:
+ 532:HALLIB/Src/stm32f7xx_hal_hcd.c ****     {
+ 1985              		.loc 1 532 0
+ 1986 0114 2068     		ldr	r0, [r4]
+ 1987 0116 FFF7FEFF 		bl	USB_ReadInterrupts
+ 1988              	.LVL179:
+ 1989 011a 10F0100F 		tst	r0, #16
+ 1990 011e 0CD0     		beq	.L102
+ 534:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1991              		.loc 1 534 0
+ 1992 0120 2268     		ldr	r2, [r4]
+ 1993 0122 9369     		ldr	r3, [r2, #24]
+ 1994 0124 23F01003 		bic	r3, r3, #16
+ 1995 0128 9361     		str	r3, [r2, #24]
+ 536:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 1996              		.loc 1 536 0
+ 1997 012a 2046     		mov	r0, r4
+ 1998 012c FFF7FEFF 		bl	HCD_RXQLVL_IRQHandler
+ 1999              	.LVL180:
+ 538:HALLIB/Src/stm32f7xx_hal_hcd.c ****     }
+ 2000              		.loc 1 538 0
+ 2001 0130 2268     		ldr	r2, [r4]
+ 2002 0132 9369     		ldr	r3, [r2, #24]
+ 2003 0134 43F01003 		orr	r3, r3, #16
+ 2004 0138 9361     		str	r3, [r2, #24]
+ 2005              	.L102:
+ARM GAS  /tmp/ccVRC0kl.s 			page 62
+
+
+ 2006 013a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2007              		.cfi_endproc
+ 2008              	.LFE143:
+ 2010              		.section	.text.HAL_HCD_Start,"ax",%progbits
+ 2011              		.align	2
+ 2012              		.global	HAL_HCD_Start
+ 2013              		.thumb
+ 2014              		.thumb_func
+ 2016              	HAL_HCD_Start:
+ 2017              	.LFB148:
+ 638:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 2018              		.loc 1 638 0
+ 2019              		.cfi_startproc
+ 2020              		@ args = 0, pretend = 0, frame = 0
+ 2021              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2022              	.LVL181:
+ 2023 0000 38B5     		push	{r3, r4, r5, lr}
+ 2024              	.LCFI20:
+ 2025              		.cfi_def_cfa_offset 16
+ 2026              		.cfi_offset 3, -16
+ 2027              		.cfi_offset 4, -12
+ 2028              		.cfi_offset 5, -8
+ 2029              		.cfi_offset 14, -4
+ 639:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_HCD_ENABLE(hhcd);
+ 2030              		.loc 1 639 0
+ 2031 0002 90F89032 		ldrb	r3, [r0, #656]	@ zero_extendqisi2
+ 2032 0006 012B     		cmp	r3, #1
+ 2033 0008 0ED0     		beq	.L119
+ 2034 000a 0446     		mov	r4, r0
+ 639:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_HCD_ENABLE(hhcd);
+ 2035              		.loc 1 639 0 is_stmt 0 discriminator 2
+ 2036 000c 0125     		movs	r5, #1
+ 2037 000e 80F89052 		strb	r5, [r0, #656]
+ 640:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_DriveVbus(hhcd->Instance, 1);
+ 2038              		.loc 1 640 0 is_stmt 1 discriminator 2
+ 2039 0012 0068     		ldr	r0, [r0]
+ 2040              	.LVL182:
+ 2041 0014 FFF7FEFF 		bl	USB_EnableGlobalInt
+ 2042              	.LVL183:
+ 641:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 2043              		.loc 1 641 0 discriminator 2
+ 2044 0018 2946     		mov	r1, r5
+ 2045 001a 2068     		ldr	r0, [r4]
+ 2046 001c FFF7FEFF 		bl	USB_DriveVbus
+ 2047              	.LVL184:
+ 642:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return HAL_OK;
+ 2048              		.loc 1 642 0 discriminator 2
+ 2049 0020 0020     		movs	r0, #0
+ 2050 0022 84F89002 		strb	r0, [r4, #656]
+ 643:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2051              		.loc 1 643 0 discriminator 2
+ 2052 0026 38BD     		pop	{r3, r4, r5, pc}
+ 2053              	.LVL185:
+ 2054              	.L119:
+ 639:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_HCD_ENABLE(hhcd);
+ 2055              		.loc 1 639 0
+ 2056 0028 0220     		movs	r0, #2
+ARM GAS  /tmp/ccVRC0kl.s 			page 63
+
+
+ 2057              	.LVL186:
+ 644:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2058              		.loc 1 644 0
+ 2059 002a 38BD     		pop	{r3, r4, r5, pc}
+ 2060              		.cfi_endproc
+ 2061              	.LFE148:
+ 2063              		.section	.text.HAL_HCD_Stop,"ax",%progbits
+ 2064              		.align	2
+ 2065              		.global	HAL_HCD_Stop
+ 2066              		.thumb
+ 2067              		.thumb_func
+ 2069              	HAL_HCD_Stop:
+ 2070              	.LFB149:
+ 653:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 2071              		.loc 1 653 0
+ 2072              		.cfi_startproc
+ 2073              		@ args = 0, pretend = 0, frame = 0
+ 2074              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2075              	.LVL187:
+ 654:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_StopHost(hhcd->Instance);
+ 2076              		.loc 1 654 0
+ 2077 0000 90F89032 		ldrb	r3, [r0, #656]	@ zero_extendqisi2
+ 2078 0004 012B     		cmp	r3, #1
+ 2079 0006 0BD0     		beq	.L123
+ 653:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_LOCK(hhcd);
+ 2080              		.loc 1 653 0 discriminator 2
+ 2081 0008 10B5     		push	{r4, lr}
+ 2082              	.LCFI21:
+ 2083              		.cfi_def_cfa_offset 8
+ 2084              		.cfi_offset 4, -8
+ 2085              		.cfi_offset 14, -4
+ 2086 000a 0446     		mov	r4, r0
+ 654:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_StopHost(hhcd->Instance);
+ 2087              		.loc 1 654 0 discriminator 2
+ 2088 000c 0123     		movs	r3, #1
+ 2089 000e 80F89032 		strb	r3, [r0, #656]
+ 655:HALLIB/Src/stm32f7xx_hal_hcd.c ****   __HAL_UNLOCK(hhcd);
+ 2090              		.loc 1 655 0 discriminator 2
+ 2091 0012 0068     		ldr	r0, [r0]
+ 2092              	.LVL188:
+ 2093 0014 FFF7FEFF 		bl	USB_StopHost
+ 2094              	.LVL189:
+ 656:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return HAL_OK;
+ 2095              		.loc 1 656 0 discriminator 2
+ 2096 0018 0020     		movs	r0, #0
+ 2097 001a 84F89002 		strb	r0, [r4, #656]
+ 657:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2098              		.loc 1 657 0 discriminator 2
+ 2099 001e 10BD     		pop	{r4, pc}
+ 2100              	.LVL190:
+ 2101              	.L123:
+ 2102              	.LCFI22:
+ 2103              		.cfi_def_cfa_offset 0
+ 2104              		.cfi_restore 4
+ 2105              		.cfi_restore 14
+ 654:HALLIB/Src/stm32f7xx_hal_hcd.c ****   USB_StopHost(hhcd->Instance);
+ 2106              		.loc 1 654 0
+ARM GAS  /tmp/ccVRC0kl.s 			page 64
+
+
+ 2107 0020 0220     		movs	r0, #2
+ 2108              	.LVL191:
+ 2109 0022 7047     		bx	lr
+ 2110              		.cfi_endproc
+ 2111              	.LFE149:
+ 2113              		.section	.text.HAL_HCD_ResetPort,"ax",%progbits
+ 2114              		.align	2
+ 2115              		.global	HAL_HCD_ResetPort
+ 2116              		.thumb
+ 2117              		.thumb_func
+ 2119              	HAL_HCD_ResetPort:
+ 2120              	.LFB150:
+ 666:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_ResetPort(hhcd->Instance));
+ 2121              		.loc 1 666 0
+ 2122              		.cfi_startproc
+ 2123              		@ args = 0, pretend = 0, frame = 0
+ 2124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2125              	.LVL192:
+ 2126 0000 08B5     		push	{r3, lr}
+ 2127              	.LCFI23:
+ 2128              		.cfi_def_cfa_offset 8
+ 2129              		.cfi_offset 3, -8
+ 2130              		.cfi_offset 14, -4
+ 667:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2131              		.loc 1 667 0
+ 2132 0002 0068     		ldr	r0, [r0]
+ 2133              	.LVL193:
+ 2134 0004 FFF7FEFF 		bl	USB_ResetPort
+ 2135              	.LVL194:
+ 668:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2136              		.loc 1 668 0
+ 2137 0008 08BD     		pop	{r3, pc}
+ 2138              		.cfi_endproc
+ 2139              	.LFE150:
+ 2141 000a 00BF     		.section	.text.HAL_HCD_GetState,"ax",%progbits
+ 2142              		.align	2
+ 2143              		.global	HAL_HCD_GetState
+ 2144              		.thumb
+ 2145              		.thumb_func
+ 2147              	HAL_HCD_GetState:
+ 2148              	.LFB151:
+ 695:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->State;
+ 2149              		.loc 1 695 0
+ 2150              		.cfi_startproc
+ 2151              		@ args = 0, pretend = 0, frame = 0
+ 2152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2153              		@ link register save eliminated.
+ 2154              	.LVL195:
+ 696:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2155              		.loc 1 696 0
+ 2156 0000 90F89102 		ldrb	r0, [r0, #657]	@ zero_extendqisi2
+ 2157              	.LVL196:
+ 697:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2158              		.loc 1 697 0
+ 2159 0004 7047     		bx	lr
+ 2160              		.cfi_endproc
+ 2161              	.LFE151:
+ARM GAS  /tmp/ccVRC0kl.s 			page 65
+
+
+ 2163 0006 00BF     		.section	.text.HAL_HCD_HC_GetURBState,"ax",%progbits
+ 2164              		.align	2
+ 2165              		.global	HAL_HCD_HC_GetURBState
+ 2166              		.thumb
+ 2167              		.thumb_func
+ 2169              	HAL_HCD_HC_GetURBState:
+ 2170              	.LFB152:
+ 714:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].urb_state;
+ 2171              		.loc 1 714 0
+ 2172              		.cfi_startproc
+ 2173              		@ args = 0, pretend = 0, frame = 0
+ 2174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2175              		@ link register save eliminated.
+ 2176              	.LVL197:
+ 715:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2177              		.loc 1 715 0
+ 2178 0000 01EB8101 		add	r1, r1, r1, lsl #2
+ 2179              	.LVL198:
+ 2180 0004 CB00     		lsls	r3, r1, #3
+ 2181 0006 1844     		add	r0, r0, r3
+ 2182              	.LVL199:
+ 716:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2183              		.loc 1 716 0
+ 2184 0008 90F85C00 		ldrb	r0, [r0, #92]	@ zero_extendqisi2
+ 2185 000c 7047     		bx	lr
+ 2186              		.cfi_endproc
+ 2187              	.LFE152:
+ 2189 000e 00BF     		.section	.text.HAL_HCD_HC_GetXferCount,"ax",%progbits
+ 2190              		.align	2
+ 2191              		.global	HAL_HCD_HC_GetXferCount
+ 2192              		.thumb
+ 2193              		.thumb_func
+ 2195              	HAL_HCD_HC_GetXferCount:
+ 2196              	.LFB153:
+ 727:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].xfer_count;
+ 2197              		.loc 1 727 0
+ 2198              		.cfi_startproc
+ 2199              		@ args = 0, pretend = 0, frame = 0
+ 2200              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2201              		@ link register save eliminated.
+ 2202              	.LVL200:
+ 728:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2203              		.loc 1 728 0
+ 2204 0000 01EB8101 		add	r1, r1, r1, lsl #2
+ 2205              	.LVL201:
+ 2206 0004 CB00     		lsls	r3, r1, #3
+ 2207 0006 1844     		add	r0, r0, r3
+ 2208              	.LVL202:
+ 729:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2209              		.loc 1 729 0
+ 2210 0008 C06C     		ldr	r0, [r0, #76]
+ 2211 000a 7047     		bx	lr
+ 2212              		.cfi_endproc
+ 2213              	.LFE153:
+ 2215              		.section	.text.HAL_HCD_HC_GetState,"ax",%progbits
+ 2216              		.align	2
+ 2217              		.global	HAL_HCD_HC_GetState
+ARM GAS  /tmp/ccVRC0kl.s 			page 66
+
+
+ 2218              		.thumb
+ 2219              		.thumb_func
+ 2221              	HAL_HCD_HC_GetState:
+ 2222              	.LFB154:
+ 749:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return hhcd->hc[chnum].state;
+ 2223              		.loc 1 749 0
+ 2224              		.cfi_startproc
+ 2225              		@ args = 0, pretend = 0, frame = 0
+ 2226              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2227              		@ link register save eliminated.
+ 2228              	.LVL203:
+ 750:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2229              		.loc 1 750 0
+ 2230 0000 01EB8101 		add	r1, r1, r1, lsl #2
+ 2231              	.LVL204:
+ 2232 0004 CB00     		lsls	r3, r1, #3
+ 2233 0006 1844     		add	r0, r0, r3
+ 2234              	.LVL205:
+ 751:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2235              		.loc 1 751 0
+ 2236 0008 90F85D00 		ldrb	r0, [r0, #93]	@ zero_extendqisi2
+ 2237 000c 7047     		bx	lr
+ 2238              		.cfi_endproc
+ 2239              	.LFE154:
+ 2241 000e 00BF     		.section	.text.HAL_HCD_GetCurrentFrame,"ax",%progbits
+ 2242              		.align	2
+ 2243              		.global	HAL_HCD_GetCurrentFrame
+ 2244              		.thumb
+ 2245              		.thumb_func
+ 2247              	HAL_HCD_GetCurrentFrame:
+ 2248              	.LFB155:
+ 759:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_GetCurrentFrame(hhcd->Instance));
+ 2249              		.loc 1 759 0
+ 2250              		.cfi_startproc
+ 2251              		@ args = 0, pretend = 0, frame = 0
+ 2252              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2253              	.LVL206:
+ 2254 0000 08B5     		push	{r3, lr}
+ 2255              	.LCFI24:
+ 2256              		.cfi_def_cfa_offset 8
+ 2257              		.cfi_offset 3, -8
+ 2258              		.cfi_offset 14, -4
+ 760:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2259              		.loc 1 760 0
+ 2260 0002 0068     		ldr	r0, [r0]
+ 2261              	.LVL207:
+ 2262 0004 FFF7FEFF 		bl	USB_GetCurrentFrame
+ 2263              	.LVL208:
+ 761:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2264              		.loc 1 761 0
+ 2265 0008 08BD     		pop	{r3, pc}
+ 2266              		.cfi_endproc
+ 2267              	.LFE155:
+ 2269 000a 00BF     		.section	.text.HAL_HCD_GetCurrentSpeed,"ax",%progbits
+ 2270              		.align	2
+ 2271              		.global	HAL_HCD_GetCurrentSpeed
+ 2272              		.thumb
+ARM GAS  /tmp/ccVRC0kl.s 			page 67
+
+
+ 2273              		.thumb_func
+ 2275              	HAL_HCD_GetCurrentSpeed:
+ 2276              	.LFB156:
+ 769:HALLIB/Src/stm32f7xx_hal_hcd.c ****   return (USB_GetHostSpeed(hhcd->Instance));
+ 2277              		.loc 1 769 0
+ 2278              		.cfi_startproc
+ 2279              		@ args = 0, pretend = 0, frame = 0
+ 2280              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2281              	.LVL209:
+ 2282 0000 08B5     		push	{r3, lr}
+ 2283              	.LCFI25:
+ 2284              		.cfi_def_cfa_offset 8
+ 2285              		.cfi_offset 3, -8
+ 2286              		.cfi_offset 14, -4
+ 770:HALLIB/Src/stm32f7xx_hal_hcd.c **** }
+ 2287              		.loc 1 770 0
+ 2288 0002 0068     		ldr	r0, [r0]
+ 2289              	.LVL210:
+ 2290 0004 FFF7FEFF 		bl	USB_GetHostSpeed
+ 2291              	.LVL211:
+ 771:HALLIB/Src/stm32f7xx_hal_hcd.c **** 
+ 2292              		.loc 1 771 0
+ 2293 0008 08BD     		pop	{r3, pc}
+ 2294              		.cfi_endproc
+ 2295              	.LFE156:
+ 2297 000a 00BF     		.text
+ 2298              	.Letext0:
+ 2299              		.file 2 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 2300              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 2301              		.file 4 "Inc/stm32f767xx.h"
+ 2302              		.file 5 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 2303              		.file 6 "HALLIB/Inc/stm32f7xx_ll_usb.h"
+ 2304              		.file 7 "HALLIB/Inc/stm32f7xx_hal_hcd.h"
+ 2305              		.file 8 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccVRC0kl.s 			page 68
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_hcd.c
+     /tmp/ccVRC0kl.s:21     .text.HCD_RXQLVL_IRQHandler:00000000 $t
+     /tmp/ccVRC0kl.s:25     .text.HCD_RXQLVL_IRQHandler:00000000 HCD_RXQLVL_IRQHandler
+     /tmp/ccVRC0kl.s:120    .text.HCD_RXQLVL_IRQHandler:00000078 $d
+     /tmp/ccVRC0kl.s:125    .text.HAL_HCD_HC_Init:00000000 $t
+     /tmp/ccVRC0kl.s:130    .text.HAL_HCD_HC_Init:00000000 HAL_HCD_HC_Init
+     /tmp/ccVRC0kl.s:215    .text.HAL_HCD_HC_Halt:00000000 $t
+     /tmp/ccVRC0kl.s:220    .text.HAL_HCD_HC_Halt:00000000 HAL_HCD_HC_Halt
+     /tmp/ccVRC0kl.s:265    .text.HAL_HCD_MspInit:00000000 $t
+     /tmp/ccVRC0kl.s:270    .text.HAL_HCD_MspInit:00000000 HAL_HCD_MspInit
+     /tmp/ccVRC0kl.s:283    .text.HAL_HCD_Init:00000000 $t
+     /tmp/ccVRC0kl.s:288    .text.HAL_HCD_Init:00000000 HAL_HCD_Init
+     /tmp/ccVRC0kl.s:393    .text.HAL_HCD_MspDeInit:00000000 $t
+     /tmp/ccVRC0kl.s:398    .text.HAL_HCD_MspDeInit:00000000 HAL_HCD_MspDeInit
+     /tmp/ccVRC0kl.s:411    .text.HAL_HCD_DeInit:00000000 $t
+     /tmp/ccVRC0kl.s:416    .text.HAL_HCD_DeInit:00000000 HAL_HCD_DeInit
+     /tmp/ccVRC0kl.s:461    .text.HAL_HCD_HC_SubmitRequest:00000000 $t
+     /tmp/ccVRC0kl.s:466    .text.HAL_HCD_HC_SubmitRequest:00000000 HAL_HCD_HC_SubmitRequest
+     /tmp/ccVRC0kl.s:514    .text.HAL_HCD_HC_SubmitRequest:00000044 $d
+     /tmp/ccVRC0kl.s:518    .text.HAL_HCD_HC_SubmitRequest:00000048 $t
+     /tmp/ccVRC0kl.s:708    .text.HAL_HCD_SOF_Callback:00000000 $t
+     /tmp/ccVRC0kl.s:713    .text.HAL_HCD_SOF_Callback:00000000 HAL_HCD_SOF_Callback
+     /tmp/ccVRC0kl.s:726    .text.HAL_HCD_Connect_Callback:00000000 $t
+     /tmp/ccVRC0kl.s:731    .text.HAL_HCD_Connect_Callback:00000000 HAL_HCD_Connect_Callback
+     /tmp/ccVRC0kl.s:744    .text.HCD_Port_IRQHandler:00000000 $t
+     /tmp/ccVRC0kl.s:748    .text.HCD_Port_IRQHandler:00000000 HCD_Port_IRQHandler
+     /tmp/ccVRC0kl.s:881    .text.HAL_HCD_Disconnect_Callback:00000000 $t
+     /tmp/ccVRC0kl.s:886    .text.HAL_HCD_Disconnect_Callback:00000000 HAL_HCD_Disconnect_Callback
+     /tmp/ccVRC0kl.s:899    .text.HAL_HCD_HC_NotifyURBChange_Callback:00000000 $t
+     /tmp/ccVRC0kl.s:904    .text.HAL_HCD_HC_NotifyURBChange_Callback:00000000 HAL_HCD_HC_NotifyURBChange_Callback
+     /tmp/ccVRC0kl.s:917    .text.HCD_HC_IN_IRQHandler:00000000 $t
+     /tmp/ccVRC0kl.s:921    .text.HCD_HC_IN_IRQHandler:00000000 HCD_HC_IN_IRQHandler
+     /tmp/ccVRC0kl.s:1358   .text.HCD_HC_OUT_IRQHandler:00000000 $t
+     /tmp/ccVRC0kl.s:1362   .text.HCD_HC_OUT_IRQHandler:00000000 HCD_HC_OUT_IRQHandler
+     /tmp/ccVRC0kl.s:1799   .text.HAL_HCD_IRQHandler:00000000 $t
+     /tmp/ccVRC0kl.s:1804   .text.HAL_HCD_IRQHandler:00000000 HAL_HCD_IRQHandler
+     /tmp/ccVRC0kl.s:2011   .text.HAL_HCD_Start:00000000 $t
+     /tmp/ccVRC0kl.s:2016   .text.HAL_HCD_Start:00000000 HAL_HCD_Start
+     /tmp/ccVRC0kl.s:2064   .text.HAL_HCD_Stop:00000000 $t
+     /tmp/ccVRC0kl.s:2069   .text.HAL_HCD_Stop:00000000 HAL_HCD_Stop
+     /tmp/ccVRC0kl.s:2114   .text.HAL_HCD_ResetPort:00000000 $t
+     /tmp/ccVRC0kl.s:2119   .text.HAL_HCD_ResetPort:00000000 HAL_HCD_ResetPort
+     /tmp/ccVRC0kl.s:2142   .text.HAL_HCD_GetState:00000000 $t
+     /tmp/ccVRC0kl.s:2147   .text.HAL_HCD_GetState:00000000 HAL_HCD_GetState
+     /tmp/ccVRC0kl.s:2164   .text.HAL_HCD_HC_GetURBState:00000000 $t
+     /tmp/ccVRC0kl.s:2169   .text.HAL_HCD_HC_GetURBState:00000000 HAL_HCD_HC_GetURBState
+     /tmp/ccVRC0kl.s:2190   .text.HAL_HCD_HC_GetXferCount:00000000 $t
+     /tmp/ccVRC0kl.s:2195   .text.HAL_HCD_HC_GetXferCount:00000000 HAL_HCD_HC_GetXferCount
+     /tmp/ccVRC0kl.s:2216   .text.HAL_HCD_HC_GetState:00000000 $t
+     /tmp/ccVRC0kl.s:2221   .text.HAL_HCD_HC_GetState:00000000 HAL_HCD_HC_GetState
+     /tmp/ccVRC0kl.s:2242   .text.HAL_HCD_GetCurrentFrame:00000000 $t
+     /tmp/ccVRC0kl.s:2247   .text.HAL_HCD_GetCurrentFrame:00000000 HAL_HCD_GetCurrentFrame
+     /tmp/ccVRC0kl.s:2270   .text.HAL_HCD_GetCurrentSpeed:00000000 $t
+     /tmp/ccVRC0kl.s:2275   .text.HAL_HCD_GetCurrentSpeed:00000000 HAL_HCD_GetCurrentSpeed
+                     .debug_frame:00000010 $d
+
+ARM GAS  /tmp/ccVRC0kl.s 			page 69
+
+
+UNDEFINED SYMBOLS
+USB_ReadPacket
+USB_HC_Init
+USB_HC_Halt
+USB_DisableGlobalInt
+USB_CoreInit
+USB_SetCurrentMode
+USB_HostInit
+USB_HC_StartXfer
+USB_InitFSLSPClkSel
+USB_GetMode
+USB_ReadInterrupts
+USB_HC_ReadInterrupt
+USB_EnableGlobalInt
+USB_DriveVbus
+USB_StopHost
+USB_ResetPort
+USB_GetCurrentFrame
+USB_GetHostSpeed

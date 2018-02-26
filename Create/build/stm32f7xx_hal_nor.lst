@@ -1,0 +1,4102 @@
+ARM GAS  /tmp/ccgp0oUe.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m7
+   3              		.eabi_attribute 28, 1
+   4              		.fpu fpv5-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.syntax unified
+  16              		.file	"stm32f7xx_hal_nor.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.HAL_NOR_MspInit,"ax",%progbits
+  21              		.align	2
+  22              		.weak	HAL_NOR_MspInit
+  23              		.thumb
+  24              		.thumb_func
+  26              	HAL_NOR_MspInit:
+  27              	.LFB138:
+  28              		.file 1 "HALLIB/Src/stm32f7xx_hal_nor.c"
+   1:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+   2:HALLIB/Src/stm32f7xx_hal_nor.c ****   ******************************************************************************
+   3:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @file    stm32f7xx_hal_nor.c
+   4:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @author  MCD Application Team
+   5:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief   NOR HAL module driver.
+   6:HALLIB/Src/stm32f7xx_hal_nor.c ****   *          This file provides a generic firmware to drive NOR memories mounted 
+   7:HALLIB/Src/stm32f7xx_hal_nor.c ****   *          as external device.
+   8:HALLIB/Src/stm32f7xx_hal_nor.c ****   *         
+   9:HALLIB/Src/stm32f7xx_hal_nor.c ****   @verbatim
+  10:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+  11:HALLIB/Src/stm32f7xx_hal_nor.c ****                      ##### How to use this driver #####
+  12:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================       
+  13:HALLIB/Src/stm32f7xx_hal_nor.c ****     [..]
+  14:HALLIB/Src/stm32f7xx_hal_nor.c ****       This driver is a generic layered driver which contains a set of APIs used to 
+  15:HALLIB/Src/stm32f7xx_hal_nor.c ****       control NOR flash memories. It uses the FMC layer functions to interface 
+  16:HALLIB/Src/stm32f7xx_hal_nor.c ****       with NOR devices. This driver is used as follows:
+  17:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+  18:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) NOR flash memory configuration sequence using the function HAL_NOR_Init() 
+  19:HALLIB/Src/stm32f7xx_hal_nor.c ****           with control and timing parameters for both normal and extended mode.
+  20:HALLIB/Src/stm32f7xx_hal_nor.c ****             
+  21:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) Read NOR flash memory manufacturer code and device IDs using the function
+  22:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_Read_ID(). The read information is stored in the NOR_ID_TypeDef 
+  23:HALLIB/Src/stm32f7xx_hal_nor.c ****           structure declared by the function caller. 
+  24:HALLIB/Src/stm32f7xx_hal_nor.c ****         
+  25:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) Access NOR flash memory by read/write data unit operations using the functions
+  26:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_Read(), HAL_NOR_Program().
+  27:HALLIB/Src/stm32f7xx_hal_nor.c ****         
+  28:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) Perform NOR flash erase block/chip operations using the functions 
+  29:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_Erase_Block() and HAL_NOR_Erase_Chip().
+  30:HALLIB/Src/stm32f7xx_hal_nor.c ****         
+ARM GAS  /tmp/ccgp0oUe.s 			page 2
+
+
+  31:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) Read the NOR flash CFI (common flash interface) IDs using the function
+  32:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_Read_CFI(). The read information is stored in the NOR_CFI_TypeDef
+  33:HALLIB/Src/stm32f7xx_hal_nor.c ****           structure declared by the function caller.
+  34:HALLIB/Src/stm32f7xx_hal_nor.c ****         
+  35:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) You can also control the NOR device by calling the control APIs HAL_NOR_WriteOperation_En
+  36:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_WriteOperation_Disable() to respectively enable/disable the NOR write operation  
+  37:HALLIB/Src/stm32f7xx_hal_nor.c ****        
+  38:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) You can monitor the NOR device HAL state by calling the function
+  39:HALLIB/Src/stm32f7xx_hal_nor.c ****           HAL_NOR_GetState() 
+  40:HALLIB/Src/stm32f7xx_hal_nor.c ****     [..]
+  41:HALLIB/Src/stm32f7xx_hal_nor.c ****      (@) This driver is a set of generic APIs which handle standard NOR flash operations.
+  42:HALLIB/Src/stm32f7xx_hal_nor.c ****          If a NOR flash device contains different operations and/or implementations, 
+  43:HALLIB/Src/stm32f7xx_hal_nor.c ****          it should be implemented separately.
+  44:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  45:HALLIB/Src/stm32f7xx_hal_nor.c ****      *** NOR HAL driver macros list ***
+  46:HALLIB/Src/stm32f7xx_hal_nor.c ****      ============================================= 
+  47:HALLIB/Src/stm32f7xx_hal_nor.c ****      [..]
+  48:HALLIB/Src/stm32f7xx_hal_nor.c ****        Below the list of most used macros in NOR HAL driver.
+  49:HALLIB/Src/stm32f7xx_hal_nor.c ****        
+  50:HALLIB/Src/stm32f7xx_hal_nor.c ****       (+) NOR_WRITE : NOR memory write data to specified address
+  51:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  52:HALLIB/Src/stm32f7xx_hal_nor.c ****   @endverbatim
+  53:HALLIB/Src/stm32f7xx_hal_nor.c ****   ******************************************************************************
+  54:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @attention
+  55:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+  56:HALLIB/Src/stm32f7xx_hal_nor.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  57:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+  58:HALLIB/Src/stm32f7xx_hal_nor.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  59:HALLIB/Src/stm32f7xx_hal_nor.c ****   * are permitted provided that the following conditions are met:
+  60:HALLIB/Src/stm32f7xx_hal_nor.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  61:HALLIB/Src/stm32f7xx_hal_nor.c ****   *      this list of conditions and the following disclaimer.
+  62:HALLIB/Src/stm32f7xx_hal_nor.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  63:HALLIB/Src/stm32f7xx_hal_nor.c ****   *      this list of conditions and the following disclaimer in the documentation
+  64:HALLIB/Src/stm32f7xx_hal_nor.c ****   *      and/or other materials provided with the distribution.
+  65:HALLIB/Src/stm32f7xx_hal_nor.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  66:HALLIB/Src/stm32f7xx_hal_nor.c ****   *      may be used to endorse or promote products derived from this software
+  67:HALLIB/Src/stm32f7xx_hal_nor.c ****   *      without specific prior written permission.
+  68:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+  69:HALLIB/Src/stm32f7xx_hal_nor.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  70:HALLIB/Src/stm32f7xx_hal_nor.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  71:HALLIB/Src/stm32f7xx_hal_nor.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  72:HALLIB/Src/stm32f7xx_hal_nor.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  73:HALLIB/Src/stm32f7xx_hal_nor.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  74:HALLIB/Src/stm32f7xx_hal_nor.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  75:HALLIB/Src/stm32f7xx_hal_nor.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  76:HALLIB/Src/stm32f7xx_hal_nor.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  77:HALLIB/Src/stm32f7xx_hal_nor.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  78:HALLIB/Src/stm32f7xx_hal_nor.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  79:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+  80:HALLIB/Src/stm32f7xx_hal_nor.c ****   ******************************************************************************
+  81:HALLIB/Src/stm32f7xx_hal_nor.c ****   */ 
+  82:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  83:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Includes ------------------------------------------------------------------*/
+  84:HALLIB/Src/stm32f7xx_hal_nor.c **** #include "stm32f7xx_hal.h"
+  85:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  86:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @addtogroup STM32F7xx_HAL_Driver
+  87:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ARM GAS  /tmp/ccgp0oUe.s 			page 3
+
+
+  88:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+  89:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  90:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR NOR
+  91:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief NOR driver modules
+  92:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+  93:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+  94:HALLIB/Src/stm32f7xx_hal_nor.c **** #ifdef HAL_NOR_MODULE_ENABLED
+  95:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  96:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Private typedef -----------------------------------------------------------*/
+  97:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Private define ------------------------------------------------------------*/
+  98:HALLIB/Src/stm32f7xx_hal_nor.c ****       
+  99:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Private_Defines NOR Private Defines
+ 100:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 101:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 102:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 103:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Constants to define address to set to write a command */
+ 104:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_FIRST                 (uint16_t)0x0555
+ 105:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_FIRST_CFI             (uint16_t)0x0055
+ 106:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_SECOND                (uint16_t)0x02AA
+ 107:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_THIRD                 (uint16_t)0x0555
+ 108:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_FOURTH                (uint16_t)0x0555
+ 109:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_FIFTH                 (uint16_t)0x02AA
+ 110:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_ADDRESS_SIXTH                 (uint16_t)0x0555
+ 111:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 112:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Constants to define data to program a command */
+ 113:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_READ_RESET               (uint16_t)0x00F0
+ 114:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_FIRST                    (uint16_t)0x00AA
+ 115:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_SECOND                   (uint16_t)0x0055
+ 116:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_AUTO_SELECT              (uint16_t)0x0090
+ 117:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_PROGRAM                  (uint16_t)0x00A0
+ 118:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_CHIP_BLOCK_ERASE_THIRD   (uint16_t)0x0080
+ 119:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FOURTH  (uint16_t)0x00AA
+ 120:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FIFTH   (uint16_t)0x0055
+ 121:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_CHIP_ERASE               (uint16_t)0x0010
+ 122:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_CFI                      (uint16_t)0x0098
+ 123:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 124:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_BUFFER_AND_PROG          (uint8_t)0x25
+ 125:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_BUFFER_AND_PROG_CONFIRM  (uint8_t)0x29
+ 126:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_CMD_DATA_BLOCK_ERASE              (uint8_t)0x30
+ 127:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 128:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Mask on NOR STATUS REGISTER */
+ 129:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_MASK_STATUS_DQ5                   (uint16_t)0x0020
+ 130:HALLIB/Src/stm32f7xx_hal_nor.c **** #define NOR_MASK_STATUS_DQ6                   (uint16_t)0x0040
+ 131:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 132:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 133:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @}
+ 134:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 135:HALLIB/Src/stm32f7xx_hal_nor.c ****       
+ 136:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Private macro -------------------------------------------------------------*/
+ 137:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Private variables ---------------------------------------------------------*/
+ 138:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Private_Variables NOR Private Variables
+ 139:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 140:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 141:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 142:HALLIB/Src/stm32f7xx_hal_nor.c **** static uint32_t uwNORMemoryDataWidth  = NOR_MEMORY_8B;
+ 143:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 144:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ARM GAS  /tmp/ccgp0oUe.s 			page 4
+
+
+ 145:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @}
+ 146:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 147:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 148:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Private functions ---------------------------------------------------------*/
+ 149:HALLIB/Src/stm32f7xx_hal_nor.c **** /* Exported functions --------------------------------------------------------*/
+ 150:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Exported_Functions NOR Exported Functions
+ 151:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 152:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 153:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 154:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Exported_Functions_Group1 Initialization and de-initialization functions 
+ 155:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief    Initialization and Configuration functions 
+ 156:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+ 157:HALLIB/Src/stm32f7xx_hal_nor.c ****   @verbatim    
+ 158:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 159:HALLIB/Src/stm32f7xx_hal_nor.c ****            ##### NOR Initialization and de_initialization functions #####
+ 160:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 161:HALLIB/Src/stm32f7xx_hal_nor.c ****   [..]  
+ 162:HALLIB/Src/stm32f7xx_hal_nor.c ****     This section provides functions allowing to initialize/de-initialize
+ 163:HALLIB/Src/stm32f7xx_hal_nor.c ****     the NOR memory
+ 164:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 165:HALLIB/Src/stm32f7xx_hal_nor.c **** @endverbatim
+ 166:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 167:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 168:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 169:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 170:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Perform the NOR memory Initialization sequence
+ 171:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 172:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 173:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Timing pointer to NOR control timing structure 
+ 174:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  ExtTiming pointer to NOR extended mode timing structure    
+ 175:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 176:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 177:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Init(NOR_HandleTypeDef *hnor, FMC_NORSRAM_TimingTypeDef *Timing, FMC_NORS
+ 178:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 179:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR handle parameter */
+ 180:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor == NULL)
+ 181:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 182:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_ERROR;
+ 183:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 184:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 185:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_RESET)
+ 186:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 187:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Allocate lock resource and initialize it */
+ 188:HALLIB/Src/stm32f7xx_hal_nor.c ****     hnor->Lock = HAL_UNLOCKED;
+ 189:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Initialize the low level hardware (MSP) */
+ 190:HALLIB/Src/stm32f7xx_hal_nor.c ****     HAL_NOR_MspInit(hnor);
+ 191:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 192:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 193:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Initialize NOR control Interface */
+ 194:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_Init(hnor->Instance, &(hnor->Init));
+ 195:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 196:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Initialize NOR timing Interface */
+ 197:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_Timing_Init(hnor->Instance, Timing, hnor->Init.NSBank); 
+ 198:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 199:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Initialize NOR extended mode timing Interface */
+ 200:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_Extended_Timing_Init(hnor->Extended, ExtTiming, hnor->Init.NSBank, hnor->Init.Extende
+ 201:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ARM GAS  /tmp/ccgp0oUe.s 			page 5
+
+
+ 202:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Enable the NORSRAM device */
+ 203:HALLIB/Src/stm32f7xx_hal_nor.c ****   __FMC_NORSRAM_ENABLE(hnor->Instance, hnor->Init.NSBank);
+ 204:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 205:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Initialize NOR Memory Data Width*/
+ 206:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.MemoryDataWidth == FMC_NORSRAM_MEM_BUS_WIDTH_8)
+ 207:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 208:HALLIB/Src/stm32f7xx_hal_nor.c ****     uwNORMemoryDataWidth = NOR_MEMORY_8B;
+ 209:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 210:HALLIB/Src/stm32f7xx_hal_nor.c ****   else
+ 211:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 212:HALLIB/Src/stm32f7xx_hal_nor.c ****     uwNORMemoryDataWidth = NOR_MEMORY_16B;
+ 213:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 214:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 215:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 216:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY; 
+ 217:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 218:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 219:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 220:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 221:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 222:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Perform NOR memory De-Initialization sequence
+ 223:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 224:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 225:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 226:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 227:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_DeInit(NOR_HandleTypeDef *hnor)  
+ 228:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 229:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* De-Initialize the low level hardware (MSP) */
+ 230:HALLIB/Src/stm32f7xx_hal_nor.c ****   HAL_NOR_MspDeInit(hnor);
+ 231:HALLIB/Src/stm32f7xx_hal_nor.c ****  
+ 232:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Configure the NOR registers with their reset values */
+ 233:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_DeInit(hnor->Instance, hnor->Extended, hnor->Init.NSBank);
+ 234:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 235:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 236:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_RESET;
+ 237:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 238:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Release Lock */
+ 239:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 240:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 241:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 242:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 243:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 244:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 245:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  NOR MSP Init
+ 246:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 247:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 248:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval None
+ 249:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 250:HALLIB/Src/stm32f7xx_hal_nor.c **** __weak void HAL_NOR_MspInit(NOR_HandleTypeDef *hnor)
+ 251:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+  29              		.loc 1 251 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  35 0000 7047     		bx	lr
+ARM GAS  /tmp/ccgp0oUe.s 			page 6
+
+
+  36              		.cfi_endproc
+  37              	.LFE138:
+  39 0002 00BF     		.section	.text.HAL_NOR_Init,"ax",%progbits
+  40              		.align	2
+  41              		.global	HAL_NOR_Init
+  42              		.thumb
+  43              		.thumb_func
+  45              	HAL_NOR_Init:
+  46              	.LFB136:
+ 178:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR handle parameter */
+  47              		.loc 1 178 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              	.LVL1:
+ 180:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+  52              		.loc 1 180 0
+  53 0000 0028     		cmp	r0, #0
+  54 0002 33D0     		beq	.L7
+ 178:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR handle parameter */
+  55              		.loc 1 178 0
+  56 0004 70B5     		push	{r4, r5, r6, lr}
+  57              	.LCFI0:
+  58              		.cfi_def_cfa_offset 16
+  59              		.cfi_offset 4, -16
+  60              		.cfi_offset 5, -12
+  61              		.cfi_offset 6, -8
+  62              		.cfi_offset 14, -4
+  63 0006 0446     		mov	r4, r0
+  64 0008 1546     		mov	r5, r2
+  65 000a 0E46     		mov	r6, r1
+ 185:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+  66              		.loc 1 185 0
+  67 000c 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+  68 0010 13F0FF0F 		tst	r3, #255
+  69 0014 04D1     		bne	.L4
+ 188:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Initialize the low level hardware (MSP) */
+  70              		.loc 1 188 0
+  71 0016 0023     		movs	r3, #0
+  72 0018 80F84430 		strb	r3, [r0, #68]
+ 190:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+  73              		.loc 1 190 0
+  74 001c FFF7FEFF 		bl	HAL_NOR_MspInit
+  75              	.LVL2:
+  76              	.L4:
+ 194:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  77              		.loc 1 194 0
+  78 0020 04F10801 		add	r1, r4, #8
+  79 0024 2068     		ldr	r0, [r4]
+  80 0026 FFF7FEFF 		bl	FMC_NORSRAM_Init
+  81              	.LVL3:
+ 197:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  82              		.loc 1 197 0
+  83 002a A268     		ldr	r2, [r4, #8]
+  84 002c 3146     		mov	r1, r6
+  85 002e 2068     		ldr	r0, [r4]
+  86 0030 FFF7FEFF 		bl	FMC_NORSRAM_Timing_Init
+ARM GAS  /tmp/ccgp0oUe.s 			page 7
+
+
+  87              	.LVL4:
+ 200:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  88              		.loc 1 200 0
+  89 0034 E36A     		ldr	r3, [r4, #44]
+  90 0036 A268     		ldr	r2, [r4, #8]
+  91 0038 2946     		mov	r1, r5
+  92 003a 6068     		ldr	r0, [r4, #4]
+  93 003c FFF7FEFF 		bl	FMC_NORSRAM_Extended_Timing_Init
+  94              	.LVL5:
+ 203:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+  95              		.loc 1 203 0
+  96 0040 2268     		ldr	r2, [r4]
+  97 0042 A168     		ldr	r1, [r4, #8]
+  98 0044 52F82130 		ldr	r3, [r2, r1, lsl #2]
+  99 0048 43F00103 		orr	r3, r3, #1
+ 100 004c 42F82130 		str	r3, [r2, r1, lsl #2]
+ 206:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 101              		.loc 1 206 0
+ 102 0050 6369     		ldr	r3, [r4, #20]
+ 103 0052 1BB9     		cbnz	r3, .L5
+ 208:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 104              		.loc 1 208 0
+ 105 0054 0022     		movs	r2, #0
+ 106 0056 064B     		ldr	r3, .L10
+ 107 0058 1A60     		str	r2, [r3]
+ 108 005a 02E0     		b	.L6
+ 109              	.L5:
+ 212:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 110              		.loc 1 212 0
+ 111 005c 0122     		movs	r2, #1
+ 112 005e 044B     		ldr	r3, .L10
+ 113 0060 1A60     		str	r2, [r3]
+ 114              	.L6:
+ 216:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 115              		.loc 1 216 0
+ 116 0062 0123     		movs	r3, #1
+ 117 0064 84F84530 		strb	r3, [r4, #69]
+ 218:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 118              		.loc 1 218 0
+ 119 0068 0020     		movs	r0, #0
+ 120 006a 70BD     		pop	{r4, r5, r6, pc}
+ 121              	.LVL6:
+ 122              	.L7:
+ 123              	.LCFI1:
+ 124              		.cfi_def_cfa_offset 0
+ 125              		.cfi_restore 4
+ 126              		.cfi_restore 5
+ 127              		.cfi_restore 6
+ 128              		.cfi_restore 14
+ 182:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 129              		.loc 1 182 0
+ 130 006c 0120     		movs	r0, #1
+ 131              	.LVL7:
+ 132 006e 7047     		bx	lr
+ 133              	.L11:
+ 134              		.align	2
+ 135              	.L10:
+ARM GAS  /tmp/ccgp0oUe.s 			page 8
+
+
+ 136 0070 00000000 		.word	.LANCHOR0
+ 137              		.cfi_endproc
+ 138              	.LFE136:
+ 140              		.section	.text.HAL_NOR_MspDeInit,"ax",%progbits
+ 141              		.align	2
+ 142              		.weak	HAL_NOR_MspDeInit
+ 143              		.thumb
+ 144              		.thumb_func
+ 146              	HAL_NOR_MspDeInit:
+ 147              	.LFB139:
+ 252:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Prevent unused argument(s) compilation warning */
+ 253:HALLIB/Src/stm32f7xx_hal_nor.c ****   UNUSED(hnor);
+ 254:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 255:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 256:HALLIB/Src/stm32f7xx_hal_nor.c ****             the HAL_NOR_MspInit could be implemented in the user file
+ 257:HALLIB/Src/stm32f7xx_hal_nor.c ****    */ 
+ 258:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 259:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 260:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 261:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  NOR MSP DeInit
+ 262:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 263:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 264:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval None
+ 265:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 266:HALLIB/Src/stm32f7xx_hal_nor.c **** __weak void HAL_NOR_MspDeInit(NOR_HandleTypeDef *hnor)
+ 267:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 148              		.loc 1 267 0
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 0
+ 151              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152              		@ link register save eliminated.
+ 153              	.LVL8:
+ 154 0000 7047     		bx	lr
+ 155              		.cfi_endproc
+ 156              	.LFE139:
+ 158 0002 00BF     		.section	.text.HAL_NOR_DeInit,"ax",%progbits
+ 159              		.align	2
+ 160              		.global	HAL_NOR_DeInit
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	HAL_NOR_DeInit:
+ 165              	.LFB137:
+ 228:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* De-Initialize the low level hardware (MSP) */
+ 166              		.loc 1 228 0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170              	.LVL9:
+ 228:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* De-Initialize the low level hardware (MSP) */
+ 171              		.loc 1 228 0
+ 172 0000 10B5     		push	{r4, lr}
+ 173              	.LCFI2:
+ 174              		.cfi_def_cfa_offset 8
+ 175              		.cfi_offset 4, -8
+ 176              		.cfi_offset 14, -4
+ 177 0002 0446     		mov	r4, r0
+ 230:HALLIB/Src/stm32f7xx_hal_nor.c ****  
+ARM GAS  /tmp/ccgp0oUe.s 			page 9
+
+
+ 178              		.loc 1 230 0
+ 179 0004 FFF7FEFF 		bl	HAL_NOR_MspDeInit
+ 180              	.LVL10:
+ 233:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 181              		.loc 1 233 0
+ 182 0008 A268     		ldr	r2, [r4, #8]
+ 183 000a 6168     		ldr	r1, [r4, #4]
+ 184 000c 2068     		ldr	r0, [r4]
+ 185 000e FFF7FEFF 		bl	FMC_NORSRAM_DeInit
+ 186              	.LVL11:
+ 236:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 187              		.loc 1 236 0
+ 188 0012 0020     		movs	r0, #0
+ 189 0014 84F84500 		strb	r0, [r4, #69]
+ 239:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 190              		.loc 1 239 0
+ 191 0018 84F84400 		strb	r0, [r4, #68]
+ 242:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 192              		.loc 1 242 0
+ 193 001c 10BD     		pop	{r4, pc}
+ 194              		.cfi_endproc
+ 195              	.LFE137:
+ 197 001e 00BF     		.section	.text.HAL_NOR_MspWait,"ax",%progbits
+ 198              		.align	2
+ 199              		.weak	HAL_NOR_MspWait
+ 200              		.thumb
+ 201              		.thumb_func
+ 203              	HAL_NOR_MspWait:
+ 204              	.LFB140:
+ 268:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Prevent unused argument(s) compilation warning */
+ 269:HALLIB/Src/stm32f7xx_hal_nor.c ****   UNUSED(hnor);
+ 270:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 271:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 272:HALLIB/Src/stm32f7xx_hal_nor.c ****             the HAL_NOR_MspDeInit could be implemented in the user file
+ 273:HALLIB/Src/stm32f7xx_hal_nor.c ****    */ 
+ 274:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 275:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 276:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 277:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  NOR MSP Wait for Ready/Busy signal
+ 278:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 279:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 280:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Timeout Maximum timeout value
+ 281:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval None
+ 282:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 283:HALLIB/Src/stm32f7xx_hal_nor.c **** __weak void HAL_NOR_MspWait(NOR_HandleTypeDef *hnor, uint32_t Timeout)
+ 284:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 205              		.loc 1 284 0
+ 206              		.cfi_startproc
+ 207              		@ args = 0, pretend = 0, frame = 0
+ 208              		@ frame_needed = 0, uses_anonymous_args = 0
+ 209              		@ link register save eliminated.
+ 210              	.LVL12:
+ 211 0000 7047     		bx	lr
+ 212              		.cfi_endproc
+ 213              	.LFE140:
+ 215 0002 00BF     		.section	.text.HAL_NOR_Read_ID,"ax",%progbits
+ 216              		.align	2
+ARM GAS  /tmp/ccgp0oUe.s 			page 10
+
+
+ 217              		.global	HAL_NOR_Read_ID
+ 218              		.thumb
+ 219              		.thumb_func
+ 221              	HAL_NOR_Read_ID:
+ 222              	.LFB141:
+ 285:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Prevent unused argument(s) compilation warning */
+ 286:HALLIB/Src/stm32f7xx_hal_nor.c ****   UNUSED(hnor);
+ 287:HALLIB/Src/stm32f7xx_hal_nor.c ****   UNUSED(Timeout);
+ 288:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 289:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 290:HALLIB/Src/stm32f7xx_hal_nor.c ****             the HAL_NOR_MspWait could be implemented in the user file
+ 291:HALLIB/Src/stm32f7xx_hal_nor.c ****    */ 
+ 292:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 293:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 294:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 295:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @}
+ 296:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 297:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 298:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Exported_Functions_Group2 Input and Output functions 
+ 299:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief    Input Output and memory control functions 
+ 300:HALLIB/Src/stm32f7xx_hal_nor.c ****   *
+ 301:HALLIB/Src/stm32f7xx_hal_nor.c ****   @verbatim    
+ 302:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 303:HALLIB/Src/stm32f7xx_hal_nor.c ****                 ##### NOR Input and Output functions #####
+ 304:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 305:HALLIB/Src/stm32f7xx_hal_nor.c ****   [..]  
+ 306:HALLIB/Src/stm32f7xx_hal_nor.c ****     This section provides functions allowing to use and control the NOR memory
+ 307:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 308:HALLIB/Src/stm32f7xx_hal_nor.c **** @endverbatim
+ 309:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 310:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 311:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 312:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 313:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Read NOR flash IDs
+ 314:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 315:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 316:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pNOR_ID  pointer to NOR ID structure
+ 317:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 318:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 319:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Read_ID(NOR_HandleTypeDef *hnor, NOR_IDTypeDef *pNOR_ID)
+ 320:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 223              		.loc 1 320 0
+ 224              		.cfi_startproc
+ 225              		@ args = 0, pretend = 0, frame = 0
+ 226              		@ frame_needed = 0, uses_anonymous_args = 0
+ 227              		@ link register save eliminated.
+ 228              	.LVL13:
+ 321:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 322:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 323:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 324:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 229              		.loc 1 324 0
+ 230 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 231 0004 012B     		cmp	r3, #1
+ 232 0006 66D0     		beq	.L31
+ 233              		.loc 1 324 0 is_stmt 0 discriminator 2
+ 234 0008 0123     		movs	r3, #1
+ARM GAS  /tmp/ccgp0oUe.s 			page 11
+
+
+ 235 000a 80F84430 		strb	r3, [r0, #68]
+ 325:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 326:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 327:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 236              		.loc 1 327 0 is_stmt 1 discriminator 2
+ 237 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 238 0012 DBB2     		uxtb	r3, r3
+ 239 0014 022B     		cmp	r3, #2
+ 240 0016 60D0     		beq	.L32
+ 320:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 241              		.loc 1 320 0
+ 242 0018 10B4     		push	{r4}
+ 243              	.LCFI3:
+ 244              		.cfi_def_cfa_offset 4
+ 245              		.cfi_offset 4, -4
+ 328:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 329:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 330:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 331:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 332:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 333:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 246              		.loc 1 333 0
+ 247 001a 8368     		ldr	r3, [r0, #8]
+ 248 001c 33B1     		cbz	r3, .L33
+ 334:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 335:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 336:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 337:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 249              		.loc 1 337 0
+ 250 001e 022B     		cmp	r3, #2
+ 251 0020 07D0     		beq	.L34
+ 338:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 339:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 340:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 341:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 252              		.loc 1 341 0
+ 253 0022 042B     		cmp	r3, #4
+ 254 0024 08D1     		bne	.L35
+ 342:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 343:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 255              		.loc 1 343 0
+ 256 0026 4FF0D043 		mov	r3, #1744830464
+ 257 002a 07E0     		b	.L18
+ 258              	.L33:
+ 335:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 259              		.loc 1 335 0
+ 260 002c 4FF0C043 		mov	r3, #1610612736
+ 261 0030 04E0     		b	.L18
+ 262              	.L34:
+ 339:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 263              		.loc 1 339 0
+ 264 0032 4FF0C843 		mov	r3, #1677721600
+ 265 0036 01E0     		b	.L18
+ 266              	.L35:
+ 344:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 345:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 346:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ARM GAS  /tmp/ccgp0oUe.s 			page 12
+
+
+ 347:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 267              		.loc 1 347 0
+ 268 0038 4FF0D843 		mov	r3, #1811939328
+ 269              	.L18:
+ 270              	.LVL14:
+ 348:HALLIB/Src/stm32f7xx_hal_nor.c ****   }  
+ 349:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 350:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 351:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 271              		.loc 1 351 0
+ 272 003c 0222     		movs	r2, #2
+ 273 003e 80F84520 		strb	r2, [r0, #69]
+ 352:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 353:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send read ID command */
+ 354:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 274              		.loc 1 354 0
+ 275 0042 284A     		ldr	r2, .L38
+ 276 0044 1268     		ldr	r2, [r2]
+ 277 0046 012A     		cmp	r2, #1
+ 278 0048 02D1     		bne	.L19
+ 279              		.loc 1 354 0 is_stmt 0 discriminator 1
+ 280 004a 03F6AA24 		addw	r4, r3, #2730
+ 281 004e 01E0     		b	.L20
+ 282              	.L19:
+ 283              		.loc 1 354 0 discriminator 2
+ 284 0050 03F25554 		addw	r4, r3, #1365
+ 285              	.L20:
+ 286              		.loc 1 354 0 discriminator 4
+ 287 0054 AA22     		movs	r2, #170
+ 288 0056 2280     		strh	r2, [r4]	@ movhi
+ 289              	.LBB68:
+ 290              	.LBB69:
+ 291              		.file 2 "CORE/cmsis_gcc.h"
+   1:CORE/cmsis_gcc.h **** /**************************************************************************//**
+   2:CORE/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:CORE/cmsis_gcc.h ****  * @brief    CMSIS Cortex-M Core Function/Instruction Header File
+   4:CORE/cmsis_gcc.h ****  * @version  V4.30
+   5:CORE/cmsis_gcc.h ****  * @date     20. October 2015
+   6:CORE/cmsis_gcc.h ****  ******************************************************************************/
+   7:CORE/cmsis_gcc.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:CORE/cmsis_gcc.h **** 
+   9:CORE/cmsis_gcc.h ****    All rights reserved.
+  10:CORE/cmsis_gcc.h ****    Redistribution and use in source and binary forms, with or without
+  11:CORE/cmsis_gcc.h ****    modification, are permitted provided that the following conditions are met:
+  12:CORE/cmsis_gcc.h ****    - Redistributions of source code must retain the above copyright
+  13:CORE/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer.
+  14:CORE/cmsis_gcc.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:CORE/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer in the
+  16:CORE/cmsis_gcc.h ****      documentation and/or other materials provided with the distribution.
+  17:CORE/cmsis_gcc.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:CORE/cmsis_gcc.h ****      to endorse or promote products derived from this software without
+  19:CORE/cmsis_gcc.h ****      specific prior written permission.
+  20:CORE/cmsis_gcc.h ****    *
+  21:CORE/cmsis_gcc.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:CORE/cmsis_gcc.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:CORE/cmsis_gcc.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:CORE/cmsis_gcc.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ARM GAS  /tmp/ccgp0oUe.s 			page 13
+
+
+  25:CORE/cmsis_gcc.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:CORE/cmsis_gcc.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:CORE/cmsis_gcc.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:CORE/cmsis_gcc.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:CORE/cmsis_gcc.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:CORE/cmsis_gcc.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:CORE/cmsis_gcc.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:CORE/cmsis_gcc.h ****    ---------------------------------------------------------------------------*/
+  33:CORE/cmsis_gcc.h **** 
+  34:CORE/cmsis_gcc.h **** 
+  35:CORE/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  36:CORE/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  37:CORE/cmsis_gcc.h **** 
+  38:CORE/cmsis_gcc.h **** /* ignore some GCC warnings */
+  39:CORE/cmsis_gcc.h **** #if defined ( __GNUC__ )
+  40:CORE/cmsis_gcc.h **** #pragma GCC diagnostic push
+  41:CORE/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  42:CORE/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  43:CORE/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  44:CORE/cmsis_gcc.h **** #endif
+  45:CORE/cmsis_gcc.h **** 
+  46:CORE/cmsis_gcc.h **** 
+  47:CORE/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+  48:CORE/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+  49:CORE/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  50:CORE/cmsis_gcc.h ****   @{
+  51:CORE/cmsis_gcc.h ****  */
+  52:CORE/cmsis_gcc.h **** 
+  53:CORE/cmsis_gcc.h **** /**
+  54:CORE/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+  55:CORE/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+  56:CORE/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+  57:CORE/cmsis_gcc.h ****  */
+  58:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+  59:CORE/cmsis_gcc.h **** {
+  60:CORE/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+  61:CORE/cmsis_gcc.h **** }
+  62:CORE/cmsis_gcc.h **** 
+  63:CORE/cmsis_gcc.h **** 
+  64:CORE/cmsis_gcc.h **** /**
+  65:CORE/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+  66:CORE/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+  67:CORE/cmsis_gcc.h ****   Can only be executed in Privileged modes.
+  68:CORE/cmsis_gcc.h ****  */
+  69:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+  70:CORE/cmsis_gcc.h **** {
+  71:CORE/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+  72:CORE/cmsis_gcc.h **** }
+  73:CORE/cmsis_gcc.h **** 
+  74:CORE/cmsis_gcc.h **** 
+  75:CORE/cmsis_gcc.h **** /**
+  76:CORE/cmsis_gcc.h ****   \brief   Get Control Register
+  77:CORE/cmsis_gcc.h ****   \details Returns the content of the Control Register.
+  78:CORE/cmsis_gcc.h ****   \return               Control Register value
+  79:CORE/cmsis_gcc.h ****  */
+  80:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
+  81:CORE/cmsis_gcc.h **** {
+ARM GAS  /tmp/ccgp0oUe.s 			page 14
+
+
+  82:CORE/cmsis_gcc.h ****   uint32_t result;
+  83:CORE/cmsis_gcc.h **** 
+  84:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, control" : "=r" (result) );
+  85:CORE/cmsis_gcc.h ****   return(result);
+  86:CORE/cmsis_gcc.h **** }
+  87:CORE/cmsis_gcc.h **** 
+  88:CORE/cmsis_gcc.h **** 
+  89:CORE/cmsis_gcc.h **** /**
+  90:CORE/cmsis_gcc.h ****   \brief   Set Control Register
+  91:CORE/cmsis_gcc.h ****   \details Writes the given value to the Control Register.
+  92:CORE/cmsis_gcc.h ****   \param [in]    control  Control Register value to set
+  93:CORE/cmsis_gcc.h ****  */
+  94:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t control)
+  95:CORE/cmsis_gcc.h **** {
+  96:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
+  97:CORE/cmsis_gcc.h **** }
+  98:CORE/cmsis_gcc.h **** 
+  99:CORE/cmsis_gcc.h **** 
+ 100:CORE/cmsis_gcc.h **** /**
+ 101:CORE/cmsis_gcc.h ****   \brief   Get IPSR Register
+ 102:CORE/cmsis_gcc.h ****   \details Returns the content of the IPSR Register.
+ 103:CORE/cmsis_gcc.h ****   \return               IPSR Register value
+ 104:CORE/cmsis_gcc.h ****  */
+ 105:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
+ 106:CORE/cmsis_gcc.h **** {
+ 107:CORE/cmsis_gcc.h ****   uint32_t result;
+ 108:CORE/cmsis_gcc.h **** 
+ 109:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+ 110:CORE/cmsis_gcc.h ****   return(result);
+ 111:CORE/cmsis_gcc.h **** }
+ 112:CORE/cmsis_gcc.h **** 
+ 113:CORE/cmsis_gcc.h **** 
+ 114:CORE/cmsis_gcc.h **** /**
+ 115:CORE/cmsis_gcc.h ****   \brief   Get APSR Register
+ 116:CORE/cmsis_gcc.h ****   \details Returns the content of the APSR Register.
+ 117:CORE/cmsis_gcc.h ****   \return               APSR Register value
+ 118:CORE/cmsis_gcc.h ****  */
+ 119:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
+ 120:CORE/cmsis_gcc.h **** {
+ 121:CORE/cmsis_gcc.h ****   uint32_t result;
+ 122:CORE/cmsis_gcc.h **** 
+ 123:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, apsr" : "=r" (result) );
+ 124:CORE/cmsis_gcc.h ****   return(result);
+ 125:CORE/cmsis_gcc.h **** }
+ 126:CORE/cmsis_gcc.h **** 
+ 127:CORE/cmsis_gcc.h **** 
+ 128:CORE/cmsis_gcc.h **** /**
+ 129:CORE/cmsis_gcc.h ****   \brief   Get xPSR Register
+ 130:CORE/cmsis_gcc.h ****   \details Returns the content of the xPSR Register.
+ 131:CORE/cmsis_gcc.h **** 
+ 132:CORE/cmsis_gcc.h ****     \return               xPSR Register value
+ 133:CORE/cmsis_gcc.h ****  */
+ 134:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
+ 135:CORE/cmsis_gcc.h **** {
+ 136:CORE/cmsis_gcc.h ****   uint32_t result;
+ 137:CORE/cmsis_gcc.h **** 
+ 138:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
+ARM GAS  /tmp/ccgp0oUe.s 			page 15
+
+
+ 139:CORE/cmsis_gcc.h ****   return(result);
+ 140:CORE/cmsis_gcc.h **** }
+ 141:CORE/cmsis_gcc.h **** 
+ 142:CORE/cmsis_gcc.h **** 
+ 143:CORE/cmsis_gcc.h **** /**
+ 144:CORE/cmsis_gcc.h ****   \brief   Get Process Stack Pointer
+ 145:CORE/cmsis_gcc.h ****   \details Returns the current value of the Process Stack Pointer (PSP).
+ 146:CORE/cmsis_gcc.h ****   \return               PSP Register value
+ 147:CORE/cmsis_gcc.h ****  */
+ 148:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
+ 149:CORE/cmsis_gcc.h **** {
+ 150:CORE/cmsis_gcc.h ****   register uint32_t result;
+ 151:CORE/cmsis_gcc.h **** 
+ 152:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, psp\n"  : "=r" (result) );
+ 153:CORE/cmsis_gcc.h ****   return(result);
+ 154:CORE/cmsis_gcc.h **** }
+ 155:CORE/cmsis_gcc.h **** 
+ 156:CORE/cmsis_gcc.h **** 
+ 157:CORE/cmsis_gcc.h **** /**
+ 158:CORE/cmsis_gcc.h ****   \brief   Set Process Stack Pointer
+ 159:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Process Stack Pointer (PSP).
+ 160:CORE/cmsis_gcc.h ****   \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 161:CORE/cmsis_gcc.h ****  */
+ 162:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+ 163:CORE/cmsis_gcc.h **** {
+ 164:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR psp, %0\n" : : "r" (topOfProcStack) : "sp");
+ 165:CORE/cmsis_gcc.h **** }
+ 166:CORE/cmsis_gcc.h **** 
+ 167:CORE/cmsis_gcc.h **** 
+ 168:CORE/cmsis_gcc.h **** /**
+ 169:CORE/cmsis_gcc.h ****   \brief   Get Main Stack Pointer
+ 170:CORE/cmsis_gcc.h ****   \details Returns the current value of the Main Stack Pointer (MSP).
+ 171:CORE/cmsis_gcc.h ****   \return               MSP Register value
+ 172:CORE/cmsis_gcc.h ****  */
+ 173:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
+ 174:CORE/cmsis_gcc.h **** {
+ 175:CORE/cmsis_gcc.h ****   register uint32_t result;
+ 176:CORE/cmsis_gcc.h **** 
+ 177:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, msp\n" : "=r" (result) );
+ 178:CORE/cmsis_gcc.h ****   return(result);
+ 179:CORE/cmsis_gcc.h **** }
+ 180:CORE/cmsis_gcc.h **** 
+ 181:CORE/cmsis_gcc.h **** 
+ 182:CORE/cmsis_gcc.h **** /**
+ 183:CORE/cmsis_gcc.h ****   \brief   Set Main Stack Pointer
+ 184:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Main Stack Pointer (MSP).
+ 185:CORE/cmsis_gcc.h **** 
+ 186:CORE/cmsis_gcc.h ****     \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 187:CORE/cmsis_gcc.h ****  */
+ 188:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+ 189:CORE/cmsis_gcc.h **** {
+ 190:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR msp, %0\n" : : "r" (topOfMainStack) : "sp");
+ 191:CORE/cmsis_gcc.h **** }
+ 192:CORE/cmsis_gcc.h **** 
+ 193:CORE/cmsis_gcc.h **** 
+ 194:CORE/cmsis_gcc.h **** /**
+ 195:CORE/cmsis_gcc.h ****   \brief   Get Priority Mask
+ARM GAS  /tmp/ccgp0oUe.s 			page 16
+
+
+ 196:CORE/cmsis_gcc.h ****   \details Returns the current state of the priority mask bit from the Priority Mask Register.
+ 197:CORE/cmsis_gcc.h ****   \return               Priority Mask value
+ 198:CORE/cmsis_gcc.h ****  */
+ 199:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
+ 200:CORE/cmsis_gcc.h **** {
+ 201:CORE/cmsis_gcc.h ****   uint32_t result;
+ 202:CORE/cmsis_gcc.h **** 
+ 203:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, primask" : "=r" (result) );
+ 204:CORE/cmsis_gcc.h ****   return(result);
+ 205:CORE/cmsis_gcc.h **** }
+ 206:CORE/cmsis_gcc.h **** 
+ 207:CORE/cmsis_gcc.h **** 
+ 208:CORE/cmsis_gcc.h **** /**
+ 209:CORE/cmsis_gcc.h ****   \brief   Set Priority Mask
+ 210:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Priority Mask Register.
+ 211:CORE/cmsis_gcc.h ****   \param [in]    priMask  Priority Mask
+ 212:CORE/cmsis_gcc.h ****  */
+ 213:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
+ 214:CORE/cmsis_gcc.h **** {
+ 215:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
+ 216:CORE/cmsis_gcc.h **** }
+ 217:CORE/cmsis_gcc.h **** 
+ 218:CORE/cmsis_gcc.h **** 
+ 219:CORE/cmsis_gcc.h **** #if       (__CORTEX_M >= 0x03U)
+ 220:CORE/cmsis_gcc.h **** 
+ 221:CORE/cmsis_gcc.h **** /**
+ 222:CORE/cmsis_gcc.h ****   \brief   Enable FIQ
+ 223:CORE/cmsis_gcc.h ****   \details Enables FIQ interrupts by clearing the F-bit in the CPSR.
+ 224:CORE/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 225:CORE/cmsis_gcc.h ****  */
+ 226:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
+ 227:CORE/cmsis_gcc.h **** {
+ 228:CORE/cmsis_gcc.h ****   __ASM volatile ("cpsie f" : : : "memory");
+ 229:CORE/cmsis_gcc.h **** }
+ 230:CORE/cmsis_gcc.h **** 
+ 231:CORE/cmsis_gcc.h **** 
+ 232:CORE/cmsis_gcc.h **** /**
+ 233:CORE/cmsis_gcc.h ****   \brief   Disable FIQ
+ 234:CORE/cmsis_gcc.h ****   \details Disables FIQ interrupts by setting the F-bit in the CPSR.
+ 235:CORE/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 236:CORE/cmsis_gcc.h ****  */
+ 237:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void)
+ 238:CORE/cmsis_gcc.h **** {
+ 239:CORE/cmsis_gcc.h ****   __ASM volatile ("cpsid f" : : : "memory");
+ 240:CORE/cmsis_gcc.h **** }
+ 241:CORE/cmsis_gcc.h **** 
+ 242:CORE/cmsis_gcc.h **** 
+ 243:CORE/cmsis_gcc.h **** /**
+ 244:CORE/cmsis_gcc.h ****   \brief   Get Base Priority
+ 245:CORE/cmsis_gcc.h ****   \details Returns the current value of the Base Priority register.
+ 246:CORE/cmsis_gcc.h ****   \return               Base Priority register value
+ 247:CORE/cmsis_gcc.h ****  */
+ 248:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
+ 249:CORE/cmsis_gcc.h **** {
+ 250:CORE/cmsis_gcc.h ****   uint32_t result;
+ 251:CORE/cmsis_gcc.h **** 
+ 252:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, basepri" : "=r" (result) );
+ARM GAS  /tmp/ccgp0oUe.s 			page 17
+
+
+ 253:CORE/cmsis_gcc.h ****   return(result);
+ 254:CORE/cmsis_gcc.h **** }
+ 255:CORE/cmsis_gcc.h **** 
+ 256:CORE/cmsis_gcc.h **** 
+ 257:CORE/cmsis_gcc.h **** /**
+ 258:CORE/cmsis_gcc.h ****   \brief   Set Base Priority
+ 259:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Base Priority register.
+ 260:CORE/cmsis_gcc.h ****   \param [in]    basePri  Base Priority value to set
+ 261:CORE/cmsis_gcc.h ****  */
+ 262:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t value)
+ 263:CORE/cmsis_gcc.h **** {
+ 264:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR basepri, %0" : : "r" (value) : "memory");
+ 265:CORE/cmsis_gcc.h **** }
+ 266:CORE/cmsis_gcc.h **** 
+ 267:CORE/cmsis_gcc.h **** 
+ 268:CORE/cmsis_gcc.h **** /**
+ 269:CORE/cmsis_gcc.h ****   \brief   Set Base Priority with condition
+ 270:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Base Priority register only if BASEPRI masking is disable
+ 271:CORE/cmsis_gcc.h ****            or the new value increases the BASEPRI priority level.
+ 272:CORE/cmsis_gcc.h ****   \param [in]    basePri  Base Priority value to set
+ 273:CORE/cmsis_gcc.h ****  */
+ 274:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI_MAX(uint32_t value)
+ 275:CORE/cmsis_gcc.h **** {
+ 276:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR basepri_max, %0" : : "r" (value) : "memory");
+ 277:CORE/cmsis_gcc.h **** }
+ 278:CORE/cmsis_gcc.h **** 
+ 279:CORE/cmsis_gcc.h **** 
+ 280:CORE/cmsis_gcc.h **** /**
+ 281:CORE/cmsis_gcc.h ****   \brief   Get Fault Mask
+ 282:CORE/cmsis_gcc.h ****   \details Returns the current value of the Fault Mask register.
+ 283:CORE/cmsis_gcc.h ****   \return               Fault Mask register value
+ 284:CORE/cmsis_gcc.h ****  */
+ 285:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void)
+ 286:CORE/cmsis_gcc.h **** {
+ 287:CORE/cmsis_gcc.h ****   uint32_t result;
+ 288:CORE/cmsis_gcc.h **** 
+ 289:CORE/cmsis_gcc.h ****   __ASM volatile ("MRS %0, faultmask" : "=r" (result) );
+ 290:CORE/cmsis_gcc.h ****   return(result);
+ 291:CORE/cmsis_gcc.h **** }
+ 292:CORE/cmsis_gcc.h **** 
+ 293:CORE/cmsis_gcc.h **** 
+ 294:CORE/cmsis_gcc.h **** /**
+ 295:CORE/cmsis_gcc.h ****   \brief   Set Fault Mask
+ 296:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Fault Mask register.
+ 297:CORE/cmsis_gcc.h ****   \param [in]    faultMask  Fault Mask value to set
+ 298:CORE/cmsis_gcc.h ****  */
+ 299:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
+ 300:CORE/cmsis_gcc.h **** {
+ 301:CORE/cmsis_gcc.h ****   __ASM volatile ("MSR faultmask, %0" : : "r" (faultMask) : "memory");
+ 302:CORE/cmsis_gcc.h **** }
+ 303:CORE/cmsis_gcc.h **** 
+ 304:CORE/cmsis_gcc.h **** #endif /* (__CORTEX_M >= 0x03U) */
+ 305:CORE/cmsis_gcc.h **** 
+ 306:CORE/cmsis_gcc.h **** 
+ 307:CORE/cmsis_gcc.h **** #if       (__CORTEX_M == 0x04U) || (__CORTEX_M == 0x07U)
+ 308:CORE/cmsis_gcc.h **** 
+ 309:CORE/cmsis_gcc.h **** /**
+ARM GAS  /tmp/ccgp0oUe.s 			page 18
+
+
+ 310:CORE/cmsis_gcc.h ****   \brief   Get FPSCR
+ 311:CORE/cmsis_gcc.h ****   \details Returns the current value of the Floating Point Status/Control register.
+ 312:CORE/cmsis_gcc.h ****   \return               Floating Point Status/Control register value
+ 313:CORE/cmsis_gcc.h ****  */
+ 314:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
+ 315:CORE/cmsis_gcc.h **** {
+ 316:CORE/cmsis_gcc.h **** #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
+ 317:CORE/cmsis_gcc.h ****   uint32_t result;
+ 318:CORE/cmsis_gcc.h **** 
+ 319:CORE/cmsis_gcc.h ****   /* Empty asm statement works as a scheduling barrier */
+ 320:CORE/cmsis_gcc.h ****   __ASM volatile ("");
+ 321:CORE/cmsis_gcc.h ****   __ASM volatile ("VMRS %0, fpscr" : "=r" (result) );
+ 322:CORE/cmsis_gcc.h ****   __ASM volatile ("");
+ 323:CORE/cmsis_gcc.h ****   return(result);
+ 324:CORE/cmsis_gcc.h **** #else
+ 325:CORE/cmsis_gcc.h ****    return(0);
+ 326:CORE/cmsis_gcc.h **** #endif
+ 327:CORE/cmsis_gcc.h **** }
+ 328:CORE/cmsis_gcc.h **** 
+ 329:CORE/cmsis_gcc.h **** 
+ 330:CORE/cmsis_gcc.h **** /**
+ 331:CORE/cmsis_gcc.h ****   \brief   Set FPSCR
+ 332:CORE/cmsis_gcc.h ****   \details Assigns the given value to the Floating Point Status/Control register.
+ 333:CORE/cmsis_gcc.h ****   \param [in]    fpscr  Floating Point Status/Control value to set
+ 334:CORE/cmsis_gcc.h ****  */
+ 335:CORE/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+ 336:CORE/cmsis_gcc.h **** {
+ 337:CORE/cmsis_gcc.h **** #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
+ 338:CORE/cmsis_gcc.h ****   /* Empty asm statement works as a scheduling barrier */
+ 339:CORE/cmsis_gcc.h ****   __ASM volatile ("");
+ 340:CORE/cmsis_gcc.h ****   __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc");
+ 341:CORE/cmsis_gcc.h ****   __ASM volatile ("");
+ 342:CORE/cmsis_gcc.h **** #endif
+ 343:CORE/cmsis_gcc.h **** }
+ 344:CORE/cmsis_gcc.h **** 
+ 345:CORE/cmsis_gcc.h **** #endif /* (__CORTEX_M == 0x04U) || (__CORTEX_M == 0x07U) */
+ 346:CORE/cmsis_gcc.h **** 
+ 347:CORE/cmsis_gcc.h **** 
+ 348:CORE/cmsis_gcc.h **** 
+ 349:CORE/cmsis_gcc.h **** /*@} end of CMSIS_Core_RegAccFunctions */
+ 350:CORE/cmsis_gcc.h **** 
+ 351:CORE/cmsis_gcc.h **** 
+ 352:CORE/cmsis_gcc.h **** /* ##########################  Core Instruction Access  ######################### */
+ 353:CORE/cmsis_gcc.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+ 354:CORE/cmsis_gcc.h ****   Access to dedicated instructions
+ 355:CORE/cmsis_gcc.h ****   @{
+ 356:CORE/cmsis_gcc.h **** */
+ 357:CORE/cmsis_gcc.h **** 
+ 358:CORE/cmsis_gcc.h **** /* Define macros for porting to both thumb1 and thumb2.
+ 359:CORE/cmsis_gcc.h ****  * For thumb1, use low register (r0-r7), specified by constraint "l"
+ 360:CORE/cmsis_gcc.h ****  * Otherwise, use general registers, specified by constraint "r" */
+ 361:CORE/cmsis_gcc.h **** #if defined (__thumb__) && !defined (__thumb2__)
+ 362:CORE/cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
+ 363:CORE/cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "l" (r)
+ 364:CORE/cmsis_gcc.h **** #else
+ 365:CORE/cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=r" (r)
+ 366:CORE/cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "r" (r)
+ARM GAS  /tmp/ccgp0oUe.s 			page 19
+
+
+ 367:CORE/cmsis_gcc.h **** #endif
+ 368:CORE/cmsis_gcc.h **** 
+ 369:CORE/cmsis_gcc.h **** /**
+ 370:CORE/cmsis_gcc.h ****   \brief   No Operation
+ 371:CORE/cmsis_gcc.h ****   \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ 372:CORE/cmsis_gcc.h ****  */
+ 373:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __NOP(void)
+ 374:CORE/cmsis_gcc.h **** {
+ 375:CORE/cmsis_gcc.h ****   __ASM volatile ("nop");
+ 376:CORE/cmsis_gcc.h **** }
+ 377:CORE/cmsis_gcc.h **** 
+ 378:CORE/cmsis_gcc.h **** 
+ 379:CORE/cmsis_gcc.h **** /**
+ 380:CORE/cmsis_gcc.h ****   \brief   Wait For Interrupt
+ 381:CORE/cmsis_gcc.h ****   \details Wait For Interrupt is a hint instruction that suspends execution until one of a number o
+ 382:CORE/cmsis_gcc.h ****  */
+ 383:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __WFI(void)
+ 384:CORE/cmsis_gcc.h **** {
+ 385:CORE/cmsis_gcc.h ****   __ASM volatile ("wfi");
+ 386:CORE/cmsis_gcc.h **** }
+ 387:CORE/cmsis_gcc.h **** 
+ 388:CORE/cmsis_gcc.h **** 
+ 389:CORE/cmsis_gcc.h **** /**
+ 390:CORE/cmsis_gcc.h ****   \brief   Wait For Event
+ 391:CORE/cmsis_gcc.h ****   \details Wait For Event is a hint instruction that permits the processor to enter
+ 392:CORE/cmsis_gcc.h ****     a low-power state until one of a number of events occurs.
+ 393:CORE/cmsis_gcc.h ****  */
+ 394:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __WFE(void)
+ 395:CORE/cmsis_gcc.h **** {
+ 396:CORE/cmsis_gcc.h ****   __ASM volatile ("wfe");
+ 397:CORE/cmsis_gcc.h **** }
+ 398:CORE/cmsis_gcc.h **** 
+ 399:CORE/cmsis_gcc.h **** 
+ 400:CORE/cmsis_gcc.h **** /**
+ 401:CORE/cmsis_gcc.h ****   \brief   Send Event
+ 402:CORE/cmsis_gcc.h ****   \details Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 403:CORE/cmsis_gcc.h ****  */
+ 404:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __SEV(void)
+ 405:CORE/cmsis_gcc.h **** {
+ 406:CORE/cmsis_gcc.h ****   __ASM volatile ("sev");
+ 407:CORE/cmsis_gcc.h **** }
+ 408:CORE/cmsis_gcc.h **** 
+ 409:CORE/cmsis_gcc.h **** 
+ 410:CORE/cmsis_gcc.h **** /**
+ 411:CORE/cmsis_gcc.h ****   \brief   Instruction Synchronization Barrier
+ 412:CORE/cmsis_gcc.h ****   \details Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 413:CORE/cmsis_gcc.h ****            so that all instructions following the ISB are fetched from cache or memory,
+ 414:CORE/cmsis_gcc.h ****            after the instruction has been completed.
+ 415:CORE/cmsis_gcc.h ****  */
+ 416:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __ISB(void)
+ 417:CORE/cmsis_gcc.h **** {
+ 418:CORE/cmsis_gcc.h ****   __ASM volatile ("isb 0xF":::"memory");
+ 419:CORE/cmsis_gcc.h **** }
+ 420:CORE/cmsis_gcc.h **** 
+ 421:CORE/cmsis_gcc.h **** 
+ 422:CORE/cmsis_gcc.h **** /**
+ 423:CORE/cmsis_gcc.h ****   \brief   Data Synchronization Barrier
+ARM GAS  /tmp/ccgp0oUe.s 			page 20
+
+
+ 424:CORE/cmsis_gcc.h ****   \details Acts as a special kind of Data Memory Barrier.
+ 425:CORE/cmsis_gcc.h ****            It completes when all explicit memory accesses before this instruction complete.
+ 426:CORE/cmsis_gcc.h ****  */
+ 427:CORE/cmsis_gcc.h **** __attribute__((always_inline)) __STATIC_INLINE void __DSB(void)
+ 428:CORE/cmsis_gcc.h **** {
+ 429:CORE/cmsis_gcc.h ****   __ASM volatile ("dsb 0xF":::"memory");
+ 292              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 293              		.syntax unified
+ 294              	@ 429 "CORE/cmsis_gcc.h" 1
+ 295 0058 BFF34F8F 		dsb 0xF
+ 296              	@ 0 "" 2
+ 297              		.thumb
+ 298              		.syntax unified
+ 299              	.LBE69:
+ 300              	.LBE68:
+ 355:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 301              		.loc 1 355 0 discriminator 4
+ 302 005c 214A     		ldr	r2, .L38
+ 303 005e 1268     		ldr	r2, [r2]
+ 304 0060 012A     		cmp	r2, #1
+ 305 0062 02D1     		bne	.L21
+ 306              		.loc 1 355 0 is_stmt 0 discriminator 1
+ 307 0064 03F25454 		addw	r4, r3, #1364
+ 308 0068 01E0     		b	.L22
+ 309              	.L21:
+ 310              		.loc 1 355 0 discriminator 2
+ 311 006a 03F2AA24 		addw	r4, r3, #682
+ 312              	.L22:
+ 313              		.loc 1 355 0 discriminator 4
+ 314 006e 5522     		movs	r2, #85
+ 315 0070 2280     		strh	r2, [r4]	@ movhi
+ 316              	.LBB70:
+ 317              	.LBB71:
+ 318              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 319              		.syntax unified
+ 320              	@ 429 "CORE/cmsis_gcc.h" 1
+ 321 0072 BFF34F8F 		dsb 0xF
+ 322              	@ 0 "" 2
+ 323              		.thumb
+ 324              		.syntax unified
+ 325              	.LBE71:
+ 326              	.LBE70:
+ 356:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 327              		.loc 1 356 0 discriminator 4
+ 328 0076 1B4A     		ldr	r2, .L38
+ 329 0078 1268     		ldr	r2, [r2]
+ 330 007a 012A     		cmp	r2, #1
+ 331 007c 02D1     		bne	.L23
+ 332              		.loc 1 356 0 is_stmt 0 discriminator 1
+ 333 007e 03F6AA24 		addw	r4, r3, #2730
+ 334 0082 01E0     		b	.L24
+ 335              	.L23:
+ 336              		.loc 1 356 0 discriminator 2
+ 337 0084 03F25554 		addw	r4, r3, #1365
+ 338              	.L24:
+ 339              		.loc 1 356 0 discriminator 4
+ 340 0088 9022     		movs	r2, #144
+ARM GAS  /tmp/ccgp0oUe.s 			page 21
+
+
+ 341 008a 2280     		strh	r2, [r4]	@ movhi
+ 342              	.LBB72:
+ 343              	.LBB73:
+ 344              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 345              		.syntax unified
+ 346              	@ 429 "CORE/cmsis_gcc.h" 1
+ 347 008c BFF34F8F 		dsb 0xF
+ 348              	@ 0 "" 2
+ 349              		.thumb
+ 350              		.syntax unified
+ 351              	.LBE73:
+ 352              	.LBE72:
+ 357:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 358:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Read the NOR IDs */
+ 359:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_ID->Manufacturer_Code = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidt
+ 353              		.loc 1 359 0 discriminator 4
+ 354 0090 1A88     		ldrh	r2, [r3]
+ 355 0092 0A80     		strh	r2, [r1]	@ movhi
+ 360:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_ID->Device_Code1      = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidt
+ 356              		.loc 1 360 0 discriminator 4
+ 357 0094 134A     		ldr	r2, .L38
+ 358 0096 1268     		ldr	r2, [r2]
+ 359 0098 012A     		cmp	r2, #1
+ 360 009a 01D1     		bne	.L25
+ 361              		.loc 1 360 0 is_stmt 0 discriminator 1
+ 362 009c 9C1C     		adds	r4, r3, #2
+ 363 009e 00E0     		b	.L26
+ 364              	.L25:
+ 365              		.loc 1 360 0 discriminator 2
+ 366 00a0 5C1C     		adds	r4, r3, #1
+ 367              	.L26:
+ 368              		.loc 1 360 0 discriminator 4
+ 369 00a2 2488     		ldrh	r4, [r4]
+ 370 00a4 4C80     		strh	r4, [r1, #2]	@ movhi
+ 361:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_ID->Device_Code2      = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidt
+ 371              		.loc 1 361 0 is_stmt 1 discriminator 4
+ 372 00a6 012A     		cmp	r2, #1
+ 373 00a8 02D1     		bne	.L27
+ 374              		.loc 1 361 0 is_stmt 0 discriminator 1
+ 375 00aa 03F11C04 		add	r4, r3, #28
+ 376 00ae 01E0     		b	.L28
+ 377              	.L27:
+ 378              		.loc 1 361 0 discriminator 2
+ 379 00b0 03F10E04 		add	r4, r3, #14
+ 380              	.L28:
+ 381              		.loc 1 361 0 discriminator 4
+ 382 00b4 2488     		ldrh	r4, [r4]
+ 383 00b6 8C80     		strh	r4, [r1, #4]	@ movhi
+ 362:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_ID->Device_Code3      = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidt
+ 384              		.loc 1 362 0 is_stmt 1 discriminator 4
+ 385 00b8 012A     		cmp	r2, #1
+ 386 00ba 01D1     		bne	.L29
+ 387              		.loc 1 362 0 is_stmt 0 discriminator 1
+ 388 00bc 1E33     		adds	r3, r3, #30
+ 389              	.LVL15:
+ 390 00be 00E0     		b	.L30
+ 391              	.LVL16:
+ARM GAS  /tmp/ccgp0oUe.s 			page 22
+
+
+ 392              	.L29:
+ 393              		.loc 1 362 0 discriminator 2
+ 394 00c0 0F33     		adds	r3, r3, #15
+ 395              	.LVL17:
+ 396              	.L30:
+ 397              		.loc 1 362 0 discriminator 4
+ 398 00c2 1B88     		ldrh	r3, [r3]
+ 399 00c4 CB80     		strh	r3, [r1, #6]	@ movhi
+ 363:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 364:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 365:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 400              		.loc 1 365 0 is_stmt 1 discriminator 4
+ 401 00c6 0123     		movs	r3, #1
+ 402 00c8 80F84530 		strb	r3, [r0, #69]
+ 366:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 367:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 368:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);   
+ 403              		.loc 1 368 0 discriminator 4
+ 404 00cc 0023     		movs	r3, #0
+ 405 00ce 80F84430 		strb	r3, [r0, #68]
+ 369:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 370:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 406              		.loc 1 370 0 discriminator 4
+ 407 00d2 1846     		mov	r0, r3
+ 408              	.LVL18:
+ 409 00d4 03E0     		b	.L17
+ 410              	.LVL19:
+ 411              	.L31:
+ 412              	.LCFI4:
+ 413              		.cfi_def_cfa_offset 0
+ 414              		.cfi_restore 4
+ 324:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 415              		.loc 1 324 0
+ 416 00d6 0220     		movs	r0, #2
+ 417              	.LVL20:
+ 418 00d8 7047     		bx	lr
+ 419              	.LVL21:
+ 420              	.L32:
+ 329:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 421              		.loc 1 329 0
+ 422 00da 0220     		movs	r0, #2
+ 423              	.LVL22:
+ 424 00dc 7047     		bx	lr
+ 425              	.LVL23:
+ 426              	.L17:
+ 427              	.LCFI5:
+ 428              		.cfi_def_cfa_offset 4
+ 429              		.cfi_offset 4, -4
+ 371:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 430              		.loc 1 371 0
+ 431 00de 5DF8044B 		ldr	r4, [sp], #4
+ 432              	.LCFI6:
+ 433              		.cfi_restore 4
+ 434              		.cfi_def_cfa_offset 0
+ 435 00e2 7047     		bx	lr
+ 436              	.L39:
+ 437              		.align	2
+ARM GAS  /tmp/ccgp0oUe.s 			page 23
+
+
+ 438              	.L38:
+ 439 00e4 00000000 		.word	.LANCHOR0
+ 440              		.cfi_endproc
+ 441              	.LFE141:
+ 443              		.section	.text.HAL_NOR_ReturnToReadMode,"ax",%progbits
+ 444              		.align	2
+ 445              		.global	HAL_NOR_ReturnToReadMode
+ 446              		.thumb
+ 447              		.thumb_func
+ 449              	HAL_NOR_ReturnToReadMode:
+ 450              	.LFB142:
+ 372:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 373:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 374:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Returns the NOR memory to Read mode.
+ 375:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 376:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 377:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 378:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 379:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_ReturnToReadMode(NOR_HandleTypeDef *hnor)
+ 380:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 451              		.loc 1 380 0
+ 452              		.cfi_startproc
+ 453              		@ args = 0, pretend = 0, frame = 0
+ 454              		@ frame_needed = 0, uses_anonymous_args = 0
+ 455              		@ link register save eliminated.
+ 456              	.LVL24:
+ 381:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;  
+ 382:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 383:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 384:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 457              		.loc 1 384 0
+ 458 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 459 0004 012B     		cmp	r3, #1
+ 460 0006 24D0     		beq	.L43
+ 461              		.loc 1 384 0 is_stmt 0 discriminator 2
+ 462 0008 0123     		movs	r3, #1
+ 463 000a 80F84430 		strb	r3, [r0, #68]
+ 385:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 386:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 387:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 464              		.loc 1 387 0 is_stmt 1 discriminator 2
+ 465 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 466 0012 DBB2     		uxtb	r3, r3
+ 467 0014 022B     		cmp	r3, #2
+ 468 0016 1ED0     		beq	.L44
+ 388:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 389:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 390:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 391:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 392:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 393:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 469              		.loc 1 393 0
+ 470 0018 8368     		ldr	r3, [r0, #8]
+ 471 001a 33B1     		cbz	r3, .L45
+ 394:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 395:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 396:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ARM GAS  /tmp/ccgp0oUe.s 			page 24
+
+
+ 397:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 472              		.loc 1 397 0
+ 473 001c 022B     		cmp	r3, #2
+ 474 001e 07D0     		beq	.L46
+ 398:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 399:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 400:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 401:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 475              		.loc 1 401 0
+ 476 0020 042B     		cmp	r3, #4
+ 477 0022 08D1     		bne	.L47
+ 402:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 403:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 478              		.loc 1 403 0
+ 479 0024 4FF0D042 		mov	r2, #1744830464
+ 480 0028 07E0     		b	.L42
+ 481              	.L45:
+ 395:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 482              		.loc 1 395 0
+ 483 002a 4FF0C042 		mov	r2, #1610612736
+ 484 002e 04E0     		b	.L42
+ 485              	.L46:
+ 399:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 486              		.loc 1 399 0
+ 487 0030 4FF0C842 		mov	r2, #1677721600
+ 488 0034 01E0     		b	.L42
+ 489              	.L47:
+ 404:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 405:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 406:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 407:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 490              		.loc 1 407 0
+ 491 0036 4FF0D842 		mov	r2, #1811939328
+ 492              	.L42:
+ 493              	.LVL25:
+ 408:HALLIB/Src/stm32f7xx_hal_nor.c ****   }  
+ 409:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 410:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(deviceaddress, NOR_CMD_DATA_READ_RESET);
+ 494              		.loc 1 410 0
+ 495 003a F023     		movs	r3, #240
+ 496 003c 1380     		strh	r3, [r2]	@ movhi
+ 497              	.LBB74:
+ 498              	.LBB75:
+ 499              		.loc 2 429 0
+ 500              		.syntax unified
+ 501              	@ 429 "CORE/cmsis_gcc.h" 1
+ 502 003e BFF34F8F 		dsb 0xF
+ 503              	@ 0 "" 2
+ 504              		.thumb
+ 505              		.syntax unified
+ 506              	.LBE75:
+ 507              	.LBE74:
+ 411:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 412:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 413:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 508              		.loc 1 413 0
+ 509 0042 0123     		movs	r3, #1
+ARM GAS  /tmp/ccgp0oUe.s 			page 25
+
+
+ 510 0044 80F84530 		strb	r3, [r0, #69]
+ 414:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 415:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 416:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);   
+ 511              		.loc 1 416 0
+ 512 0048 0023     		movs	r3, #0
+ 513 004a 80F84430 		strb	r3, [r0, #68]
+ 417:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 418:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 514              		.loc 1 418 0
+ 515 004e 1846     		mov	r0, r3
+ 516              	.LVL26:
+ 517 0050 7047     		bx	lr
+ 518              	.LVL27:
+ 519              	.L43:
+ 384:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 520              		.loc 1 384 0
+ 521 0052 0220     		movs	r0, #2
+ 522              	.LVL28:
+ 523 0054 7047     		bx	lr
+ 524              	.LVL29:
+ 525              	.L44:
+ 389:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 526              		.loc 1 389 0
+ 527 0056 0220     		movs	r0, #2
+ 528              	.LVL30:
+ 419:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 529              		.loc 1 419 0
+ 530 0058 7047     		bx	lr
+ 531              		.cfi_endproc
+ 532              	.LFE142:
+ 534 005a 00BF     		.section	.text.HAL_NOR_Read,"ax",%progbits
+ 535              		.align	2
+ 536              		.global	HAL_NOR_Read
+ 537              		.thumb
+ 538              		.thumb_func
+ 540              	HAL_NOR_Read:
+ 541              	.LFB143:
+ 420:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 421:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 422:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Read data from NOR memory 
+ 423:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 424:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 425:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pAddress pointer to Device address
+ 426:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pData  pointer to read data  
+ 427:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 428:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 429:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData)
+ 430:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 542              		.loc 1 430 0
+ 543              		.cfi_startproc
+ 544              		@ args = 0, pretend = 0, frame = 0
+ 545              		@ frame_needed = 0, uses_anonymous_args = 0
+ 546              		@ link register save eliminated.
+ 547              	.LVL31:
+ 431:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 432:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ARM GAS  /tmp/ccgp0oUe.s 			page 26
+
+
+ 433:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 434:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 548              		.loc 1 434 0
+ 549 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 550 0004 012B     		cmp	r3, #1
+ 551 0006 4DD0     		beq	.L57
+ 552              		.loc 1 434 0 is_stmt 0 discriminator 2
+ 553 0008 0123     		movs	r3, #1
+ 554 000a 80F84430 		strb	r3, [r0, #68]
+ 435:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 436:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 437:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 555              		.loc 1 437 0 is_stmt 1 discriminator 2
+ 556 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 557 0012 DBB2     		uxtb	r3, r3
+ 558 0014 022B     		cmp	r3, #2
+ 559 0016 47D0     		beq	.L58
+ 430:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 560              		.loc 1 430 0
+ 561 0018 30B4     		push	{r4, r5}
+ 562              	.LCFI7:
+ 563              		.cfi_def_cfa_offset 8
+ 564              		.cfi_offset 4, -8
+ 565              		.cfi_offset 5, -4
+ 438:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 439:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 440:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 441:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 442:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 443:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 566              		.loc 1 443 0
+ 567 001a 8368     		ldr	r3, [r0, #8]
+ 568 001c 33B1     		cbz	r3, .L59
+ 444:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 445:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 446:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 447:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 569              		.loc 1 447 0
+ 570 001e 022B     		cmp	r3, #2
+ 571 0020 07D0     		beq	.L60
+ 448:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 449:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 450:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 451:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 572              		.loc 1 451 0
+ 573 0022 042B     		cmp	r3, #4
+ 574 0024 08D1     		bne	.L61
+ 452:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 453:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 575              		.loc 1 453 0
+ 576 0026 4FF0D043 		mov	r3, #1744830464
+ 577 002a 07E0     		b	.L50
+ 578              	.L59:
+ 445:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 579              		.loc 1 445 0
+ 580 002c 4FF0C043 		mov	r3, #1610612736
+ 581 0030 04E0     		b	.L50
+ARM GAS  /tmp/ccgp0oUe.s 			page 27
+
+
+ 582              	.L60:
+ 449:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 583              		.loc 1 449 0
+ 584 0032 4FF0C843 		mov	r3, #1677721600
+ 585 0036 01E0     		b	.L50
+ 586              	.L61:
+ 454:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 455:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 456:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 457:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 587              		.loc 1 457 0
+ 588 0038 4FF0D843 		mov	r3, #1811939328
+ 589              	.L50:
+ 590              	.LVL32:
+ 458:HALLIB/Src/stm32f7xx_hal_nor.c ****   } 
+ 459:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 460:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 461:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 591              		.loc 1 461 0
+ 592 003c 0224     		movs	r4, #2
+ 593 003e 80F84540 		strb	r4, [r0, #69]
+ 462:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 463:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send read data command */
+ 464:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 594              		.loc 1 464 0
+ 595 0042 1B4C     		ldr	r4, .L64
+ 596 0044 2468     		ldr	r4, [r4]
+ 597 0046 012C     		cmp	r4, #1
+ 598 0048 02D1     		bne	.L51
+ 599              		.loc 1 464 0 is_stmt 0 discriminator 1
+ 600 004a 03F6AA25 		addw	r5, r3, #2730
+ 601 004e 01E0     		b	.L52
+ 602              	.L51:
+ 603              		.loc 1 464 0 discriminator 2
+ 604 0050 03F25555 		addw	r5, r3, #1365
+ 605              	.L52:
+ 606              		.loc 1 464 0 discriminator 4
+ 607 0054 AA24     		movs	r4, #170
+ 608 0056 2C80     		strh	r4, [r5]	@ movhi
+ 609              	.LBB76:
+ 610              	.LBB77:
+ 611              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 612              		.syntax unified
+ 613              	@ 429 "CORE/cmsis_gcc.h" 1
+ 614 0058 BFF34F8F 		dsb 0xF
+ 615              	@ 0 "" 2
+ 616              		.thumb
+ 617              		.syntax unified
+ 618              	.LBE77:
+ 619              	.LBE76:
+ 465:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 620              		.loc 1 465 0 discriminator 4
+ 621 005c 144C     		ldr	r4, .L64
+ 622 005e 2468     		ldr	r4, [r4]
+ 623 0060 012C     		cmp	r4, #1
+ 624 0062 02D1     		bne	.L53
+ 625              		.loc 1 465 0 is_stmt 0 discriminator 1
+ARM GAS  /tmp/ccgp0oUe.s 			page 28
+
+
+ 626 0064 03F25455 		addw	r5, r3, #1364
+ 627 0068 01E0     		b	.L54
+ 628              	.L53:
+ 629              		.loc 1 465 0 discriminator 2
+ 630 006a 03F2AA25 		addw	r5, r3, #682
+ 631              	.L54:
+ 632              		.loc 1 465 0 discriminator 4
+ 633 006e 5524     		movs	r4, #85
+ 634 0070 2C80     		strh	r4, [r5]	@ movhi
+ 635              	.LBB78:
+ 636              	.LBB79:
+ 637              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 638              		.syntax unified
+ 639              	@ 429 "CORE/cmsis_gcc.h" 1
+ 640 0072 BFF34F8F 		dsb 0xF
+ 641              	@ 0 "" 2
+ 642              		.thumb
+ 643              		.syntax unified
+ 644              	.LBE79:
+ 645              	.LBE78:
+ 466:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 646              		.loc 1 466 0 discriminator 4
+ 647 0076 0E4C     		ldr	r4, .L64
+ 648 0078 2468     		ldr	r4, [r4]
+ 649 007a 012C     		cmp	r4, #1
+ 650 007c 02D1     		bne	.L55
+ 651              		.loc 1 466 0 is_stmt 0 discriminator 1
+ 652 007e 03F6AA23 		addw	r3, r3, #2730
+ 653              	.LVL33:
+ 654 0082 01E0     		b	.L56
+ 655              	.LVL34:
+ 656              	.L55:
+ 657              		.loc 1 466 0 discriminator 2
+ 658 0084 03F25553 		addw	r3, r3, #1365
+ 659              	.LVL35:
+ 660              	.L56:
+ 661              		.loc 1 466 0 discriminator 4
+ 662 0088 F024     		movs	r4, #240
+ 663 008a 1C80     		strh	r4, [r3]	@ movhi
+ 664              	.LBB80:
+ 665              	.LBB81:
+ 666              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 667              		.syntax unified
+ 668              	@ 429 "CORE/cmsis_gcc.h" 1
+ 669 008c BFF34F8F 		dsb 0xF
+ 670              	@ 0 "" 2
+ 671              		.thumb
+ 672              		.syntax unified
+ 673              	.LBE81:
+ 674              	.LBE80:
+ 467:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 468:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Read the data */
+ 469:HALLIB/Src/stm32f7xx_hal_nor.c ****   *pData = *(__IO uint32_t *)(uint32_t)pAddress;
+ 675              		.loc 1 469 0 discriminator 4
+ 676 0090 0B68     		ldr	r3, [r1]
+ 677 0092 1380     		strh	r3, [r2]	@ movhi
+ 470:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ARM GAS  /tmp/ccgp0oUe.s 			page 29
+
+
+ 471:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 472:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 678              		.loc 1 472 0 discriminator 4
+ 679 0094 0123     		movs	r3, #1
+ 680 0096 80F84530 		strb	r3, [r0, #69]
+ 473:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 474:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 475:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 681              		.loc 1 475 0 discriminator 4
+ 682 009a 0023     		movs	r3, #0
+ 683 009c 80F84430 		strb	r3, [r0, #68]
+ 476:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 477:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 684              		.loc 1 477 0 discriminator 4
+ 685 00a0 1846     		mov	r0, r3
+ 686              	.LVL36:
+ 687 00a2 03E0     		b	.L49
+ 688              	.LVL37:
+ 689              	.L57:
+ 690              	.LCFI8:
+ 691              		.cfi_def_cfa_offset 0
+ 692              		.cfi_restore 4
+ 693              		.cfi_restore 5
+ 434:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 694              		.loc 1 434 0
+ 695 00a4 0220     		movs	r0, #2
+ 696              	.LVL38:
+ 697 00a6 7047     		bx	lr
+ 698              	.LVL39:
+ 699              	.L58:
+ 439:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 700              		.loc 1 439 0
+ 701 00a8 0220     		movs	r0, #2
+ 702              	.LVL40:
+ 703 00aa 7047     		bx	lr
+ 704              	.LVL41:
+ 705              	.L49:
+ 706              	.LCFI9:
+ 707              		.cfi_def_cfa_offset 8
+ 708              		.cfi_offset 4, -8
+ 709              		.cfi_offset 5, -4
+ 478:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 710              		.loc 1 478 0
+ 711 00ac 30BC     		pop	{r4, r5}
+ 712              	.LCFI10:
+ 713              		.cfi_restore 5
+ 714              		.cfi_restore 4
+ 715              		.cfi_def_cfa_offset 0
+ 716 00ae 7047     		bx	lr
+ 717              	.L65:
+ 718              		.align	2
+ 719              	.L64:
+ 720 00b0 00000000 		.word	.LANCHOR0
+ 721              		.cfi_endproc
+ 722              	.LFE143:
+ 724              		.section	.text.HAL_NOR_Program,"ax",%progbits
+ 725              		.align	2
+ARM GAS  /tmp/ccgp0oUe.s 			page 30
+
+
+ 726              		.global	HAL_NOR_Program
+ 727              		.thumb
+ 728              		.thumb_func
+ 730              	HAL_NOR_Program:
+ 731              	.LFB144:
+ 479:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 480:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 481:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Program data to NOR memory 
+ 482:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 483:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 484:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pAddress Device address
+ 485:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pData  pointer to the data to write   
+ 486:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 487:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 488:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData)
+ 489:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 732              		.loc 1 489 0
+ 733              		.cfi_startproc
+ 734              		@ args = 0, pretend = 0, frame = 0
+ 735              		@ frame_needed = 0, uses_anonymous_args = 0
+ 736              		@ link register save eliminated.
+ 737              	.LVL42:
+ 490:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 491:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 492:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 493:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 738              		.loc 1 493 0
+ 739 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 740 0004 012B     		cmp	r3, #1
+ 741 0006 4FD0     		beq	.L75
+ 742              		.loc 1 493 0 is_stmt 0 discriminator 2
+ 743 0008 0123     		movs	r3, #1
+ 744 000a 80F84430 		strb	r3, [r0, #68]
+ 494:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 495:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 496:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 745              		.loc 1 496 0 is_stmt 1 discriminator 2
+ 746 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 747 0012 DBB2     		uxtb	r3, r3
+ 748 0014 022B     		cmp	r3, #2
+ 749 0016 49D0     		beq	.L76
+ 489:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 750              		.loc 1 489 0
+ 751 0018 30B4     		push	{r4, r5}
+ 752              	.LCFI11:
+ 753              		.cfi_def_cfa_offset 8
+ 754              		.cfi_offset 4, -8
+ 755              		.cfi_offset 5, -4
+ 497:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 498:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 499:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 500:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 501:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 502:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 756              		.loc 1 502 0
+ 757 001a 8368     		ldr	r3, [r0, #8]
+ 758 001c 33B1     		cbz	r3, .L77
+ARM GAS  /tmp/ccgp0oUe.s 			page 31
+
+
+ 503:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 504:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 505:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 506:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 759              		.loc 1 506 0
+ 760 001e 022B     		cmp	r3, #2
+ 761 0020 07D0     		beq	.L78
+ 507:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 508:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 509:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 510:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 762              		.loc 1 510 0
+ 763 0022 042B     		cmp	r3, #4
+ 764 0024 08D1     		bne	.L79
+ 511:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 512:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 765              		.loc 1 512 0
+ 766 0026 4FF0D043 		mov	r3, #1744830464
+ 767 002a 07E0     		b	.L68
+ 768              	.L77:
+ 504:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 769              		.loc 1 504 0
+ 770 002c 4FF0C043 		mov	r3, #1610612736
+ 771 0030 04E0     		b	.L68
+ 772              	.L78:
+ 508:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 773              		.loc 1 508 0
+ 774 0032 4FF0C843 		mov	r3, #1677721600
+ 775 0036 01E0     		b	.L68
+ 776              	.L79:
+ 513:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 514:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 515:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 516:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 777              		.loc 1 516 0
+ 778 0038 4FF0D843 		mov	r3, #1811939328
+ 779              	.L68:
+ 780              	.LVL43:
+ 517:HALLIB/Src/stm32f7xx_hal_nor.c ****   } 
+ 518:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 519:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 520:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 781              		.loc 1 520 0
+ 782 003c 0224     		movs	r4, #2
+ 783 003e 80F84540 		strb	r4, [r0, #69]
+ 521:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 522:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send program data command */
+ 523:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 784              		.loc 1 523 0
+ 785 0042 1C4C     		ldr	r4, .L82
+ 786 0044 2468     		ldr	r4, [r4]
+ 787 0046 012C     		cmp	r4, #1
+ 788 0048 02D1     		bne	.L69
+ 789              		.loc 1 523 0 is_stmt 0 discriminator 1
+ 790 004a 03F6AA25 		addw	r5, r3, #2730
+ 791 004e 01E0     		b	.L70
+ 792              	.L69:
+ARM GAS  /tmp/ccgp0oUe.s 			page 32
+
+
+ 793              		.loc 1 523 0 discriminator 2
+ 794 0050 03F25555 		addw	r5, r3, #1365
+ 795              	.L70:
+ 796              		.loc 1 523 0 discriminator 4
+ 797 0054 AA24     		movs	r4, #170
+ 798 0056 2C80     		strh	r4, [r5]	@ movhi
+ 799              	.LBB82:
+ 800              	.LBB83:
+ 801              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 802              		.syntax unified
+ 803              	@ 429 "CORE/cmsis_gcc.h" 1
+ 804 0058 BFF34F8F 		dsb 0xF
+ 805              	@ 0 "" 2
+ 806              		.thumb
+ 807              		.syntax unified
+ 808              	.LBE83:
+ 809              	.LBE82:
+ 524:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 810              		.loc 1 524 0 discriminator 4
+ 811 005c 154C     		ldr	r4, .L82
+ 812 005e 2468     		ldr	r4, [r4]
+ 813 0060 012C     		cmp	r4, #1
+ 814 0062 02D1     		bne	.L71
+ 815              		.loc 1 524 0 is_stmt 0 discriminator 1
+ 816 0064 03F25455 		addw	r5, r3, #1364
+ 817 0068 01E0     		b	.L72
+ 818              	.L71:
+ 819              		.loc 1 524 0 discriminator 2
+ 820 006a 03F2AA25 		addw	r5, r3, #682
+ 821              	.L72:
+ 822              		.loc 1 524 0 discriminator 4
+ 823 006e 5524     		movs	r4, #85
+ 824 0070 2C80     		strh	r4, [r5]	@ movhi
+ 825              	.LBB84:
+ 826              	.LBB85:
+ 827              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 828              		.syntax unified
+ 829              	@ 429 "CORE/cmsis_gcc.h" 1
+ 830 0072 BFF34F8F 		dsb 0xF
+ 831              	@ 0 "" 2
+ 832              		.thumb
+ 833              		.syntax unified
+ 834              	.LBE85:
+ 835              	.LBE84:
+ 525:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 836              		.loc 1 525 0 discriminator 4
+ 837 0076 0F4C     		ldr	r4, .L82
+ 838 0078 2468     		ldr	r4, [r4]
+ 839 007a 012C     		cmp	r4, #1
+ 840 007c 02D1     		bne	.L73
+ 841              		.loc 1 525 0 is_stmt 0 discriminator 1
+ 842 007e 03F6AA23 		addw	r3, r3, #2730
+ 843              	.LVL44:
+ 844 0082 01E0     		b	.L74
+ 845              	.LVL45:
+ 846              	.L73:
+ 847              		.loc 1 525 0 discriminator 2
+ARM GAS  /tmp/ccgp0oUe.s 			page 33
+
+
+ 848 0084 03F25553 		addw	r3, r3, #1365
+ 849              	.LVL46:
+ 850              	.L74:
+ 851              		.loc 1 525 0 discriminator 4
+ 852 0088 A024     		movs	r4, #160
+ 853 008a 1C80     		strh	r4, [r3]	@ movhi
+ 854              	.LBB86:
+ 855              	.LBB87:
+ 856              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 857              		.syntax unified
+ 858              	@ 429 "CORE/cmsis_gcc.h" 1
+ 859 008c BFF34F8F 		dsb 0xF
+ 860              	@ 0 "" 2
+ 861              		.thumb
+ 862              		.syntax unified
+ 863              	.LBE87:
+ 864              	.LBE86:
+ 526:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 527:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Write the data */
+ 528:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(pAddress, *pData);
+ 865              		.loc 1 528 0 discriminator 4
+ 866 0090 1388     		ldrh	r3, [r2]
+ 867 0092 0B80     		strh	r3, [r1]	@ movhi
+ 868              	.LBB88:
+ 869              	.LBB89:
+ 870              		.loc 2 429 0 discriminator 4
+ 871              		.syntax unified
+ 872              	@ 429 "CORE/cmsis_gcc.h" 1
+ 873 0094 BFF34F8F 		dsb 0xF
+ 874              	@ 0 "" 2
+ 875              		.thumb
+ 876              		.syntax unified
+ 877              	.LBE89:
+ 878              	.LBE88:
+ 529:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 530:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 531:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 879              		.loc 1 531 0 discriminator 4
+ 880 0098 0123     		movs	r3, #1
+ 881 009a 80F84530 		strb	r3, [r0, #69]
+ 532:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 533:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 534:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 882              		.loc 1 534 0 discriminator 4
+ 883 009e 0023     		movs	r3, #0
+ 884 00a0 80F84430 		strb	r3, [r0, #68]
+ 535:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 536:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 885              		.loc 1 536 0 discriminator 4
+ 886 00a4 1846     		mov	r0, r3
+ 887              	.LVL47:
+ 888 00a6 03E0     		b	.L67
+ 889              	.LVL48:
+ 890              	.L75:
+ 891              	.LCFI12:
+ 892              		.cfi_def_cfa_offset 0
+ 893              		.cfi_restore 4
+ARM GAS  /tmp/ccgp0oUe.s 			page 34
+
+
+ 894              		.cfi_restore 5
+ 493:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 895              		.loc 1 493 0
+ 896 00a8 0220     		movs	r0, #2
+ 897              	.LVL49:
+ 898 00aa 7047     		bx	lr
+ 899              	.LVL50:
+ 900              	.L76:
+ 498:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 901              		.loc 1 498 0
+ 902 00ac 0220     		movs	r0, #2
+ 903              	.LVL51:
+ 904 00ae 7047     		bx	lr
+ 905              	.LVL52:
+ 906              	.L67:
+ 907              	.LCFI13:
+ 908              		.cfi_def_cfa_offset 8
+ 909              		.cfi_offset 4, -8
+ 910              		.cfi_offset 5, -4
+ 537:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 911              		.loc 1 537 0
+ 912 00b0 30BC     		pop	{r4, r5}
+ 913              	.LCFI14:
+ 914              		.cfi_restore 5
+ 915              		.cfi_restore 4
+ 916              		.cfi_def_cfa_offset 0
+ 917 00b2 7047     		bx	lr
+ 918              	.L83:
+ 919              		.align	2
+ 920              	.L82:
+ 921 00b4 00000000 		.word	.LANCHOR0
+ 922              		.cfi_endproc
+ 923              	.LFE144:
+ 925              		.section	.text.HAL_NOR_ReadBuffer,"ax",%progbits
+ 926              		.align	2
+ 927              		.global	HAL_NOR_ReadBuffer
+ 928              		.thumb
+ 929              		.thumb_func
+ 931              	HAL_NOR_ReadBuffer:
+ 932              	.LFB145:
+ 538:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 539:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 540:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Reads a half-word buffer from the NOR memory.
+ 541:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to the NOR handle
+ 542:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  uwAddress NOR memory internal address to read from.
+ 543:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pData pointer to the buffer that receives the data read from the 
+ 544:HALLIB/Src/stm32f7xx_hal_nor.c ****   *         NOR memory.
+ 545:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  uwBufferSize  number of Half word to read.
+ 546:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 547:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 548:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_ReadBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress, uint16_t *pData, 
+ 549:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 933              		.loc 1 549 0
+ 934              		.cfi_startproc
+ 935              		@ args = 0, pretend = 0, frame = 0
+ 936              		@ frame_needed = 0, uses_anonymous_args = 0
+ 937              		@ link register save eliminated.
+ARM GAS  /tmp/ccgp0oUe.s 			page 35
+
+
+ 938              	.LVL53:
+ 939 0000 70B4     		push	{r4, r5, r6}
+ 940              	.LCFI15:
+ 941              		.cfi_def_cfa_offset 12
+ 942              		.cfi_offset 4, -12
+ 943              		.cfi_offset 5, -8
+ 944              		.cfi_offset 6, -4
+ 945              	.LVL54:
+ 550:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 551:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 552:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 553:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 946              		.loc 1 553 0
+ 947 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 948 0006 012C     		cmp	r4, #1
+ 949 0008 52D0     		beq	.L95
+ 950              		.loc 1 553 0 is_stmt 0 discriminator 2
+ 951 000a 0124     		movs	r4, #1
+ 952 000c 80F84440 		strb	r4, [r0, #68]
+ 554:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 555:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 556:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 953              		.loc 1 556 0 is_stmt 1 discriminator 2
+ 954 0010 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 955 0014 E4B2     		uxtb	r4, r4
+ 956 0016 022C     		cmp	r4, #2
+ 957 0018 4CD0     		beq	.L96
+ 557:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 558:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 559:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 560:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 561:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 562:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 958              		.loc 1 562 0
+ 959 001a 8468     		ldr	r4, [r0, #8]
+ 960 001c 34B1     		cbz	r4, .L97
+ 563:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 564:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 565:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 566:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 961              		.loc 1 566 0
+ 962 001e 022C     		cmp	r4, #2
+ 963 0020 07D0     		beq	.L98
+ 567:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 568:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 569:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 570:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 964              		.loc 1 570 0
+ 965 0022 042C     		cmp	r4, #4
+ 966 0024 08D1     		bne	.L99
+ 571:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 572:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 967              		.loc 1 572 0
+ 968 0026 4FF0D044 		mov	r4, #1744830464
+ 969 002a 07E0     		b	.L86
+ 970              	.L97:
+ 564:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ARM GAS  /tmp/ccgp0oUe.s 			page 36
+
+
+ 971              		.loc 1 564 0
+ 972 002c 4FF0C044 		mov	r4, #1610612736
+ 973 0030 04E0     		b	.L86
+ 974              	.L98:
+ 568:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 975              		.loc 1 568 0
+ 976 0032 4FF0C844 		mov	r4, #1677721600
+ 977 0036 01E0     		b	.L86
+ 978              	.L99:
+ 573:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 574:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 575:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 576:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 979              		.loc 1 576 0
+ 980 0038 4FF0D844 		mov	r4, #1811939328
+ 981              	.L86:
+ 982              	.LVL55:
+ 577:HALLIB/Src/stm32f7xx_hal_nor.c ****   }  
+ 578:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 579:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 580:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 983              		.loc 1 580 0
+ 984 003c 0225     		movs	r5, #2
+ 985 003e 80F84550 		strb	r5, [r0, #69]
+ 581:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 582:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send read data command */
+ 583:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 986              		.loc 1 583 0
+ 987 0042 1E4D     		ldr	r5, .L101
+ 988 0044 2D68     		ldr	r5, [r5]
+ 989 0046 012D     		cmp	r5, #1
+ 990 0048 02D1     		bne	.L87
+ 991              		.loc 1 583 0 is_stmt 0 discriminator 1
+ 992 004a 04F6AA26 		addw	r6, r4, #2730
+ 993 004e 01E0     		b	.L88
+ 994              	.L87:
+ 995              		.loc 1 583 0 discriminator 2
+ 996 0050 04F25556 		addw	r6, r4, #1365
+ 997              	.L88:
+ 998              		.loc 1 583 0 discriminator 4
+ 999 0054 AA25     		movs	r5, #170
+ 1000 0056 3580     		strh	r5, [r6]	@ movhi
+ 1001              	.LBB90:
+ 1002              	.LBB91:
+ 1003              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1004              		.syntax unified
+ 1005              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1006 0058 BFF34F8F 		dsb 0xF
+ 1007              	@ 0 "" 2
+ 1008              		.thumb
+ 1009              		.syntax unified
+ 1010              	.LBE91:
+ 1011              	.LBE90:
+ 584:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 1012              		.loc 1 584 0 discriminator 4
+ 1013 005c 174D     		ldr	r5, .L101
+ 1014 005e 2D68     		ldr	r5, [r5]
+ARM GAS  /tmp/ccgp0oUe.s 			page 37
+
+
+ 1015 0060 012D     		cmp	r5, #1
+ 1016 0062 02D1     		bne	.L89
+ 1017              		.loc 1 584 0 is_stmt 0 discriminator 1
+ 1018 0064 04F25456 		addw	r6, r4, #1364
+ 1019 0068 01E0     		b	.L90
+ 1020              	.L89:
+ 1021              		.loc 1 584 0 discriminator 2
+ 1022 006a 04F2AA26 		addw	r6, r4, #682
+ 1023              	.L90:
+ 1024              		.loc 1 584 0 discriminator 4
+ 1025 006e 5525     		movs	r5, #85
+ 1026 0070 3580     		strh	r5, [r6]	@ movhi
+ 1027              	.LBB92:
+ 1028              	.LBB93:
+ 1029              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1030              		.syntax unified
+ 1031              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1032 0072 BFF34F8F 		dsb 0xF
+ 1033              	@ 0 "" 2
+ 1034              		.thumb
+ 1035              		.syntax unified
+ 1036              	.LBE93:
+ 1037              	.LBE92:
+ 585:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 1038              		.loc 1 585 0 discriminator 4
+ 1039 0076 114D     		ldr	r5, .L101
+ 1040 0078 2D68     		ldr	r5, [r5]
+ 1041 007a 012D     		cmp	r5, #1
+ 1042 007c 02D1     		bne	.L91
+ 1043              		.loc 1 585 0 is_stmt 0 discriminator 1
+ 1044 007e 04F6AA24 		addw	r4, r4, #2730
+ 1045              	.LVL56:
+ 1046 0082 01E0     		b	.L92
+ 1047              	.LVL57:
+ 1048              	.L91:
+ 1049              		.loc 1 585 0 discriminator 2
+ 1050 0084 04F25554 		addw	r4, r4, #1365
+ 1051              	.LVL58:
+ 1052              	.L92:
+ 1053              		.loc 1 585 0 discriminator 4
+ 1054 0088 F025     		movs	r5, #240
+ 1055 008a 2580     		strh	r5, [r4]	@ movhi
+ 1056              	.LBB94:
+ 1057              	.LBB95:
+ 1058              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1059              		.syntax unified
+ 1060              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1061 008c BFF34F8F 		dsb 0xF
+ 1062              	@ 0 "" 2
+ 1063              		.thumb
+ 1064              		.syntax unified
+ 1065 0090 04E0     		b	.L93
+ 1066              	.L94:
+ 1067              	.LVL59:
+ 1068              	.LBE95:
+ 1069              	.LBE94:
+ 586:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ARM GAS  /tmp/ccgp0oUe.s 			page 38
+
+
+ 587:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Read buffer */
+ 588:HALLIB/Src/stm32f7xx_hal_nor.c ****   while( uwBufferSize > 0) 
+ 589:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 590:HALLIB/Src/stm32f7xx_hal_nor.c ****     *pData++ = *(__IO uint16_t *)uwAddress;
+ 1070              		.loc 1 590 0
+ 1071 0092 31F8024B 		ldrh	r4, [r1], #2
+ 1072              	.LVL60:
+ 1073 0096 1480     		strh	r4, [r2]	@ movhi
+ 1074              	.LVL61:
+ 591:HALLIB/Src/stm32f7xx_hal_nor.c ****     uwAddress += 2;
+ 592:HALLIB/Src/stm32f7xx_hal_nor.c ****     uwBufferSize--;
+ 1075              		.loc 1 592 0
+ 1076 0098 013B     		subs	r3, r3, #1
+ 1077              	.LVL62:
+ 590:HALLIB/Src/stm32f7xx_hal_nor.c ****     uwAddress += 2;
+ 1078              		.loc 1 590 0
+ 1079 009a 0232     		adds	r2, r2, #2
+ 1080              	.LVL63:
+ 1081              	.L93:
+ 588:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 1082              		.loc 1 588 0
+ 1083 009c 002B     		cmp	r3, #0
+ 1084 009e F8D1     		bne	.L94
+ 593:HALLIB/Src/stm32f7xx_hal_nor.c ****   } 
+ 594:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 595:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 596:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 1085              		.loc 1 596 0
+ 1086 00a0 0123     		movs	r3, #1
+ 1087              	.LVL64:
+ 1088 00a2 80F84530 		strb	r3, [r0, #69]
+ 597:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 598:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 599:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 1089              		.loc 1 599 0
+ 1090 00a6 0023     		movs	r3, #0
+ 1091 00a8 80F84430 		strb	r3, [r0, #68]
+ 600:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 601:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 1092              		.loc 1 601 0
+ 1093 00ac 1846     		mov	r0, r3
+ 1094              	.LVL65:
+ 1095 00ae 02E0     		b	.L85
+ 1096              	.LVL66:
+ 1097              	.L95:
+ 553:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 1098              		.loc 1 553 0
+ 1099 00b0 0220     		movs	r0, #2
+ 1100              	.LVL67:
+ 1101 00b2 00E0     		b	.L85
+ 1102              	.LVL68:
+ 1103              	.L96:
+ 558:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1104              		.loc 1 558 0
+ 1105 00b4 0220     		movs	r0, #2
+ 1106              	.LVL69:
+ 1107              	.L85:
+ARM GAS  /tmp/ccgp0oUe.s 			page 39
+
+
+ 602:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 1108              		.loc 1 602 0
+ 1109 00b6 70BC     		pop	{r4, r5, r6}
+ 1110              	.LCFI16:
+ 1111              		.cfi_restore 6
+ 1112              		.cfi_restore 5
+ 1113              		.cfi_restore 4
+ 1114              		.cfi_def_cfa_offset 0
+ 1115 00b8 7047     		bx	lr
+ 1116              	.L102:
+ 1117 00ba 00BF     		.align	2
+ 1118              	.L101:
+ 1119 00bc 00000000 		.word	.LANCHOR0
+ 1120              		.cfi_endproc
+ 1121              	.LFE145:
+ 1123              		.section	.text.HAL_NOR_ProgramBuffer,"ax",%progbits
+ 1124              		.align	2
+ 1125              		.global	HAL_NOR_ProgramBuffer
+ 1126              		.thumb
+ 1127              		.thumb_func
+ 1129              	HAL_NOR_ProgramBuffer:
+ 1130              	.LFB146:
+ 603:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 604:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 605:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Writes a half-word buffer to the NOR memory. This function must be used 
+ 606:HALLIB/Src/stm32f7xx_hal_nor.c ****             only with S29GL128P NOR memory. 
+ 607:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to the NOR handle
+ 608:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  uwAddress NOR memory internal start write address 
+ 609:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pData pointer to source data buffer. 
+ 610:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  uwBufferSize Size of the buffer to write
+ 611:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 612:HALLIB/Src/stm32f7xx_hal_nor.c ****   */ 
+ 613:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_ProgramBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress, uint16_t *pDat
+ 614:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 1131              		.loc 1 614 0
+ 1132              		.cfi_startproc
+ 1133              		@ args = 0, pretend = 0, frame = 0
+ 1134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1135              	.LVL70:
+ 1136 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1137              	.LCFI17:
+ 1138              		.cfi_def_cfa_offset 20
+ 1139              		.cfi_offset 4, -20
+ 1140              		.cfi_offset 5, -16
+ 1141              		.cfi_offset 6, -12
+ 1142              		.cfi_offset 7, -8
+ 1143              		.cfi_offset 14, -4
+ 1144              	.LVL71:
+ 615:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint16_t * p_currentaddress = (uint16_t *)NULL;
+ 616:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint16_t * p_endaddress = (uint16_t *)NULL;
+ 617:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t lastloadedaddress = 0, deviceaddress = 0;
+ 618:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 619:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 620:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 1145              		.loc 1 620 0
+ 1146 0002 90F84440 		ldrb	r4, [r0, #68]	@ zero_extendqisi2
+ 1147 0006 012C     		cmp	r4, #1
+ARM GAS  /tmp/ccgp0oUe.s 			page 40
+
+
+ 1148 0008 6FD0     		beq	.L116
+ 1149              		.loc 1 620 0 is_stmt 0 discriminator 2
+ 1150 000a 0124     		movs	r4, #1
+ 1151 000c 80F84440 		strb	r4, [r0, #68]
+ 621:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 622:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 623:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 1152              		.loc 1 623 0 is_stmt 1 discriminator 2
+ 1153 0010 90F84540 		ldrb	r4, [r0, #69]	@ zero_extendqisi2
+ 1154 0014 E4B2     		uxtb	r4, r4
+ 1155 0016 022C     		cmp	r4, #2
+ 1156 0018 69D0     		beq	.L117
+ 624:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 625:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 626:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 627:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 628:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 629:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 1157              		.loc 1 629 0
+ 1158 001a 8468     		ldr	r4, [r0, #8]
+ 1159 001c 34B1     		cbz	r4, .L118
+ 630:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 631:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 632:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 633:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 1160              		.loc 1 633 0
+ 1161 001e 022C     		cmp	r4, #2
+ 1162 0020 07D0     		beq	.L119
+ 634:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 635:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 636:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 637:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 1163              		.loc 1 637 0
+ 1164 0022 042C     		cmp	r4, #4
+ 1165 0024 08D1     		bne	.L120
+ 638:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 639:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 1166              		.loc 1 639 0
+ 1167 0026 4FF0D046 		mov	r6, #1744830464
+ 1168 002a 07E0     		b	.L105
+ 1169              	.L118:
+ 631:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1170              		.loc 1 631 0
+ 1171 002c 4FF0C046 		mov	r6, #1610612736
+ 1172 0030 04E0     		b	.L105
+ 1173              	.L119:
+ 635:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1174              		.loc 1 635 0
+ 1175 0032 4FF0C846 		mov	r6, #1677721600
+ 1176 0036 01E0     		b	.L105
+ 1177              	.L120:
+ 640:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 641:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 642:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 643:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 1178              		.loc 1 643 0
+ 1179 0038 4FF0D846 		mov	r6, #1811939328
+ARM GAS  /tmp/ccgp0oUe.s 			page 41
+
+
+ 1180              	.L105:
+ 1181              	.LVL72:
+ 644:HALLIB/Src/stm32f7xx_hal_nor.c ****   }  
+ 645:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 646:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 647:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 1182              		.loc 1 647 0
+ 1183 003c 0224     		movs	r4, #2
+ 1184 003e 80F84540 		strb	r4, [r0, #69]
+ 648:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 649:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Initialize variables */
+ 650:HALLIB/Src/stm32f7xx_hal_nor.c ****   p_currentaddress  = (uint16_t*)((uint32_t)(uwAddress));
+ 1185              		.loc 1 650 0
+ 1186 0042 0C46     		mov	r4, r1
+ 1187              	.LVL73:
+ 651:HALLIB/Src/stm32f7xx_hal_nor.c ****   p_endaddress      = p_currentaddress + (uwBufferSize-1);
+ 1188              		.loc 1 651 0
+ 1189 0044 6FF00045 		mvn	r5, #-2147483648
+ 1190 0048 1D44     		add	r5, r5, r3
+ 1191 004a 01EB4505 		add	r5, r1, r5, lsl #1
+ 1192              	.LVL74:
+ 652:HALLIB/Src/stm32f7xx_hal_nor.c ****   lastloadedaddress = (uint32_t)(uwAddress);
+ 653:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 654:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Issue unlock command sequence */
+ 655:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 1193              		.loc 1 655 0
+ 1194 004e 294F     		ldr	r7, .L122
+ 1195 0050 3F68     		ldr	r7, [r7]
+ 1196 0052 012F     		cmp	r7, #1
+ 1197 0054 02D1     		bne	.L106
+ 1198              	.LVL75:
+ 1199              		.loc 1 655 0 is_stmt 0 discriminator 1
+ 1200 0056 06F6AA2E 		addw	lr, r6, #2730
+ 1201 005a 01E0     		b	.L107
+ 1202              	.L106:
+ 1203              		.loc 1 655 0 discriminator 2
+ 1204 005c 06F2555E 		addw	lr, r6, #1365
+ 1205              	.L107:
+ 1206              		.loc 1 655 0 discriminator 4
+ 1207 0060 AA27     		movs	r7, #170
+ 1208 0062 AEF80070 		strh	r7, [lr]	@ movhi
+ 1209              	.LBB96:
+ 1210              	.LBB97:
+ 1211              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1212              		.syntax unified
+ 1213              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1214 0066 BFF34F8F 		dsb 0xF
+ 1215              	@ 0 "" 2
+ 1216              		.thumb
+ 1217              		.syntax unified
+ 1218              	.LBE97:
+ 1219              	.LBE96:
+ 656:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 1220              		.loc 1 656 0 discriminator 4
+ 1221 006a 224F     		ldr	r7, .L122
+ 1222 006c 3F68     		ldr	r7, [r7]
+ 1223 006e 012F     		cmp	r7, #1
+ARM GAS  /tmp/ccgp0oUe.s 			page 42
+
+
+ 1224 0070 02D1     		bne	.L108
+ 1225              		.loc 1 656 0 is_stmt 0 discriminator 1
+ 1226 0072 06F2545E 		addw	lr, r6, #1364
+ 1227 0076 01E0     		b	.L109
+ 1228              	.L108:
+ 1229              		.loc 1 656 0 discriminator 2
+ 1230 0078 06F2AA2E 		addw	lr, r6, #682
+ 1231              	.L109:
+ 1232              		.loc 1 656 0 discriminator 4
+ 1233 007c 5527     		movs	r7, #85
+ 1234 007e AEF80070 		strh	r7, [lr]	@ movhi
+ 1235              	.LBB98:
+ 1236              	.LBB99:
+ 1237              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1238              		.syntax unified
+ 1239              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1240 0082 BFF34F8F 		dsb 0xF
+ 1241              	@ 0 "" 2
+ 1242              		.thumb
+ 1243              		.syntax unified
+ 1244              	.LBE99:
+ 1245              	.LBE98:
+ 657:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 658:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Write Buffer Load Command */
+ 659:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, uwAddress), NOR_CMD_DATA_BUFFER_AND
+ 1246              		.loc 1 659 0 discriminator 4
+ 1247 0086 1B4F     		ldr	r7, .L122
+ 1248 0088 3F68     		ldr	r7, [r7]
+ 1249 008a 012F     		cmp	r7, #1
+ 1250 008c 02D1     		bne	.L110
+ 1251              		.loc 1 659 0 is_stmt 0 discriminator 1
+ 1252 008e 06EB410E 		add	lr, r6, r1, lsl #1
+ 1253 0092 01E0     		b	.L111
+ 1254              	.L110:
+ 1255              		.loc 1 659 0 discriminator 2
+ 1256 0094 06EB010E 		add	lr, r6, r1
+ 1257              	.L111:
+ 1258              		.loc 1 659 0 discriminator 4
+ 1259 0098 2527     		movs	r7, #37
+ 1260 009a AEF80070 		strh	r7, [lr]	@ movhi
+ 1261              	.LBB100:
+ 1262              	.LBB101:
+ 1263              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1264              		.syntax unified
+ 1265              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1266 009e BFF34F8F 		dsb 0xF
+ 1267              	@ 0 "" 2
+ 1268              		.thumb
+ 1269              		.syntax unified
+ 1270              	.LBE101:
+ 1271              	.LBE100:
+ 660:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, uwAddress), (uwBufferSize - 1)); 
+ 1272              		.loc 1 660 0 discriminator 4
+ 1273 00a2 144F     		ldr	r7, .L122
+ 1274 00a4 3F68     		ldr	r7, [r7]
+ 1275 00a6 012F     		cmp	r7, #1
+ 1276 00a8 02D1     		bne	.L112
+ARM GAS  /tmp/ccgp0oUe.s 			page 43
+
+
+ 1277              		.loc 1 660 0 is_stmt 0 discriminator 1
+ 1278 00aa 06EB4106 		add	r6, r6, r1, lsl #1
+ 1279              	.LVL76:
+ 1280 00ae 00E0     		b	.L113
+ 1281              	.LVL77:
+ 1282              	.L112:
+ 1283              		.loc 1 660 0 discriminator 2
+ 1284 00b0 0E44     		add	r6, r6, r1
+ 1285              	.LVL78:
+ 1286              	.L113:
+ 1287              		.loc 1 660 0 discriminator 4
+ 1288 00b2 013B     		subs	r3, r3, #1
+ 1289              	.LVL79:
+ 1290 00b4 9BB2     		uxth	r3, r3
+ 1291              	.LVL80:
+ 1292 00b6 3380     		strh	r3, [r6]	@ movhi
+ 1293              	.LBB102:
+ 1294              	.LBB103:
+ 1295              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1296              		.syntax unified
+ 1297              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1298 00b8 BFF34F8F 		dsb 0xF
+ 1299              	@ 0 "" 2
+ 1300              		.thumb
+ 1301              		.syntax unified
+ 1302 00bc 07E0     		b	.L114
+ 1303              	.LVL81:
+ 1304              	.L115:
+ 1305              	.LBE103:
+ 1306              	.LBE102:
+ 661:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 662:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Load Data into NOR Buffer */
+ 663:HALLIB/Src/stm32f7xx_hal_nor.c ****   while(p_currentaddress <= p_endaddress)
+ 664:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 665:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Store last loaded address & data value (for polling) */
+ 666:HALLIB/Src/stm32f7xx_hal_nor.c ****      lastloadedaddress = (uint32_t)p_currentaddress;
+ 1307              		.loc 1 666 0
+ 1308 00be 2146     		mov	r1, r4
+ 1309              	.LVL82:
+ 667:HALLIB/Src/stm32f7xx_hal_nor.c ****  
+ 668:HALLIB/Src/stm32f7xx_hal_nor.c ****     NOR_WRITE(p_currentaddress, *pData++);
+ 1310              		.loc 1 668 0
+ 1311 00c0 931C     		adds	r3, r2, #2
+ 1312              	.LVL83:
+ 1313 00c2 1288     		ldrh	r2, [r2]
+ 1314 00c4 24F8022B 		strh	r2, [r4], #2	@ movhi
+ 1315              	.LVL84:
+ 1316              	.LBB104:
+ 1317              	.LBB105:
+ 1318              		.loc 2 429 0
+ 1319              		.syntax unified
+ 1320              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1321 00c8 BFF34F8F 		dsb 0xF
+ 1322              	@ 0 "" 2
+ 1323              	.LVL85:
+ 1324              		.thumb
+ 1325              		.syntax unified
+ARM GAS  /tmp/ccgp0oUe.s 			page 44
+
+
+ 1326              	.LBE105:
+ 1327              	.LBE104:
+ 1328              		.loc 1 668 0
+ 1329 00cc 1A46     		mov	r2, r3
+ 1330              	.LVL86:
+ 1331              	.L114:
+ 663:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 1332              		.loc 1 663 0
+ 1333 00ce AC42     		cmp	r4, r5
+ 1334 00d0 F5D9     		bls	.L115
+ 669:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 670:HALLIB/Src/stm32f7xx_hal_nor.c ****     p_currentaddress ++; 
+ 671:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 672:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 673:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE((uint32_t)(lastloadedaddress), NOR_CMD_DATA_BUFFER_AND_PROG_CONFIRM);
+ 1335              		.loc 1 673 0
+ 1336 00d2 2923     		movs	r3, #41
+ 1337 00d4 0B80     		strh	r3, [r1]	@ movhi
+ 1338              	.LBB106:
+ 1339              	.LBB107:
+ 1340              		.loc 2 429 0
+ 1341              		.syntax unified
+ 1342              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1343 00d6 BFF34F8F 		dsb 0xF
+ 1344              	@ 0 "" 2
+ 1345              		.thumb
+ 1346              		.syntax unified
+ 1347              	.LBE107:
+ 1348              	.LBE106:
+ 674:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 675:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 676:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 1349              		.loc 1 676 0
+ 1350 00da 0123     		movs	r3, #1
+ 1351 00dc 80F84530 		strb	r3, [r0, #69]
+ 677:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 678:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 679:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 1352              		.loc 1 679 0
+ 1353 00e0 0023     		movs	r3, #0
+ 1354 00e2 80F84430 		strb	r3, [r0, #68]
+ 680:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 681:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK; 
+ 1355              		.loc 1 681 0
+ 1356 00e6 1846     		mov	r0, r3
+ 1357              	.LVL87:
+ 1358 00e8 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1359              	.LVL88:
+ 1360              	.L116:
+ 620:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 1361              		.loc 1 620 0
+ 1362 00ea 0220     		movs	r0, #2
+ 1363              	.LVL89:
+ 1364 00ec F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1365              	.LVL90:
+ 1366              	.L117:
+ 625:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ARM GAS  /tmp/ccgp0oUe.s 			page 45
+
+
+ 1367              		.loc 1 625 0
+ 1368 00ee 0220     		movs	r0, #2
+ 1369              	.LVL91:
+ 682:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 683:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 1370              		.loc 1 683 0
+ 1371 00f0 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1372              	.L123:
+ 1373 00f2 00BF     		.align	2
+ 1374              	.L122:
+ 1375 00f4 00000000 		.word	.LANCHOR0
+ 1376              		.cfi_endproc
+ 1377              	.LFE146:
+ 1379              		.section	.text.HAL_NOR_Erase_Block,"ax",%progbits
+ 1380              		.align	2
+ 1381              		.global	HAL_NOR_Erase_Block
+ 1382              		.thumb
+ 1383              		.thumb_func
+ 1385              	HAL_NOR_Erase_Block:
+ 1386              	.LFB147:
+ 684:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 685:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 686:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Erase the specified block of the NOR memory 
+ 687:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 688:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 689:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  BlockAddress  Block to erase address 
+ 690:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Address Device address
+ 691:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 692:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 693:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Erase_Block(NOR_HandleTypeDef *hnor, uint32_t BlockAddress, uint32_t Addr
+ 694:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 1387              		.loc 1 694 0
+ 1388              		.cfi_startproc
+ 1389              		@ args = 0, pretend = 0, frame = 0
+ 1390              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1391              		@ link register save eliminated.
+ 1392              	.LVL92:
+ 695:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 696:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 697:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 698:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 1393              		.loc 1 698 0
+ 1394 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 1395 0004 012B     		cmp	r3, #1
+ 1396 0006 69D0     		beq	.L137
+ 1397              		.loc 1 698 0 is_stmt 0 discriminator 2
+ 1398 0008 0123     		movs	r3, #1
+ 1399 000a 80F84430 		strb	r3, [r0, #68]
+ 699:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 700:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 701:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 1400              		.loc 1 701 0 is_stmt 1 discriminator 2
+ 1401 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 1402 0012 DBB2     		uxtb	r3, r3
+ 1403 0014 022B     		cmp	r3, #2
+ 1404 0016 63D0     		beq	.L138
+ 694:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ARM GAS  /tmp/ccgp0oUe.s 			page 46
+
+
+ 1405              		.loc 1 694 0
+ 1406 0018 30B4     		push	{r4, r5}
+ 1407              	.LCFI18:
+ 1408              		.cfi_def_cfa_offset 8
+ 1409              		.cfi_offset 4, -8
+ 1410              		.cfi_offset 5, -4
+ 702:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 703:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 704:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 705:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 706:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 707:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 1411              		.loc 1 707 0
+ 1412 001a 8368     		ldr	r3, [r0, #8]
+ 1413 001c 33B1     		cbz	r3, .L139
+ 708:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 709:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 710:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 711:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 1414              		.loc 1 711 0
+ 1415 001e 022B     		cmp	r3, #2
+ 1416 0020 07D0     		beq	.L140
+ 712:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 713:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 714:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 715:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 1417              		.loc 1 715 0
+ 1418 0022 042B     		cmp	r3, #4
+ 1419 0024 08D1     		bne	.L141
+ 716:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 717:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 1420              		.loc 1 717 0
+ 1421 0026 4FF0D043 		mov	r3, #1744830464
+ 1422 002a 07E0     		b	.L126
+ 1423              	.L139:
+ 709:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1424              		.loc 1 709 0
+ 1425 002c 4FF0C043 		mov	r3, #1610612736
+ 1426 0030 04E0     		b	.L126
+ 1427              	.L140:
+ 713:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1428              		.loc 1 713 0
+ 1429 0032 4FF0C843 		mov	r3, #1677721600
+ 1430 0036 01E0     		b	.L126
+ 1431              	.L141:
+ 718:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 719:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 720:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 721:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 1432              		.loc 1 721 0
+ 1433 0038 4FF0D843 		mov	r3, #1811939328
+ 1434              	.L126:
+ 1435              	.LVL93:
+ 722:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 723:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 724:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 725:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ARM GAS  /tmp/ccgp0oUe.s 			page 47
+
+
+ 1436              		.loc 1 725 0
+ 1437 003c 0224     		movs	r4, #2
+ 1438 003e 80F84540 		strb	r4, [r0, #69]
+ 726:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 727:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send block erase command sequence */
+ 728:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 1439              		.loc 1 728 0
+ 1440 0042 294C     		ldr	r4, .L144
+ 1441 0044 2468     		ldr	r4, [r4]
+ 1442 0046 012C     		cmp	r4, #1
+ 1443 0048 02D1     		bne	.L127
+ 1444              		.loc 1 728 0 is_stmt 0 discriminator 1
+ 1445 004a 03F6AA25 		addw	r5, r3, #2730
+ 1446 004e 01E0     		b	.L128
+ 1447              	.L127:
+ 1448              		.loc 1 728 0 discriminator 2
+ 1449 0050 03F25555 		addw	r5, r3, #1365
+ 1450              	.L128:
+ 1451              		.loc 1 728 0 discriminator 4
+ 1452 0054 AA24     		movs	r4, #170
+ 1453 0056 2C80     		strh	r4, [r5]	@ movhi
+ 1454              	.LBB108:
+ 1455              	.LBB109:
+ 1456              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1457              		.syntax unified
+ 1458              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1459 0058 BFF34F8F 		dsb 0xF
+ 1460              	@ 0 "" 2
+ 1461              		.thumb
+ 1462              		.syntax unified
+ 1463              	.LBE109:
+ 1464              	.LBE108:
+ 729:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 1465              		.loc 1 729 0 discriminator 4
+ 1466 005c 224C     		ldr	r4, .L144
+ 1467 005e 2468     		ldr	r4, [r4]
+ 1468 0060 012C     		cmp	r4, #1
+ 1469 0062 02D1     		bne	.L129
+ 1470              		.loc 1 729 0 is_stmt 0 discriminator 1
+ 1471 0064 03F25455 		addw	r5, r3, #1364
+ 1472 0068 01E0     		b	.L130
+ 1473              	.L129:
+ 1474              		.loc 1 729 0 discriminator 2
+ 1475 006a 03F2AA25 		addw	r5, r3, #682
+ 1476              	.L130:
+ 1477              		.loc 1 729 0 discriminator 4
+ 1478 006e 5524     		movs	r4, #85
+ 1479 0070 2C80     		strh	r4, [r5]	@ movhi
+ 1480              	.LBB110:
+ 1481              	.LBB111:
+ 1482              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1483              		.syntax unified
+ 1484              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1485 0072 BFF34F8F 		dsb 0xF
+ 1486              	@ 0 "" 2
+ 1487              		.thumb
+ 1488              		.syntax unified
+ARM GAS  /tmp/ccgp0oUe.s 			page 48
+
+
+ 1489              	.LBE111:
+ 1490              	.LBE110:
+ 730:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 1491              		.loc 1 730 0 discriminator 4
+ 1492 0076 1C4C     		ldr	r4, .L144
+ 1493 0078 2468     		ldr	r4, [r4]
+ 1494 007a 012C     		cmp	r4, #1
+ 1495 007c 02D1     		bne	.L131
+ 1496              		.loc 1 730 0 is_stmt 0 discriminator 1
+ 1497 007e 03F6AA25 		addw	r5, r3, #2730
+ 1498 0082 01E0     		b	.L132
+ 1499              	.L131:
+ 1500              		.loc 1 730 0 discriminator 2
+ 1501 0084 03F25555 		addw	r5, r3, #1365
+ 1502              	.L132:
+ 1503              		.loc 1 730 0 discriminator 4
+ 1504 0088 8024     		movs	r4, #128
+ 1505 008a 2C80     		strh	r4, [r5]	@ movhi
+ 1506              	.LBB112:
+ 1507              	.LBB113:
+ 1508              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1509              		.syntax unified
+ 1510              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1511 008c BFF34F8F 		dsb 0xF
+ 1512              	@ 0 "" 2
+ 1513              		.thumb
+ 1514              		.syntax unified
+ 1515              	.LBE113:
+ 1516              	.LBE112:
+ 731:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FOURTH), NOR_CMD_DA
+ 1517              		.loc 1 731 0 discriminator 4
+ 1518 0090 154C     		ldr	r4, .L144
+ 1519 0092 2468     		ldr	r4, [r4]
+ 1520 0094 012C     		cmp	r4, #1
+ 1521 0096 02D1     		bne	.L133
+ 1522              		.loc 1 731 0 is_stmt 0 discriminator 1
+ 1523 0098 03F6AA25 		addw	r5, r3, #2730
+ 1524 009c 01E0     		b	.L134
+ 1525              	.L133:
+ 1526              		.loc 1 731 0 discriminator 2
+ 1527 009e 03F25555 		addw	r5, r3, #1365
+ 1528              	.L134:
+ 1529              		.loc 1 731 0 discriminator 4
+ 1530 00a2 AA24     		movs	r4, #170
+ 1531 00a4 2C80     		strh	r4, [r5]	@ movhi
+ 1532              	.LBB114:
+ 1533              	.LBB115:
+ 1534              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1535              		.syntax unified
+ 1536              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1537 00a6 BFF34F8F 		dsb 0xF
+ 1538              	@ 0 "" 2
+ 1539              		.thumb
+ 1540              		.syntax unified
+ 1541              	.LBE115:
+ 1542              	.LBE114:
+ 732:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIFTH), NOR_CMD_DAT
+ARM GAS  /tmp/ccgp0oUe.s 			page 49
+
+
+ 1543              		.loc 1 732 0 discriminator 4
+ 1544 00aa 0F4C     		ldr	r4, .L144
+ 1545 00ac 2468     		ldr	r4, [r4]
+ 1546 00ae 012C     		cmp	r4, #1
+ 1547 00b0 02D1     		bne	.L135
+ 1548              		.loc 1 732 0 is_stmt 0 discriminator 1
+ 1549 00b2 03F25453 		addw	r3, r3, #1364
+ 1550              	.LVL94:
+ 1551 00b6 01E0     		b	.L136
+ 1552              	.LVL95:
+ 1553              	.L135:
+ 1554              		.loc 1 732 0 discriminator 2
+ 1555 00b8 03F2AA23 		addw	r3, r3, #682
+ 1556              	.LVL96:
+ 1557              	.L136:
+ 1558              		.loc 1 732 0 discriminator 4
+ 1559 00bc 5524     		movs	r4, #85
+ 1560 00be 1C80     		strh	r4, [r3]	@ movhi
+ 1561              	.LBB116:
+ 1562              	.LBB117:
+ 1563              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1564              		.syntax unified
+ 1565              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1566 00c0 BFF34F8F 		dsb 0xF
+ 1567              	@ 0 "" 2
+ 1568              		.thumb
+ 1569              		.syntax unified
+ 1570              	.LBE117:
+ 1571              	.LBE116:
+ 733:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE((uint32_t)(BlockAddress + Address), NOR_CMD_DATA_BLOCK_ERASE);
+ 1572              		.loc 1 733 0 discriminator 4
+ 1573 00c4 3023     		movs	r3, #48
+ 1574 00c6 8B52     		strh	r3, [r1, r2]	@ movhi
+ 1575              	.LBB118:
+ 1576              	.LBB119:
+ 1577              		.loc 2 429 0 discriminator 4
+ 1578              		.syntax unified
+ 1579              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1580 00c8 BFF34F8F 		dsb 0xF
+ 1581              	@ 0 "" 2
+ 1582              		.thumb
+ 1583              		.syntax unified
+ 1584              	.LBE119:
+ 1585              	.LBE118:
+ 734:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 735:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR memory status and update the controller state */
+ 736:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 1586              		.loc 1 736 0 discriminator 4
+ 1587 00cc 0123     		movs	r3, #1
+ 1588 00ce 80F84530 		strb	r3, [r0, #69]
+ 737:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 738:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 739:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 1589              		.loc 1 739 0 discriminator 4
+ 1590 00d2 0023     		movs	r3, #0
+ 1591 00d4 80F84430 		strb	r3, [r0, #68]
+ 740:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ARM GAS  /tmp/ccgp0oUe.s 			page 50
+
+
+ 741:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 1592              		.loc 1 741 0 discriminator 4
+ 1593 00d8 1846     		mov	r0, r3
+ 1594              	.LVL97:
+ 1595 00da 03E0     		b	.L125
+ 1596              	.LVL98:
+ 1597              	.L137:
+ 1598              	.LCFI19:
+ 1599              		.cfi_def_cfa_offset 0
+ 1600              		.cfi_restore 4
+ 1601              		.cfi_restore 5
+ 698:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 1602              		.loc 1 698 0
+ 1603 00dc 0220     		movs	r0, #2
+ 1604              	.LVL99:
+ 1605 00de 7047     		bx	lr
+ 1606              	.LVL100:
+ 1607              	.L138:
+ 703:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1608              		.loc 1 703 0
+ 1609 00e0 0220     		movs	r0, #2
+ 1610              	.LVL101:
+ 1611 00e2 7047     		bx	lr
+ 1612              	.LVL102:
+ 1613              	.L125:
+ 1614              	.LCFI20:
+ 1615              		.cfi_def_cfa_offset 8
+ 1616              		.cfi_offset 4, -8
+ 1617              		.cfi_offset 5, -4
+ 742:HALLIB/Src/stm32f7xx_hal_nor.c ****  
+ 743:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 1618              		.loc 1 743 0
+ 1619 00e4 30BC     		pop	{r4, r5}
+ 1620              	.LCFI21:
+ 1621              		.cfi_restore 5
+ 1622              		.cfi_restore 4
+ 1623              		.cfi_def_cfa_offset 0
+ 1624 00e6 7047     		bx	lr
+ 1625              	.L145:
+ 1626              		.align	2
+ 1627              	.L144:
+ 1628 00e8 00000000 		.word	.LANCHOR0
+ 1629              		.cfi_endproc
+ 1630              	.LFE147:
+ 1632              		.section	.text.HAL_NOR_Erase_Chip,"ax",%progbits
+ 1633              		.align	2
+ 1634              		.global	HAL_NOR_Erase_Chip
+ 1635              		.thumb
+ 1636              		.thumb_func
+ 1638              	HAL_NOR_Erase_Chip:
+ 1639              	.LFB148:
+ 744:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 745:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 746:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Erase the entire NOR chip.
+ 747:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 748:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 749:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Address  Device address  
+ARM GAS  /tmp/ccgp0oUe.s 			page 51
+
+
+ 750:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 751:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 752:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Erase_Chip(NOR_HandleTypeDef *hnor, uint32_t Address)
+ 753:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 1640              		.loc 1 753 0
+ 1641              		.cfi_startproc
+ 1642              		@ args = 0, pretend = 0, frame = 0
+ 1643              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1644              		@ link register save eliminated.
+ 1645              	.LVL103:
+ 754:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 755:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 756:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 757:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 1646              		.loc 1 757 0
+ 1647 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 1648 0004 012B     		cmp	r3, #1
+ 1649 0006 71D0     		beq	.L161
+ 1650              		.loc 1 757 0 is_stmt 0 discriminator 2
+ 1651 0008 0123     		movs	r3, #1
+ 1652 000a 80F84430 		strb	r3, [r0, #68]
+ 758:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 759:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 760:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 1653              		.loc 1 760 0 is_stmt 1 discriminator 2
+ 1654 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 1655 0012 DBB2     		uxtb	r3, r3
+ 1656 0014 022B     		cmp	r3, #2
+ 1657 0016 6BD0     		beq	.L162
+ 761:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 762:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 763:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 764:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 765:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 766:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 1658              		.loc 1 766 0
+ 1659 0018 8368     		ldr	r3, [r0, #8]
+ 1660 001a 33B1     		cbz	r3, .L163
+ 767:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 768:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 769:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 770:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 1661              		.loc 1 770 0
+ 1662 001c 022B     		cmp	r3, #2
+ 1663 001e 07D0     		beq	.L164
+ 771:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 772:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 773:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 774:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 1664              		.loc 1 774 0
+ 1665 0020 042B     		cmp	r3, #4
+ 1666 0022 08D1     		bne	.L165
+ 775:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 776:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 1667              		.loc 1 776 0
+ 1668 0024 4FF0D043 		mov	r3, #1744830464
+ 1669 0028 07E0     		b	.L148
+ARM GAS  /tmp/ccgp0oUe.s 			page 52
+
+
+ 1670              	.L163:
+ 768:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1671              		.loc 1 768 0
+ 1672 002a 4FF0C043 		mov	r3, #1610612736
+ 1673 002e 04E0     		b	.L148
+ 1674              	.L164:
+ 772:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1675              		.loc 1 772 0
+ 1676 0030 4FF0C843 		mov	r3, #1677721600
+ 1677 0034 01E0     		b	.L148
+ 1678              	.L165:
+ 777:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 778:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 779:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 780:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 1679              		.loc 1 780 0
+ 1680 0036 4FF0D843 		mov	r3, #1811939328
+ 1681              	.L148:
+ 1682              	.LVL104:
+ 781:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 782:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 783:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 784:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;  
+ 1683              		.loc 1 784 0
+ 1684 003a 0222     		movs	r2, #2
+ 1685 003c 80F84520 		strb	r2, [r0, #69]
+ 785:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 786:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send NOR chip erase command sequence */
+ 787:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DAT
+ 1686              		.loc 1 787 0
+ 1687 0040 2C4A     		ldr	r2, .L166
+ 1688 0042 1268     		ldr	r2, [r2]
+ 1689 0044 012A     		cmp	r2, #1
+ 1690 0046 02D1     		bne	.L149
+ 1691              		.loc 1 787 0 is_stmt 0 discriminator 1
+ 1692 0048 03F6AA21 		addw	r1, r3, #2730
+ 1693              	.LVL105:
+ 1694 004c 01E0     		b	.L150
+ 1695              	.LVL106:
+ 1696              	.L149:
+ 1697              		.loc 1 787 0 discriminator 2
+ 1698 004e 03F25551 		addw	r1, r3, #1365
+ 1699              	.LVL107:
+ 1700              	.L150:
+ 1701              		.loc 1 787 0 discriminator 4
+ 1702 0052 AA22     		movs	r2, #170
+ 1703 0054 0A80     		strh	r2, [r1]	@ movhi
+ 1704              	.LBB120:
+ 1705              	.LBB121:
+ 1706              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1707              		.syntax unified
+ 1708              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1709 0056 BFF34F8F 		dsb 0xF
+ 1710              	@ 0 "" 2
+ 1711              		.thumb
+ 1712              		.syntax unified
+ 1713              	.LBE121:
+ARM GAS  /tmp/ccgp0oUe.s 			page 53
+
+
+ 1714              	.LBE120:
+ 788:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DA
+ 1715              		.loc 1 788 0 discriminator 4
+ 1716 005a 264A     		ldr	r2, .L166
+ 1717 005c 1268     		ldr	r2, [r2]
+ 1718 005e 012A     		cmp	r2, #1
+ 1719 0060 02D1     		bne	.L151
+ 1720              		.loc 1 788 0 is_stmt 0 discriminator 1
+ 1721 0062 03F25451 		addw	r1, r3, #1364
+ 1722 0066 01E0     		b	.L152
+ 1723              	.L151:
+ 1724              		.loc 1 788 0 discriminator 2
+ 1725 0068 03F2AA21 		addw	r1, r3, #682
+ 1726              	.L152:
+ 1727              		.loc 1 788 0 discriminator 4
+ 1728 006c 5522     		movs	r2, #85
+ 1729 006e 0A80     		strh	r2, [r1]	@ movhi
+ 1730              	.LBB122:
+ 1731              	.LBB123:
+ 1732              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1733              		.syntax unified
+ 1734              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1735 0070 BFF34F8F 		dsb 0xF
+ 1736              	@ 0 "" 2
+ 1737              		.thumb
+ 1738              		.syntax unified
+ 1739              	.LBE123:
+ 1740              	.LBE122:
+ 789:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DAT
+ 1741              		.loc 1 789 0 discriminator 4
+ 1742 0074 1F4A     		ldr	r2, .L166
+ 1743 0076 1268     		ldr	r2, [r2]
+ 1744 0078 012A     		cmp	r2, #1
+ 1745 007a 02D1     		bne	.L153
+ 1746              		.loc 1 789 0 is_stmt 0 discriminator 1
+ 1747 007c 03F6AA21 		addw	r1, r3, #2730
+ 1748 0080 01E0     		b	.L154
+ 1749              	.L153:
+ 1750              		.loc 1 789 0 discriminator 2
+ 1751 0082 03F25551 		addw	r1, r3, #1365
+ 1752              	.L154:
+ 1753              		.loc 1 789 0 discriminator 4
+ 1754 0086 8022     		movs	r2, #128
+ 1755 0088 0A80     		strh	r2, [r1]	@ movhi
+ 1756              	.LBB124:
+ 1757              	.LBB125:
+ 1758              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1759              		.syntax unified
+ 1760              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1761 008a BFF34F8F 		dsb 0xF
+ 1762              	@ 0 "" 2
+ 1763              		.thumb
+ 1764              		.syntax unified
+ 1765              	.LBE125:
+ 1766              	.LBE124:
+ 790:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FOURTH), NOR_CMD_DA
+ 1767              		.loc 1 790 0 discriminator 4
+ARM GAS  /tmp/ccgp0oUe.s 			page 54
+
+
+ 1768 008e 194A     		ldr	r2, .L166
+ 1769 0090 1268     		ldr	r2, [r2]
+ 1770 0092 012A     		cmp	r2, #1
+ 1771 0094 02D1     		bne	.L155
+ 1772              		.loc 1 790 0 is_stmt 0 discriminator 1
+ 1773 0096 03F6AA21 		addw	r1, r3, #2730
+ 1774 009a 01E0     		b	.L156
+ 1775              	.L155:
+ 1776              		.loc 1 790 0 discriminator 2
+ 1777 009c 03F25551 		addw	r1, r3, #1365
+ 1778              	.L156:
+ 1779              		.loc 1 790 0 discriminator 4
+ 1780 00a0 AA22     		movs	r2, #170
+ 1781 00a2 0A80     		strh	r2, [r1]	@ movhi
+ 1782              	.LBB126:
+ 1783              	.LBB127:
+ 1784              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1785              		.syntax unified
+ 1786              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1787 00a4 BFF34F8F 		dsb 0xF
+ 1788              	@ 0 "" 2
+ 1789              		.thumb
+ 1790              		.syntax unified
+ 1791              	.LBE127:
+ 1792              	.LBE126:
+ 791:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIFTH), NOR_CMD_DAT
+ 1793              		.loc 1 791 0 discriminator 4
+ 1794 00a8 124A     		ldr	r2, .L166
+ 1795 00aa 1268     		ldr	r2, [r2]
+ 1796 00ac 012A     		cmp	r2, #1
+ 1797 00ae 02D1     		bne	.L157
+ 1798              		.loc 1 791 0 is_stmt 0 discriminator 1
+ 1799 00b0 03F25451 		addw	r1, r3, #1364
+ 1800 00b4 01E0     		b	.L158
+ 1801              	.L157:
+ 1802              		.loc 1 791 0 discriminator 2
+ 1803 00b6 03F2AA21 		addw	r1, r3, #682
+ 1804              	.L158:
+ 1805              		.loc 1 791 0 discriminator 4
+ 1806 00ba 5522     		movs	r2, #85
+ 1807 00bc 0A80     		strh	r2, [r1]	@ movhi
+ 1808              	.LBB128:
+ 1809              	.LBB129:
+ 1810              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1811              		.syntax unified
+ 1812              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1813 00be BFF34F8F 		dsb 0xF
+ 1814              	@ 0 "" 2
+ 1815              		.thumb
+ 1816              		.syntax unified
+ 1817              	.LBE129:
+ 1818              	.LBE128:
+ 792:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SIXTH), NOR_CMD_DAT
+ 1819              		.loc 1 792 0 discriminator 4
+ 1820 00c2 0C4A     		ldr	r2, .L166
+ 1821 00c4 1268     		ldr	r2, [r2]
+ 1822 00c6 012A     		cmp	r2, #1
+ARM GAS  /tmp/ccgp0oUe.s 			page 55
+
+
+ 1823 00c8 02D1     		bne	.L159
+ 1824              		.loc 1 792 0 is_stmt 0 discriminator 1
+ 1825 00ca 03F6AA23 		addw	r3, r3, #2730
+ 1826              	.LVL108:
+ 1827 00ce 01E0     		b	.L160
+ 1828              	.LVL109:
+ 1829              	.L159:
+ 1830              		.loc 1 792 0 discriminator 2
+ 1831 00d0 03F25553 		addw	r3, r3, #1365
+ 1832              	.LVL110:
+ 1833              	.L160:
+ 1834              		.loc 1 792 0 discriminator 4
+ 1835 00d4 1022     		movs	r2, #16
+ 1836 00d6 1A80     		strh	r2, [r3]	@ movhi
+ 1837              	.LBB130:
+ 1838              	.LBB131:
+ 1839              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1840              		.syntax unified
+ 1841              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1842 00d8 BFF34F8F 		dsb 0xF
+ 1843              	@ 0 "" 2
+ 1844              		.thumb
+ 1845              		.syntax unified
+ 1846              	.LBE131:
+ 1847              	.LBE130:
+ 793:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 794:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR memory status and update the controller state */
+ 795:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 1848              		.loc 1 795 0 discriminator 4
+ 1849 00dc 0123     		movs	r3, #1
+ 1850 00de 80F84530 		strb	r3, [r0, #69]
+ 796:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 797:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 798:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 1851              		.loc 1 798 0 discriminator 4
+ 1852 00e2 0023     		movs	r3, #0
+ 1853 00e4 80F84430 		strb	r3, [r0, #68]
+ 799:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 800:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 1854              		.loc 1 800 0 discriminator 4
+ 1855 00e8 1846     		mov	r0, r3
+ 1856              	.LVL111:
+ 1857 00ea 7047     		bx	lr
+ 1858              	.LVL112:
+ 1859              	.L161:
+ 757:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 1860              		.loc 1 757 0
+ 1861 00ec 0220     		movs	r0, #2
+ 1862              	.LVL113:
+ 1863 00ee 7047     		bx	lr
+ 1864              	.LVL114:
+ 1865              	.L162:
+ 762:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1866              		.loc 1 762 0
+ 1867 00f0 0220     		movs	r0, #2
+ 1868              	.LVL115:
+ 801:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ARM GAS  /tmp/ccgp0oUe.s 			page 56
+
+
+ 1869              		.loc 1 801 0
+ 1870 00f2 7047     		bx	lr
+ 1871              	.L167:
+ 1872              		.align	2
+ 1873              	.L166:
+ 1874 00f4 00000000 		.word	.LANCHOR0
+ 1875              		.cfi_endproc
+ 1876              	.LFE148:
+ 1878              		.section	.text.HAL_NOR_Read_CFI,"ax",%progbits
+ 1879              		.align	2
+ 1880              		.global	HAL_NOR_Read_CFI
+ 1881              		.thumb
+ 1882              		.thumb_func
+ 1884              	HAL_NOR_Read_CFI:
+ 1885              	.LFB149:
+ 802:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 803:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 804:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Read NOR flash CFI IDs
+ 805:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 806:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 807:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  pNOR_CFI  pointer to NOR CFI IDs structure  
+ 808:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 809:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 810:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_Read_CFI(NOR_HandleTypeDef *hnor, NOR_CFITypeDef *pNOR_CFI)
+ 811:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 1886              		.loc 1 811 0
+ 1887              		.cfi_startproc
+ 1888              		@ args = 0, pretend = 0, frame = 0
+ 1889              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1890              		@ link register save eliminated.
+ 1891              	.LVL116:
+ 812:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 813:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 814:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 815:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 1892              		.loc 1 815 0
+ 1893 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 1894 0004 012B     		cmp	r3, #1
+ 1895 0006 55D0     		beq	.L181
+ 1896              		.loc 1 815 0 is_stmt 0 discriminator 2
+ 1897 0008 0123     		movs	r3, #1
+ 1898 000a 80F84430 		strb	r3, [r0, #68]
+ 816:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 817:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 818:HALLIB/Src/stm32f7xx_hal_nor.c ****   if(hnor->State == HAL_NOR_STATE_BUSY)
+ 1899              		.loc 1 818 0 is_stmt 1 discriminator 2
+ 1900 000e 90F84530 		ldrb	r3, [r0, #69]	@ zero_extendqisi2
+ 1901 0012 DBB2     		uxtb	r3, r3
+ 1902 0014 022B     		cmp	r3, #2
+ 1903 0016 4FD0     		beq	.L182
+ 811:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t deviceaddress = 0;
+ 1904              		.loc 1 811 0
+ 1905 0018 10B4     		push	{r4}
+ 1906              	.LCFI22:
+ 1907              		.cfi_def_cfa_offset 4
+ 1908              		.cfi_offset 4, -4
+ 819:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ARM GAS  /tmp/ccgp0oUe.s 			page 57
+
+
+ 820:HALLIB/Src/stm32f7xx_hal_nor.c ****      return HAL_BUSY;
+ 821:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 822:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 823:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Select the NOR device address */
+ 824:HALLIB/Src/stm32f7xx_hal_nor.c ****   if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)
+ 1909              		.loc 1 824 0
+ 1910 001a 8368     		ldr	r3, [r0, #8]
+ 1911 001c 33B1     		cbz	r3, .L183
+ 825:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 826:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS1;
+ 827:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 828:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)
+ 1912              		.loc 1 828 0
+ 1913 001e 022B     		cmp	r3, #2
+ 1914 0020 07D0     		beq	.L184
+ 829:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 830:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS2;
+ 831:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 832:HALLIB/Src/stm32f7xx_hal_nor.c ****   else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)
+ 1915              		.loc 1 832 0
+ 1916 0022 042B     		cmp	r3, #4
+ 1917 0024 08D1     		bne	.L185
+ 833:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 834:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS3;
+ 1918              		.loc 1 834 0
+ 1919 0026 4FF0D043 		mov	r3, #1744830464
+ 1920 002a 07E0     		b	.L170
+ 1921              	.L183:
+ 826:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1922              		.loc 1 826 0
+ 1923 002c 4FF0C043 		mov	r3, #1610612736
+ 1924 0030 04E0     		b	.L170
+ 1925              	.L184:
+ 830:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 1926              		.loc 1 830 0
+ 1927 0032 4FF0C843 		mov	r3, #1677721600
+ 1928 0036 01E0     		b	.L170
+ 1929              	.L185:
+ 835:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 836:HALLIB/Src/stm32f7xx_hal_nor.c ****   else /* FMC_NORSRAM_BANK4 */
+ 837:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 838:HALLIB/Src/stm32f7xx_hal_nor.c ****     deviceaddress = NOR_MEMORY_ADRESS4;
+ 1930              		.loc 1 838 0
+ 1931 0038 4FF0D843 		mov	r3, #1811939328
+ 1932              	.L170:
+ 1933              	.LVL117:
+ 839:HALLIB/Src/stm32f7xx_hal_nor.c ****   }  
+ 840:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 841:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 842:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 1934              		.loc 1 842 0
+ 1935 003c 0222     		movs	r2, #2
+ 1936 003e 80F84520 		strb	r2, [r0, #69]
+ 843:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 844:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Send read CFI query command */
+ 845:HALLIB/Src/stm32f7xx_hal_nor.c ****   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI), NOR_CMD
+ 1937              		.loc 1 845 0
+ARM GAS  /tmp/ccgp0oUe.s 			page 58
+
+
+ 1938 0042 204A     		ldr	r2, .L188
+ 1939 0044 1268     		ldr	r2, [r2]
+ 1940 0046 012A     		cmp	r2, #1
+ 1941 0048 02D1     		bne	.L171
+ 1942              		.loc 1 845 0 is_stmt 0 discriminator 1
+ 1943 004a 03F1AA04 		add	r4, r3, #170
+ 1944 004e 01E0     		b	.L172
+ 1945              	.L171:
+ 1946              		.loc 1 845 0 discriminator 2
+ 1947 0050 03F15504 		add	r4, r3, #85
+ 1948              	.L172:
+ 1949              		.loc 1 845 0 discriminator 4
+ 1950 0054 9822     		movs	r2, #152
+ 1951 0056 2280     		strh	r2, [r4]	@ movhi
+ 1952              	.LBB132:
+ 1953              	.LBB133:
+ 1954              		.loc 2 429 0 is_stmt 1 discriminator 4
+ 1955              		.syntax unified
+ 1956              	@ 429 "CORE/cmsis_gcc.h" 1
+ 1957 0058 BFF34F8F 		dsb 0xF
+ 1958              	@ 0 "" 2
+ 1959              		.thumb
+ 1960              		.syntax unified
+ 1961              	.LBE133:
+ 1962              	.LBE132:
+ 846:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 847:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* read the NOR CFI information */
+ 848:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_CFI->CFI_1 = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, CFI1_ADD
+ 1963              		.loc 1 848 0 discriminator 4
+ 1964 005c 194A     		ldr	r2, .L188
+ 1965 005e 1268     		ldr	r2, [r2]
+ 1966 0060 012A     		cmp	r2, #1
+ 1967 0062 02D1     		bne	.L173
+ 1968              		.loc 1 848 0 is_stmt 0 discriminator 1
+ 1969 0064 03F1C204 		add	r4, r3, #194
+ 1970 0068 01E0     		b	.L174
+ 1971              	.L173:
+ 1972              		.loc 1 848 0 discriminator 2
+ 1973 006a 03F16104 		add	r4, r3, #97
+ 1974              	.L174:
+ 1975              		.loc 1 848 0 discriminator 4
+ 1976 006e 2488     		ldrh	r4, [r4]
+ 1977 0070 0C80     		strh	r4, [r1]	@ movhi
+ 849:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_CFI->CFI_2 = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, CFI2_ADD
+ 1978              		.loc 1 849 0 is_stmt 1 discriminator 4
+ 1979 0072 012A     		cmp	r2, #1
+ 1980 0074 02D1     		bne	.L175
+ 1981              		.loc 1 849 0 is_stmt 0 discriminator 1
+ 1982 0076 03F1C404 		add	r4, r3, #196
+ 1983 007a 01E0     		b	.L176
+ 1984              	.L175:
+ 1985              		.loc 1 849 0 discriminator 2
+ 1986 007c 03F16204 		add	r4, r3, #98
+ 1987              	.L176:
+ 1988              		.loc 1 849 0 discriminator 4
+ 1989 0080 2488     		ldrh	r4, [r4]
+ 1990 0082 4C80     		strh	r4, [r1, #2]	@ movhi
+ARM GAS  /tmp/ccgp0oUe.s 			page 59
+
+
+ 850:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_CFI->CFI_3 = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, CFI3_ADD
+ 1991              		.loc 1 850 0 is_stmt 1 discriminator 4
+ 1992 0084 012A     		cmp	r2, #1
+ 1993 0086 02D1     		bne	.L177
+ 1994              		.loc 1 850 0 is_stmt 0 discriminator 1
+ 1995 0088 03F1C604 		add	r4, r3, #198
+ 1996 008c 01E0     		b	.L178
+ 1997              	.L177:
+ 1998              		.loc 1 850 0 discriminator 2
+ 1999 008e 03F16304 		add	r4, r3, #99
+ 2000              	.L178:
+ 2001              		.loc 1 850 0 discriminator 4
+ 2002 0092 2488     		ldrh	r4, [r4]
+ 2003 0094 8C80     		strh	r4, [r1, #4]	@ movhi
+ 851:HALLIB/Src/stm32f7xx_hal_nor.c ****   pNOR_CFI->CFI_4 = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, CFI4_ADD
+ 2004              		.loc 1 851 0 is_stmt 1 discriminator 4
+ 2005 0096 012A     		cmp	r2, #1
+ 2006 0098 01D1     		bne	.L179
+ 2007              		.loc 1 851 0 is_stmt 0 discriminator 1
+ 2008 009a C833     		adds	r3, r3, #200
+ 2009              	.LVL118:
+ 2010 009c 00E0     		b	.L180
+ 2011              	.LVL119:
+ 2012              	.L179:
+ 2013              		.loc 1 851 0 discriminator 2
+ 2014 009e 6433     		adds	r3, r3, #100
+ 2015              	.LVL120:
+ 2016              	.L180:
+ 2017              		.loc 1 851 0 discriminator 4
+ 2018 00a0 1B88     		ldrh	r3, [r3]
+ 2019 00a2 CB80     		strh	r3, [r1, #6]	@ movhi
+ 852:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 853:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Check the NOR controller state */
+ 854:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 2020              		.loc 1 854 0 is_stmt 1 discriminator 4
+ 2021 00a4 0123     		movs	r3, #1
+ 2022 00a6 80F84530 		strb	r3, [r0, #69]
+ 855:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 856:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 857:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor);
+ 2023              		.loc 1 857 0 discriminator 4
+ 2024 00aa 0023     		movs	r3, #0
+ 2025 00ac 80F84430 		strb	r3, [r0, #68]
+ 858:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 859:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;
+ 2026              		.loc 1 859 0 discriminator 4
+ 2027 00b0 1846     		mov	r0, r3
+ 2028              	.LVL121:
+ 2029 00b2 03E0     		b	.L169
+ 2030              	.LVL122:
+ 2031              	.L181:
+ 2032              	.LCFI23:
+ 2033              		.cfi_def_cfa_offset 0
+ 2034              		.cfi_restore 4
+ 815:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 2035              		.loc 1 815 0
+ 2036 00b4 0220     		movs	r0, #2
+ARM GAS  /tmp/ccgp0oUe.s 			page 60
+
+
+ 2037              	.LVL123:
+ 2038 00b6 7047     		bx	lr
+ 2039              	.LVL124:
+ 2040              	.L182:
+ 820:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+ 2041              		.loc 1 820 0
+ 2042 00b8 0220     		movs	r0, #2
+ 2043              	.LVL125:
+ 2044 00ba 7047     		bx	lr
+ 2045              	.LVL126:
+ 2046              	.L169:
+ 2047              	.LCFI24:
+ 2048              		.cfi_def_cfa_offset 4
+ 2049              		.cfi_offset 4, -4
+ 860:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 2050              		.loc 1 860 0
+ 2051 00bc 5DF8044B 		ldr	r4, [sp], #4
+ 2052              	.LCFI25:
+ 2053              		.cfi_restore 4
+ 2054              		.cfi_def_cfa_offset 0
+ 2055 00c0 7047     		bx	lr
+ 2056              	.L189:
+ 2057 00c2 00BF     		.align	2
+ 2058              	.L188:
+ 2059 00c4 00000000 		.word	.LANCHOR0
+ 2060              		.cfi_endproc
+ 2061              	.LFE149:
+ 2063              		.section	.text.HAL_NOR_WriteOperation_Enable,"ax",%progbits
+ 2064              		.align	2
+ 2065              		.global	HAL_NOR_WriteOperation_Enable
+ 2066              		.thumb
+ 2067              		.thumb_func
+ 2069              	HAL_NOR_WriteOperation_Enable:
+ 2070              	.LFB150:
+ 861:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 862:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 863:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @}
+ 864:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 865:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 866:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Exported_Functions_Group3 NOR Control functions
+ 867:HALLIB/Src/stm32f7xx_hal_nor.c ****  *  @brief   management functions 
+ 868:HALLIB/Src/stm32f7xx_hal_nor.c ****  *
+ 869:HALLIB/Src/stm32f7xx_hal_nor.c **** @verbatim   
+ 870:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 871:HALLIB/Src/stm32f7xx_hal_nor.c ****                         ##### NOR Control functions #####
+ 872:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 873:HALLIB/Src/stm32f7xx_hal_nor.c ****   [..]
+ 874:HALLIB/Src/stm32f7xx_hal_nor.c ****     This subsection provides a set of functions allowing to control dynamically
+ 875:HALLIB/Src/stm32f7xx_hal_nor.c ****     the NOR interface.
+ 876:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 877:HALLIB/Src/stm32f7xx_hal_nor.c **** @endverbatim
+ 878:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 879:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 880:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 881:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 882:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Enables dynamically NOR write operation.
+ 883:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ARM GAS  /tmp/ccgp0oUe.s 			page 61
+
+
+ 884:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 885:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 886:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 887:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_WriteOperation_Enable(NOR_HandleTypeDef *hnor)
+ 888:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 2071              		.loc 1 888 0
+ 2072              		.cfi_startproc
+ 2073              		@ args = 0, pretend = 0, frame = 0
+ 2074              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2075              	.LVL127:
+ 2076 0000 38B5     		push	{r3, r4, r5, lr}
+ 2077              	.LCFI26:
+ 2078              		.cfi_def_cfa_offset 16
+ 2079              		.cfi_offset 3, -16
+ 2080              		.cfi_offset 4, -12
+ 2081              		.cfi_offset 5, -8
+ 2082              		.cfi_offset 14, -4
+ 889:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 890:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 2083              		.loc 1 890 0
+ 2084 0002 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 2085 0006 012B     		cmp	r3, #1
+ 2086 0008 0DD0     		beq	.L192
+ 2087 000a 0446     		mov	r4, r0
+ 2088              		.loc 1 890 0 is_stmt 0 discriminator 2
+ 2089 000c 0125     		movs	r5, #1
+ 2090 000e 80F84450 		strb	r5, [r0, #68]
+ 891:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 892:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Enable write operation */
+ 893:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_WriteOperation_Enable(hnor->Instance, hnor->Init.NSBank); 
+ 2091              		.loc 1 893 0 is_stmt 1 discriminator 2
+ 2092 0012 8168     		ldr	r1, [r0, #8]
+ 2093 0014 0068     		ldr	r0, [r0]
+ 2094              	.LVL128:
+ 2095 0016 FFF7FEFF 		bl	FMC_NORSRAM_WriteOperation_Enable
+ 2096              	.LVL129:
+ 894:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 895:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 896:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_READY;
+ 2097              		.loc 1 896 0 discriminator 2
+ 2098 001a 84F84550 		strb	r5, [r4, #69]
+ 897:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 898:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 899:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor); 
+ 2099              		.loc 1 899 0 discriminator 2
+ 2100 001e 0020     		movs	r0, #0
+ 2101 0020 84F84400 		strb	r0, [r4, #68]
+ 900:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 901:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 2102              		.loc 1 901 0 discriminator 2
+ 2103 0024 38BD     		pop	{r3, r4, r5, pc}
+ 2104              	.LVL130:
+ 2105              	.L192:
+ 890:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 2106              		.loc 1 890 0
+ 2107 0026 0220     		movs	r0, #2
+ 2108              	.LVL131:
+ARM GAS  /tmp/ccgp0oUe.s 			page 62
+
+
+ 902:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 2109              		.loc 1 902 0
+ 2110 0028 38BD     		pop	{r3, r4, r5, pc}
+ 2111              		.cfi_endproc
+ 2112              	.LFE150:
+ 2114 002a 00BF     		.section	.text.HAL_NOR_WriteOperation_Disable,"ax",%progbits
+ 2115              		.align	2
+ 2116              		.global	HAL_NOR_WriteOperation_Disable
+ 2117              		.thumb
+ 2118              		.thumb_func
+ 2120              	HAL_NOR_WriteOperation_Disable:
+ 2121              	.LFB151:
+ 903:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 904:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 905:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Disables dynamically NOR write operation.
+ 906:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 907:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 908:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval HAL status
+ 909:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 910:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor)
+ 911:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 2122              		.loc 1 911 0
+ 2123              		.cfi_startproc
+ 2124              		@ args = 0, pretend = 0, frame = 0
+ 2125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2126              	.LVL132:
+ 912:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 913:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_LOCK(hnor);
+ 2127              		.loc 1 913 0
+ 2128 0000 90F84430 		ldrb	r3, [r0, #68]	@ zero_extendqisi2
+ 2129 0004 012B     		cmp	r3, #1
+ 2130 0006 12D0     		beq	.L196
+ 911:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process Locked */
+ 2131              		.loc 1 911 0 discriminator 2
+ 2132 0008 10B5     		push	{r4, lr}
+ 2133              	.LCFI27:
+ 2134              		.cfi_def_cfa_offset 8
+ 2135              		.cfi_offset 4, -8
+ 2136              		.cfi_offset 14, -4
+ 2137 000a 0446     		mov	r4, r0
+ 2138              		.loc 1 913 0 discriminator 2
+ 2139 000c 0123     		movs	r3, #1
+ 2140 000e 80F84430 		strb	r3, [r0, #68]
+ 914:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 915:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the SRAM controller state */
+ 916:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_BUSY;
+ 2141              		.loc 1 916 0 discriminator 2
+ 2142 0012 0223     		movs	r3, #2
+ 2143 0014 80F84530 		strb	r3, [r0, #69]
+ 917:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+ 918:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Disable write operation */
+ 919:HALLIB/Src/stm32f7xx_hal_nor.c ****   FMC_NORSRAM_WriteOperation_Disable(hnor->Instance, hnor->Init.NSBank); 
+ 2144              		.loc 1 919 0 discriminator 2
+ 2145 0018 8168     		ldr	r1, [r0, #8]
+ 2146 001a 0068     		ldr	r0, [r0]
+ 2147              	.LVL133:
+ 2148 001c FFF7FEFF 		bl	FMC_NORSRAM_WriteOperation_Disable
+ARM GAS  /tmp/ccgp0oUe.s 			page 63
+
+
+ 2149              	.LVL134:
+ 920:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 921:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Update the NOR controller state */
+ 922:HALLIB/Src/stm32f7xx_hal_nor.c ****   hnor->State = HAL_NOR_STATE_PROTECTED;
+ 2150              		.loc 1 922 0 discriminator 2
+ 2151 0020 0423     		movs	r3, #4
+ 2152 0022 84F84530 		strb	r3, [r4, #69]
+ 923:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 924:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Process unlocked */
+ 925:HALLIB/Src/stm32f7xx_hal_nor.c ****   __HAL_UNLOCK(hnor); 
+ 2153              		.loc 1 925 0 discriminator 2
+ 2154 0026 0020     		movs	r0, #0
+ 2155 0028 84F84400 		strb	r0, [r4, #68]
+ 926:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 927:HALLIB/Src/stm32f7xx_hal_nor.c ****   return HAL_OK;  
+ 2156              		.loc 1 927 0 discriminator 2
+ 2157 002c 10BD     		pop	{r4, pc}
+ 2158              	.LVL135:
+ 2159              	.L196:
+ 2160              	.LCFI28:
+ 2161              		.cfi_def_cfa_offset 0
+ 2162              		.cfi_restore 4
+ 2163              		.cfi_restore 14
+ 913:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 2164              		.loc 1 913 0
+ 2165 002e 0220     		movs	r0, #2
+ 2166              	.LVL136:
+ 2167 0030 7047     		bx	lr
+ 2168              		.cfi_endproc
+ 2169              	.LFE151:
+ 2171 0032 00BF     		.section	.text.HAL_NOR_GetState,"ax",%progbits
+ 2172              		.align	2
+ 2173              		.global	HAL_NOR_GetState
+ 2174              		.thumb
+ 2175              		.thumb_func
+ 2177              	HAL_NOR_GetState:
+ 2178              	.LFB152:
+ 928:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 929:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 930:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 931:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @}
+ 932:HALLIB/Src/stm32f7xx_hal_nor.c ****   */  
+ 933:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 934:HALLIB/Src/stm32f7xx_hal_nor.c **** /** @defgroup NOR_Exported_Functions_Group4 NOR State functions 
+ 935:HALLIB/Src/stm32f7xx_hal_nor.c ****  *  @brief   Peripheral State functions 
+ 936:HALLIB/Src/stm32f7xx_hal_nor.c ****  *
+ 937:HALLIB/Src/stm32f7xx_hal_nor.c **** @verbatim   
+ 938:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================
+ 939:HALLIB/Src/stm32f7xx_hal_nor.c ****                       ##### NOR State functions #####
+ 940:HALLIB/Src/stm32f7xx_hal_nor.c ****   ==============================================================================  
+ 941:HALLIB/Src/stm32f7xx_hal_nor.c ****   [..]
+ 942:HALLIB/Src/stm32f7xx_hal_nor.c ****     This subsection permits to get in run-time the status of the NOR controller 
+ 943:HALLIB/Src/stm32f7xx_hal_nor.c ****     and the data flow.
+ 944:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 945:HALLIB/Src/stm32f7xx_hal_nor.c **** @endverbatim
+ 946:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @{
+ 947:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ARM GAS  /tmp/ccgp0oUe.s 			page 64
+
+
+ 948:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 949:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 950:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  return the NOR controller state
+ 951:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 952:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.
+ 953:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval NOR controller state
+ 954:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 955:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_NOR_StateTypeDef HAL_NOR_GetState(NOR_HandleTypeDef *hnor)
+ 956:HALLIB/Src/stm32f7xx_hal_nor.c **** {
+ 2179              		.loc 1 956 0
+ 2180              		.cfi_startproc
+ 2181              		@ args = 0, pretend = 0, frame = 0
+ 2182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2183              		@ link register save eliminated.
+ 2184              	.LVL137:
+ 957:HALLIB/Src/stm32f7xx_hal_nor.c ****   return hnor->State;
+ 2185              		.loc 1 957 0
+ 2186 0000 90F84500 		ldrb	r0, [r0, #69]	@ zero_extendqisi2
+ 2187              	.LVL138:
+ 958:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 2188              		.loc 1 958 0
+ 2189 0004 7047     		bx	lr
+ 2190              		.cfi_endproc
+ 2191              	.LFE152:
+ 2193 0006 00BF     		.section	.text.HAL_NOR_GetStatus,"ax",%progbits
+ 2194              		.align	2
+ 2195              		.global	HAL_NOR_GetStatus
+ 2196              		.thumb
+ 2197              		.thumb_func
+ 2199              	HAL_NOR_GetStatus:
+ 2200              	.LFB153:
+ 959:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 960:HALLIB/Src/stm32f7xx_hal_nor.c **** /**
+ 961:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @brief  Returns the NOR operation status.
+ 962:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+ 963:HALLIB/Src/stm32f7xx_hal_nor.c ****   *                the configuration information for NOR module.   
+ 964:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Address Device address
+ 965:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @param  Timeout NOR programming Timeout
+ 966:HALLIB/Src/stm32f7xx_hal_nor.c ****   * @retval NOR_Status: The returned value can be: HAL_NOR_STATUS_SUCCESS, HAL_NOR_STATUS_ERROR
+ 967:HALLIB/Src/stm32f7xx_hal_nor.c ****   *         or HAL_NOR_STATUS_TIMEOUT
+ 968:HALLIB/Src/stm32f7xx_hal_nor.c ****   */
+ 969:HALLIB/Src/stm32f7xx_hal_nor.c **** HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Address, uint32_t Timeout
+ 970:HALLIB/Src/stm32f7xx_hal_nor.c **** { 
+ 2201              		.loc 1 970 0
+ 2202              		.cfi_startproc
+ 2203              		@ args = 0, pretend = 0, frame = 0
+ 2204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2205              	.LVL139:
+ 2206 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2207              	.LCFI29:
+ 2208              		.cfi_def_cfa_offset 24
+ 2209              		.cfi_offset 3, -24
+ 2210              		.cfi_offset 4, -20
+ 2211              		.cfi_offset 5, -16
+ 2212              		.cfi_offset 6, -12
+ 2213              		.cfi_offset 7, -8
+ 2214              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccgp0oUe.s 			page 65
+
+
+ 2215 0002 0C46     		mov	r4, r1
+ 2216 0004 1646     		mov	r6, r2
+ 2217              	.LVL140:
+ 971:HALLIB/Src/stm32f7xx_hal_nor.c ****   HAL_NOR_StatusTypeDef status = HAL_NOR_STATUS_ONGOING;
+ 972:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint16_t tmpSR1 = 0, tmpSR2 = 0;
+ 973:HALLIB/Src/stm32f7xx_hal_nor.c ****   uint32_t tickstart = 0;
+ 974:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 975:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Poll on NOR memory Ready/Busy signal ------------------------------------*/
+ 976:HALLIB/Src/stm32f7xx_hal_nor.c ****   HAL_NOR_MspWait(hnor, Timeout);
+ 2218              		.loc 1 976 0
+ 2219 0006 1146     		mov	r1, r2
+ 2220              	.LVL141:
+ 2221 0008 FFF7FEFF 		bl	HAL_NOR_MspWait
+ 2222              	.LVL142:
+ 977:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 978:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Get the NOR memory operation status -------------------------------------*/
+ 979:HALLIB/Src/stm32f7xx_hal_nor.c ****   
+ 980:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Get tick */
+ 981:HALLIB/Src/stm32f7xx_hal_nor.c ****   tickstart = HAL_GetTick();
+ 2223              		.loc 1 981 0
+ 2224 000c FFF7FEFF 		bl	HAL_GetTick
+ 2225              	.LVL143:
+ 2226 0010 0746     		mov	r7, r0
+ 2227              	.LVL144:
+ 971:HALLIB/Src/stm32f7xx_hal_nor.c ****   HAL_NOR_StatusTypeDef status = HAL_NOR_STATUS_ONGOING;
+ 2228              		.loc 1 971 0
+ 2229 0012 0125     		movs	r5, #1
+ 982:HALLIB/Src/stm32f7xx_hal_nor.c ****   while((status != HAL_NOR_STATUS_SUCCESS ) && (status != HAL_NOR_STATUS_TIMEOUT))
+ 2230              		.loc 1 982 0
+ 2231 0014 27E0     		b	.L201
+ 2232              	.LVL145:
+ 2233              	.L205:
+ 983:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 984:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Check for the Timeout */
+ 985:HALLIB/Src/stm32f7xx_hal_nor.c ****     if(Timeout != HAL_MAX_DELAY)
+ 2234              		.loc 1 985 0
+ 2235 0016 B6F1FF3F 		cmp	r6, #-1
+ 2236 001a 09D0     		beq	.L202
+ 986:HALLIB/Src/stm32f7xx_hal_nor.c ****     {
+ 987:HALLIB/Src/stm32f7xx_hal_nor.c ****       if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+ 2237              		.loc 1 987 0
+ 2238 001c 2EB1     		cbz	r6, .L206
+ 2239              		.loc 1 987 0 is_stmt 0 discriminator 1
+ 2240 001e FFF7FEFF 		bl	HAL_GetTick
+ 2241              	.LVL146:
+ 2242 0022 C01B     		subs	r0, r0, r7
+ 2243 0024 8642     		cmp	r6, r0
+ 2244 0026 02D3     		bcc	.L207
+ 2245 0028 02E0     		b	.L202
+ 2246              	.L206:
+ 988:HALLIB/Src/stm32f7xx_hal_nor.c ****       {
+ 989:HALLIB/Src/stm32f7xx_hal_nor.c ****         status = HAL_NOR_STATUS_TIMEOUT; 
+ 2247              		.loc 1 989 0 is_stmt 1
+ 2248 002a 0325     		movs	r5, #3
+ 2249              	.LVL147:
+ 2250 002c 00E0     		b	.L202
+ 2251              	.LVL148:
+ARM GAS  /tmp/ccgp0oUe.s 			page 66
+
+
+ 2252              	.L207:
+ 2253 002e 0325     		movs	r5, #3
+ 2254              	.LVL149:
+ 2255              	.L202:
+ 990:HALLIB/Src/stm32f7xx_hal_nor.c ****       } 
+ 991:HALLIB/Src/stm32f7xx_hal_nor.c ****     } 
+ 992:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 993:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* Read NOR status register (DQ6 and DQ5) */
+ 994:HALLIB/Src/stm32f7xx_hal_nor.c ****     tmpSR1 = *(__IO uint16_t *)Address;
+ 2256              		.loc 1 994 0
+ 2257 0030 2288     		ldrh	r2, [r4]
+ 2258 0032 92B2     		uxth	r2, r2
+ 2259              	.LVL150:
+ 995:HALLIB/Src/stm32f7xx_hal_nor.c ****     tmpSR2 = *(__IO uint16_t *)Address;
+ 2260              		.loc 1 995 0
+ 2261 0034 2388     		ldrh	r3, [r4]
+ 2262 0036 9BB2     		uxth	r3, r3
+ 2263              	.LVL151:
+ 996:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+ 997:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* If DQ6 did not toggle between the two reads then return HAL_NOR_STATUS_SUCCESS  */
+ 998:HALLIB/Src/stm32f7xx_hal_nor.c ****     if((tmpSR1 & NOR_MASK_STATUS_DQ6) == (tmpSR2 & NOR_MASK_STATUS_DQ6)) 
+ 2264              		.loc 1 998 0
+ 2265 0038 5340     		eors	r3, r3, r2
+ 2266              	.LVL152:
+ 2267 003a 03F04003 		and	r3, r3, #64
+ 2268 003e 9BB2     		uxth	r3, r3
+ 2269 0040 BBB1     		cbz	r3, .L208
+ 999:HALLIB/Src/stm32f7xx_hal_nor.c ****     {
+1000:HALLIB/Src/stm32f7xx_hal_nor.c ****       return HAL_NOR_STATUS_SUCCESS ;
+1001:HALLIB/Src/stm32f7xx_hal_nor.c ****     }
+1002:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+1003:HALLIB/Src/stm32f7xx_hal_nor.c ****     if((tmpSR1 & NOR_MASK_STATUS_DQ5) == NOR_MASK_STATUS_DQ5)
+ 2270              		.loc 1 1003 0
+ 2271 0042 02F02002 		and	r2, r2, #32
+ 2272              	.LVL153:
+ 2273 0046 92B2     		uxth	r2, r2
+ 2274 0048 02B1     		cbz	r2, .L204
+1004:HALLIB/Src/stm32f7xx_hal_nor.c ****     {
+1005:HALLIB/Src/stm32f7xx_hal_nor.c ****       status = HAL_NOR_STATUS_ONGOING;
+ 2275              		.loc 1 1005 0
+ 2276 004a 0125     		movs	r5, #1
+ 2277              	.LVL154:
+ 2278              	.L204:
+1006:HALLIB/Src/stm32f7xx_hal_nor.c ****     }
+1007:HALLIB/Src/stm32f7xx_hal_nor.c ****     
+1008:HALLIB/Src/stm32f7xx_hal_nor.c ****     tmpSR1 = *(__IO uint16_t *)Address;
+ 2279              		.loc 1 1008 0
+ 2280 004c 2288     		ldrh	r2, [r4]
+ 2281 004e 92B2     		uxth	r2, r2
+ 2282              	.LVL155:
+1009:HALLIB/Src/stm32f7xx_hal_nor.c ****     tmpSR2 = *(__IO uint16_t *)Address;
+ 2283              		.loc 1 1009 0
+ 2284 0050 2388     		ldrh	r3, [r4]
+ 2285 0052 9BB2     		uxth	r3, r3
+ 2286              	.LVL156:
+1010:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+1011:HALLIB/Src/stm32f7xx_hal_nor.c ****     /* If DQ6 did not toggle between the two reads then return HAL_NOR_STATUS_SUCCESS  */
+ARM GAS  /tmp/ccgp0oUe.s 			page 67
+
+
+1012:HALLIB/Src/stm32f7xx_hal_nor.c ****     if((tmpSR1 & NOR_MASK_STATUS_DQ6) == (tmpSR2 & NOR_MASK_STATUS_DQ6)) 
+ 2287              		.loc 1 1012 0
+ 2288 0054 5340     		eors	r3, r3, r2
+ 2289              	.LVL157:
+ 2290 0056 03F04003 		and	r3, r3, #64
+ 2291 005a 9BB2     		uxth	r3, r3
+ 2292 005c 5BB1     		cbz	r3, .L210
+1013:HALLIB/Src/stm32f7xx_hal_nor.c ****     {
+1014:HALLIB/Src/stm32f7xx_hal_nor.c ****       return HAL_NOR_STATUS_SUCCESS;
+1015:HALLIB/Src/stm32f7xx_hal_nor.c ****     }
+1016:HALLIB/Src/stm32f7xx_hal_nor.c ****     if((tmpSR1 & NOR_MASK_STATUS_DQ5) == NOR_MASK_STATUS_DQ5)
+ 2293              		.loc 1 1016 0
+ 2294 005e 02F02002 		and	r2, r2, #32
+ 2295              	.LVL158:
+ 2296 0062 92B2     		uxth	r2, r2
+ 2297 0064 4AB9     		cbnz	r2, .L211
+ 2298              	.LVL159:
+ 2299              	.L201:
+ 982:HALLIB/Src/stm32f7xx_hal_nor.c ****   {
+ 2300              		.loc 1 982 0
+ 2301 0066 002D     		cmp	r5, #0
+ 2302 0068 18BF     		it	ne
+ 2303 006a 032D     		cmpne	r5, #3
+ 2304 006c D3D1     		bne	.L205
+1017:HALLIB/Src/stm32f7xx_hal_nor.c ****     {
+1018:HALLIB/Src/stm32f7xx_hal_nor.c ****       return HAL_NOR_STATUS_ERROR;
+1019:HALLIB/Src/stm32f7xx_hal_nor.c ****     } 
+1020:HALLIB/Src/stm32f7xx_hal_nor.c ****   }
+1021:HALLIB/Src/stm32f7xx_hal_nor.c **** 
+1022:HALLIB/Src/stm32f7xx_hal_nor.c ****   /* Return the operation status */
+1023:HALLIB/Src/stm32f7xx_hal_nor.c ****   return status;
+ 2305              		.loc 1 1023 0
+ 2306 006e 2846     		mov	r0, r5
+ 2307 0070 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2308              	.LVL160:
+ 2309              	.L208:
+1000:HALLIB/Src/stm32f7xx_hal_nor.c ****     }
+ 2310              		.loc 1 1000 0
+ 2311 0072 0020     		movs	r0, #0
+ 2312 0074 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2313              	.LVL161:
+ 2314              	.L210:
+1014:HALLIB/Src/stm32f7xx_hal_nor.c ****     }
+ 2315              		.loc 1 1014 0
+ 2316 0076 0020     		movs	r0, #0
+ 2317 0078 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2318              	.LVL162:
+ 2319              	.L211:
+1018:HALLIB/Src/stm32f7xx_hal_nor.c ****     } 
+ 2320              		.loc 1 1018 0
+ 2321 007a 0220     		movs	r0, #2
+1024:HALLIB/Src/stm32f7xx_hal_nor.c **** }
+ 2322              		.loc 1 1024 0
+ 2323 007c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2324              		.cfi_endproc
+ 2325              	.LFE153:
+ 2327 007e 00BF     		.section	.bss.uwNORMemoryDataWidth,"aw",%nobits
+ARM GAS  /tmp/ccgp0oUe.s 			page 68
+
+
+ 2328              		.align	2
+ 2329              		.set	.LANCHOR0,. + 0
+ 2332              	uwNORMemoryDataWidth:
+ 2333 0000 00000000 		.space	4
+ 2334              		.text
+ 2335              	.Letext0:
+ 2336              		.file 3 "/opt/5.4.2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 2337              		.file 4 "/opt/5.4.2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 2338              		.file 5 "Inc/stm32f767xx.h"
+ 2339              		.file 6 "HALLIB/Inc/stm32f7xx_hal_def.h"
+ 2340              		.file 7 "HALLIB/Inc/stm32f7xx_ll_fmc.h"
+ 2341              		.file 8 "HALLIB/Inc/stm32f7xx_hal_nor.h"
+ 2342              		.file 9 "HALLIB/Inc/stm32f7xx_hal.h"
+ 2343              		.file 10 "CORE/core_cm7.h"
+ARM GAS  /tmp/ccgp0oUe.s 			page 69
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f7xx_hal_nor.c
+     /tmp/ccgp0oUe.s:21     .text.HAL_NOR_MspInit:00000000 $t
+     /tmp/ccgp0oUe.s:26     .text.HAL_NOR_MspInit:00000000 HAL_NOR_MspInit
+     /tmp/ccgp0oUe.s:40     .text.HAL_NOR_Init:00000000 $t
+     /tmp/ccgp0oUe.s:45     .text.HAL_NOR_Init:00000000 HAL_NOR_Init
+     /tmp/ccgp0oUe.s:136    .text.HAL_NOR_Init:00000070 $d
+     /tmp/ccgp0oUe.s:141    .text.HAL_NOR_MspDeInit:00000000 $t
+     /tmp/ccgp0oUe.s:146    .text.HAL_NOR_MspDeInit:00000000 HAL_NOR_MspDeInit
+     /tmp/ccgp0oUe.s:159    .text.HAL_NOR_DeInit:00000000 $t
+     /tmp/ccgp0oUe.s:164    .text.HAL_NOR_DeInit:00000000 HAL_NOR_DeInit
+     /tmp/ccgp0oUe.s:198    .text.HAL_NOR_MspWait:00000000 $t
+     /tmp/ccgp0oUe.s:203    .text.HAL_NOR_MspWait:00000000 HAL_NOR_MspWait
+     /tmp/ccgp0oUe.s:216    .text.HAL_NOR_Read_ID:00000000 $t
+     /tmp/ccgp0oUe.s:221    .text.HAL_NOR_Read_ID:00000000 HAL_NOR_Read_ID
+     /tmp/ccgp0oUe.s:439    .text.HAL_NOR_Read_ID:000000e4 $d
+     /tmp/ccgp0oUe.s:444    .text.HAL_NOR_ReturnToReadMode:00000000 $t
+     /tmp/ccgp0oUe.s:449    .text.HAL_NOR_ReturnToReadMode:00000000 HAL_NOR_ReturnToReadMode
+     /tmp/ccgp0oUe.s:535    .text.HAL_NOR_Read:00000000 $t
+     /tmp/ccgp0oUe.s:540    .text.HAL_NOR_Read:00000000 HAL_NOR_Read
+     /tmp/ccgp0oUe.s:720    .text.HAL_NOR_Read:000000b0 $d
+     /tmp/ccgp0oUe.s:725    .text.HAL_NOR_Program:00000000 $t
+     /tmp/ccgp0oUe.s:730    .text.HAL_NOR_Program:00000000 HAL_NOR_Program
+     /tmp/ccgp0oUe.s:921    .text.HAL_NOR_Program:000000b4 $d
+     /tmp/ccgp0oUe.s:926    .text.HAL_NOR_ReadBuffer:00000000 $t
+     /tmp/ccgp0oUe.s:931    .text.HAL_NOR_ReadBuffer:00000000 HAL_NOR_ReadBuffer
+     /tmp/ccgp0oUe.s:1119   .text.HAL_NOR_ReadBuffer:000000bc $d
+     /tmp/ccgp0oUe.s:1124   .text.HAL_NOR_ProgramBuffer:00000000 $t
+     /tmp/ccgp0oUe.s:1129   .text.HAL_NOR_ProgramBuffer:00000000 HAL_NOR_ProgramBuffer
+     /tmp/ccgp0oUe.s:1375   .text.HAL_NOR_ProgramBuffer:000000f4 $d
+     /tmp/ccgp0oUe.s:1380   .text.HAL_NOR_Erase_Block:00000000 $t
+     /tmp/ccgp0oUe.s:1385   .text.HAL_NOR_Erase_Block:00000000 HAL_NOR_Erase_Block
+     /tmp/ccgp0oUe.s:1628   .text.HAL_NOR_Erase_Block:000000e8 $d
+     /tmp/ccgp0oUe.s:1633   .text.HAL_NOR_Erase_Chip:00000000 $t
+     /tmp/ccgp0oUe.s:1638   .text.HAL_NOR_Erase_Chip:00000000 HAL_NOR_Erase_Chip
+     /tmp/ccgp0oUe.s:1874   .text.HAL_NOR_Erase_Chip:000000f4 $d
+     /tmp/ccgp0oUe.s:1879   .text.HAL_NOR_Read_CFI:00000000 $t
+     /tmp/ccgp0oUe.s:1884   .text.HAL_NOR_Read_CFI:00000000 HAL_NOR_Read_CFI
+     /tmp/ccgp0oUe.s:2059   .text.HAL_NOR_Read_CFI:000000c4 $d
+     /tmp/ccgp0oUe.s:2064   .text.HAL_NOR_WriteOperation_Enable:00000000 $t
+     /tmp/ccgp0oUe.s:2069   .text.HAL_NOR_WriteOperation_Enable:00000000 HAL_NOR_WriteOperation_Enable
+     /tmp/ccgp0oUe.s:2115   .text.HAL_NOR_WriteOperation_Disable:00000000 $t
+     /tmp/ccgp0oUe.s:2120   .text.HAL_NOR_WriteOperation_Disable:00000000 HAL_NOR_WriteOperation_Disable
+     /tmp/ccgp0oUe.s:2172   .text.HAL_NOR_GetState:00000000 $t
+     /tmp/ccgp0oUe.s:2177   .text.HAL_NOR_GetState:00000000 HAL_NOR_GetState
+     /tmp/ccgp0oUe.s:2194   .text.HAL_NOR_GetStatus:00000000 $t
+     /tmp/ccgp0oUe.s:2199   .text.HAL_NOR_GetStatus:00000000 HAL_NOR_GetStatus
+     /tmp/ccgp0oUe.s:2328   .bss.uwNORMemoryDataWidth:00000000 $d
+     /tmp/ccgp0oUe.s:2332   .bss.uwNORMemoryDataWidth:00000000 uwNORMemoryDataWidth
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+FMC_NORSRAM_Init
+FMC_NORSRAM_Timing_Init
+FMC_NORSRAM_Extended_Timing_Init
+FMC_NORSRAM_DeInit
+FMC_NORSRAM_WriteOperation_Enable
+ARM GAS  /tmp/ccgp0oUe.s 			page 70
+
+
+FMC_NORSRAM_WriteOperation_Disable
+HAL_GetTick
