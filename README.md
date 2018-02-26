@@ -1,16 +1,16 @@
-#STM32F767-Template
+# STM32F767-Template
 
 Build a template for the STM32F7 microprocessor, specifically the STM32F7 Discovery and Evaluation Board. Use Makefile to create a project template for containing HAL libraries.
 
 Tested on Ubuntu 16.04.2 LTS, both using ARM GNU Toolchain and board STM32F767IGTx.
 
-##Prerequisites
-###GNU Toolchain
+## Prerequisites
+### GNU Toolchain
 [https://developer.arm.com/open-source/gnu-toolchain/gnu-rm](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm)
 
 GNU ARM Embedded Toolchain, pre-built for ARM Cortex-M and Cortex-R processors.
 
-###Libraries
+### Libraries
 [http://www.st.com/en/embedded-software/stm32cubef7.html](http://www.st.com/en/embedded-software/stm32cubef7.html)
 
 Inside the downloaded zip file, you can find STM32F7Cube embedded software stack composed of:
@@ -21,7 +21,7 @@ Inside the downloaded zip file, you can find STM32F7Cube embedded software stack
 
 With this template, you can have several project directories that use a common makefile.
 
-##Demo project usage
+## Demo project usage
 
 The demo project basically just toggles some LED's on and off.
 
@@ -31,8 +31,8 @@ The demo project basically just toggles some LED's on and off.
 
 - run make in the `create/` dir.
 
-##Programming & debugging the board
-###Linux debugging
+## Programming & debugging the board
+### Linux debugging
 
 [https://github.com/texane/stlink](https://github.com/texane/stlink)
 
@@ -40,11 +40,11 @@ Open source version of the STMicroelectronics Stlink Tools, made for Linux (in m
 
 - Start st-flash in on windows with `st-flash write test.bin address`
 
-###Windows flashing
+### Windows flashing
 [http://www.st.com/en/embedded-software/stsw-link004.html](http://www.st.com/en/embedded-software/stsw-link004.html)
 
 - Download ST-LINK Utility and add directory with st-link_cli executable to user/system PATH variable
 
-##Acknowledgements
-###Concept
+## Acknowledgements
+### Concept
 Concept adapted from [STM32-Template github project](https://github.com/geoffreymbrown/STM32-Template).
